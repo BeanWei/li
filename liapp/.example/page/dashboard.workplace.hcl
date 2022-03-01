@@ -1,8 +1,8 @@
-page "workplcae" {
+page "dashboard.workplace" {
     description = "工作台"
     properties "report" {
         component = ""
-        component_props {
+        componentProps {
             title = "欢迎回来"
         }
     }
