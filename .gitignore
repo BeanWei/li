@@ -16,7 +16,7 @@
 .vscode/
 *exvim*
 *vendor*
-*go.sum
+li-app/*go.sum
 
 node_modules/
 npm-debug.log
