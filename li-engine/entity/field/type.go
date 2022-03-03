@@ -15,7 +15,7 @@ const (
 	TypeDecimal
 	TypeMap
 	TypeStrings
-	TypeArray
+	TypeObjects
 	TypeUUID
 	TypeBytes
 	TypeDatetime
@@ -47,7 +47,7 @@ var (
 		TypeDecimal:   "decimal",
 		TypeMap:       "json",
 		TypeStrings:   "array<str>",
-		TypeArray:     "array<json>",
+		TypeObjects:   "array<json>",
 		TypeUUID:      "uuid",
 		TypeBytes:     "bytes",
 		TypeDatetime:  "datetime",

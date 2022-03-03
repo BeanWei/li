@@ -80,28 +80,68 @@ func Decimal(name string) *numberBuilder {
 }
 
 // Map arbitrary JSON data
-func Map(name string) {}
+func Map(name string) *anyBuilder {
+	return &anyBuilder{&Descriptor{
+		Name: name,
+		Type: TypeMap,
+	}}
+}
 
 // Strings arbitrary JSON data
-func Strings(name string) {}
+func Strings(name string) *anyBuilder {
+	return &anyBuilder{&Descriptor{
+		Name: name,
+		Type: TypeStrings,
+	}}
+}
 
-// Array arbitrary JSON data
-func Array(name string) {}
+// Objects arbitrary JSON data
+func Objects(name string) *anyBuilder {
+	return &anyBuilder{&Descriptor{
+		Name: name,
+		Type: TypeObjects,
+	}}
+}
 
 // UUID uuid type
-func UUID(name string) {}
+func UUID(name string) *anyBuilder {
+	return &anyBuilder{&Descriptor{
+		Name: name,
+		Type: TypeUUID,
+	}}
+}
 
 // Bytes arbitrary precision number
-func Bytes(name string) {}
+func Bytes(name string) *anyBuilder {
+	return &anyBuilder{&Descriptor{
+		Name: name,
+		Type: TypeBytes,
+	}}
+}
 
 // Datetime Timezone-aware point in time
-func Datetime(name string) {}
+func Datetime(name string) *anyBuilder {
+	return &anyBuilder{&Descriptor{
+		Name: name,
+		Type: TypeDatetime,
+	}}
+}
 
 // Duration absolute time span
-func Duration(name string) {}
+func Duration(name string) *anyBuilder {
+	return &anyBuilder{&Descriptor{
+		Name: name,
+		Type: TypeDuration,
+	}}
+}
 
 // Sequences auto-incrementing sequence of int64
-func Sequences(name string) {}
+func Sequences(name string) *anyBuilder {
+	return &anyBuilder{&Descriptor{
+		Name: name,
+		Type: TypeSequences,
+	}}
+}
 
 // Enum enum
 func Enum(name string) *enumBuilder {
@@ -125,6 +165,14 @@ func Link(name string) *linkBuilder {
 			IsLink: true,
 		},
 	}}
+}
+
+type anyBuilder struct {
+	desc *Descriptor
+}
+
+func (b *anyBuilder) Descriptor() *Descriptor {
+	return b.desc
 }
 
 type stringBuilder struct {
