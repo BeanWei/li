@@ -8,6 +8,12 @@ import (
 type (
 	Schema interface {
 		Type() string
+		Mixin() []Mixin
+		Fields() []Field
+		Indexes() []Index
+	}
+
+	Mixin interface {
 		Fields() []Field
 		Indexes() []Index
 	}

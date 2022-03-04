@@ -1,37 +1,4 @@
 ## li-engine
-
-## Entity
-```go
-type Post struct {
-    entity.Schema
-}
-
-func (Post) Mixin() []entity.Mixin {
-    return []entity.Mixin {
-
-    }
-}
-
-func (Post) Annotations() []entity.Annotation {
-    return []entity.Annotation{
-
-    }
-}
-
-func (Post) Fields() []entity.Field {
-    return []entity.Field{
-        entity.FieldStr("title"),
-    }
-}
-
-func (Post) Indexes() []entity.Index {
-    return []entity.Index{
-        entity.IndexFields("title"),
-    }
-}
-```
-
-
 ## Page
 ```go
 type PostListPage struct {
