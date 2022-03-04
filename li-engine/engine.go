@@ -67,8 +67,25 @@ func GenEntityESDL(schemas ...entity.Schema) string {
 }
 
 // GenPageSchema 生成页面的 json-schema
-func GenPageSchema(schemas ...page.Schema) map[string]string {
-	pages := make(map[string]string)
+func GenPageSchema(schemas ...page.Schema) map[string]map[string]interface{} {
+	pages := make(map[string]map[string]interface{})
+	for _, schema := range schemas {
+		var (
+			properties = make(map[string]interface{})
+			nodes      = make([]page.Node, 0)
+		)
+		for _, mixin := range schema.Mixin() {
+			nodes = append(nodes, mixin.Nodes()...)
+		}
+		nodes = append(nodes, schema.Nodes()...)
+		for _, node := range nodes {
+			properties[node.Descriptor().Name] = node.Descriptor().ToSchema()
+		}
+		pages[reflect.TypeOf(schema).Elem().Name()] = map[string]interface{}{
+			"type":       "object",
+			"properties": properties,
+		}
+	}
 	return pages
 }
 

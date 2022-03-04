@@ -1,11 +1,14 @@
 package engine
 
 import (
+	"encoding/json"
 	"testing"
 
 	"github.com/BeanWei/li/li-engine/entity"
 	"github.com/BeanWei/li/li-engine/entity/field"
 	"github.com/BeanWei/li/li-engine/entity/index"
+	"github.com/BeanWei/li/li-engine/page"
+	"github.com/BeanWei/li/li-engine/page/node"
 )
 
 type Post struct {
@@ -30,4 +33,24 @@ func (Post) Indexes() []entity.Index {
 
 func Test_GenEntityESDL(t *testing.T) {
 	t.Log("\n" + GenEntityESDL(&Post{}))
+}
+
+type PostListPage struct {
+	page.Schema
+}
+
+func (PostListPage) Mixin() []page.Mixin {
+	return []page.Mixin{}
+}
+
+func (PostListPage) Nodes() []page.Node {
+	return []page.Node{
+		node.Checkbox("a"),
+	}
+}
+
+func Test_GenPageSchema(t *testing.T) {
+	schema := GenPageSchema(&PostListPage{})
+	res, _ := json.MarshalIndent(schema, "", "	")
+	t.Log("\n" + string(res))
 }

@@ -6,14 +6,14 @@ type (
 	Schema interface {
 		Type() string
 		Mixin() []Mixin
-		Nodes() []Nodes
+		Nodes() []Node
 	}
 
 	Mixin interface {
-		Nodes() []Nodes
+		Nodes() []Node
 	}
 
-	Nodes interface {
+	Node interface {
 		Descriptor() *node.Descriptor
 	}
 )
