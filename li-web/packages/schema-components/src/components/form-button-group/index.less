@@ -1,0 +1,16 @@
+@import '~@arco-design/web-react/lib/style/theme/default';
+
+@btn-group-prefix-cls: ~'@{prefix}-formily-button-group';;
+
+.@{btn-group-prefix-cls}-sticky {
+  padding: 10px 0;
+  border-top: 1px solid #eee;
+  z-index: 999;
+
+  &-inner {
+    display: flex;
+    .@{prefix}formily-item {
+      flex: 2;
+    }
+  }
+}
