@@ -5,8 +5,11 @@ import (
 	"strings"
 
 	"github.com/BeanWei/li/li-engine/entity"
+	"github.com/BeanWei/li/li-engine/page"
 )
 
+// GenEntityESDL 生成模型的 esdl
+// Note: 需要注意 schemas 的顺序，关联的对象必须放在前面
 func GenEntityESDL(schemas ...entity.Schema) string {
 	var (
 		b          strings.Builder
@@ -61,4 +64,15 @@ func GenEntityESDL(schemas ...entity.Schema) string {
 		COMMIT MIGRATION;
 	*/
 	return b.String()
+}
+
+// GenPageSchema 生成页面的 json-schema
+func GenPageSchema(schemas ...page.Schema) map[string]string {
+	pages := make(map[string]string)
+	return pages
+}
+
+// GenApp 生成应用信息
+func GenAppConfig() {
+
 }
