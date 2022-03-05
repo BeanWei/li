@@ -3,10 +3,11 @@ import {
   RecursionField,
   Schema,
   SchemaExpressionScopeContext,
+  useField,
   useFieldSchema,
 } from "@formily/react";
 import { createContext, useContext, useEffect, useState } from "react";
-import { Menu as ArcoMenu } from "@arco-design/web-react";
+import { Icon, Menu as ArcoMenu } from "@arco-design/web-react";
 import { createPortal } from "react-dom";
 
 function findByUid(schema: Schema, uid: string): any {
@@ -200,3 +201,67 @@ export const Menu: ComposedMenu = observer((props) => {
     </MenuModeContext.Provider>
   );
 });
+
+Menu.Item = observer((props) => {
+  const { icon, ...others } = props;
+  const schema = useFieldSchema();
+  const field = useField();
+  return (
+    <ArcoMenu.Item
+      {...others}
+      key={schema.name}
+      eventKey={schema.name}
+      schema={schema}
+    >
+      <Icon type={icon} style={{ marginRight: 5 }} />
+      {field.title}
+    </ArcoMenu.Item>
+  );
+});
+
+Menu.URL = observer((props) => {
+  const { icon, ...others } = props;
+  const schema = useFieldSchema();
+  const field = useField();
+  return (
+    <ArcoMenu.Item
+      {...others}
+      key={schema.name}
+      eventKey={schema.name}
+      schema={schema}
+      onClick={() => {
+        window.open(props.href, "_blank");
+      }}
+    >
+      <Icon style={{ marginRight: 5 }} type={icon} />
+      {field.title}
+    </ArcoMenu.Item>
+  );
+});
+
+Menu.SubMenu = observer((props) => {
+  const { icon, ...others } = props;
+  const schema = useFieldSchema();
+  const field = useField();
+  const mode = useContext(MenuModeContext);
+  if (mode === "mix") {
+    return <ArcoMenu.Item {...props} />;
+  }
+  return (
+    <ArcoMenu.SubMenu
+      {...others}
+      key={schema.name}
+      eventKey={schema.name}
+      title={
+        <>
+          <Icon style={{ marginRight: 5 }} type={icon} />
+          {field.title}
+        </>
+      }
+    >
+      <RecursionField schema={schema} onlyRenderProperties />
+    </ArcoMenu.SubMenu>
+  );
+});
+
+export default Menu;
