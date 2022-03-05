@@ -5,8 +5,6 @@ import {
   SpaceProps,
 } from "@arco-design/web-react";
 import { useFormLayout } from "../form-layout";
-import "@arco-design/web-react/lib/Divider/style/index";
-import "@arco-design/web-react/lib/Space/style/index";
 
 export const Space: React.FC<SpaceProps> = (props) => {
   let { split } = props;

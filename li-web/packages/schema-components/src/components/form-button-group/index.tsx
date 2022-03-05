@@ -11,7 +11,6 @@ import cls from "classnames";
 import { SpaceProps } from "@arco-design/web-react";
 import { BaseItem, IFormItemProps } from "../form-item";
 import { usePrefixCls } from "../__builtins__";
-import "@arco-design/web-react/lib/Form/style/index";
 import "./index.less";
 
 interface IStickyProps {

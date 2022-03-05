@@ -25,13 +25,13 @@
     "lodash": "^4.17.21",
     "mockjs": "^1.1.0",
     "nprogress": "^0.2.0",
+    "pro-utils": "workspace:*",
     "react": "^17.0.2",
     "react-dom": "^17.0.2",
     "react-helmet": "^6.1.0",
     "react-i18next": "^11.15.5",
     "react-router": "^5.2.0",
     "react-router-dom": "^5.2.0",
-    "pro-utils": "workspace:*",
     "schema-components": "workspace:*"
   },
   "devDependencies": {
@@ -49,7 +49,8 @@
     "less-loader": "7.3.0",
     "tsconfig": "workspace:*",
     "typescript": "^4.5.2",
-    "vite": "^2.6.14"
+    "vite": "^2.6.14",
+    "vite-plugin-mock": "^2.9.6"
   },
   "peerDependencies": {
     "@arco-design/web-react": ">=2.0.0"

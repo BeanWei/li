@@ -2,8 +2,6 @@ import { connect, mapProps, mapReadPretty } from "@formily/react";
 import { Select, Tag } from "@arco-design/web-react";
 import { IconLoading } from "@arco-design/web-react/icon";
 import { useCompile } from "../../hooks/useCompile";
-import "@arco-design/web-react/lib/Select/style/index";
-import "@arco-design/web-react/lib/Tag/style/index";
 
 const colors: Record<string, any> = {
   red: '{{t("Red")}}',

@@ -2,8 +2,6 @@ import { connect, mapProps, mapReadPretty, useField } from "@formily/react";
 import { Radio as ArcoRadio, Tag } from "@arco-design/web-react";
 import type { RadioProps, RadioGroupProps } from "@arco-design/web-react";
 import { isValid } from "@formily/shared";
-import "@arco-design/web-react/lib/Radio/style/index";
-import "@arco-design/web-react/lib/Tag/style/index";
 
 type ComposedRadio = React.FC<RadioProps> & {
   Group?: React.FC<RadioGroupProps>;

@@ -8,7 +8,6 @@ import { IconLoading } from "@arco-design/web-react/icon";
 import { toArr } from "@formily/shared";
 import { ArrayField } from "@formily/core";
 import { DefaultFieldNames } from "@arco-design/web-react/es/Cascader/cascader";
-import "@arco-design/web-react/lib/Cascader/style/index";
 
 interface CascaderRef {
   focus: () => void;

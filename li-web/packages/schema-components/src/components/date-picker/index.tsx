@@ -11,7 +11,6 @@ import { connect, mapReadPretty } from "@formily/react";
 import { isArr } from "@formily/shared";
 import cls from "classnames";
 import { usePrefixCls } from "../__builtins__";
-import "@arco-design/web-react/lib/DatePicker/style/index";
 
 type ComposedDatePicker = React.FC<DatePickerProps> & {
   WeekPicker?: React.FC<WeekPickerProps>;

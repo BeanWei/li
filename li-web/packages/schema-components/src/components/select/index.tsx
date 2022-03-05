@@ -15,8 +15,6 @@ import { IconLoading } from "@arco-design/web-react/icon";
 import { isValid, toArr } from "@formily/shared";
 import { isArrayField } from "@formily/core";
 import { getCurrentOptions } from "./shared";
-import "@arco-design/web-react/lib/Select/style/index";
-import "@arco-design/web-react/lib/Tag/style/index";
 
 type SelectProps = ArcoSelectProps & {
   objectValue?: boolean;

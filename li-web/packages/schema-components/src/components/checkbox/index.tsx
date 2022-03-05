@@ -5,7 +5,6 @@ import { IconCheck, IconClose } from "@arco-design/web-react/icon";
 import type { CheckboxProps, CheckboxGroupProps } from "@arco-design/web-react";
 import { isValid } from "@formily/shared";
 import { uniq } from "lodash";
-import "@arco-design/web-react/lib/Checkbox/style/index";
 
 type ComposedCheckbox = React.FC<CheckboxProps> & {
   Group?: React.FC<CheckboxGroupProps<any>>;
