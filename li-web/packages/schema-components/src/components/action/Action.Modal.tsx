@@ -26,7 +26,7 @@ export const ActionModal: ComposedActionDrawer = observer((props) => {
       {createPortal(
         // @ts-ignore
         <Modal
-          title={schema.title}
+          title={field.title}
           {...rest}
           visible={visible}
           onCancel={() => setVisible(false)}
