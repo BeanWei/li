@@ -4,19 +4,54 @@
   "description": "li admin",
   "private": true,
   "scripts": {
-    "dev": "umi dev",
-    "build": "umi build",
-    "postinstall": "umi setup",
-    "start": "npm run dev"
+    "start": "vite",
+    "dev": "vite",
+    "preview": "vite preview"
   },
   "dependencies": {
-    "umi": "^4.0.0-rc.5"
+    "@arco-design/web-react": "^2.30.0",
+    "@arco-plugins/vite-react": "^1.0.5",
+    "@arco-themes/react-arco-pro": "^0.0.7",
+    "@emotion/css": "^11.7.1",
+    "@formily/core": "2.0.13",
+    "@formily/json-schema": "2.0.13",
+    "@formily/react": "2.0.13",
+    "@formily/reactive": "2.0.13",
+    "@formily/reactive-react": "2.0.13",
+    "@formily/shared": "2.0.13",
+    "ahooks": "^3.1.13",
+    "axios": "^0.26.0",
+    "classnames": "^2.3.1",
+    "deepmerge": "^4.2.2",
+    "i18next": "^21.6.13",
+    "lodash": "^4.17.21",
+    "mockjs": "^1.1.0",
+    "nprogress": "^0.2.0",
+    "qs": "^6.10.3",
+    "react": "^17.0.2",
+    "react-dom": "^17.0.2",
+    "react-helmet": "^6.1.0",
+    "react-i18next": "^11.15.5",
+    "react-router": "^5.2.0",
+    "react-router-dom": "^5.2.0",
+    "schema-components": "workspace:*"
   },
   "devDependencies": {
+    "@arco-design/web-react": "^2.0.0",
+    "@arco-design/webpack-plugin": "^1.6.0",
+    "@arco-plugins/vite-plugin-svgr": "^0.7.2",
+    "@svgr/webpack": "^5.5.0",
     "@types/react": "^17.0.0",
     "@types/react-dom": "^17.0.0",
-    "typescript": "^4.1.2",
+    "@vitejs/plugin-react": "^1.1.0",
     "config": "workspace:*",
-    "tsconfig": "workspace:*"
+    "less": "^4.1.2",
+    "less-loader": "7.3.0",
+    "tsconfig": "workspace:*",
+    "typescript": "^4.5.2",
+    "vite": "^2.6.14"
+  },
+  "peerDependencies": {
+    "@arco-design/web-react": ">=2.0.0"
   }
 }

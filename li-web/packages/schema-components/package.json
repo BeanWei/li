@@ -1,9 +1,7 @@
 {
-  "name": "@li/schema-components",
+  "name": "schema-components",
   "version": "0.0.0",
-  "main": "./dist/index.js",
-  "module": "./dist/index.mjs",
-  "types": "./dist/index.d.ts",
+  "main": "./src/index.ts",
   "license": "MIT",
   "sideEffects": [
     "dist/*",
@@ -25,7 +23,7 @@
     "typescript": "^4.5.2"
   },
   "peerDependencies": {
-    "@arco-design/web-react": "^2.29.2",
+    "@arco-design/web-react": "^2.30.0",
     "@types/react": ">=16.8.0 || >=17.0.0",
     "@types/react-dom": ">=16.8.0 || >=17.0.0",
     "react": ">=16.8.0 || >=17.0.0",
@@ -33,6 +31,7 @@
     "react-is": ">=16.8.0 || >=17.0.0"
   },
   "dependencies": {
+    "@emotion/css": "^11.7.1",
     "@formily/core": "2.0.13",
     "@formily/grid": "2.0.13",
     "@formily/json-schema": "2.0.13",
@@ -45,5 +44,8 @@
     "react-i18next": "^11.15.5",
     "react-sortable-hoc": "^1.11.0",
     "react-sticky-box": "^0.9.3"
+  },
+  "publishConfig": {
+    "access": "public"
   }
 }
