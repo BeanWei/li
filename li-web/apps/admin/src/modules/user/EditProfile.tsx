@@ -9,8 +9,8 @@ import {
   useActionContext,
 } from "schema-components";
 import { useCurrentUserContext } from "./CurrentUserProvider";
-import { useRequest } from "../api-client";
 import { DropdownVisibleContext } from "./CurrentUser";
+import { useRequest } from "pro-utils";
 
 const useCloseAction = () => {
   const { setVisible } = useActionContext();

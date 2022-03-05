@@ -123,8 +123,8 @@ export interface RequestError extends Error {
 interface IRequest {
   (
     operation: string,
-    variables: Record<string, any>,
-    opts: AxiosRequestConfig & { skipErrorHandler?: boolean }
+    variables?: Record<string, any>,
+    opts?: AxiosRequestConfig & { skipErrorHandler?: boolean }
   ): Promise<AxiosResponse<any, any>>;
 }
 
@@ -223,7 +223,7 @@ const getRequestInstance = (): AxiosInstance => {
   return requestInstance;
 };
 
-const request: IRequest = (operation, variables, opts) => {
+const request: IRequest = (operation, variables = {}, opts = {}) => {
   const requestInstance = getRequestInstance();
   return new Promise((resolve, reject) => {
     requestInstance

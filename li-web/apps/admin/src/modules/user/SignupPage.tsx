@@ -3,8 +3,8 @@ import { uid } from "@formily/shared";
 import { Message } from "@arco-design/web-react";
 import { useHistory } from "react-router-dom";
 import { SchemaComponent } from "schema-components";
-import { useAPIClient } from "../api-client";
 import { useCurrentDocumentTitle } from "../document-title";
+import { request } from "pro-utils";
 
 const schema: ISchema = {
   type: "object",
@@ -98,13 +98,10 @@ const schema: ISchema = {
 const useSignup = () => {
   const history = useHistory();
   const form = useForm();
-  const api = useAPIClient();
   return {
     async run() {
       await form.submit();
-      await api.resource("users").signup({
-        values: form.values,
-      });
+      await request("signup", form.values);
       Message.success("注册成功，即将跳转登录页");
       setTimeout(() => {
         history.push("/signin");

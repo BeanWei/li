@@ -1,8 +1,8 @@
 import { ISchema, useForm } from "@formily/react";
 import { uid } from "@formily/shared";
+import { request } from "pro-utils";
 import { useHistory } from "react-router-dom";
 import { SchemaComponent } from "schema-components";
-import { useAPIClient } from "../api-client";
 import { useCurrentDocumentTitle } from "../document-title";
 
 const schema: ISchema = {
@@ -61,15 +61,11 @@ const schema: ISchema = {
 const useSignin = () => {
   const history = useHistory();
   const form = useForm();
-  const api = useAPIClient();
   return {
     async run() {
       await form.submit();
-      const response = await api.resource("users").signin({
-        values: form.values,
-      });
+      const response = await request("signin", form.values);
       if (response?.data?.data?.token) {
-        api.setBearerToken(response?.data?.data?.token);
         history.push("/admin");
       }
     },

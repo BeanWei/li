@@ -8,7 +8,7 @@ import {
   SchemaComponent,
   useActionContext,
 } from "schema-components";
-import { useAPIClient } from "../api-client";
+import { request } from "pro-utils";
 import { DropdownVisibleContext } from "./CurrentUser";
 
 const useCloseAction = () => {
@@ -27,13 +27,10 @@ const useCloseAction = () => {
 const useSaveCurrentUserValues = () => {
   const { setVisible } = useActionContext();
   const form = useForm();
-  const api = useAPIClient();
   return {
     async run() {
       await form.submit();
-      await api.resource("users").changePassword({
-        values: form.values,
-      });
+      await request("changePassword", form.values);
       setVisible(false);
     },
   };

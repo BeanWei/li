@@ -6,14 +6,13 @@ import { ChangePassword } from "./ChangePassword";
 import { EditProfile } from "./EditProfile";
 import { LanguageSettings } from "./LanguageSettings";
 import { SwitchRole } from "./SwitchRole";
-import { useAPIClient } from "../api-client";
 import { useCurrentUserContext } from "./CurrentUserProvider";
+import { request } from "pro-utils";
 
 export const DropdownVisibleContext = createContext<any>({});
 
 export const CurrentUser = () => {
   const history = useHistory();
-  const api = useAPIClient();
   const { t } = useTranslation();
   const [visible, setVisible] = useState(false);
   const { data } = useCurrentUserContext();
@@ -34,7 +33,7 @@ export const CurrentUser = () => {
               <Menu.Item
                 key="signout"
                 onClick={() => {
-                  api.setBearerToken(null);
+                  request("signout");
                   history.push("/signin");
                 }}
               >
