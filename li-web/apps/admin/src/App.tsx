@@ -67,7 +67,7 @@ const App = compose(...providers)(() => {
             path: "/admin/:name(.+)?",
             component: "AdminLayout",
             title: "Li Admin",
-            uiSchema: data,
+            schema: data,
           },
           {
             type: "route",

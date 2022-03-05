@@ -11,6 +11,7 @@ export * from "./form-item";
 export * from "./form-layout";
 export * from "./input";
 export * from "./input-number";
+export * from "./menu";
 export * from "./password";
 export * from "./radio";
 export * from "./select";
