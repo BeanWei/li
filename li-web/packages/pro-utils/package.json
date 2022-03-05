@@ -1,0 +1,36 @@
+{
+  "name": "pro-utils",
+  "version": "0.0.0",
+  "main": "./src/index.ts",
+  "license": "MIT",
+  "sideEffects": [
+    "dist/*",
+    "esm/*.js",
+    "lib/*.js",
+    "src/*.ts",
+    "*.less",
+    "**/*/style.js"
+  ],
+  "devDependencies": {
+    "@types/lodash": "^4.14.179",
+    "config": "workspace:*",
+    "tsconfig": "workspace:*",
+    "typescript": "^4.5.2"
+  },
+  "peerDependencies": {
+    "@arco-design/web-react": "^2.30.0",
+    "@types/react": ">=16.8.0 || >=17.0.0",
+    "@types/react-dom": ">=16.8.0 || >=17.0.0",
+    "react": ">=16.8.0 || >=17.0.0",
+    "react-dom": ">=16.8.0",
+    "react-is": ">=16.8.0 || >=17.0.0"
+  },
+  "dependencies": {
+    "@ahooksjs/use-request": "^2.8.15",
+    "axios": "^0.26.0",
+    "lodash": "^4.17.21"
+  },
+  "publishConfig": {
+    "access": "public"
+  }
+}

@@ -27,21 +27,21 @@ importers:
       '@formily/reactive-react': 2.0.13
       '@formily/shared': 2.0.13
       '@svgr/webpack': ^5.5.0
+      '@types/lodash': ^4.14.179
       '@types/react': ^17.0.0
       '@types/react-dom': ^17.0.0
+      '@types/react-helmet': ^6.1.5
       '@vitejs/plugin-react': ^1.1.0
       ahooks: ^3.1.13
-      axios: ^0.26.0
       classnames: ^2.3.1
       config: workspace:*
-      deepmerge: ^4.2.2
       i18next: ^21.6.13
       less: ^4.1.2
       less-loader: 7.3.0
       lodash: ^4.17.21
       mockjs: ^1.1.0
       nprogress: ^0.2.0
-      qs: ^6.10.3
+      pro-utils: workspace:*
       react: ^17.0.2
       react-dom: ^17.0.2
       react-helmet: ^6.1.0
@@ -64,14 +64,12 @@ importers:
       '@formily/reactive-react': 2.0.13_6b63c6d6a77210751d6bef6389658b39
       '@formily/shared': 2.0.13
       ahooks: 3.1.13_react@17.0.2
-      axios: 0.26.0
       classnames: 2.3.1
-      deepmerge: 4.2.2
       i18next: 21.6.13
       lodash: 4.17.21
       mockjs: 1.1.0
       nprogress: 0.2.0
-      qs: 6.10.3
+      pro-utils: link:../../packages/pro-utils
       react: 17.0.2
       react-dom: 17.0.2_react@17.0.2
       react-helmet: 6.1.0_react@17.0.2
@@ -83,8 +81,10 @@ importers:
       '@arco-design/webpack-plugin': 1.7.0
       '@arco-plugins/vite-plugin-svgr': 0.7.2_vite@2.8.6
       '@svgr/webpack': 5.5.0
+      '@types/lodash': 4.14.179
       '@types/react': 17.0.39
       '@types/react-dom': 17.0.13
+      '@types/react-helmet': 6.1.5
       '@vitejs/plugin-react': 1.2.0
       config: link:../../packages/config
       less: 4.1.2
@@ -104,6 +104,25 @@ importers:
       eslint-config-prettier: 8.5.0
       eslint-plugin-react: 7.28.0
     devDependencies:
+      typescript: 4.6.2
+
+  packages/pro-utils:
+    specifiers:
+      '@ahooksjs/use-request': ^2.8.15
+      '@types/lodash': ^4.14.179
+      axios: ^0.26.0
+      config: workspace:*
+      lodash: ^4.17.21
+      tsconfig: workspace:*
+      typescript: ^4.5.2
+    dependencies:
+      '@ahooksjs/use-request': 2.8.15
+      axios: 0.26.0
+      lodash: 4.17.21
+    devDependencies:
+      '@types/lodash': 4.14.179
+      config: link:../config
+      tsconfig: link:../tsconfig
       typescript: 4.6.2
 
   packages/schema-components:
@@ -151,6 +170,15 @@ importers:
     specifiers: {}
 
 packages:
+
+  /@ahooksjs/use-request/2.8.15:
+    resolution: {integrity: sha512-xhVaM4fyIiAMdVFuuU5i3CFUdFa/IblF+fvITVMFaUEO3w/V5tVCAF6WIA3T03n1/RPuzRkA7Ao1PFtSGtGelw==}
+    peerDependencies:
+      react: ^16.8.0 || ^17.0.0
+    dependencies:
+      lodash.debounce: 4.0.8
+      lodash.throttle: 4.1.1
+    dev: false
 
   /@ampproject/remapping/2.1.2:
     resolution: {integrity: sha512-hoyByceqwKirw7w3Z7gnIIZC3Wx3J484Y3L/cMpXFbr7d9ZQj2mODrirNzcJa+SM3UlpWXYvKV4RlRpFXlWgXg==}
@@ -2061,7 +2089,7 @@ packages:
     dev: false
 
   /@types/lodash/4.14.179:
-    resolution: {integrity: sha512-uwc1x90yCKqGcIOAT6DwOSuxnrAbpkdPsUOZtwrXb4D/6wZs+6qG7QnIawDuZWg0sWpxl+ltIKCaLoMlna678w==, registry: https://registry.npm.taobao.org/, tarball: https://registry.npm.taobao.org/@types/lodash/-/lodash-4.14.179.tgz}
+    resolution: {integrity: sha512-uwc1x90yCKqGcIOAT6DwOSuxnrAbpkdPsUOZtwrXb4D/6wZs+6qG7QnIawDuZWg0sWpxl+ltIKCaLoMlna678w==}
     dev: true
 
   /@types/mathjax/0.0.36:
@@ -2109,6 +2137,12 @@ packages:
 
   /@types/react-dom/17.0.13:
     resolution: {integrity: sha512-wEP+B8hzvy6ORDv1QBhcQia4j6ea4SFIBttHYpXKPFZRviBvknq0FRh3VrIxeXUmsPkwuXVZrVGG7KUVONmXCQ==}
+    dependencies:
+      '@types/react': 17.0.39
+    dev: true
+
+  /@types/react-helmet/6.1.5:
+    resolution: {integrity: sha512-/ICuy7OHZxR0YCAZLNg9r7I9aijWUWvxaPR6uTuyxe8tAj5RL4Sw1+R6NhXUtOsarkGYPmaHdBDvuXh2DIN/uA==}
     dependencies:
       '@types/react': 17.0.39
     dev: true
@@ -3549,6 +3583,7 @@ packages:
   /deepmerge/4.2.2:
     resolution: {integrity: sha512-FJ3UgI4gIl+PHZm53knsuSFpE+nESMr7M4v9QcgB7S63Kj/6WqMiFQJpBBYz1Pt+66bZpP3Q7Lye0Oo9MPKEdg==}
     engines: {node: '>=0.10.0'}
+    dev: true
 
   /define-properties/1.1.3:
     resolution: {integrity: sha512-3MqfYKj2lLzdMSf8ZIZE/V+Zuy+BgD6f164e8K2w7dgnpKArBDerGYpM46IYYcjnkdPNMjPk9A6VFB8+3SKlXQ==}
@@ -5165,14 +5200,12 @@ packages:
 
   /lodash.debounce/4.0.8:
     resolution: {integrity: sha512-FT1yDzDYEoYWhnSGnpE/4Kj1fLZkDFyqRb7fNt6FdYOSxlUWAtp42Eh6Wb0rGIv/m9Bgo7x4GhQbm5Ys4SG5ow==}
-    dev: true
 
   /lodash.isequal/4.5.0:
     resolution: {integrity: sha512-pDo3lu8Jhfjqls6GkMgpahsF9kCyayhgykjyLMNFTKWrpVdAQtYyB4muAMWozBB4ig/dtWAmsMxLEI8wuz+DYQ==}
 
   /lodash.throttle/4.1.1:
-    resolution: {integrity: sha512-wIkUCfVKpVsWo3JSZlc+8MB5it+2AN5W8J7YVMST30UrvcQNZ1Okbj+rbVniijTWE6FGYy4XJq/rHkas8qJMLQ==, registry: https://registry.npm.taobao.org/, tarball: https://registry.npm.taobao.org/lodash.throttle/-/lodash.throttle-4.1.1.tgz}
-    dev: true
+    resolution: {integrity: sha512-wIkUCfVKpVsWo3JSZlc+8MB5it+2AN5W8J7YVMST30UrvcQNZ1Okbj+rbVniijTWE6FGYy4XJq/rHkas8qJMLQ==}
 
   /lodash/4.17.21:
     resolution: {integrity: sha512-v2kDEe57lecTulaDIuNTPy3Ry4gLGJ6Z1O3vE1krgXZNrsQ+LFTGHVxVjcXPs17LhbZVGedAJv8XZ1tvj5FvSg==}
@@ -6370,13 +6403,6 @@ packages:
     resolution: {integrity: sha512-kV/CThkXo6xyFEZUugw/+pIOywXcDbFYgSct5cT3gqlbkBE1SJdwy6UQoZvodiWF/ckQLZyDE/Bu1M6gVu5lVw==}
     engines: {node: '>=0.6.0', teleport: '>=0.2.0'}
     dev: true
-
-  /qs/6.10.3:
-    resolution: {integrity: sha512-wr7M2E0OFRfIfJZjKGieI8lBKb7fRCH4Fv5KNPEs7gJ8jadvotdsS08PzOKR7opXhZ/Xkjtt3WF9g38drmyRqQ==}
-    engines: {node: '>=0.6'}
-    dependencies:
-      side-channel: 1.0.4
-    dev: false
 
   /query-string/4.3.4:
     resolution: {integrity: sha512-O2XLNDBIg1DnTOa+2XrIwSiXEV8h2KImXUnjhhn2+UsvZ+Es2uyd5CCRTNQlDGbzUQOW3aYCBx9rVA6dzsiY7Q==, registry: https://registry.npm.taobao.org/, tarball: https://registry.npm.taobao.org/query-string/-/query-string-4.3.4.tgz}
@@ -7734,7 +7760,7 @@ packages:
     dev: true
 
   /typescript/4.6.2:
-    resolution: {integrity: sha512-HM/hFigTBHZhLXshn9sN37H085+hQGeJHJ/X7LpBWLID/fbc2acUMfU+lGD98X81sKP+pFa9f0DZmCwB9GnbAg==, registry: https://registry.npm.taobao.org/, tarball: https://registry.npm.taobao.org/typescript/-/typescript-4.6.2.tgz}
+    resolution: {integrity: sha512-HM/hFigTBHZhLXshn9sN37H085+hQGeJHJ/X7LpBWLID/fbc2acUMfU+lGD98X81sKP+pFa9f0DZmCwB9GnbAg==}
     engines: {node: '>=4.2.0'}
     hasBin: true
     dev: true

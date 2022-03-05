@@ -158,7 +158,7 @@ const InternalLayout = (props: any) => {
           ref={sideMenuRef}
         ></ArcoLayout.Sider>
         <ArcoLayout.Content style={{ minHeight: "calc(100vh - 46px)" }}>
-          <RemoteSchemaComponent onlyRenderProperties uid={match.params.name} />
+          <RemoteSchemaComponent uid={match.params.name} />
         </ArcoLayout.Content>
       </ArcoLayout>
     </ArcoLayout>

@@ -42,6 +42,6 @@ export const useDocumentTitle = () => {
 export const useCurrentDocumentTitle = (title: string) => {
   const { setTitle } = useDocumentTitle();
   useEffect(() => {
-    setTitle(title);
+    setTitle?.(title);
   }, []);
 };

@@ -2,7 +2,7 @@ import { Schema } from "@formily/react";
 import { Spin } from "@arco-design/web-react";
 import React from "react";
 import { useSchemaComponentContext } from "schema-components/src/hooks";
-import { useRequest } from "../api-client";
+import { useRequest } from "pro-utils";
 import { SchemaComponent } from "schema-components";
 
 export interface RemoteSchemaComponentProps {
@@ -12,7 +12,6 @@ export interface RemoteSchemaComponentProps {
   schemaTransform?: (schema: Schema) => Schema;
   render?: any;
   hidden?: any;
-  onlyRenderProperties?: boolean;
 }
 
 const defaultTransform = (s: Schema) => s;
@@ -21,7 +20,6 @@ const RequestSchemaComponent: React.FC<RemoteSchemaComponentProps> = (
   props
 ) => {
   const {
-    onlyRenderProperties,
     hidden,
     scope,
     uid,
@@ -29,18 +27,21 @@ const RequestSchemaComponent: React.FC<RemoteSchemaComponentProps> = (
     schemaTransform = defaultTransform,
   } = props;
   const { reset } = useSchemaComponentContext();
-  const conf = {
-    url: `/uiSchemas:${
-      onlyRenderProperties ? "getProperties" : "getJsonSchema"
-    }/${uid}`,
-  };
-  const { data, loading } = useRequest(conf, {
-    refreshDeps: [uid],
-    onSuccess(data) {
-      onSuccess && onSuccess(data);
-      reset && reset();
+  const { data, loading } = useRequest(
+    {
+      operation: "getPageSchema",
+      variables: {
+        uid,
+      },
     },
-  });
+    {
+      refreshDeps: [uid],
+      onSuccess(data) {
+        onSuccess && onSuccess(data);
+        reset && reset();
+      },
+    }
+  );
 
   if (loading) {
     return <Spin />;

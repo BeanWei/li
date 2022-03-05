@@ -1,16 +1,13 @@
-import { Result } from "ahooks/lib/useRequest/src/types";
 import React, { createContext, useContext } from "react";
-import { useRequest } from "../api-client";
+import { useRequest } from "pro-utils";
 
-export const AsyncDataContext = createContext<
-  Result<any, any> & { state?: any; setState?: any }
->(null);
+export const AsyncDataContext = createContext<any>({});
 
 export interface AsyncDataProviderProps {
   value?: any;
   request?: any;
   uid?: string;
-  onSuccess?: (data, params) => void;
+  onSuccess?: (data: any, params: any) => void;
 }
 
 export const AsyncDataProvider: React.FC<AsyncDataProviderProps> = (props) => {
