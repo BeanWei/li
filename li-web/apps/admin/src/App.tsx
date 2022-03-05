@@ -11,7 +11,8 @@ import {
   ConfigProvider,
   DocumentTitleProvider,
   i18n,
-  Layout,
+  AdminLayout,
+  BlankLayout,
   RouteSwitch,
   RouteSwitchProvider,
 } from "./modules";
@@ -38,7 +39,8 @@ const providers = [
     RouteSwitchProvider,
     {
       components: {
-        Layout,
+        AdminLayout,
+        BlankLayout,
       },
     },
   ],
@@ -46,14 +48,45 @@ const providers = [
 
 const App = compose(...providers)(() => {
   const { data, loading } = useRequest({
-    operation: "getAppRoutes",
+    operation: "getAppMenuSchema",
   });
   if (loading) {
     return <Spin />;
   }
   return (
     <div>
-      <RouteSwitch routes={data?.data || []} />
+      <RouteSwitch
+        routes={[
+          {
+            type: "redirect",
+            from: "/",
+            to: "/admin",
+          },
+          {
+            type: "route",
+            path: "/admin/:name(.+)?",
+            component: "AdminLayout",
+            title: "Li Admin",
+            uiSchema: data,
+          },
+          {
+            type: "route",
+            component: "BlankLayout",
+            routes: [
+              {
+                type: "route",
+                path: "/signin",
+                component: "SigninPage",
+              },
+              {
+                type: "route",
+                path: "/signup",
+                component: "SignupPage",
+              },
+            ],
+          },
+        ]}
+      />
     </div>
   );
 });

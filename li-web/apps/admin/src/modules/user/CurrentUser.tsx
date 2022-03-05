@@ -33,7 +33,7 @@ export const CurrentUser = () => {
               <Menu.Item
                 key="signout"
                 onClick={() => {
-                  request("signout");
+                  request("userSignOut");
                   history.push("/signin");
                 }}
               >

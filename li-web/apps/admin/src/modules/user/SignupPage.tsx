@@ -101,7 +101,7 @@ const useSignup = () => {
   return {
     async run() {
       await form.submit();
-      await request("signup", form.values);
+      await request("userSignup", form.values);
       Message.success("注册成功，即将跳转登录页");
       setTimeout(() => {
         history.push("/signin");

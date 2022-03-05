@@ -1,6 +1,6 @@
 import { useRef, useState } from "react";
 import { css } from "@emotion/css";
-import { Layout as ArcoLayout } from "@arco-design/web-react";
+import { Layout } from "@arco-design/web-react";
 import { useHistory, useRouteMatch } from "react-router-dom";
 import { Schema } from "@formily/react";
 import { useRoute } from "./hooks";
@@ -78,8 +78,8 @@ const InternalLayout = (props: any) => {
   const [hidden, setHidden] = useState(false);
   // const result = useSystemSettings();
   return (
-    <ArcoLayout>
-      <ArcoLayout.Header
+    <Layout>
+      <Layout.Header
         style={{
           height: 46,
           lineHeight: "46px",
@@ -150,22 +150,22 @@ const InternalLayout = (props: any) => {
           /> */}
           <CurrentUser />
         </div>
-      </ArcoLayout.Header>
-      <ArcoLayout>
-        <ArcoLayout.Sider
+      </Layout.Header>
+      <Layout>
+        <Layout.Sider
           style={{ display: "none" }}
           theme={"light"}
           ref={sideMenuRef}
-        ></ArcoLayout.Sider>
-        <ArcoLayout.Content style={{ minHeight: "calc(100vh - 46px)" }}>
+        ></Layout.Sider>
+        <Layout.Content style={{ minHeight: "calc(100vh - 46px)" }}>
           <RemoteSchemaComponent uid={match.params.name} />
-        </ArcoLayout.Content>
-      </ArcoLayout>
-    </ArcoLayout>
+        </Layout.Content>
+      </Layout>
+    </Layout>
   );
 };
 
-export const Layout = () => {
+export const AdminLayout = () => {
   return (
     <CurrentUserProvider>
       <InternalLayout />
@@ -173,4 +173,4 @@ export const Layout = () => {
   );
 };
 
-export default Layout;
+export default AdminLayout;

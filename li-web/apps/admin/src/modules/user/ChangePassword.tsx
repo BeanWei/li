@@ -131,7 +131,7 @@ export const ChangePassword = () => {
   return (
     <ActionContext.Provider value={{ visible, setVisible }}>
       <Menu.Item
-        key={"ChangePassword"}
+        key={"userChangePassword"}
         onClick={() => {
           ctx?.setVisible?.(false);
           setVisible(true);

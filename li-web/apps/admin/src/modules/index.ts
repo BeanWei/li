@@ -1,5 +1,4 @@
 export * from "./application";
-export * from "./api-client";
 export * from "./async-data-provider";
 export * from "./config-provider";
 export * from "./document-title";

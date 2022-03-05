@@ -64,7 +64,7 @@ const useSignin = () => {
   return {
     async run() {
       await form.submit();
-      const response = await request("signin", form.values);
+      const response = await request("userSignin", form.values);
       if (response?.data?.data?.token) {
         history.push("/admin");
       }
