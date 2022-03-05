@@ -1,12 +1,17 @@
 import { Link, Notification, Spin } from "@arco-design/web-react";
 import { I18nextProvider } from "react-i18next";
 import { NavLink } from "react-router-dom";
-import { SchemaComponentProvider } from "schema-components";
+import {
+  SchemaComponentProvider,
+  UiSchemaComponentProvider,
+} from "schema-components";
 import {
   APIClient,
   APIClientProvider,
   compose,
+  ConfigProvider,
   DocumentTitleProvider,
+  i18n,
   Layout,
   RouteSwitch,
   RouteSwitchProvider,
@@ -30,11 +35,9 @@ apiClient.axios.interceptors.response.use(
 );
 
 const providers = [
-  // [HashRouter],
-  // [MemoryRouter, { initialEntries: ['/'] }],
   [APIClientProvider, { apiClient }],
-  // [I18nextProvider, { i18n }],
-  // [AntdConfigProvider, { remoteLocale: true }],
+  [I18nextProvider, { i18n }],
+  [ConfigProvider, { remoteLocale: true }],
   // SystemSettingsProvider,
   // [
   //   PluginManagerProvider,
@@ -48,6 +51,7 @@ const providers = [
   //   },
   // ],
   [SchemaComponentProvider, { components: { Link, NavLink } }],
+  UiSchemaComponentProvider,
   [DocumentTitleProvider, { addonAfter: "Li" }],
   [
     RouteSwitchProvider,
