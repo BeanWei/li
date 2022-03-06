@@ -22,67 +22,66 @@ export const ActionDrawer: ComposedActionDrawer = observer((props) => {
     }
     return buf;
   });
-  return (
-    <>
-      {createPortal(
-        <Drawer
-          width={"50%"}
-          title={field.title}
-          {...rest}
-          visible={visible}
-          onCancel={() => setVisible(false)}
-          className={cls(
-            rest.className,
-            css`
-              &.li-action-popup {
-                .arco-drawer-content {
-                  background: #f0f2f5;
-                }
-              }
-            `
-          )}
-          footer={
-            footerSchema ? (
-              <div
-                className={css`
-                  display: flex;
-                  justify-content: flex-end;
-                  width: 100%;
-                  .arco-btn {
-                    margin-right: 8px;
-                  }
-                `}
-              >
-                <RecursionField
-                  basePath={field.address}
-                  schema={schema}
-                  onlyRenderProperties
-                  filterProperties={(s) => {
-                    return s["x-component"] === footerNodeName;
-                  }}
-                />
-              </div>
-            ) : null
+
+  return createPortal(
+    <Drawer
+      width={"50%"}
+      title={field.title}
+      {...rest}
+      visible={visible}
+      unmountOnExit
+      onCancel={() => setVisible(false)}
+      className={cls(
+        rest.className,
+        css`
+          &.li-action-popup {
+            .arco-drawer-content {
+              background: #f0f2f5;
+            }
           }
-        >
-          <RecursionField
-            basePath={field.address}
-            schema={schema}
-            onlyRenderProperties
-            filterProperties={(s) => {
-              return s["x-component"] !== footerNodeName;
-            }}
-          />
-        </Drawer>,
-        document.body
+        `
       )}
-    </>
+      footer={
+        footerSchema ? (
+          <div
+            className={css`
+              display: flex;
+              justify-content: flex-end;
+              width: 100%;
+              .arco-btn {
+                margin-right: 8px;
+              }
+            `}
+          >
+            <RecursionField
+              basePath={field.address}
+              schema={schema}
+              onlyRenderProperties
+              filterProperties={(s) => {
+                return s["x-component"] === footerNodeName;
+              }}
+            />
+          </div>
+        ) : null
+      }
+    >
+      <RecursionField
+        basePath={field.address}
+        schema={schema}
+        onlyRenderProperties
+        filterProperties={(s) => {
+          return s["x-component"] !== footerNodeName;
+        }}
+      />
+    </Drawer>,
+    document.body
   );
 });
 
 ActionDrawer.Footer = observer(() => {
   const field = useField();
   const schema = useFieldSchema();
+
   return (
     <RecursionField
       basePath={field.address}

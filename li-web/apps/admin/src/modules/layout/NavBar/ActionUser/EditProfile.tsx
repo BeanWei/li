@@ -7,23 +7,11 @@ import {
   ActionContext,
   SchemaComponent,
   useActionContext,
+  useCloseAction,
 } from "schema-components";
 import { useRequest } from "pro-utils";
 import { useAdminLayoutContext } from "../../AdminLayoutProvider";
 import styles from "../style/index.module.less";
-
-const useCloseAction = () => {
-  const { setVisible } = useActionContext();
-  const form = useForm();
-  return {
-    async run() {
-      setVisible(false);
-      form.submit((values) => {
-        console.log(values);
-      });
-    },
-  };
-};
 
 const useCurrentUserValues = (options: any) => {
   const ctx = useAdminLayoutContext();
