@@ -17,9 +17,11 @@ export const DocumentTitleProvider: React.FC<{
 }> = (props) => {
   const { addonBefore, addonAfter } = props;
   const [title, setTitle] = useState("");
-  const documentTitle = `${addonBefore ? ` - ${addonBefore}` : ""}${
-    title || ""
-  }${addonAfter ? ` - ${addonAfter}` : ""}`;
+  const documentTitle = title
+    ? `${addonBefore ? `${addonBefore} - ` : ""}${title || ""}${
+        addonAfter ? ` - ${addonAfter}` : ""
+      }`
+    : "Li Admin";
   return (
     <DocumentTitleContext.Provider
       value={{

@@ -4,8 +4,8 @@
   "description": "li admin",
   "private": true,
   "scripts": {
-    "start": "vite",
-    "dev": "vite",
+    "start": "cross-env NODE_ENV=development vite",
+    "dev": "cross-env NODE_ENV=development vite",
     "preview": "vite preview"
   },
   "dependencies": {
@@ -45,6 +45,7 @@
     "@types/react-helmet": "^6.1.5",
     "@vitejs/plugin-react": "^1.1.0",
     "config": "workspace:*",
+    "cross-env": "^7.0.3",
     "less": "^4.1.2",
     "less-loader": "7.3.0",
     "tsconfig": "workspace:*",

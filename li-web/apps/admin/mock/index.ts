@@ -1,4 +1,6 @@
 import { MockMethod } from "vite-plugin-mock";
+import getAppMenuSchema from "./getAppMenuSchema";
+import userGetProfile from "./userGetProfile";
 
 export default [
   {
@@ -9,6 +11,11 @@ export default [
       if (operation === "getAppMenuSchema") {
         return {
           data: getAppMenuSchema,
+        };
+      }
+      if (operation === "userGetProfile") {
+        return {
+          data: userGetProfile,
         };
       }
       return {

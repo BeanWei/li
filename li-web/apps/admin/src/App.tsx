@@ -1,6 +1,6 @@
 import { Link, Spin } from "@arco-design/web-react";
 import { I18nextProvider } from "react-i18next";
-import { NavLink } from "react-router-dom";
+import { BrowserRouter, NavLink } from "react-router-dom";
 import {
   SchemaComponentProvider,
   UiSchemaComponentProvider,
@@ -50,17 +50,19 @@ const App = compose(...providers)(() => {
   const { data, loading } = useRequest({
     operation: "getAppMenuSchema",
   });
+
   if (loading) {
     return <Spin />;
   }
   return (
-    <div>
+    <BrowserRouter>
       <RouteSwitch
         routes={[
           {
             type: "redirect",
             from: "/",
             to: "/admin",
+            exact: true,
           },
           {
             type: "route",
@@ -87,7 +89,7 @@ const App = compose(...providers)(() => {
           },
         ]}
       />
-    </div>
+    </BrowserRouter>
   );
 });
 

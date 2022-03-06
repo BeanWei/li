@@ -10,9 +10,7 @@ export const useCurrentUserContext = () => {
 };
 
 export const CurrentUserProvider = (props: any) => {
-  const result = useRequest({
-    url: "userGetProfile",
-  });
+  const result = useRequest("userGetProfile");
   if (result.loading) {
     return <Spin />;
   }

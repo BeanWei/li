@@ -195,7 +195,7 @@ const defaultErrorHandler: IErrorHandler = (error, opts, config) => {
 };
 
 const defaultConfig: RequestConfig = {
-  url: "/api/liql",
+  baseURL: window.location.origin + "/api/liql",
   method: "POST",
 };
 
