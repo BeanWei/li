@@ -1,4 +1,4 @@
-import { useRef, useState } from "react";
+import { useState } from "react";
 import { Layout } from "@arco-design/web-react";
 import { useHistory, useRouteMatch } from "react-router-dom";
 import { SchemaComponent } from "schema-components";
@@ -9,22 +9,21 @@ import Navbar from "./NavBar";
 import { AdminLayoutProvider } from "./AdminLayoutProvider";
 import styles from "@/style/layout.module.less";
 
-const InternalLayout = (props: any) => {
+const InternalLayout = () => {
   const route = useRoute();
   const history = useHistory();
   const match = useRouteMatch<any>();
   const { setTitle } = useDocumentTitle();
-  const sideMenuRef = useRef();
-  const defaultSelectedUid = match.params.name;
-  const [schema, setSchema] = useState({});
-  const onSelect = ({ item }: any) => {
-    const schema = item.props.schema;
-    console.log("onSelect", schema);
-    setSchema(schema);
-    setTitle?.(schema.title);
-    history.push(`/admin/${schema["x-data"]}`);
+  const defaultSelectedKeys = match.params.name ?? [];
+  const [, setSchema] = useState({});
+  const onClickMenuItem = (key: string, _: any, paths: any) => {
+    console.log(key, paths);
+    // const schema = item.props.schema;
+    // console.log("onSelect", schema);
+    // setSchema(schema);
+    // setTitle?.(schema.title);
+    // history.push(`/admin/${schema["x-data"]}`);
   };
-  const [hidden, setHidden] = useState(false);
 
   return (
     <Layout className={styles.layout}>
@@ -33,15 +32,19 @@ const InternalLayout = (props: any) => {
       </div>
       <Layout>
         <Layout.Sider
-          style={{ display: "none" }}
-          theme={"light"}
-          ref={sideMenuRef}
+          className={styles["layout-sider"]}
+          trigger={null}
+          collapsible
+          breakpoint="xl"
+          width={220}
+          style={{ paddingTop: 60 }}
         >
-          <SchemaComponent
-            hidden={hidden}
-            schema={route.schema}
-            scope={{ onSelect, sideMenuRef, defaultSelectedUid }}
-          />
+          <div className={styles["menu-wrapper"]}>
+            <SchemaComponent
+              schema={route.schema}
+              scope={{ onClickMenuItem, defaultSelectedKeys }}
+            />
+          </div>
         </Layout.Sider>
         <Layout className={styles["layout-content"]}>
           <div className={styles["layout-content-wrapper"]}>

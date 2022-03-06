@@ -3,10 +3,10 @@ import {
   IconLanguage,
   IconLock,
   IconPoweroff,
-  IconSettings,
 } from "@arco-design/web-react/icon";
-import { useAdminLayoutContext } from "../AdminLayoutProvider";
-import styles from "./style/index.module.less";
+import { useAdminLayoutContext } from "../../AdminLayoutProvider";
+import styles from "../style/index.module.less";
+import { EditProfile } from "./EditProfile";
 
 const ActionUser: React.FC = () => {
   const { profile = {} } = useAdminLayoutContext();
@@ -15,10 +15,7 @@ const ActionUser: React.FC = () => {
     <Dropdown
       droplist={
         <Menu>
-          <Menu.Item key="editprofile">
-            <IconSettings className={styles["dropdown-icon"]} />
-            用户设置
-          </Menu.Item>
+          <EditProfile />
           <Menu.Item key="changepwd">
             <IconLock className={styles["dropdown-icon"]} />
             修改密码

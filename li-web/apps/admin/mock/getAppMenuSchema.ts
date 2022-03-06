@@ -3,57 +3,10 @@ export default {
   type: "void",
   "x-component": "Menu",
   "x-component-props": {
-    defaultSelectedUid: "u1",
-    onSelect: "{{ onSelect }}",
-    sideMenuRefScopeKey: "sideMenuRef",
+    defaultSelectedKeys: "{{ defaultSelectedKeys }}",
+    onClickMenuItem: "{{ onClickMenuItem }}",
   },
   properties: {
-    item3: {
-      type: "void",
-      title: "SubMenu u3",
-      "x-data": "u3",
-      "x-component": "Menu.SubMenu",
-      "x-component-props": {},
-      properties: {
-        item6: {
-          type: "void",
-          title: "SubMenu u6",
-          "x-data": "u6",
-          "x-component": "Menu.SubMenu",
-          "x-component-props": {},
-          properties: {
-            item7: {
-              type: "void",
-              title: "Menu Item u7",
-              "x-data": "u7",
-              "x-component": "Menu.Item",
-              "x-component-props": {},
-            },
-            item8: {
-              type: "void",
-              title: "Menu Item u8",
-              "x-data": "u8",
-              "x-component": "Menu.Item",
-              "x-component-props": {},
-            },
-          },
-        },
-        item4: {
-          type: "void",
-          title: "Menu Item u4",
-          "x-data": "u4",
-          "x-component": "Menu.Item",
-          "x-component-props": {},
-        },
-        item5: {
-          type: "void",
-          title: "Menu Item u5",
-          "x-data": "u5",
-          "x-component": "Menu.Item",
-          "x-component-props": {},
-        },
-      },
-    },
     item1: {
       type: "void",
       title: "Menu Item u1",
@@ -68,17 +21,63 @@ export default {
       "x-component": "Menu.Item",
       "x-component-props": {},
     },
-    item9: {
+    item3: {
       type: "void",
-      title: "SubMenu u9",
-      "x-data": "u9",
+      title: "SubMenu u3",
+      "x-data": "u3",
       "x-component": "Menu.SubMenu",
       "x-component-props": {},
       properties: {
-        item10: {
+        item31: {
           type: "void",
-          title: "Menu Item u10",
-          "x-data": "u10",
+          title: "SubMenu u31",
+          "x-data": "u31",
+          "x-component": "Menu.SubMenu",
+          "x-component-props": {},
+          properties: {
+            item311: {
+              type: "void",
+              title: "Menu Item u311",
+              "x-data": "u311",
+              "x-component": "Menu.Item",
+              "x-component-props": {},
+            },
+            item312: {
+              type: "void",
+              title: "Menu Item u312",
+              "x-data": "u312",
+              "x-component": "Menu.Item",
+              "x-component-props": {},
+            },
+          },
+        },
+        item32: {
+          type: "void",
+          title: "Menu Item u32",
+          "x-data": "u32",
+          "x-component": "Menu.Item",
+          "x-component-props": {},
+        },
+        item33: {
+          type: "void",
+          title: "Menu Item u33",
+          "x-data": "u33",
+          "x-component": "Menu.Item",
+          "x-component-props": {},
+        },
+      },
+    },
+    item4: {
+      type: "void",
+      title: "SubMenu u4",
+      "x-data": "u4",
+      "x-component": "Menu.SubMenu",
+      "x-component-props": {},
+      properties: {
+        item41: {
+          type: "void",
+          title: "Menu Item u41",
+          "x-data": "u41",
           "x-component": "Menu.Item",
           "x-component-props": {},
         },

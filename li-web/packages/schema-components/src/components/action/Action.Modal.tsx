@@ -8,9 +8,9 @@ import {
 import { Modal } from "@arco-design/web-react";
 import { createPortal } from "react-dom";
 import { useActionContext } from ".";
-import { ComposedActionDrawer } from "./types";
+import { ComposedActionModal } from "./types";
 
-export const ActionModal: ComposedActionDrawer = observer((props) => {
+export const ActionModal: ComposedActionModal = observer((props) => {
   const { footerNodeName = "Action.Modal.Footer", ...rest } = props;
   const { visible, setVisible } = useActionContext();
   const schema = useFieldSchema();
@@ -24,7 +24,6 @@ export const ActionModal: ComposedActionDrawer = observer((props) => {
   return (
     <>
       {createPortal(
-        // @ts-ignore
         <Modal
           title={field.title}
           {...rest}

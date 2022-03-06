@@ -12,11 +12,11 @@ import { useActionContext } from "./hooks";
 import { ComposedActionDrawer } from "./types";
 
 export const ActionDrawer: ComposedActionDrawer = observer((props) => {
-  const { footerNodeName = "Action.Drawer.Footer", ...others } = props;
+  const { footerNodeName = "Action.Drawer.Footer", ...rest } = props;
   const { visible, setVisible } = useActionContext();
   const schema = useFieldSchema();
   const field = useField();
-  const footerSchema = schema.reduceProperties((buf, s) => {
+  const footerSchema: any = schema.reduceProperties((buf, s) => {
     if (s["x-component"] === footerNodeName) {
       return s;
     }
@@ -28,11 +28,11 @@ export const ActionDrawer: ComposedActionDrawer = observer((props) => {
         <Drawer
           width={"50%"}
           title={field.title}
-          {...others}
+          {...rest}
           visible={visible}
           onCancel={() => setVisible(false)}
           className={cls(
-            others.className,
+            rest.className,
             css`
               &.li-action-popup {
                 .arco-drawer-content {

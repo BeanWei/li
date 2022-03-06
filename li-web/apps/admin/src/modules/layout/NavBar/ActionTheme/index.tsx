@@ -1,8 +1,8 @@
 import { Tooltip } from "@arco-design/web-react";
 import { IconMoonFill, IconSunFill } from "@arco-design/web-react/icon";
 import { useContext } from "react";
-import { AdminLayoutContext } from "../AdminLayoutProvider";
-import IconButton from "./IconButton";
+import { AdminLayoutContext } from "../../AdminLayoutProvider";
+import IconButton from "../IconButton";
 
 const ActionTheme: React.FC = () => {
   const { theme, setTheme } = useContext(AdminLayoutContext);
