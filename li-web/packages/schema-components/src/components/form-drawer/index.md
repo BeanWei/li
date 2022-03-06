@@ -14,6 +14,7 @@ import {
   SchemaComponent,
 } from "schema-components";
 import { Button } from "@arco-design/web-react";
+import "@arco-design/web-react/dist/css/arco.css";
 
 const schema = {
   type: "object",
@@ -28,7 +29,6 @@ const schema = {
     bbb: {
       type: "string",
       title: "输入框2",
-      required: true,
       "x-decorator": "FormItem",
       "x-component": "Input",
     },

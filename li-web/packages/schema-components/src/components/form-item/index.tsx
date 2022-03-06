@@ -12,6 +12,7 @@ import {
   IconExclamationCircle,
   IconLoading,
 } from "@arco-design/web-react/icon";
+import "./index.less";
 
 export interface IFormItemProps {
   className?: string;

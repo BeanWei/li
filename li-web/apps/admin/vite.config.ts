@@ -8,7 +8,10 @@ import setting from "./src/settings.json";
 // https://vitejs.dev/config/
 export default defineConfig({
   resolve: {
-    alias: [{ find: "@", replacement: "/src" }],
+    alias: [
+      { find: "@", replacement: "/src" },
+      { find: /^~/, replacement: "" }, // https://github.com/vitejs/vite/issues/2185
+    ],
   },
   plugins: [
     react(),

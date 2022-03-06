@@ -1,102 +1,38 @@
-import { useState } from "react";
-import { ISchema, useForm } from "@formily/react";
-import { IconSettings } from "@arco-design/web-react/icon";
-import { uid } from "@formily/shared";
-import { Menu } from "@arco-design/web-react";
+import { ISchema } from "@formily/react";
 import {
-  ActionContext,
+  Form,
+  FormDrawer,
+  FormItem,
+  FormLayout,
+  Input,
   SchemaComponent,
-  useActionContext,
-  useCloseAction,
+  SchemaComponentProvider,
 } from "schema-components";
-import { useRequest } from "pro-utils";
 import { useAdminLayoutContext } from "../../AdminLayoutProvider";
-import styles from "../style/index.module.less";
-
-const useCurrentUserValues = (options: any) => {
-  const ctx = useAdminLayoutContext();
-  return useRequest(() => Promise.resolve(ctx.profile), options);
-};
-
-const useSaveCurrentUserValues = () => {
-  const { setVisible } = useActionContext();
-  const form = useForm();
-  return {
-    async run() {
-      form.submit((values) => {
-        setVisible(false);
-        console.log(values);
-      });
-    },
-  };
-};
 
 const schema: ISchema = {
   type: "object",
   properties: {
-    [uid()]: {
-      type: "void",
-      title: "个人资料",
-      "x-decorator": "Form",
-      "x-decorator-props": {
-        useValues: "{{ useCurrentUserValues }}",
-      },
-      "x-component": "Action.Drawer",
-      properties: {
-        nickname: {
-          type: "string",
-          title: "{{t('Nickname')}}",
-          "x-decorator": "FormItem",
-          "x-component": "Input",
-          required: true,
-        },
-        footer: {
-          "x-component": "Action.Drawer.Footer",
-          type: "void",
-          properties: {
-            cancel: {
-              title: "Cancel",
-              "x-component": "Action",
-              "x-component-props": {
-                useAction: "{{ useCloseAction }}",
-              },
-            },
-            submit: {
-              title: "Submit",
-              "x-component": "Action",
-              "x-component-props": {
-                type: "primary",
-                useAction: "{{ useSaveCurrentUserValues }}",
-              },
-            },
-          },
-        },
-      },
+    nickname: {
+      type: "string",
+      title: "{{t('Nickname')}}",
+      "x-decorator": "FormItem",
+      "x-component": "Input",
+      required: true,
     },
   },
 };
 
-export const EditProfile = () => {
-  const [visible, setVisible] = useState(false);
-  return (
-    <ActionContext.Provider value={{ visible, setVisible }}>
-      <Menu.Item
-        key="editprofile"
-        onClick={() => {
-          setVisible(true);
-        }}
-      >
-        <IconSettings className={styles["dropdown-icon"]} />
-        用户设置
-      </Menu.Item>
-      <SchemaComponent
-        scope={{
-          useCurrentUserValues,
-          useCloseAction,
-          useSaveCurrentUserValues,
-        }}
-        schema={schema}
-      />
-    </ActionContext.Provider>
-  );
+export const openEditProfileDrawer = (initialValues: Record<string, any>) => {
+  FormDrawer("个人资料", () => {
+    return (
+      <FormLayout>
+        <SchemaComponentProvider components={{ Form, Input, FormItem }}>
+          <SchemaComponent schema={schema} />
+        </SchemaComponentProvider>
+      </FormLayout>
+    );
+  }).open({
+    initialValues,
+  });
 };
