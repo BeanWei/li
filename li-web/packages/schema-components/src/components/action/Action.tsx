@@ -13,11 +13,23 @@ import ActionPopover from "./Action.Popover";
 import ActionLink from "./Action.Link";
 import { ActionContext } from "./context";
 import { ComposedAction } from "./types";
+import { Button, Modal } from "@arco-design/web-react";
+import { useA } from "./hooks";
 
+// TODO: Improve Typing
 export const Action: ComposedAction = observer((props: any) => {
-  const { popover, openMode, containerRefKey } = props;
+  const {
+    popover,
+    confirm,
+    openMode,
+    containerRefKey,
+    useAction = useA,
+    onClick,
+    ...rest
+  } = props;
   const [visible, setVisible] = useState(false);
   const field = useField();
+  const { run } = useAction();
   const fieldSchema = useFieldSchema();
   return (
     <ActionContext.Provider
@@ -29,6 +41,30 @@ export const Action: ComposedAction = observer((props: any) => {
           onlyRenderProperties
           schema={fieldSchema}
         />
+      )}
+      {!popover && (
+        <Button
+          {...rest}
+          onClick={(e) => {
+            e.preventDefault();
+            e.stopPropagation();
+            const onOk = () => {
+              onClick?.(e);
+              setVisible(true);
+              run();
+            };
+            if (confirm) {
+              Modal.confirm({
+                ...confirm,
+                onOk,
+              });
+            } else {
+              onOk();
+            }
+          }}
+        >
+          {field.title}
+        </Button>
       )}
       {!popover && props.children}
     </ActionContext.Provider>
