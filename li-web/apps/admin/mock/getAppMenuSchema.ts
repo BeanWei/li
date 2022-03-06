@@ -3,7 +3,6 @@ export default {
   type: "void",
   "x-component": "Menu",
   "x-component-props": {
-    mode: "mix",
     defaultSelectedUid: "u1",
     onSelect: "{{ onSelect }}",
     sideMenuRefScopeKey: "sideMenuRef",

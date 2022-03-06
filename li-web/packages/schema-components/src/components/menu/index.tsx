@@ -207,12 +207,7 @@ Menu.Item = observer((props) => {
   const schema = useFieldSchema();
   const field = useField();
   return (
-    <ArcoMenu.Item
-      {...others}
-      key={schema.name}
-      eventKey={schema.name}
-      schema={schema}
-    >
+    <ArcoMenu.Item {...others} key={schema.name} schema={schema}>
       <Icon type={icon} style={{ marginRight: 5 }} />
       {field.title}
     </ArcoMenu.Item>
@@ -227,7 +222,6 @@ Menu.URL = observer((props) => {
     <ArcoMenu.Item
       {...others}
       key={schema.name}
-      eventKey={schema.name}
       schema={schema}
       onClick={() => {
         window.open(props.href, "_blank");
@@ -251,7 +245,6 @@ Menu.SubMenu = observer((props) => {
     <ArcoMenu.SubMenu
       {...others}
       key={schema.name}
-      eventKey={schema.name}
       title={
         <>
           <Icon style={{ marginRight: 5 }} type={icon} />
