@@ -3,11 +3,11 @@ export default {
   type: "void",
   "x-component": "Menu",
   "x-component-props": {
-    defaultSelectedKeys: "{{ defaultSelectedKeys }}",
+    defaultSelectedKeys: ["WelcomePage"],
     onClickMenuItem: "{{ onClickMenuItem }}",
     menuData: [
       {
-        key: "WelcomPage",
+        key: "WelcomePage",
         name: "欢迎",
       },
       {

@@ -1,5 +1,6 @@
 import { MockMethod } from "vite-plugin-mock";
 import getAppMenuSchema from "./getAppMenuSchema";
+import getWelcomePageSchema from "./getWelcomePageSchema";
 import userGetProfile from "./userGetProfile";
 
 export default [
@@ -16,6 +17,17 @@ export default [
       if (operation === "userGetProfile") {
         return {
           data: userGetProfile,
+        };
+      }
+      if (operation == "getPageSchema") {
+        if (variables.uid === "WelcomePage") {
+          return {
+            data: getWelcomePageSchema,
+          };
+        }
+        return {
+          code: 0,
+          data: {},
         };
       }
       return {
