@@ -311,7 +311,6 @@ export const BaseItem: React.FC<IFormItemProps> = ({ children, ...props }) => {
         className={cls(`${prefixCls}-form-item-wrapper`, {
           [`${prefixCls}-item-wrapper-flex`]:
             !enableCol || !!!wrapperCol || !label,
-          [`${prefixCls}-form-item-control`]: true,
         })}
         span={enableCol && !!wrapperCol ? wrapperCol : undefined}
       >
@@ -344,15 +343,22 @@ export const BaseItem: React.FC<IFormItemProps> = ({ children, ...props }) => {
             </div>
           )}
         </div>
-        {!!feedbackText && (
-          <div
-            className={cls(`${prefixCls}-form-message`, {
-              [`${prefixCls}-form-message-help`]: true,
-            })}
-          >
-            {feedbackText}
-          </div>
-        )}
+        {!!feedbackText &&
+          feedbackLayout !== "popover" &&
+          feedbackLayout !== "none" && (
+            <div
+              className={cls({
+                [`${prefixCls}-form-message`]: true,
+                [`${prefixCls}-form-item-${feedbackStatus}-help`]:
+                  !!feedbackStatus,
+                [`${prefixCls}-form-item-help`]: true,
+                [`${prefixCls}-form-item-help-enter`]: true,
+                [`${prefixCls}-form-item-help-enter-active`]: true,
+              })}
+            >
+              {feedbackText}
+            </div>
+          )}
         {extra && (
           <div className={cls(`${prefixCls}-form-item-extra`)}>{extra}</div>
         )}

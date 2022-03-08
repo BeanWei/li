@@ -54,7 +54,7 @@ export default () => (
   <Button
     onClick={() => {
       FormDrawer("弹窗表单", (resolve) => (
-        <FormLayout labelCol={6} wrapperCol={10}>
+        <FormLayout labelCol={6} wrapperCol={16}>
           <SchemaComponentProvider components={{ Form, Input, FormItem }}>
             <SchemaComponent schema={schema} />
           </SchemaComponentProvider>
