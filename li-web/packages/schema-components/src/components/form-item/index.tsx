@@ -10,7 +10,7 @@ import {
 } from "@arco-design/web-react/icon";
 import { connect, mapProps } from "@formily/react";
 import { isVoidField } from "@formily/core";
-import { useFormLayout } from "../form-layout";
+import { FormLayoutShallowContext, useFormLayout } from "../form-layout";
 import { getPrefixCls, pickDataProps } from "../__builtins__";
 import "./index.less";
 
@@ -262,12 +262,12 @@ export const BaseItem: React.FC<IFormItemProps> = ({ children, ...props }) => {
         ref={containerRef}
         span={enableCol && !!labelCol ? labelCol : undefined}
         className={cls(
+          `${prefixCls}-form-item-label`,
           `${prefixCls}-form-label-item`,
-          `${prefixCls}-form-label-content`,
           {
             [`${prefixCls}-form-label-item-tooltip`]:
               (tooltip && tooltipLayout === "text") || overflow,
-            [`${prefixCls}-form-label-item-flex`]: enableCol || !!!labelCol,
+            [`${prefixCls}-form-label-item-flex`]: !enableCol || !!!labelCol,
           }
         )}
         style={labelStyle}
@@ -286,7 +286,21 @@ export const BaseItem: React.FC<IFormItemProps> = ({ children, ...props }) => {
       {...pickDataProps(props)}
       div={layout !== "horizontal"}
       data-grid-span={props.gridSpan}
-      className={`${prefixCls}-form-item ${prefixCls}-form-layout-${layout}`}
+      className={cls({
+        [`${prefixCls}-form-item`]: true,
+        [`${prefixCls}-form-item-layout-${layout}`]: true,
+        [`${prefixCls}-form-item-${feedbackStatus}`]: !!feedbackStatus,
+        [`${prefixCls}-form-item-feedback-has-text`]: !!feedbackText,
+        [`${prefixCls}-form-item-size-${size}`]: !!size,
+        [`${prefixCls}-form-item-feedback-layout-${feedbackLayout}`]:
+          !!feedbackLayout,
+        [`${prefixCls}-form-item-fullness`]: !!fullness || !!feedbackIcon,
+        [`${prefixCls}-form-item-label-align-${labelAlign}`]: true,
+        [`${prefixCls}-form-item-control-align-${wrapperAlign}`]: true,
+        [`${prefixCls}-form-item-label-wrap`]: !!labelWrap,
+        [`${prefixCls}-form-item-control-wrap`]: !!wrapperWrap,
+        [props.className || ""]: !!props.className,
+      })}
       style={{
         ...style,
         ...gridStyles,
@@ -297,10 +311,39 @@ export const BaseItem: React.FC<IFormItemProps> = ({ children, ...props }) => {
         className={cls(`${prefixCls}-form-item-wrapper`, {
           [`${prefixCls}-item-wrapper-flex`]:
             !enableCol || !!!wrapperCol || !label,
+          [`${prefixCls}-form-item-control`]: true,
         })}
         span={enableCol && !!wrapperCol ? wrapperCol : undefined}
       >
-        {formatChildren}
+        <div className={cls(`${prefixCls}-form-item-control-content`)}>
+          {addonBefore && (
+            <div className={cls(`${prefixCls}-form-item-addon-before`)}>
+              {addonBefore}
+            </div>
+          )}
+          <div
+            style={wrapperStyle}
+            className={cls({
+              [`${prefixCls}-form-item-control-content-component`]: true,
+              [`${prefixCls}-form-item-control-content-component-has-feedback-icon`]:
+                !!feedbackIcon,
+            })}
+          >
+            <FormLayoutShallowContext.Provider value={undefined}>
+              {formatChildren}
+            </FormLayoutShallowContext.Provider>
+            {feedbackIcon && (
+              <div className={cls(`${prefixCls}-form-item-feedback-icon`)}>
+                {feedbackIcon}
+              </div>
+            )}
+          </div>
+          {addonAfter && (
+            <div className={cls(`${prefixCls}-form-item-addon-after`)}>
+              {addonAfter}
+            </div>
+          )}
+        </div>
         {!!feedbackText && (
           <div
             className={cls(`${prefixCls}-form-message`, {
@@ -310,7 +353,9 @@ export const BaseItem: React.FC<IFormItemProps> = ({ children, ...props }) => {
             {feedbackText}
           </div>
         )}
-        {extra && <div className={cls(`${prefixCls}-form-extra`)}>{extra}</div>}
+        {extra && (
+          <div className={cls(`${prefixCls}-form-item-extra`)}>{extra}</div>
+        )}
       </Grid.Col>
     </Grid.Row>
   );

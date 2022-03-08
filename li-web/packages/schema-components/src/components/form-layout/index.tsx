@@ -48,9 +48,13 @@ export interface IFormLayoutContext
   wrapperCol?: number;
 }
 
-export const FormLayoutDeepContext = createContext<IFormLayoutContext>({});
+export const FormLayoutDeepContext = createContext<
+  IFormLayoutContext | undefined
+>(undefined);
 
-export const FormLayoutShallowContext = createContext<IFormLayoutContext>({});
+export const FormLayoutShallowContext = createContext<
+  IFormLayoutContext | undefined
+>(undefined);
 
 export const useFormDeepLayout = () => useContext(FormLayoutDeepContext);
 
@@ -62,9 +66,9 @@ export const useFormLayout = () => ({
 });
 
 export const FormLayout: React.FC<IFormLayoutProps> & {
-  useFormLayout: () => IFormLayoutContext;
-  useFormDeepLayout: () => IFormLayoutContext;
-  useFormShallowLayout: () => IFormLayoutContext;
+  useFormLayout: () => IFormLayoutContext | undefined;
+  useFormDeepLayout: () => IFormLayoutContext | undefined;
+  useFormShallowLayout: () => IFormLayoutContext | undefined;
 } = ({ shallow, children, prefixCls, className, style, ...otherProps }) => {
   const { ref, props } = useResponsiveFormLayout(otherProps);
   const deepLayout = useFormDeepLayout();
