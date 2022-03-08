@@ -10,7 +10,10 @@ import {
   DatePicker,
   Cascader,
   Select,
+  Submit,
+  Form,
   FormItem,
+  FormButtonGroup,
   FormLayout,
   SchemaComponentProvider,
   SchemaComponent,
@@ -117,6 +120,11 @@ export default () => (
       }}
     >
       <SchemaComponent schema={schema} />
+      <FormButtonGroup.FormItem>
+        <Submit long size="large">
+          提交
+        </Submit>
+      </FormButtonGroup.FormItem>
     </SchemaComponentProvider>
   </FormLayout>
 );
