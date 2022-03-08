@@ -26,6 +26,7 @@ export const ActionModal: ComposedActionModal = observer((props) => {
       {createPortal(
         <Modal
           title={field.title}
+          autoFocus={false}
           {...rest}
           visible={visible}
           onCancel={() => setVisible(false)}

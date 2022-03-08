@@ -27,6 +27,7 @@ export const ActionDrawer: ComposedActionDrawer = observer((props) => {
     <Drawer
       width={"50%"}
       title={field.title}
+      autoFocus={false}
       {...rest}
       visible={visible}
       unmountOnExit
