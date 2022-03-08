@@ -25,6 +25,7 @@ const schema = {
       required: true,
       "x-decorator": "FormItem",
       "x-component": "Input",
+      maxLength: 2,
     },
     bbb: {
       type: "string",
@@ -34,7 +35,7 @@ const schema = {
     },
     ccc: {
       type: "string",
-      title: "输入框3",
+      title: "输入框333333333",
       required: true,
       "x-decorator": "FormItem",
       "x-component": "Input",

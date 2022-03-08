@@ -112,7 +112,7 @@ export function FormDrawer(title: any, id: any, renderer?: any): IFormDrawer {
   });
   const renderDrawer = (visible = true) => {
     return (
-      <Drawer {...drawer} visible={visible}>
+      <Drawer autoFocus={false} {...drawer} visible={visible}>
         <FormProvider form={env.form}>
           <DrawerContent />
         </FormProvider>

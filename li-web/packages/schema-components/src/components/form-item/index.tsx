@@ -1,23 +1,22 @@
-import React, { useEffect, useRef, useState } from "react";
+import { useEffect, useRef, useState } from "react";
 import cls from "classnames";
-import { usePrefixCls, pickDataProps } from "../__builtins__";
-import { isVoidField } from "@formily/core";
-import { connect, mapProps } from "@formily/react";
-import { useFormLayout, FormLayoutShallowContext } from "../form-layout";
-import { Tooltip, Popover } from "@arco-design/web-react";
+import { Grid, Popover, Tooltip } from "@arco-design/web-react";
 import {
-  IconQuestionCircle,
-  IconCloseCircle,
   IconCheckCircle,
+  IconCloseCircle,
   IconExclamationCircle,
   IconLoading,
+  IconQuestionCircle,
 } from "@arco-design/web-react/icon";
+import { connect, mapProps } from "@formily/react";
+import { isVoidField } from "@formily/core";
+import { useFormLayout } from "../form-layout";
+import { getPrefixCls, pickDataProps } from "../__builtins__";
 import "./index.less";
 
 export interface IFormItemProps {
   className?: string;
   style?: React.CSSProperties;
-  prefixCls?: string;
   label?: React.ReactNode;
   colon?: boolean;
   tooltip?: React.ReactNode;
@@ -38,7 +37,6 @@ export interface IFormItemProps {
   addonBefore?: React.ReactNode;
   addonAfter?: React.ReactNode;
   size?: "small" | "default" | "large";
-  inset?: boolean;
   extra?: React.ReactNode;
   feedbackText?: React.ReactNode;
   feedbackLayout?: "loose" | "terse" | "popover" | "none" | (string & {});
@@ -47,7 +45,6 @@ export interface IFormItemProps {
   getPopupContainer?: (node: HTMLElement) => HTMLElement;
   asterisk?: boolean;
   gridSpan?: number;
-  bordered?: boolean;
 }
 
 type ComposeFormItem = React.FC<IFormItemProps> & {
@@ -73,9 +70,7 @@ const useFormItemLayout = (props: IFormItemProps) => {
     wrapperWrap: props.wrapperWrap ?? layout.wrapperWrap,
     fullness: props.fullness ?? layout.fullness,
     size: props.size ?? layout.size,
-    inset: props.inset ?? layout.inset,
     asterisk: props.asterisk,
-    bordered: props.bordered ?? layout.bordered,
     feedbackIcon: props.feedbackIcon,
     feedbackLayout: props.feedbackLayout ?? layout.feedbackLayout ?? "loose",
     tooltipLayout: props.tooltipLayout ?? layout.tooltipLayout ?? "icon",
@@ -96,15 +91,18 @@ function useOverflow<
   const labelCol = JSON.stringify(layout.labelCol);
 
   useEffect(() => {
-    if (containerRef.current && contentRef.current) {
-      const contentWidth = contentRef.current.getBoundingClientRect().width;
-      const containerWidth = containerRef.current.getBoundingClientRect().width;
-      if (contentWidth && containerWidth && containerWidth < contentWidth) {
-        if (!overflow) setOverflow(true);
-      } else {
-        if (overflow) setOverflow(false);
+    requestAnimationFrame(() => {
+      if (containerRef.current && contentRef.current) {
+        const contentWidth = contentRef.current.getBoundingClientRect().width;
+        const containerWidth =
+          containerRef.current.getBoundingClientRect().width;
+        if (contentWidth && containerWidth && containerWidth < contentWidth) {
+          if (!overflow) setOverflow(true);
+        } else {
+          if (overflow) setOverflow(false);
+        }
       }
-    }
+    });
   }, [labelCol]);
 
   return {
@@ -122,7 +120,6 @@ const ICON_MAP = {
 };
 
 export const BaseItem: React.FC<IFormItemProps> = ({ children, ...props }) => {
-  const [active, setActive] = useState(false);
   const formLayout = useFormItemLayout(props);
   const { containerRef, contentRef, overflow } = useOverflow<
     HTMLDivElement,
@@ -132,7 +129,7 @@ export const BaseItem: React.FC<IFormItemProps> = ({ children, ...props }) => {
     label,
     style,
     layout,
-    colon = true,
+    colon,
     addonBefore,
     addonAfter,
     asterisk,
@@ -143,8 +140,6 @@ export const BaseItem: React.FC<IFormItemProps> = ({ children, ...props }) => {
     feedbackLayout,
     feedbackIcon,
     getPopupContainer,
-    inset,
-    bordered = true,
     labelWidth,
     wrapperWidth,
     labelCol,
@@ -180,7 +175,7 @@ export const BaseItem: React.FC<IFormItemProps> = ({ children, ...props }) => {
     }
   }
 
-  const prefixCls = usePrefixCls("formily-item", props);
+  const prefixCls = getPrefixCls();
   const formatChildren =
     feedbackLayout === "popover" && feedbackStatus ? (
       <Popover
@@ -188,8 +183,9 @@ export const BaseItem: React.FC<IFormItemProps> = ({ children, ...props }) => {
         content={
           <div
             className={cls({
-              [`${prefixCls}-${feedbackStatus}-help`]: !!feedbackStatus,
-              [`${prefixCls}-help`]: true,
+              [`${prefixCls}-form-item-${feedbackStatus}-help`]:
+                !!feedbackStatus,
+              [`${prefixCls}-form-item-help`]: true,
             })}
           >
             {ICON_MAP[feedbackStatus]} {feedbackText}
@@ -220,10 +216,23 @@ export const BaseItem: React.FC<IFormItemProps> = ({ children, ...props }) => {
 
   const renderLabelText = () => {
     const labelChildren = (
-      <div className={`${prefixCls}-label-content`} ref={containerRef}>
+      <div className={`${prefixCls}-form-label-content`} ref={containerRef}>
         <span ref={contentRef}>
-          {asterisk && <span className={`${prefixCls}-asterisk`}>{"*"}</span>}
-          <label>{label}</label>
+          <label>
+            {asterisk && (
+              <strong className={`${prefixCls}-form-item-symbol`}>
+                <svg
+                  fill="currentColor"
+                  viewBox="0 0 1024 1024"
+                  width="1em"
+                  height="1em"
+                >
+                  <path d="M583.338667 17.066667c18.773333 0 34.133333 15.36 34.133333 34.133333v349.013333l313.344-101.888a34.133333 34.133333 0 0 1 43.008 22.016l42.154667 129.706667a34.133333 34.133333 0 0 1-21.845334 43.178667l-315.733333 102.4 208.896 287.744a34.133333 34.133333 0 0 1-7.509333 47.786666l-110.421334 80.213334a34.133333 34.133333 0 0 1-47.786666-7.509334L505.685333 706.218667 288.426667 1005.226667a34.133333 34.133333 0 0 1-47.786667 7.509333l-110.421333-80.213333a34.133333 34.133333 0 0 1-7.509334-47.786667l214.186667-295.253333L29.013333 489.813333a34.133333 34.133333 0 0 1-22.016-43.008l42.154667-129.877333a34.133333 34.133333 0 0 1 43.008-22.016l320.512 104.106667L412.672 51.2c0-18.773333 15.36-34.133333 34.133333-34.133333h136.533334z" />
+                </svg>
+              </strong>
+            )}
+            {label}
+          </label>
         </span>
       </div>
     );
@@ -241,7 +250,7 @@ export const BaseItem: React.FC<IFormItemProps> = ({ children, ...props }) => {
   const renderTooltipIcon = () => {
     if (tooltip && tooltipLayout === "icon" && !overflow) {
       return (
-        <span className={`${prefixCls}-label-tooltip-icon`}>
+        <span className={`${prefixCls}-form-label-item-tooltip-icon`}>
           <Tooltip position="top" content={tooltip}>
             {tooltipIcon}
           </Tooltip>
@@ -253,114 +262,56 @@ export const BaseItem: React.FC<IFormItemProps> = ({ children, ...props }) => {
   const renderLabel = () => {
     if (!label) return null;
     return (
-      <div
-        className={cls({
-          [`${prefixCls}-label`]: true,
-          [`${prefixCls}-label-tooltip`]:
+      <Grid.Col
+        span={enableCol && !!labelCol ? labelCol : undefined}
+        className={cls(`${prefixCls}-form-label-item`, {
+          [`${prefixCls}-form-label-item-tooltip`]:
             (tooltip && tooltipLayout === "text") || overflow,
-          [`${prefixCls}-item-col-${labelCol}`]: enableCol && !!labelCol,
+          [`${prefixCls}-form-label-item-flex`]: enableCol || !!!labelCol,
         })}
         style={labelStyle}
       >
         {renderLabelText()}
         {renderTooltipIcon()}
-        {label !== " " && (
-          <span className={`${prefixCls}-colon`}>{colon ? ":" : ""}</span>
-        )}
-      </div>
+        <span className={`${prefixCls}-form-item-colon`}>
+          {colon ? ":" : ""}
+        </span>
+      </Grid.Col>
     );
   };
 
   return (
-    <div
+    <Grid.Row
       {...pickDataProps(props)}
+      div={layout !== "horizontal"}
+      data-grid-span={props.gridSpan}
+      className={`${prefixCls}-form-item ${prefixCls}-form-layout-${layout}`}
       style={{
         ...style,
         ...gridStyles,
       }}
-      data-grid-span={props.gridSpan}
-      className={cls({
-        [`${prefixCls}`]: true,
-        [`${prefixCls}-layout-${layout}`]: true,
-        [`${prefixCls}-${feedbackStatus}`]: !!feedbackStatus,
-        [`${prefixCls}-feedback-has-text`]: !!feedbackText,
-        [`${prefixCls}-size-${size}`]: !!size,
-        [`${prefixCls}-feedback-layout-${feedbackLayout}`]: !!feedbackLayout,
-        [`${prefixCls}-fullness`]: !!fullness || !!inset || !!feedbackIcon,
-        [`${prefixCls}-inset`]: !!inset,
-        [`${prefixCls}-active`]: active,
-        [`${prefixCls}-inset-active`]: !!inset && active,
-        [`${prefixCls}-label-align-${labelAlign}`]: true,
-        [`${prefixCls}-control-align-${wrapperAlign}`]: true,
-        [`${prefixCls}-label-wrap`]: !!labelWrap,
-        [`${prefixCls}-control-wrap`]: !!wrapperWrap,
-        [`${prefixCls}-bordered-none`]:
-          bordered === false || !!inset || !!feedbackIcon,
-        [props.className || ""]: !!props.className,
-      })}
-      onFocus={() => {
-        if (feedbackIcon || inset) {
-          setActive(true);
-        }
-      }}
-      onBlur={() => {
-        if (feedbackIcon || inset) {
-          setActive(false);
-        }
-      }}
     >
       {renderLabel()}
-      <div
-        className={cls({
-          [`${prefixCls}-control`]: true,
-          [`${prefixCls}-item-col-${wrapperCol}`]:
-            enableCol && !!wrapperCol && label,
+      <Grid.Col
+        className={cls(`${prefixCls}-form-item-wrapper`, {
+          [`${prefixCls}-item-wrapper-flex`]:
+            !enableCol || !!!wrapperCol || !label,
         })}
+        span={enableCol && !!wrapperCol ? wrapperCol : undefined}
       >
-        <div className={cls(`${prefixCls}-control-content`)}>
-          {addonBefore && (
-            <div className={cls(`${prefixCls}-addon-before`)}>
-              {addonBefore}
-            </div>
-          )}
+        {formatChildren}
+        {!!feedbackText && (
           <div
-            style={wrapperStyle}
-            className={cls({
-              [`${prefixCls}-control-content-component`]: true,
-              [`${prefixCls}-control-content-component-has-feedback-icon`]:
-                !!feedbackIcon,
+            className={cls(`${prefixCls}-form-message`, {
+              [`${prefixCls}-form-message-help`]: true,
             })}
           >
-            <FormLayoutShallowContext.Provider value={{}}>
-              {formatChildren}
-            </FormLayoutShallowContext.Provider>
-            {feedbackIcon && (
-              <div className={cls(`${prefixCls}-feedback-icon`)}>
-                {feedbackIcon}
-              </div>
-            )}
+            {feedbackText}
           </div>
-          {addonAfter && (
-            <div className={cls(`${prefixCls}-addon-after`)}>{addonAfter}</div>
-          )}
-        </div>
-        {!!feedbackText &&
-          feedbackLayout !== "popover" &&
-          feedbackLayout !== "none" && (
-            <div
-              className={cls({
-                [`${prefixCls}-${feedbackStatus}-help`]: !!feedbackStatus,
-                [`${prefixCls}-help`]: true,
-                [`${prefixCls}-help-enter`]: true,
-                [`${prefixCls}-help-enter-active`]: true,
-              })}
-            >
-              {feedbackText}
-            </div>
-          )}
-        {extra && <div className={cls(`${prefixCls}-extra`)}>{extra}</div>}
-      </div>
-    </div>
+        )}
+        {extra && <div className={cls(`${prefixCls}-form-extra`)}>{extra}</div>}
+      </Grid.Col>
+    </Grid.Row>
   );
 };
 
