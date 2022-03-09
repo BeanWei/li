@@ -121,7 +121,7 @@ export default () => (
     >
       <SchemaComponent schema={schema} />
       <FormButtonGroup.FormItem>
-        <Submit long size="large">
+        <Submit long size="large" onSubmit={(values) => console.log(values)}>
           提交
         </Submit>
       </FormButtonGroup.FormItem>
