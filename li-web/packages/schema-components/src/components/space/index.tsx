@@ -15,6 +15,7 @@ export const Space: React.FC<SpaceProps> = (props) => {
   return React.createElement(ArcoSpace, {
     size: props.size ?? layout?.spaceGap,
     ...props,
+    split,
   });
 };
 
