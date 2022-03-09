@@ -187,8 +187,7 @@ const ArrayTablePagination: React.FC<IArrayTablePaginationProps> = (props) => {
 };
 
 const RowComp = (props: any) => {
-  const { record, index, ...rest } = props;
-  return <SortableRow index={index} {...rest} />;
+  return <SortableRow index={props["index"] || 0} {...props} />;
 };
 
 export const ArrayTable: ComposedArrayTable = observer(
@@ -201,8 +200,8 @@ export const ArrayTable: ComposedArrayTable = observer(
     const columns = useArrayTableColumns(dataSource, sources);
     const pagination = isBool(props.pagination) ? {} : props.pagination;
     const addition = useAddition();
-    const defaultRowKey = (record: any) => {
-      return dataSource.indexOf(record);
+    const defaultRowKey = (record: any): string => {
+      return dataSource.indexOf(record).toString();
     };
     const addTdStyles = (node: HTMLElement) => {
       const helper = document.body.querySelector(`.${prefixCls}-sort-helper`);
@@ -226,7 +225,7 @@ export const ArrayTable: ComposedArrayTable = observer(
               <Table
                 size="small"
                 border
-                rowKey={`${defaultRowKey}`}
+                rowKey={defaultRowKey}
                 {...props}
                 onChange={() => {}}
                 pagination={false}
