@@ -1,6 +1,6 @@
-package page
+package view
 
-import "github.com/BeanWei/li/li-engine/page/node"
+import "github.com/BeanWei/li/li-engine/view/node"
 
 type (
 	Schema interface {

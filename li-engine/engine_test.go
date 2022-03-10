@@ -7,8 +7,8 @@ import (
 	"github.com/BeanWei/li/li-engine/entity"
 	"github.com/BeanWei/li/li-engine/entity/field"
 	"github.com/BeanWei/li/li-engine/entity/index"
-	"github.com/BeanWei/li/li-engine/page"
-	"github.com/BeanWei/li/li-engine/page/node"
+	"github.com/BeanWei/li/li-engine/view"
+	"github.com/BeanWei/li/li-engine/view/node"
 )
 
 type Post struct {
@@ -36,15 +36,15 @@ func Test_GenEntityESDL(t *testing.T) {
 }
 
 type PostListPage struct {
-	page.Schema
+	view.Schema
 }
 
-func (PostListPage) Mixin() []page.Mixin {
-	return []page.Mixin{}
+func (PostListPage) Mixin() []view.Mixin {
+	return []view.Mixin{}
 }
 
-func (PostListPage) Nodes() []page.Node {
-	return []page.Node{
+func (PostListPage) Nodes() []view.Node {
+	return []view.Node{
 		node.Checkbox("a"),
 	}
 }

@@ -5,7 +5,7 @@ import (
 	"strings"
 
 	"github.com/BeanWei/li/li-engine/entity"
-	"github.com/BeanWei/li/li-engine/page"
+	"github.com/BeanWei/li/li-engine/view"
 )
 
 // GenEntityESDL 生成模型的 esdl
@@ -67,12 +67,12 @@ func GenEntityESDL(schemas ...entity.Schema) string {
 }
 
 // GenPageSchema 生成页面的 json-schema
-func GenPageSchema(schemas ...page.Schema) map[string]map[string]interface{} {
+func GenPageSchema(schemas ...view.Schema) map[string]map[string]interface{} {
 	pages := make(map[string]map[string]interface{})
 	for _, schema := range schemas {
 		var (
 			properties = make(map[string]interface{})
-			nodes      = make([]page.Node, 0)
+			nodes      = make([]view.Node, 0)
 		)
 		for _, mixin := range schema.Mixin() {
 			nodes = append(nodes, mixin.Nodes()...)

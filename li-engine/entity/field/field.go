@@ -291,6 +291,52 @@ type Descriptor struct {
 	Constraints []string
 }
 
+/*
+type Descriptor struct {
+	// 公共属性
+	Name     string
+	Names    [2]string
+	Required bool
+	Multi    bool
+	Default  interface{}
+	Defaults [2]string
+
+	// 实体属性
+	ValueType   Type
+	EdgeName    string
+	Sensitive   bool
+	Constraints []string
+
+	// 视图属性
+	ViewType        string
+	ViewUIProps     map[string]interface{}
+	ViewSchemaProps map[string]interface{}
+}
+func (d *Descriptor) ToESDL() string {
+	var b strings.Builder
+	if d.ValueType == TypeLink || d.ValueType == TypeMultiLink {
+		b.WriteString(d.ValueType.String())
+	} else {
+		b.WriteString("property ")
+	}
+	if d.EdgeName != "" {
+		b.WriteString(" -> " + d.EdgeName)
+	} else {
+		b.WriteString(" -> " + d.ValueType.String())
+	}
+	if len(d.Constraints) != 0 {
+		b.WriteString(" {")
+		for _, cst := range d.Constraints {
+			b.WriteString(" constraint " + cst + ";")
+		}
+		b.WriteString(" }")
+	} else {
+		b.WriteString(";")
+	}
+	return b.String()
+}
+*/
+
 func (d *Descriptor) ToESDL() string {
 	var b strings.Builder
 	if d.Link.IsLink {
