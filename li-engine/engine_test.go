@@ -4,36 +4,10 @@ import (
 	"encoding/json"
 	"testing"
 
-	"github.com/BeanWei/li/li-engine/entity"
-	"github.com/BeanWei/li/li-engine/entity/field"
-	"github.com/BeanWei/li/li-engine/entity/index"
 	"github.com/BeanWei/li/li-engine/view"
+	"github.com/BeanWei/li/li-engine/view/block"
 	"github.com/BeanWei/li/li-engine/view/node"
 )
-
-type Post struct {
-	entity.Schema
-}
-
-func (Post) Mixin() []entity.Mixin {
-	return []entity.Mixin{}
-}
-
-func (Post) Fields() []entity.Field {
-	return []entity.Field{
-		field.String("title"),
-	}
-}
-
-func (Post) Indexes() []entity.Index {
-	return []entity.Index{
-		index.Fields("title"),
-	}
-}
-
-func Test_GenEntityESDL(t *testing.T) {
-	t.Log("\n" + GenEntityESDL(&Post{}))
-}
 
 type PostListPage struct {
 	view.Schema
@@ -45,7 +19,39 @@ func (PostListPage) Mixin() []view.Mixin {
 
 func (PostListPage) Blocks() []view.Block {
 	return []view.Block{
-		node.Checkbox("a"),
+		block.GridRow("row1").
+			Gutter(20).
+			Children(
+				block.GridCol("col1").
+					Span(8).
+					Children(
+						node.Checkbox("check1"),
+					),
+				block.GridCol("col2").
+					Span(8).
+					Children(
+						node.Checkbox("check2"),
+					),
+				block.GridCol("col3").
+					Span(8).
+					Children(
+						node.Checkbox("check3"),
+					),
+			),
+		block.GridRow("row2").
+			Gutter(20).
+			Children(
+				block.GridCol("col4").
+					Span(16).
+					Children(
+						node.Checkbox("check4"),
+					),
+				block.GridCol("col5").
+					Span(8).
+					Children(
+						node.Checkbox("check5"),
+					),
+			),
 	}
 }
 
