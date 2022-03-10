@@ -43,8 +43,8 @@ func (PostListPage) Mixin() []view.Mixin {
 	return []view.Mixin{}
 }
 
-func (PostListPage) Nodes() []view.Node {
-	return []view.Node{
+func (PostListPage) Blocks() []view.Block {
+	return []view.Block{
 		node.Checkbox("a"),
 	}
 }

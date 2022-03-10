@@ -72,14 +72,14 @@ func GenPageSchema(schemas ...view.Schema) map[string]map[string]interface{} {
 	for _, schema := range schemas {
 		var (
 			properties = make(map[string]interface{})
-			nodes      = make([]view.Node, 0)
+			blocks     = make([]view.Block, 0)
 		)
 		for _, mixin := range schema.Mixin() {
-			nodes = append(nodes, mixin.Nodes()...)
+			blocks = append(blocks, mixin.Blocks()...)
 		}
-		nodes = append(nodes, schema.Nodes()...)
-		for _, node := range nodes {
-			properties[node.Descriptor().Name] = node.Descriptor().ToSchema()
+		blocks = append(blocks, schema.Blocks()...)
+		for _, block := range blocks {
+			properties[block.Schema().Name] = block.Schema()
 		}
 		pages[reflect.TypeOf(schema).Elem().Name()] = map[string]interface{}{
 			"type":       "object",

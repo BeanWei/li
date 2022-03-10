@@ -1,22 +1,19 @@
 package node
 
+import "github.com/BeanWei/li/li-engine/view/ui"
+
 func Checkbox(name string) *nodeCheckboxBuilder {
-	return &nodeCheckboxBuilder{desc: &Descriptor{
-		Name:          name,
-		SchemaType:    SchemaTypeBool,
-		ComponentName: "Checkbox",
+	return &nodeCheckboxBuilder{schema: &ui.Schema{
+		Name:       name,
+		Type:       ui.SchemaTypeBool,
+		XComponent: ui.ComponentCheckbox,
 	}}
 }
 
 type nodeCheckboxBuilder struct {
-	desc *Descriptor
+	schema *ui.Schema
 }
 
-func (b *nodeCheckboxBuilder) SchemaProps(props *SchemaProps) *nodeCheckboxBuilder {
-	b.desc.SchemaProps = props
-	return b
-}
-
-func (b *nodeCheckboxBuilder) Descriptor() *Descriptor {
-	return b.desc
+func (b *nodeCheckboxBuilder) Schema() *ui.Schema {
+	return b.schema
 }
