@@ -1,4 +1,4 @@
-package block
+package node
 
 import (
 	"github.com/BeanWei/li/li-engine/view/data"

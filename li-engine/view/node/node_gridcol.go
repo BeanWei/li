@@ -1,4 +1,4 @@
-package block
+package node
 
 import (
 	"github.com/BeanWei/li/li-engine/view"
@@ -23,7 +23,7 @@ func (b *gridcolBuilder) Schema() *ui.Schema {
 	return b.schema
 }
 
-func (b *gridcolBuilder) Children(elements ...view.Block) *gridcolBuilder {
+func (b *gridcolBuilder) Children(elements ...view.Node) *gridcolBuilder {
 	for _, element := range elements {
 		b.schema.Properties[element.Schema().Name] = element.Schema()
 	}

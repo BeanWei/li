@@ -8,14 +8,14 @@ type (
 	Schema interface {
 		Type() string
 		Mixin() []Mixin
-		Blocks() []Block
+		Nodes() []Node
 	}
 
 	Mixin interface {
-		Blocks() []Block
+		Nodes() []Node
 	}
 
-	Block interface {
+	Node interface {
 		Schema() *ui.Schema
 	}
 )

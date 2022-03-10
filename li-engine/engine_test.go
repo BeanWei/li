@@ -5,7 +5,6 @@ import (
 	"testing"
 
 	"github.com/BeanWei/li/li-engine/view"
-	"github.com/BeanWei/li/li-engine/view/block"
 	"github.com/BeanWei/li/li-engine/view/node"
 )
 
@@ -17,36 +16,36 @@ func (PostListPage) Mixin() []view.Mixin {
 	return []view.Mixin{}
 }
 
-func (PostListPage) Blocks() []view.Block {
-	return []view.Block{
-		block.GridRow("row1").
+func (PostListPage) Nodes() []view.Node {
+	return []view.Node{
+		node.GridRow("row1").
 			Gutter(20).
 			Children(
-				block.GridCol("col1").
+				node.GridCol("col1").
 					Span(8).
 					Children(
 						node.Checkbox("check1"),
 					),
-				block.GridCol("col2").
+				node.GridCol("col2").
 					Span(8).
 					Children(
 						node.Checkbox("check2"),
 					),
-				block.GridCol("col3").
+				node.GridCol("col3").
 					Span(8).
 					Children(
 						node.Checkbox("check3"),
 					),
 			),
-		block.GridRow("row2").
+		node.GridRow("row2").
 			Gutter(20).
 			Children(
-				block.GridCol("col4").
+				node.GridCol("col4").
 					Span(16).
 					Children(
 						node.Checkbox("check4"),
 					),
-				block.GridCol("col5").
+				node.GridCol("col5").
 					Span(8).
 					Children(
 						node.Checkbox("check5"),

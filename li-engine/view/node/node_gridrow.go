@@ -1,4 +1,4 @@
-package block
+package node
 
 import (
 	"github.com/BeanWei/li/li-engine/view"
@@ -23,7 +23,7 @@ func (b *gridrowBuilder) Schema() *ui.Schema {
 	return b.schema
 }
 
-func (b *gridrowBuilder) Children(elements ...view.Block) *gridrowBuilder {
+func (b *gridrowBuilder) Children(elements ...view.Node) *gridrowBuilder {
 	for _, element := range elements {
 		b.schema.Properties[element.Schema().Name] = element.Schema()
 	}
