@@ -9,6 +9,7 @@ import {
   SchemaComponent,
   SchemaComponentProvider,
   ListTable,
+  Checkbox,
 } from "schema-components";
 import { Button } from "@arco-design/web-react";
 import "@arco-design/web-react/dist/css/arco.css";
@@ -16,31 +17,43 @@ import "@arco-design/web-react/dist/css/arco.css";
 const schema: ISchema = {
   type: "object",
   properties: {
-    input: {
+    table1: {
       type: "array",
-      title: `编辑模式`,
-      default: [
-        { id: 1, name: "Name1" },
-        { id: 2, name: "Name2" },
-        { id: 3, name: "Name3" },
-      ],
+      title: `ListTable-1`,
       "x-component": "ListTable",
       "x-component-props": {
         rowKey: "id",
         rowSelection: {
           type: "checkbox",
         },
-        data: [{ id: 1, name: "阿璃" }],
       },
       properties: {
         column1: {
           type: "void",
-          title: "Name",
           "x-component": "ListTable.Column",
+          "x-component-props": {
+            title: "Name",
+            dataIndex: "name",
+          },
           properties: {
             name: {
               type: "string",
               "x-component": "Input",
+              "x-read-pretty": true,
+            },
+          },
+        },
+        column2: {
+          type: "void",
+          "x-component": "ListTable.Column",
+          "x-component-props": {
+            title: "OK",
+            dataIndex: "ok",
+          },
+          properties: {
+            ok: {
+              type: "boolean",
+              "x-component": "Checkbox",
               "x-read-pretty": true,
             },
           },
@@ -51,7 +64,7 @@ const schema: ISchema = {
 };
 
 export default () => (
-  <SchemaComponentProvider components={{ ListTable, Input }}>
+  <SchemaComponentProvider components={{ ListTable, Input, Checkbox }}>
     <SchemaComponent schema={schema} />
   </SchemaComponentProvider>
 );
