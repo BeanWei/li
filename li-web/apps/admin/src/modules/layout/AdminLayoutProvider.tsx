@@ -27,7 +27,7 @@ export const AdminLayoutProvider = (props: any) => {
   return (
     <AdminLayoutContext.Provider
       value={{
-        lang: result.data.language,
+        lang: result?.data?.language,
         profile: result.data,
       }}
     >

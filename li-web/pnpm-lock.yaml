@@ -112,15 +112,15 @@ importers:
 
   packages/pro-utils:
     specifiers:
-      '@ahooksjs/use-request': ^2.8.15
       '@types/lodash': ^4.14.179
+      ahooks: ^3.1.13
       axios: ^0.26.0
       config: workspace:*
       lodash: ^4.17.21
       tsconfig: workspace:*
       typescript: ^4.5.2
     dependencies:
-      '@ahooksjs/use-request': 2.8.15
+      ahooks: 3.1.13
       axios: 0.26.0
       lodash: 4.17.21
     devDependencies:
@@ -176,15 +176,6 @@ importers:
     specifiers: {}
 
 packages:
-
-  /@ahooksjs/use-request/2.8.15:
-    resolution: {integrity: sha512-xhVaM4fyIiAMdVFuuU5i3CFUdFa/IblF+fvITVMFaUEO3w/V5tVCAF6WIA3T03n1/RPuzRkA7Ao1PFtSGtGelw==}
-    peerDependencies:
-      react: ^16.8.0 || ^17.0.0
-    dependencies:
-      lodash.debounce: 4.0.8
-      lodash.throttle: 4.1.1
-    dev: false
 
   /@ampproject/remapping/2.1.2:
     resolution: {integrity: sha512-hoyByceqwKirw7w3Z7gnIIZC3Wx3J484Y3L/cMpXFbr7d9ZQj2mODrirNzcJa+SM3UlpWXYvKV4RlRpFXlWgXg==}
@@ -2763,6 +2754,22 @@ packages:
     resolution: {integrity: sha512-V7uUvAwnimu6eh/PED4mCDjE7tokeZQLKlxg9lCTMPhN+NjsSbtdacByVlR1oluXQzD3MOw55wylDmQo4+S9ZQ==}
     dev: false
 
+  /ahooks/3.1.13:
+    resolution: {integrity: sha512-ZWwWRhikXCWuR+X+LxXK8sWu2KPU7nh7UfaTTB93NhmoeytzN8VODRfVjq8LbT2ow5Q7PuG13143OcW9nN1vBg==}
+    engines: {node: '>=8.0.0'}
+    peerDependencies:
+      react: ^16.8.6 || ^17.0
+    dependencies:
+      '@types/js-cookie': 2.2.7
+      ahooks-v3-count: 1.0.0
+      dayjs: 1.10.8
+      intersection-observer: 0.12.0
+      js-cookie: 2.2.1
+      lodash: 4.17.21
+      resize-observer-polyfill: 1.5.1
+      screenfull: 5.2.0
+    dev: false
+
   /ahooks/3.1.13_react@17.0.2:
     resolution: {integrity: sha512-ZWwWRhikXCWuR+X+LxXK8sWu2KPU7nh7UfaTTB93NhmoeytzN8VODRfVjq8LbT2ow5Q7PuG13143OcW9nN1vBg==}
     engines: {node: '>=8.0.0'}
@@ -5326,12 +5333,14 @@ packages:
 
   /lodash.debounce/4.0.8:
     resolution: {integrity: sha512-FT1yDzDYEoYWhnSGnpE/4Kj1fLZkDFyqRb7fNt6FdYOSxlUWAtp42Eh6Wb0rGIv/m9Bgo7x4GhQbm5Ys4SG5ow==}
+    dev: true
 
   /lodash.isequal/4.5.0:
     resolution: {integrity: sha512-pDo3lu8Jhfjqls6GkMgpahsF9kCyayhgykjyLMNFTKWrpVdAQtYyB4muAMWozBB4ig/dtWAmsMxLEI8wuz+DYQ==}
 
   /lodash.throttle/4.1.1:
     resolution: {integrity: sha512-wIkUCfVKpVsWo3JSZlc+8MB5it+2AN5W8J7YVMST30UrvcQNZ1Okbj+rbVniijTWE6FGYy4XJq/rHkas8qJMLQ==}
+    dev: true
 
   /lodash/4.17.21:
     resolution: {integrity: sha512-v2kDEe57lecTulaDIuNTPy3Ry4gLGJ6Z1O3vE1krgXZNrsQ+LFTGHVxVjcXPs17LhbZVGedAJv8XZ1tvj5FvSg==}

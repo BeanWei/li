@@ -47,9 +47,7 @@ const providers = [
 ];
 
 const App = compose(...providers)(() => {
-  const { data, loading } = useRequest({
-    operation: "getAppMenuSchema",
-  });
+  const { data, loading } = useRequest("getAppMenuSchema");
 
   if (loading) {
     return <Spin />;

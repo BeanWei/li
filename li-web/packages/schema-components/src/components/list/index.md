@@ -23,6 +23,7 @@ const schema: ISchema = {
     list: {
       type: "void",
       "x-component": "List",
+      "x-operation": "getUserList",
       properties: {
         actions: {
           type: "void",

@@ -11,18 +11,10 @@ export const List: ComposedList = observer((props) => {
   const schema = useFieldSchema();
   const operation = schema["x-operation"];
 
-  const result = useRequest(
-    {
-      operation,
-      variables: {
-        current: 1,
-        pageSize: 10,
-      },
-    },
-    {
-      manual: true,
-    }
-  );
+  const result = useRequest(operation, {
+    current: 1,
+    pageSize: 10,
+  });
 
   const total = result.data?.total || 0;
   const { current = 1, pageSize = 10 } = result.params[0] || {};
@@ -36,36 +28,26 @@ export const List: ComposedList = observer((props) => {
     }
     const [oldPaginationParams = {}, ...restParams] = result.params || [];
     result.run({
-      operation,
-      variables: {
-        ...oldPaginationParams,
-        ...restParams,
-        current: toCurrent,
-        pageSize: toPageSize,
-      },
+      ...oldPaginationParams,
+      ...restParams,
+      current: toCurrent,
+      pageSize: toPageSize,
     });
   };
+
   const changePageSize = (p: number) => {
     onPageChange(current, p);
   };
 
-  const { params = [], run } = result;
-
   const onTableChange = (pagination: any, sorter: any, filters: any) => {
-    console.log("pagination: ", pagination);
-    console.log("sorter: ", sorter);
-    console.log("filters: ", filters);
-    const [oldPaginationParams, ...restParams] = params || [];
-    run({
-      operation,
-      variables: {
-        ...oldPaginationParams,
-        current: pagination.current,
-        pageSize: pagination.pageSize,
-        filters,
-        sorter,
-        ...restParams,
-      },
+    const [oldPaginationParams, ...restParams] = result.params || [];
+    result.run({
+      ...oldPaginationParams,
+      ...restParams,
+      current: pagination.current,
+      pageSize: pagination.pageSize,
+      filters,
+      sorter,
     });
   };
 

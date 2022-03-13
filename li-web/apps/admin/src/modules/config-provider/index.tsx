@@ -11,10 +11,10 @@ import { useRequest } from "pro-utils";
 export function ConfigProvider(props: ConfigProviderProps) {
   const { i18n } = useTranslation();
   const { loading } = useRequest("app:getLang", {
-    onSuccess(data) {
+    onSuccess(data: any) {
       const locale = localStorage.getItem("locale");
-      if (data?.data?.lang && locale !== data?.data?.lang) {
-        i18n.changeLanguage(data?.data?.lang);
+      if (data?.lang && locale !== data?.lang) {
+        i18n.changeLanguage(data?.lang);
       }
     },
     manual: true, // !remoteLocale,

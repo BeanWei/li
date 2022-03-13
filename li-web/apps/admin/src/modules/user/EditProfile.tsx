@@ -27,7 +27,7 @@ const useCloseAction = () => {
 
 const useCurrentUserValues = (options: any) => {
   const ctx = useCurrentUserContext();
-  return useRequest(() => Promise.resolve(ctx.data), options);
+  return useRequest("getUserProfile", options);
 };
 
 const useSaveCurrentUserValues = () => {

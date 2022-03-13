@@ -28,15 +28,11 @@ const RequestSchemaComponent: React.FC<RemoteSchemaComponentProps> = (
   } = props;
   const { reset } = useSchemaComponentContext();
   const { data, loading } = useRequest(
-    {
-      operation: "getPageSchema",
-      variables: {
-        uid,
-      },
-    },
+    "getPageSchema",
+    { uid },
     {
       refreshDeps: [uid],
-      onSuccess(data) {
+      onSuccess(data: any) {
         onSuccess && onSuccess(data);
         reset && reset();
       },
@@ -53,7 +49,7 @@ const RequestSchemaComponent: React.FC<RemoteSchemaComponentProps> = (
     <SchemaComponent
       memoized
       scope={scope}
-      schema={schemaTransform(data || {})}
+      schema={schemaTransform(data || ({} as any))}
     />
   );
 };
