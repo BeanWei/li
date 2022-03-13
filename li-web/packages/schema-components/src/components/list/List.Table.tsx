@@ -1,4 +1,4 @@
-import { Fragment, useMemo, useState } from "react";
+import { Fragment, useContext, useMemo } from "react";
 import { Table } from "@arco-design/web-react";
 import { ColumnProps, TableProps } from "@arco-design/web-react/es/Table";
 import { ArrayField, createForm } from "@formily/core";
@@ -13,10 +13,8 @@ import {
 import { observer } from "@formily/reactive-react";
 import { RecordIndexProvider, RecordProvider } from "../../core";
 import { useAttach } from "../../hooks";
-
-type ComposedListTable = React.FC<TableProps<any>> & {
-  Column?: React.FC<ColumnProps<any>>;
-};
+import { ComposedListTable } from "./types";
+import { ListContext } from "./context";
 
 const isColumnComponent = (schema: Schema) => {
   return schema["x-component"]?.endsWith(".Column") > -1;
@@ -34,6 +32,7 @@ const useTableColumns = () => {
     }, [])
     .map((s: Schema) => {
       return {
+        ...s["x-component-props"],
         title: s["x-component-props"]["title"] || s.title,
         dataIndex: s.name,
         key: s.name,
@@ -52,7 +51,7 @@ const useTableColumns = () => {
   return columns;
 };
 
-const BaseTable: React.FC<any> = observer((props) => {
+const BaseTable: React.FC<TableProps> = observer((props) => {
   const field = useField<ArrayField>();
   const columns = useTableColumns();
   return (
@@ -67,25 +66,38 @@ const BaseTable: React.FC<any> = observer((props) => {
 
 export const ListTable: ComposedListTable = observer(
   (props: TableProps<any>) => {
+    const ctx = useContext(ListContext);
     const field = useField<ArrayField>();
     const schema = useFieldSchema();
-    const form = useMemo(() => createForm(), []);
+    const form = useMemo(
+      () =>
+        createForm({
+          initialValues: {
+            [schema.name as string]: ctx.tableProps?.data,
+          },
+        }),
+      []
+    );
     const f = useAttach(
       form.createArrayField({ ...field.props, basePath: "" })
     );
-    form.setValues({
-      [schema.name as string]: [
-        { id: 1, name: "阿璃0", ok: true },
-        { id: 2, name: "阿璃00", ok: false },
-      ],
-    });
-
-    const [selectedRowKeys, setSelectedRowKeys] = useState([]);
 
     return (
       <FormContext.Provider value={form}>
         <FieldContext.Provider value={f}>
-          <BaseTable {...props} />
+          <BaseTable
+            {...ctx.tableProps}
+            {...props}
+            onChange={ctx.tableProps?.onChange}
+            rowSelection={
+              props.rowSelection
+                ? {
+                    ...props.rowSelection,
+                    onChange: ctx.setSelectedRowKeys,
+                  }
+                : undefined
+            }
+          />
         </FieldContext.Provider>
       </FormContext.Provider>
     );

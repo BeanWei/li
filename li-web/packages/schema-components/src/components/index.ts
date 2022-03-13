@@ -17,7 +17,7 @@ export * from "./form-modal";
 export * from "./grid";
 export * from "./input";
 export * from "./input-number";
-export * from "./list-table";
+export * from "./list";
 export * from "./menu";
 export * from "./password";
 export * from "./radio";

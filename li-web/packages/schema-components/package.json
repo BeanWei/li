@@ -43,7 +43,8 @@
     "lodash": "^4.17.21",
     "react-i18next": "^11.15.5",
     "react-sortable-hoc": "^1.11.0",
-    "react-sticky-box": "^0.9.3"
+    "react-sticky-box": "^0.9.3",
+    "pro-utils": "workspace:*"
   },
   "publishConfig": {
     "access": "public"

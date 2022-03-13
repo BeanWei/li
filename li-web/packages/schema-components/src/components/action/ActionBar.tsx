@@ -2,17 +2,8 @@ import { observer, RecursionField, useFieldSchema } from "@formily/react";
 import { Space } from "@arco-design/web-react";
 
 export const ActionBar = observer((props: any) => {
-  const { layout = "tow-columns", style, ...others } = props;
+  const { style, ...rest } = props;
   const fieldSchema = useFieldSchema();
-  if (layout === "one-column") {
-    return (
-      <div style={{ display: "flex", ...style }} {...others}>
-        {props.children && (
-          <div style={{ marginRight: 8 }}>{props.children}</div>
-        )}
-      </div>
-    );
-  }
   return (
     <div
       style={{
@@ -21,7 +12,7 @@ export const ActionBar = observer((props: any) => {
         alignItems: "center",
         ...style,
       }}
-      {...others}
+      {...rest}
     >
       <div
         style={{
@@ -33,7 +24,7 @@ export const ActionBar = observer((props: any) => {
       >
         <Space>
           {fieldSchema.mapProperties((schema, key) => {
-            if (schema["x-align"] !== "left") {
+            if (schema["x-component-props"]?.["position"] !== "left") {
               return null;
             }
             return <RecursionField key={key} name={key} schema={schema} />;
@@ -41,7 +32,7 @@ export const ActionBar = observer((props: any) => {
         </Space>
         <Space>
           {fieldSchema.mapProperties((schema, key) => {
-            if (schema["x-align"] === "left") {
+            if (schema["x-component-props"]?.["position"] === "left") {
               return null;
             }
             return <RecursionField key={key} name={key} schema={schema} />;
