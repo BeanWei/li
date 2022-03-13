@@ -1,8 +1,4 @@
-import axios, {
-  type AxiosInstance,
-  type AxiosRequestConfig,
-  type AxiosResponse,
-} from "axios";
+import axios, { AxiosInstance, AxiosRequestConfig, AxiosResponse } from "axios";
 import useAhookRequest, { UseRequestProvider } from "@ahooksjs/use-request";
 import { Message, Notification } from "@arco-design/web-react";
 

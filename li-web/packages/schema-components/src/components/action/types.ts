@@ -4,12 +4,15 @@ import {
   ModalProps,
   PopoverProps,
 } from "@arco-design/web-react";
+import { ConfirmProps } from "@arco-design/web-react/es/Modal/confirm";
 
 export type ActionProps = ButtonProps & {
   component?: any;
+  confirm?: ConfirmProps;
   useAction?: () => {
     run(): Promise<void>;
   };
+  [key: string]: any;
 };
 
 export type ComposedAction = React.FC<ActionProps> & {

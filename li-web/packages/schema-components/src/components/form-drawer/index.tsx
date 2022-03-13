@@ -30,10 +30,6 @@ type FormDrawerRenderer =
 
 type DrawerTitle = string | number | React.ReactElement;
 
-type EventType =
-  | React.KeyboardEvent<HTMLDivElement>
-  | React.MouseEvent<HTMLDivElement | HTMLButtonElement>;
-
 const isDrawerTitle = (props: any): props is DrawerTitle => {
   return (
     isNum(props) || isStr(props) || isBool(props) || React.isValidElement(props)

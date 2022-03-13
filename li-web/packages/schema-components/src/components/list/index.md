@@ -26,17 +26,42 @@ const schema: ISchema = {
       properties: {
         actions: {
           type: "void",
-          "x-component": "ActionBar",
-          "x-component-props": {
-            style: {
-              marginBottom: 9,
-            },
-          },
+          "x-component": "List.Action",
           properties: {
+            filtergroup: {
+              type: "void",
+              "x-component": "List.Action.FilterGroup",
+              "x-component-props": {
+                position: "left",
+              },
+              properties: {
+                input1: {
+                  type: "string",
+                  title: "Name",
+                  "x-decorator": "FormItem",
+                  "x-component": "Input",
+                },
+              },
+            },
+            search: {
+              type: "void",
+              "x-component": "List.Action.Search",
+              "x-component-props": {
+                position: "left",
+              },
+            },
+            filter2: {
+              type: "void",
+              "x-component": "List.Action.FilterSelect",
+            },
             delete: {
               type: "void",
               title: "Delete",
               "x-component": "List.Action.BulkDelete",
+            },
+            refresh: {
+              type: "void",
+              "x-component": "List.Action.Refresh",
             },
           },
         },

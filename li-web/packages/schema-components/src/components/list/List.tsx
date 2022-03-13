@@ -100,7 +100,7 @@ export const List: ComposedList = observer((props) => {
   );
 });
 
-List.Table = ListTable;
 List.Action = ListAction;
+List.Table = ListTable;
 
 export default List;
