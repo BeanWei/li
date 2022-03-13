@@ -27,21 +27,36 @@ const useTableColumns = () => {
   const columns = schema
     .reduceProperties((buf: any, s) => {
       if (isColumnComponent(s)) {
-        return buf.concat([s]);
+        return buf.concat(
+          s.reduceProperties((buf_: any, s_) => {
+            return buf_.concat([
+              {
+                colProps: s["x-component-props"],
+                title: s?.["x-component-props"]?.["title"] || s.title,
+                key: s_.name,
+                schema: s,
+              },
+            ]);
+          }, [])
+        );
       }
     }, [])
-    .map((s: Schema) => {
+    .map((col: any) => {
       return {
-        ...s["x-component-props"],
-        title: s["x-component-props"]["title"] || s.title,
-        dataIndex: s.name,
-        key: s.name,
+        ...col.colProps,
+        title: col.title,
+        dataIndex: col.key,
+        key: col.key,
         render: (v, record) => {
           const index = field.value?.indexOf(record);
           return (
             <RecordIndexProvider index={index}>
               <RecordProvider record={record}>
-                <RecursionField schema={s} name={index} onlyRenderProperties />
+                <RecursionField
+                  schema={col.schema}
+                  name={index}
+                  onlyRenderProperties
+                />
               </RecordProvider>
             </RecordIndexProvider>
           );
