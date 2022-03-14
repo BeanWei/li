@@ -7,6 +7,7 @@ func Checkbox(name string) *checkboxBuilder {
 		Name:       name,
 		Type:       ui.SchemaTypeBool,
 		XComponent: ui.ComponentCheckbox,
+		XDecorator: ui.DecoratorFormItem,
 	}}
 }
 
@@ -15,5 +16,10 @@ type checkboxBuilder struct {
 }
 
 func (b *checkboxBuilder) Schema() *ui.Schema {
+	return b.schema
+}
+
+func (b *checkboxBuilder) Title(title string) *ui.Schema {
+	b.schema.Title = title
 	return b.schema
 }

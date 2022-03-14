@@ -23,6 +23,79 @@ func (b *listtableBuilder) Schema() *ui.Schema {
 	return b.schema
 }
 
+func (b *listtableBuilder) LayoutFixed(fixed bool) *listtableBuilder {
+	b.schema.XComponentProps["tableLayoutFixed"] = fixed
+	return b
+}
+
+func (b *listtableBuilder) Border(border bool) *listtableBuilder {
+	b.schema.XComponentProps["border"] = border
+	return b
+}
+
+func (b *listtableBuilder) Hover(hover bool) *listtableBuilder {
+	b.schema.XComponentProps["hover"] = hover
+	return b
+}
+
+func (b *listtableBuilder) Stripe(stripe bool) *listtableBuilder {
+	b.schema.XComponentProps["stripe"] = stripe
+	return b
+}
+
+func (b *listtableBuilder) Size(size string) *listtableBuilder {
+	b.schema.XComponentProps["size"] = size
+	return b
+}
+
+func (b *listtableBuilder) RowSelectionType(typ string) *listtableBuilder {
+	if b.schema.XComponentProps["rowSelection"] == nil {
+		b.schema.XComponentProps["rowSelection"] = make(map[string]interface{})
+	}
+	rowsel, ok := b.schema.XComponentProps["rowSelection"].(map[string]interface{})
+	if ok {
+		rowsel["type"] = typ
+		b.schema.XComponentProps["rowSelection"] = rowsel
+	}
+	return b
+}
+
+func (b *listtableBuilder) RowSelectionColumnTitle(title string) *listtableBuilder {
+	if b.schema.XComponentProps["rowSelection"] == nil {
+		b.schema.XComponentProps["rowSelection"] = make(map[string]interface{})
+	}
+	rowsel, ok := b.schema.XComponentProps["rowSelection"].(map[string]interface{})
+	if ok {
+		rowsel["columnTitle"] = title
+		b.schema.XComponentProps["rowSelection"] = rowsel
+	}
+	return b
+}
+
+func (b *listtableBuilder) RowSelectionColumnWidth(width int) *listtableBuilder {
+	if b.schema.XComponentProps["rowSelection"] == nil {
+		b.schema.XComponentProps["rowSelection"] = make(map[string]interface{})
+	}
+	rowsel, ok := b.schema.XComponentProps["rowSelection"].(map[string]interface{})
+	if ok {
+		rowsel["columnWidth"] = width
+		b.schema.XComponentProps["rowSelection"] = rowsel
+	}
+	return b
+}
+
+func (b *listtableBuilder) RowSelectionFixed(fixed string) *listtableBuilder {
+	if b.schema.XComponentProps["rowSelection"] == nil {
+		b.schema.XComponentProps["rowSelection"] = make(map[string]interface{})
+	}
+	rowsel, ok := b.schema.XComponentProps["rowSelection"].(map[string]interface{})
+	if ok {
+		rowsel["fixed"] = fixed
+		b.schema.XComponentProps["rowSelection"] = rowsel
+	}
+	return b
+}
+
 func (b *listtableBuilder) Columns(elements ...view.Node) *listtableBuilder {
 	for _, element := range elements {
 		b.schema.Properties[element.Schema().Name] = element.Schema()
