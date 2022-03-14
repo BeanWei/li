@@ -23,18 +23,18 @@ func (b *listtableBuilder) Schema() *ui.Schema {
 	return b.schema
 }
 
-func (b *listtableBuilder) LayoutFixed(fixed bool) *listtableBuilder {
-	b.schema.XComponentProps["tableLayoutFixed"] = fixed
+func (b *listtableBuilder) LayoutFixed() *listtableBuilder {
+	b.schema.XComponentProps["tableLayoutFixed"] = true
 	return b
 }
 
-func (b *listtableBuilder) Border(border bool) *listtableBuilder {
-	b.schema.XComponentProps["border"] = border
+func (b *listtableBuilder) Border() *listtableBuilder {
+	b.schema.XComponentProps["border"] = true
 	return b
 }
 
-func (b *listtableBuilder) Hover(hover bool) *listtableBuilder {
-	b.schema.XComponentProps["hover"] = hover
+func (b *listtableBuilder) Hover() *listtableBuilder {
+	b.schema.XComponentProps["hover"] = true
 	return b
 }
 

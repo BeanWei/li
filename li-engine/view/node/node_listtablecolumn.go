@@ -30,8 +30,8 @@ func (b *listtablecolumnBuilder) Align(align string) *listtablecolumnBuilder {
 }
 
 // Ellipsis 单元格内容超出长度后，是否自动省略
-func (b *listtablecolumnBuilder) Ellipsis(ellipsis bool) *listtablecolumnBuilder {
-	b.schema.XComponentProps["ellipsis"] = ellipsis
+func (b *listtablecolumnBuilder) Ellipsis() *listtablecolumnBuilder {
+	b.schema.XComponentProps["ellipsis"] = true
 	return b
 }
 
