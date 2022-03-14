@@ -24,6 +24,11 @@ func (b *listBuilder) Schema() *ui.Schema {
 	return b.schema
 }
 
+func (b *listBuilder) DecoratorCard() *ui.Schema {
+	b.schema.XDecorator = ui.DecoratorCardItem
+	return b.schema
+}
+
 func (b *listBuilder) DataHandler(operation string, handler data.Handler) *listBuilder {
 	b.schema.XOperation = operation
 	data.RegisterHandler(operation, handler)
