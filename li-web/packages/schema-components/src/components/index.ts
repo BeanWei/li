@@ -2,7 +2,7 @@ export * from "./action";
 export * from "./array-base";
 export * from "./array-items";
 export * from "./array-table";
-export * from "./card";
+export * from "./card-item";
 export * from "./cascader";
 export * from "./checkbox";
 export * from "./color-select";
