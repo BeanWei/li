@@ -43,7 +43,15 @@ func (PostListPage) Nodes() []view.Node {
 				node.GridCol("col4").
 					Span(16).
 					Children(
-						node.Checkbox("check4"),
+						node.List("list").
+							Children(
+								node.ListTable("table").Columns(
+									node.ListTableColumn("col1").
+										Render(
+											node.Checkbox("checkbox1"),
+										),
+								),
+							),
 					),
 				node.GridCol("col5").
 					Span(8).
