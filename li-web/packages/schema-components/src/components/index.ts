@@ -21,6 +21,7 @@ export * from "./list";
 export * from "./menu";
 export * from "./password";
 export * from "./radio";
+export * from "./reset";
 export * from "./select";
 export * from "./space";
 export * from "./submit";
