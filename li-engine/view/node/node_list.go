@@ -35,7 +35,7 @@ func (b *listBuilder) DataHandler(operation string, controller control.Controlle
 	return b
 }
 
-func (b *listBuilder) Children(elements ...view.Node) *listBuilder {
+func (b *listBuilder) Child(elements ...view.Node) *listBuilder {
 	for _, element := range elements {
 		b.schema.Properties[element.Schema().Name] = element.Schema()
 	}

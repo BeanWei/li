@@ -30,7 +30,7 @@ type (
 	}
 )
 
-func ToView(schema Schema) view.Node {
+func ToListNode(schema Schema) view.Node {
 	nodes := make([]view.Node, 0)
 	for _, mixin := range schema.Mixin() {
 		for _, mfield := range mixin.Fields() {
@@ -41,5 +41,19 @@ func ToView(schema Schema) view.Node {
 		nodes = append(nodes, field.Descriptor().View)
 	}
 	return node.List(reflect.TypeOf(schema).Elem().Name()).
-		Children(nodes...)
+		Child(nodes...)
+}
+
+func ToFormNode(schema Schema) view.Node {
+	nodes := make([]view.Node, 0)
+	for _, mixin := range schema.Mixin() {
+		for _, mfield := range mixin.Fields() {
+			nodes = append(nodes, mfield.Descriptor().View)
+		}
+	}
+	for _, field := range schema.Fields() {
+		nodes = append(nodes, field.Descriptor().View)
+	}
+	return node.Form(reflect.TypeOf(schema).Elem().Name()).
+		Child(nodes...)
 }
