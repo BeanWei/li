@@ -1,7 +1,7 @@
 package node
 
 import (
-	"github.com/BeanWei/li/li-engine/view/data"
+	"github.com/BeanWei/li/li-engine/ctrl"
 	"github.com/BeanWei/li/li-engine/view/ui"
 )
 
@@ -23,8 +23,8 @@ func (b *listcardBuilder) Schema() *ui.Schema {
 	return b.schema
 }
 
-func (b *listcardBuilder) DataProvider(operation string, handler data.Handler) *listcardBuilder {
+func (b *listcardBuilder) DataProvider(operation string, controller ctrl.Controller) *listcardBuilder {
 	b.schema.XOperation = operation
-	data.RegisterHandler(operation, handler)
+	ctrl.RegisterController(operation, controller)
 	return b
 }

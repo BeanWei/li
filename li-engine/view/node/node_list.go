@@ -1,8 +1,8 @@
 package node
 
 import (
+	"github.com/BeanWei/li/li-engine/ctrl"
 	"github.com/BeanWei/li/li-engine/view"
-	"github.com/BeanWei/li/li-engine/view/data"
 	"github.com/BeanWei/li/li-engine/view/ui"
 )
 
@@ -29,9 +29,9 @@ func (b *listBuilder) DecoratorCard() *ui.Schema {
 	return b.schema
 }
 
-func (b *listBuilder) DataHandler(operation string, handler data.Handler) *listBuilder {
+func (b *listBuilder) DataHandler(operation string, controller ctrl.Controller) *listBuilder {
 	b.schema.XOperation = operation
-	data.RegisterHandler(operation, handler)
+	ctrl.RegisterController(operation, controller)
 	return b
 }
 
