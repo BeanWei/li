@@ -3,7 +3,7 @@ package engine
 import (
 	"context"
 
-	"github.com/BeanWei/li/li-engine/ctrl"
+	"github.com/BeanWei/li/li-engine/control"
 	"github.com/BeanWei/li/li-engine/view"
 	"github.com/gogf/gf/v2/encoding/gjson"
 	"github.com/gogf/gf/v2/frame/g"
@@ -54,7 +54,7 @@ func NewApp(cfg *App) {
 	recursionmenu = func(menus []*AppMenu) []*appmenu {
 		amenus := make([]*appmenu, len(menus))
 		for i, menu := range menus {
-			key, page := view.SchemaToMap(menu.Page)
+			key, page := view.ToPage(menu.Page)
 			pages[key] = page
 			amenu := &appmenu{
 				Name:     menu.Name,
@@ -73,16 +73,15 @@ func NewApp(cfg *App) {
 
 	appcfg.Menus = recursionmenu(cfg.Menus)
 
-	ctrl.RegisterController("@getAppSettings", func(ctx context.Context, variables *gjson.Json) (res interface{}, err error) {
+	control.RegisterController("@getAppSettings", func(ctx context.Context, variables *gjson.Json) (res interface{}, err error) {
 		return appcfg, nil
 	})
-	ctrl.RegisterController("@getAppPageSchema", func(ctx context.Context, variables *gjson.Json) (res interface{}, err error) {
+	control.RegisterController("@getAppPageSchema", func(ctx context.Context, variables *gjson.Json) (res interface{}, err error) {
 		return pages[variables.Get("key").String()], nil
 	})
 
 	s := g.Server()
 	s.Group("/", func(group *ghttp.RouterGroup) {
-		group.Bind(ctrl.Liql)
+		group.Bind(control.Liql)
 	})
-	s.Run()
 }

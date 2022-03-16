@@ -22,7 +22,7 @@ type (
 	}
 )
 
-func SchemaToMap(schema Schema) (string, map[string]interface{}) {
+func ToPage(schema Schema) (string, map[string]interface{}) {
 	var (
 		properties = make(map[string]interface{})
 		nodes      = make([]Node, 0)
