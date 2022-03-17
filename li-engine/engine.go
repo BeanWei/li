@@ -12,9 +12,10 @@ import (
 
 type (
 	App struct {
-		Title string
-		Logo  string
-		Menus []*AppMenu
+		Title    string
+		Logo     string
+		Menus    []*AppMenu
+		NavItems []view.Schema
 	}
 
 	AppMenu struct {
@@ -26,10 +27,11 @@ type (
 	}
 
 	app struct {
-		Title     string     `json:"title"`
-		Logo      string     `json:"logo"`
-		Menus     []*appmenu `json:"menus"`
-		EntryPage string     `json:"entry_page"`
+		Title    string        `json:"title"`
+		Logo     string        `json:"logo"`
+		NavItems []view.Schema `json:"navitems"`
+		Menus    []*appmenu    `json:"menus"`
+		Home     string        `json:"home"`
 	}
 
 	appmenu struct {
@@ -43,9 +45,10 @@ type (
 func NewApp(cfg *App) {
 	var (
 		appcfg = &app{
-			Title: cfg.Title,
-			Logo:  cfg.Logo,
-			Menus: make([]*appmenu, len(cfg.Menus)),
+			Title:    cfg.Title,
+			Logo:     cfg.Logo,
+			NavItems: cfg.NavItems,
+			Menus:    make([]*appmenu, len(cfg.Menus)),
 		}
 		pages         = make(map[string]map[string]interface{})
 		recursionmenu func(menus []*AppMenu) []*appmenu
@@ -63,7 +66,7 @@ func NewApp(cfg *App) {
 				Children: make([]*appmenu, len(menu.Children)),
 			}
 			if menu.IsHome {
-				appcfg.EntryPage = key
+				appcfg.Home = key
 			}
 			amenu.Children = recursionmenu(menu.Children)
 			amenus[i] = amenu
@@ -73,11 +76,11 @@ func NewApp(cfg *App) {
 
 	appcfg.Menus = recursionmenu(cfg.Menus)
 
-	control.RegisterController("@getAppSettings", func(ctx context.Context, variables *gjson.Json) (res interface{}, err error) {
+	control.RegisterController("@getAppConfig", func(ctx context.Context, variables *gjson.Json) (res interface{}, err error) {
 		return appcfg, nil
 	})
-	control.RegisterController("@getAppPageSchema", func(ctx context.Context, variables *gjson.Json) (res interface{}, err error) {
-		return pages[variables.Get("key").String()], nil
+	control.RegisterController("@getAppView", func(ctx context.Context, variables *gjson.Json) (res interface{}, err error) {
+		return pages[variables.Get("uid").String()], nil
 	})
 
 	s := g.Server()
