@@ -74,6 +74,9 @@ func typ(t interface{}) string {
 
 func (d *Descriptor) ToESDL() string {
 	var b strings.Builder
+	if d.Required {
+		b.WriteString("required ")
+	}
 	if d.Multi {
 		b.WriteString("multi ")
 	}

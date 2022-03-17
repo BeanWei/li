@@ -5,15 +5,15 @@ import (
 	"github.com/BeanWei/li/li-engine/view/node"
 )
 
-type WorkplacePage struct {
+type DashboardWorkplace struct {
 	view.Schema
 }
 
-func (WorkplacePage) Nodes() []view.Node {
+func (DashboardWorkplace) Nodes() []view.Node {
 	return []view.Node{
 		node.GridRow("row1").
 			Gutter(20).
-			Children(
+			Child(
 				node.GridCol("col1").
 					Span(8).
 					Content("Col-1"),
@@ -26,7 +26,7 @@ func (WorkplacePage) Nodes() []view.Node {
 			),
 		node.GridRow("row2").
 			Gutter(20).
-			Children(
+			Child(
 				node.GridCol("col4").
 					Span(16).
 					Content("Col-4"),

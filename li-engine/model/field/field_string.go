@@ -31,14 +31,14 @@ func (b *stringBuilder) Descriptor() *Descriptor {
 	return b.desc
 }
 
-func (b *stringBuilder) Required() *Descriptor {
+func (b *stringBuilder) Required() *stringBuilder {
 	b.desc.Required = true
-	return b.desc
+	return b
 }
 
-func (b *stringBuilder) Unique() *Descriptor {
+func (b *stringBuilder) Unique() *stringBuilder {
 	b.desc.Constraints = append(b.desc.Constraints, "exclusive")
-	return b.desc
+	return b
 }
 
 func (b *stringBuilder) Sensitive() *stringBuilder {

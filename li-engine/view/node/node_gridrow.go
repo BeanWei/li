@@ -23,7 +23,7 @@ func (b *gridrowBuilder) Schema() *ui.Schema {
 	return b.schema
 }
 
-func (b *gridrowBuilder) Children(elements ...view.Node) *gridrowBuilder {
+func (b *gridrowBuilder) Child(elements ...view.Node) *gridrowBuilder {
 	for _, element := range elements {
 		b.schema.Properties[element.Schema().Name] = element.Schema()
 	}
