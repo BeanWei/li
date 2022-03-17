@@ -28,7 +28,7 @@ const RequestSchemaComponent: React.FC<RemoteSchemaComponentProps> = (
   } = props;
   const { reset } = useSchemaComponentContext();
   const { data, loading } = useRequest(
-    "getPageSchema",
+    "@getAppView",
     { uid },
     {
       refreshDeps: [uid],

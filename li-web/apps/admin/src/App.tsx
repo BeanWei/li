@@ -11,43 +11,23 @@ import {
   ConfigProvider,
   DocumentTitleProvider,
   i18n,
-  AdminLayout,
-  BlankLayout,
+  Layout,
   RouteSwitch,
   RouteSwitchProvider,
+  ThemeSwitch,
 } from "./modules";
 
 const providers = [
   [I18nextProvider, { i18n }],
   [ConfigProvider, { remoteLocale: true }],
-  // SystemSettingsProvider,
-  // [
-  //   PluginManagerProvider,
-  //   {
-  //     components: {
-  //       ACLShortcut,
-  //       DesignableSwitch,
-  //       CollectionManagerShortcut,
-  //       SystemSettingsShortcut,
-  //     },
-  //   },
-  // ],
-  [SchemaComponentProvider, { components: { Link, NavLink } }],
+  [SchemaComponentProvider, { components: { Link, NavLink, ThemeSwitch } }],
   UiSchemaComponentProvider,
   [DocumentTitleProvider, { addonAfter: "Li" }],
-  [
-    RouteSwitchProvider,
-    {
-      components: {
-        AdminLayout,
-        BlankLayout,
-      },
-    },
-  ],
+  [RouteSwitchProvider, { components: { Layout } }],
 ];
 
 const App = compose(...providers)(() => {
-  const { data, loading } = useRequest("getAppMenuSchema");
+  const { data, loading } = useRequest("@getAppConfig");
 
   if (loading) {
     return <Spin />;
@@ -65,13 +45,12 @@ const App = compose(...providers)(() => {
           {
             type: "route",
             path: "/admin/:name(.+)?",
-            component: "AdminLayout",
-            title: "Li Admin",
-            schema: data,
+            component: "Layout",
+            title: data?.data?.title || "Li Admin",
+            config: data?.data,
           },
           {
             type: "route",
-            component: "BlankLayout",
             routes: [
               {
                 type: "route",

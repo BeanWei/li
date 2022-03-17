@@ -1,5 +1,5 @@
 import { MockMethod } from "vite-plugin-mock";
-import getAppMenuSchema from "./getAppMenuSchema";
+import getAppConfig from "./getAppConfig";
 import getWelcomePageSchema from "./getWelcomePageSchema";
 import userGetProfile from "./userGetProfile";
 
@@ -9,9 +9,9 @@ export default [
     method: "post",
     response: ({ body }) => {
       const { operation, variables } = body;
-      if (operation === "getAppMenuSchema") {
+      if (operation === "@getAppConfig") {
         return {
-          data: getAppMenuSchema,
+          data: getAppConfig,
         };
       }
       if (operation === "userGetProfile") {
@@ -19,7 +19,7 @@ export default [
           data: userGetProfile,
         };
       }
-      if (operation == "getPageSchema") {
+      if (operation == "@getAppView") {
         if (variables.uid === "WelcomePage") {
           return {
             data: getWelcomePageSchema,
