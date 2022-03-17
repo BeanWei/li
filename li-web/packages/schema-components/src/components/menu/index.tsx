@@ -53,7 +53,7 @@ const getNavMenuItems = (menusData: MenuDataItem[] = []): React.ReactNode[] => {
     // Is it a http link
     if (isUrl(itemPath)) {
       return (
-        <span
+        <div
           title={item.name}
           onClick={(e) => {
             e.stopPropagation();
@@ -63,7 +63,7 @@ const getNavMenuItems = (menusData: MenuDataItem[] = []): React.ReactNode[] => {
         >
           <Icon style={{ marginRight: 5 }} type={item.icon} />
           {item.name}
-        </span>
+        </div>
       );
     }
     return (
