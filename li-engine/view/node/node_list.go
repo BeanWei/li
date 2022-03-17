@@ -24,9 +24,9 @@ func (b *listBuilder) Schema() *ui.Schema {
 	return b.schema
 }
 
-func (b *listBuilder) DecoratorCard() *ui.Schema {
+func (b *listBuilder) DecoratorCard() *listBuilder {
 	b.schema.XDecorator = ui.DecoratorCardItem
-	return b.schema
+	return b
 }
 
 func (b *listBuilder) DataHandler(operation string, controller control.Controller) *listBuilder {

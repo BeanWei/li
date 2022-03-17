@@ -20,17 +20,17 @@ func (b *timeBuilder) Schema() *ui.Schema {
 	return b.schema
 }
 
-func (b *timeBuilder) Required() *ui.Schema {
+func (b *timeBuilder) Required() *timeBuilder {
 	b.schema.Required = true
-	return b.schema
+	return b
 }
 
-func (b *timeBuilder) Title(title string) *ui.Schema {
+func (b *timeBuilder) Title(title string) *timeBuilder {
 	b.schema.Title = title
-	return b.schema
+	return b
 }
 
-func (b *timeBuilder) Format(format string) *ui.Schema {
+func (b *timeBuilder) Format(format string) *timeBuilder {
 	b.schema.XComponentProps["format"] = format
-	return b.schema
+	return b
 }

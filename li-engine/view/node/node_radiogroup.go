@@ -20,17 +20,17 @@ func (b *radiogroupBuilder) Schema() *ui.Schema {
 	return b.schema
 }
 
-func (b *radiogroupBuilder) Required() *ui.Schema {
+func (b *radiogroupBuilder) Required() *radiogroupBuilder {
 	b.schema.Required = true
-	return b.schema
+	return b
 }
 
-func (b *radiogroupBuilder) Title(title string) *ui.Schema {
+func (b *radiogroupBuilder) Title(title string) *radiogroupBuilder {
 	b.schema.Title = title
-	return b.schema
+	return b
 }
 
-func (b *radiogroupBuilder) Option(label string, value ...interface{}) *ui.Schema {
+func (b *radiogroupBuilder) Option(label string, value ...interface{}) *radiogroupBuilder {
 	var val interface{}
 	if len(value) > 0 {
 		val = value[0]
@@ -41,5 +41,5 @@ func (b *radiogroupBuilder) Option(label string, value ...interface{}) *ui.Schem
 		"label": label,
 		"value": val,
 	})
-	return b.schema
+	return b
 }

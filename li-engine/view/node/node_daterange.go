@@ -20,23 +20,23 @@ func (b *daterangeBuilder) Schema() *ui.Schema {
 	return b.schema
 }
 
-func (b *daterangeBuilder) Required() *ui.Schema {
+func (b *daterangeBuilder) Required() *daterangeBuilder {
 	b.schema.Required = true
-	return b.schema
+	return b
 }
 
-func (b *daterangeBuilder) Title(title string) *ui.Schema {
+func (b *daterangeBuilder) Title(title string) *daterangeBuilder {
 	b.schema.Title = title
-	return b.schema
+	return b
 }
 
 // Mode Time, Week, Month, Quarter, Year
-func (b *daterangeBuilder) Mode(mode string) *ui.Schema {
+func (b *daterangeBuilder) Mode(mode string) *daterangeBuilder {
 	b.schema.XComponentProps["mode"] = mode
-	return b.schema
+	return b
 }
 
-func (b *daterangeBuilder) Format(format string) *ui.Schema {
+func (b *daterangeBuilder) Format(format string) *daterangeBuilder {
 	b.schema.XComponentProps["format"] = format
-	return b.schema
+	return b
 }

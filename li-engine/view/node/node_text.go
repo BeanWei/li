@@ -19,22 +19,22 @@ func (b *textBuilder) Schema() *ui.Schema {
 	return b.schema
 }
 
-func (b *textBuilder) Required() *ui.Schema {
+func (b *textBuilder) Required() *textBuilder {
 	b.schema.Required = true
-	return b.schema
+	return b
 }
 
-func (b *textBuilder) MinLength(min int) *ui.Schema {
+func (b *textBuilder) MinLength(min int) *textBuilder {
 	b.schema.MinLength = min
-	return b.schema
+	return b
 }
 
-func (b *textBuilder) MaxLength(max int) *ui.Schema {
+func (b *textBuilder) MaxLength(max int) *textBuilder {
 	b.schema.MaxLength = max
-	return b.schema
+	return b
 }
 
-func (b *textBuilder) Title(title string) *ui.Schema {
+func (b *textBuilder) Title(title string) *textBuilder {
 	b.schema.Title = title
-	return b.schema
+	return b
 }

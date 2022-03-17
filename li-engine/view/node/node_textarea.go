@@ -19,22 +19,22 @@ func (b *textareaBuilder) Schema() *ui.Schema {
 	return b.schema
 }
 
-func (b *textareaBuilder) Required() *ui.Schema {
+func (b *textareaBuilder) Required() *textareaBuilder {
 	b.schema.Required = true
-	return b.schema
+	return b
 }
 
-func (b *textareaBuilder) MinLength(min int) *ui.Schema {
+func (b *textareaBuilder) MinLength(min int) *textareaBuilder {
 	b.schema.MinLength = min
-	return b.schema
+	return b
 }
 
-func (b *textareaBuilder) MaxLength(max int) *ui.Schema {
+func (b *textareaBuilder) MaxLength(max int) *textareaBuilder {
 	b.schema.MaxLength = max
-	return b.schema
+	return b
 }
 
-func (b *textareaBuilder) Title(title string) *ui.Schema {
+func (b *textareaBuilder) Title(title string) *textareaBuilder {
 	b.schema.Title = title
-	return b.schema
+	return b
 }

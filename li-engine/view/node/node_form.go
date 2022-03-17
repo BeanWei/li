@@ -21,9 +21,9 @@ func (b *formBuilder) Schema() *ui.Schema {
 	return b.schema
 }
 
-func (b *formBuilder) DecoratorCard() *ui.Schema {
+func (b *formBuilder) DecoratorCard() *formBuilder {
 	b.schema.XDecorator = ui.DecoratorCardItem
-	return b.schema
+	return b
 }
 
 func (b *formBuilder) Child(elements ...view.Node) *formBuilder {

@@ -20,17 +20,17 @@ func (b *timerangeBuilder) Schema() *ui.Schema {
 	return b.schema
 }
 
-func (b *timerangeBuilder) Required() *ui.Schema {
+func (b *timerangeBuilder) Required() *timerangeBuilder {
 	b.schema.Required = true
-	return b.schema
+	return b
 }
 
-func (b *timerangeBuilder) Title(title string) *ui.Schema {
+func (b *timerangeBuilder) Title(title string) *timerangeBuilder {
 	b.schema.Title = title
-	return b.schema
+	return b
 }
 
-func (b *timerangeBuilder) Format(format string) *ui.Schema {
+func (b *timerangeBuilder) Format(format string) *timerangeBuilder {
 	b.schema.XComponentProps["format"] = format
-	return b.schema
+	return b
 }

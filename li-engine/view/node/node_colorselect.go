@@ -19,12 +19,12 @@ func (b *colorselectBuilder) Schema() *ui.Schema {
 	return b.schema
 }
 
-func (b *colorselectBuilder) Required() *ui.Schema {
+func (b *colorselectBuilder) Required() *colorselectBuilder {
 	b.schema.Required = true
-	return b.schema
+	return b
 }
 
-func (b *colorselectBuilder) Title(title string) *ui.Schema {
+func (b *colorselectBuilder) Title(title string) *colorselectBuilder {
 	b.schema.Title = title
-	return b.schema
+	return b
 }

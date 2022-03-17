@@ -19,7 +19,7 @@ func (b *switchBuilder) Schema() *ui.Schema {
 	return b.schema
 }
 
-func (b *switchBuilder) Title(title string) *ui.Schema {
+func (b *switchBuilder) Title(title string) *switchBuilder {
 	b.schema.Title = title
-	return b.schema
+	return b
 }

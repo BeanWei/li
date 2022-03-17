@@ -24,27 +24,27 @@ func (b *percentBuilder) Schema() *ui.Schema {
 	return b.schema
 }
 
-func (b *percentBuilder) Required() *ui.Schema {
+func (b *percentBuilder) Required() *percentBuilder {
 	b.schema.Required = true
-	return b.schema
+	return b
 }
 
-func (b *percentBuilder) Minimum(min int) *ui.Schema {
+func (b *percentBuilder) Minimum(min int) *percentBuilder {
 	b.schema.Minimum = min
-	return b.schema
+	return b
 }
 
-func (b *percentBuilder) Maximum(max int) *ui.Schema {
+func (b *percentBuilder) Maximum(max int) *percentBuilder {
 	b.schema.Maximum = max
-	return b.schema
+	return b
 }
 
-func (b *percentBuilder) Title(title string) *ui.Schema {
+func (b *percentBuilder) Title(title string) *percentBuilder {
 	b.schema.Title = title
-	return b.schema
+	return b
 }
 
-func (b *percentBuilder) Step(step int) *ui.Schema {
+func (b *percentBuilder) Step(step int) *percentBuilder {
 	b.schema.XComponentProps["step"] = step
-	return b.schema
+	return b
 }

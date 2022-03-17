@@ -20,17 +20,17 @@ func (b *checkboxgroupBuilder) Schema() *ui.Schema {
 	return b.schema
 }
 
-func (b *checkboxgroupBuilder) Required() *ui.Schema {
+func (b *checkboxgroupBuilder) Required() *checkboxgroupBuilder {
 	b.schema.Required = true
-	return b.schema
+	return b
 }
 
-func (b *checkboxgroupBuilder) Title(title string) *ui.Schema {
+func (b *checkboxgroupBuilder) Title(title string) *checkboxgroupBuilder {
 	b.schema.Title = title
-	return b.schema
+	return b
 }
 
-func (b *checkboxgroupBuilder) Option(label string, value ...interface{}) *ui.Schema {
+func (b *checkboxgroupBuilder) Option(label string, value ...interface{}) *checkboxgroupBuilder {
 	var val interface{}
 	if len(value) > 0 {
 		val = value[0]
@@ -41,5 +41,5 @@ func (b *checkboxgroupBuilder) Option(label string, value ...interface{}) *ui.Sc
 		"label": label,
 		"value": val,
 	})
-	return b.schema
+	return b
 }

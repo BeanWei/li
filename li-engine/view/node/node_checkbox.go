@@ -19,7 +19,7 @@ func (b *checkboxBuilder) Schema() *ui.Schema {
 	return b.schema
 }
 
-func (b *checkboxBuilder) Title(title string) *ui.Schema {
+func (b *checkboxBuilder) Title(title string) *checkboxBuilder {
 	b.schema.Title = title
-	return b.schema
+	return b
 }

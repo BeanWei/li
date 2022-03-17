@@ -20,12 +20,12 @@ func (b *emailBuilder) Schema() *ui.Schema {
 	return b.schema
 }
 
-func (b *emailBuilder) Required() *ui.Schema {
+func (b *emailBuilder) Required() *emailBuilder {
 	b.schema.Required = true
-	return b.schema
+	return b
 }
 
-func (b *emailBuilder) Title(title string) *ui.Schema {
+func (b *emailBuilder) Title(title string) *emailBuilder {
 	b.schema.Title = title
-	return b.schema
+	return b
 }

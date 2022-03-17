@@ -20,27 +20,27 @@ func (b *rateBuilder) Schema() *ui.Schema {
 	return b.schema
 }
 
-func (b *rateBuilder) Required() *ui.Schema {
+func (b *rateBuilder) Required() *rateBuilder {
 	b.schema.Required = true
-	return b.schema
+	return b
 }
 
-func (b *rateBuilder) Title(title string) *ui.Schema {
+func (b *rateBuilder) Title(title string) *rateBuilder {
 	b.schema.Title = title
-	return b.schema
+	return b
 }
 
-func (b *rateBuilder) Count(count int) *ui.Schema {
+func (b *rateBuilder) Count(count int) *rateBuilder {
 	b.schema.XComponentProps["count"] = count
-	return b.schema
+	return b
 }
 
-func (b *rateBuilder) AllowHalf() *ui.Schema {
+func (b *rateBuilder) AllowHalf() *rateBuilder {
 	b.schema.XComponentProps["allowHalf"] = true
-	return b.schema
+	return b
 }
 
-func (b *rateBuilder) Grading() *ui.Schema {
+func (b *rateBuilder) Grading() *rateBuilder {
 	b.schema.XComponentProps["grading"] = true
-	return b.schema
+	return b
 }

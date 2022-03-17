@@ -19,12 +19,12 @@ func (b *tagsBuilder) Schema() *ui.Schema {
 	return b.schema
 }
 
-func (b *tagsBuilder) Required() *ui.Schema {
+func (b *tagsBuilder) Required() *tagsBuilder {
 	b.schema.Required = true
-	return b.schema
+	return b
 }
 
-func (b *tagsBuilder) Title(title string) *ui.Schema {
+func (b *tagsBuilder) Title(title string) *tagsBuilder {
 	b.schema.Title = title
-	return b.schema
+	return b
 }

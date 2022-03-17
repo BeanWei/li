@@ -20,47 +20,47 @@ func (b *numberBuilder) Schema() *ui.Schema {
 	return b.schema
 }
 
-func (b *numberBuilder) Required() *ui.Schema {
+func (b *numberBuilder) Required() *numberBuilder {
 	b.schema.Required = true
-	return b.schema
+	return b
 }
 
-func (b *numberBuilder) Minimum(min int) *ui.Schema {
+func (b *numberBuilder) Minimum(min int) *numberBuilder {
 	b.schema.Minimum = min
-	return b.schema
+	return b
 }
 
-func (b *numberBuilder) Maximum(max int) *ui.Schema {
+func (b *numberBuilder) Maximum(max int) *numberBuilder {
 	b.schema.Maximum = max
-	return b.schema
+	return b
 }
 
-func (b *numberBuilder) Title(title string) *ui.Schema {
+func (b *numberBuilder) Title(title string) *numberBuilder {
 	b.schema.Title = title
-	return b.schema
+	return b
 }
 
-func (b *numberBuilder) Step(step int) *ui.Schema {
+func (b *numberBuilder) Step(step int) *numberBuilder {
 	b.schema.XComponentProps["step"] = step
-	return b.schema
+	return b
 }
 
-func (b *numberBuilder) Precision(precision int) *ui.Schema {
+func (b *numberBuilder) Precision(precision int) *numberBuilder {
 	b.schema.XComponentProps["precision"] = precision
-	return b.schema
+	return b
 }
 
-func (b *numberBuilder) Mode(mode string) *ui.Schema {
+func (b *numberBuilder) Mode(mode string) *numberBuilder {
 	b.schema.XComponentProps["mode"] = mode
-	return b.schema
+	return b
 }
 
-func (b *numberBuilder) Prefix(prefix string) *ui.Schema {
+func (b *numberBuilder) Prefix(prefix string) *numberBuilder {
 	b.schema.XComponentProps["prefix"] = prefix
-	return b.schema
+	return b
 }
 
-func (b *numberBuilder) Suffix(suffix string) *ui.Schema {
+func (b *numberBuilder) Suffix(suffix string) *numberBuilder {
 	b.schema.XComponentProps["suffix"] = suffix
-	return b.schema
+	return b
 }

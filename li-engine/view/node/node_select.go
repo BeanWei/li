@@ -21,32 +21,32 @@ func (b *selectBuilder) Schema() *ui.Schema {
 	return b.schema
 }
 
-func (b *selectBuilder) Required() *ui.Schema {
+func (b *selectBuilder) Required() *selectBuilder {
 	b.schema.Required = true
-	return b.schema
+	return b
 }
 
-func (b *selectBuilder) Title(title string) *ui.Schema {
+func (b *selectBuilder) Title(title string) *selectBuilder {
 	b.schema.Title = title
-	return b.schema
+	return b
 }
 
-func (b *selectBuilder) Multiple() *ui.Schema {
+func (b *selectBuilder) Multiple() *selectBuilder {
 	b.schema.XComponentProps["mode"] = "multiple"
-	return b.schema
+	return b
 }
 
-func (b *selectBuilder) AllowCreate() *ui.Schema {
+func (b *selectBuilder) AllowCreate() *selectBuilder {
 	b.schema.XComponentProps["allowCreate"] = true
-	return b.schema
+	return b
 }
 
-func (b *selectBuilder) MaxTagCount(max int) *ui.Schema {
+func (b *selectBuilder) MaxTagCount(max int) *selectBuilder {
 	b.schema.XComponentProps["maxTagCount"] = max
-	return b.schema
+	return b
 }
 
-func (b *selectBuilder) Option(label string, value ...interface{}) *ui.Schema {
+func (b *selectBuilder) Option(label string, value ...interface{}) *selectBuilder {
 	var val interface{}
 	if len(value) > 0 {
 		val = value[0]
@@ -57,5 +57,5 @@ func (b *selectBuilder) Option(label string, value ...interface{}) *ui.Schema {
 		"label": label,
 		"value": val,
 	})
-	return b.schema
+	return b
 }

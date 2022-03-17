@@ -19,22 +19,22 @@ func (b *passwordBuilder) Schema() *ui.Schema {
 	return b.schema
 }
 
-func (b *passwordBuilder) Required() *ui.Schema {
+func (b *passwordBuilder) Required() *passwordBuilder {
 	b.schema.Required = true
-	return b.schema
+	return b
 }
 
-func (b *passwordBuilder) MinLength(min int) *ui.Schema {
+func (b *passwordBuilder) MinLength(min int) *passwordBuilder {
 	b.schema.MinLength = min
-	return b.schema
+	return b
 }
 
-func (b *passwordBuilder) MaxLength(max int) *ui.Schema {
+func (b *passwordBuilder) MaxLength(max int) *passwordBuilder {
 	b.schema.MaxLength = max
-	return b.schema
+	return b
 }
 
-func (b *passwordBuilder) Title(title string) *ui.Schema {
+func (b *passwordBuilder) Title(title string) *passwordBuilder {
 	b.schema.Title = title
-	return b.schema
+	return b
 }

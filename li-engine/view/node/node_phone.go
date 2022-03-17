@@ -20,12 +20,12 @@ func (b *phoneBuilder) Schema() *ui.Schema {
 	return b.schema
 }
 
-func (b *phoneBuilder) Required() *ui.Schema {
+func (b *phoneBuilder) Required() *phoneBuilder {
 	b.schema.Required = true
-	return b.schema
+	return b
 }
 
-func (b *phoneBuilder) Title(title string) *ui.Schema {
+func (b *phoneBuilder) Title(title string) *phoneBuilder {
 	b.schema.Title = title
-	return b.schema
+	return b
 }
