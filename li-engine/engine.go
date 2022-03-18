@@ -18,7 +18,7 @@ type (
 		Copyright string
 		Menus     []*AppMenu
 		NavItems  []view.Node
-		SignPage  view.Schema
+		Binding   *AppBinding
 	}
 
 	AppMenu struct {
@@ -29,14 +29,19 @@ type (
 		IsHome   bool
 	}
 
+	AppBinding struct {
+		SignPage                 view.Schema
+		GetCurrentUserController control.Controller
+	}
+
 	app struct {
-		Title     string                 `json:"title"`
-		Logo      string                 `json:"logo"`
-		Copyright string                 `json:"copyright"`
-		NavItems  []*ui.Schema           `json:"navitems"`
-		Menus     []*appmenu             `json:"menus"`
-		Home      string                 `json:"home"`
-		SignPage  map[string]interface{} `json:"signpage"`
+		Title     string       `json:"title"`
+		Logo      string       `json:"logo"`
+		Copyright string       `json:"copyright"`
+		NavItems  []*ui.Schema `json:"navitems"`
+		Menus     []*appmenu   `json:"menus"`
+		Home      string       `json:"home"`
+		Binding   *appbinding  `json:"binding"`
 	}
 
 	appmenu struct {
@@ -45,18 +50,24 @@ type (
 		Target   string     `json:"target"`
 		Children []*appmenu `json:"children"`
 	}
+
+	appbinding struct {
+		SignPage map[string]interface{} `json:"signpage"`
+	}
 )
 
 func NewApp(cfg *App) {
 	var (
-		_, signpage = view.ToPage(cfg.SignPage)
+		_, signpage = view.ToPage(cfg.Binding.SignPage)
 		appcfg      = &app{
 			Title:     cfg.Title,
 			Logo:      cfg.Logo,
 			Copyright: cfg.Copyright,
 			Menus:     make([]*appmenu, len(cfg.Menus)),
 			NavItems:  make([]*ui.Schema, len(cfg.NavItems)),
-			SignPage:  signpage,
+			Binding: &appbinding{
+				SignPage: signpage,
+			},
 		}
 		pages         = make(map[string]map[string]interface{})
 		recursionmenu func(menus []*AppMenu) []*appmenu
@@ -94,6 +105,7 @@ func NewApp(cfg *App) {
 		}
 	}
 
+	control.RegisterController("@getCurrentUser", cfg.Binding.GetCurrentUserController)
 	control.RegisterController("@getAppConfig", func(ctx context.Context, variables *gjson.Json) (res interface{}, err error) {
 		return appcfg, nil
 	})
