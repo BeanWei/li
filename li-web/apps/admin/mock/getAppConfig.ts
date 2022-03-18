@@ -11,6 +11,40 @@ export default {
         },
       },
     },
+    {
+      type: "void",
+      properties: {
+        theme: {
+          "x-component": "DropdownMenu",
+          items: {
+            editprofile: {
+              title: "用户设置",
+              "x-component": "DropdownMenu.Item",
+            },
+            changepwd: {
+              title: "修改密码",
+              "x-component": "DropdownMenu.Item",
+            },
+            switchlang: {
+              title: "切换语言",
+              "x-component": "DropdownMenu.Item",
+            },
+            signout: {
+              title: "退出登录",
+              "x-component": "DropdownMenu.Item",
+            },
+          },
+          properties: {
+            curUser: {
+              "x-component": "Avatar",
+              "x-component-props": {
+                src: "https://lf1-xgcdn-tos.pstatp.com/obj/vcloud/vadmin/start.8e0e4855ee346a46ccff8ff3e24db27b.png",
+              },
+            },
+          },
+        },
+      },
+    },
   ],
   menus: [
     {

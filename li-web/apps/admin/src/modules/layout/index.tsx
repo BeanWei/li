@@ -96,10 +96,9 @@ export const Layout = () => {
             </div>
             <ul className={styles.right}>
               {navitems.map((item: any, i: number) => {
-                console.log(item);
                 return (
                   <li key={i.toString()}>
-                    <SchemaComponent schema={item} />
+                    <SchemaComponent schema={item} onlyRenderProperties />
                   </li>
                 );
               })}

@@ -7,3 +7,5 @@ export const CardItem: React.FC = (props) => {
     </Card>
   );
 };
+
+export default CardItem;
