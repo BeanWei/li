@@ -2,31 +2,34 @@ import Logo from "@/assets/logo.svg";
 import { Layout } from "@arco-design/web-react";
 import { SchemaComponent } from "schema-components";
 import { useRoute } from "../route-switch/hooks";
+import styles from "./index.module.less";
 
 export const SignPage: React.FC = (props) => {
   const route = useRoute();
   const {
     title = "Li Admin",
+    subTitle,
     footer = "Li Admin",
     logo,
     body = {},
   } = route.config;
 
   return (
-    <Layout>
-      <Layout.Header>
-        <div>
-          {logo ? <img src={logo} /> : <Logo />}
-          <div style={{ fontSize: "20px" }}>{title}</div>
+    <div className={styles.container}>
+      <div className={styles.top}>
+        <div className={styles.header}>
+          <span className={styles.logo}>
+            {logo ? <img src={logo} /> : <Logo />}
+          </span>
+          <span className={styles.title}>{title}</span>
         </div>
-      </Layout.Header>
-      <Layout.Content>
-        <div>
-          <SchemaComponent schema={body} />
-        </div>
-      </Layout.Content>
-      <Layout.Footer>{footer}</Layout.Footer>
-    </Layout>
+        {subTitle ? <div className={styles.desc}>{subTitle}</div> : null}
+      </div>
+      <div className={styles.content}>
+        <SchemaComponent schema={body} />
+      </div>
+      <Layout.Footer className={styles.footer}>{footer}</Layout.Footer>
+    </div>
   );
 };
 

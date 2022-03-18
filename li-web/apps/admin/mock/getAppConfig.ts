@@ -36,40 +36,40 @@ export default {
       ],
     },
     {
-      name: "列表页",
+      title: "列表页",
       key: "ListPage",
       children: [
         {
           key: "AdminPageSub1Sub",
-          name: "一级列表页面",
+          title: "一级列表页面",
           children: [
             {
               key: "AdminPageSub1Sub1",
-              name: "一一级列表页面",
+              title: "一一级列表页面",
             },
             {
               key: "AdminPageSub1Sub2",
-              name: "一二级列表页面",
+              title: "一二级列表页面",
             },
             {
               key: "sAdminPageSub1Sub3",
-              name: "一三级列表页面",
+              title: "一三级列表页面",
             },
           ],
         },
         {
           key: "AdminPageSub2",
-          name: "二级列表页面",
+          title: "二级列表页面",
         },
         {
           key: "AdminPageSub3",
-          name: "三级列表页面",
+          title: "三级列表页面",
         },
       ],
     },
     {
       target: "https://github.com/BeanWei",
-      name: "Github",
+      title: "Github",
     },
   ],
   signpage: {
@@ -96,10 +96,12 @@ export default {
         "x-content": "登录",
         "x-component": "Submit",
         "x-decorator": "FormItem",
+        "x-operation": "userSignIn",
         "x-component-props": {
           block: true,
           type: "primary",
           style: { width: "100%" },
+          onSubmitSuccessTo: "/admin/WelcomePage",
         },
       },
     },
