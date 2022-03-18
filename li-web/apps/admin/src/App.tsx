@@ -52,7 +52,7 @@ const App = compose(...providers)(() => {
             config: {
               title: data?.data?.title,
               logo: data?.data?.logo,
-              body: data?.data?.signpage,
+              body: data?.data?.binding.signpage,
               footer: data?.data?.copyright,
             },
           },
@@ -61,7 +61,11 @@ const App = compose(...providers)(() => {
             path: entry + "/:name(.+)?",
             component: "Layout",
             title: data?.data?.title || "Li Admin",
-            config: data?.data,
+            config: {
+              ...data?.data,
+              title: data?.data?.title || "Li Admin",
+              entry,
+            },
           },
         ]}
       />

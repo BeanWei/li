@@ -11,19 +11,23 @@ import { RemoteSchemaComponent } from "../route-switch/RemoteSchemaComponent";
 import styles from "./index.module.less";
 
 export const LayoutContext = createContext<{
+  appinfo?: Record<string, any>;
   lang?: string;
   setLang?: (value: string) => void;
   theme?: string;
   setTheme?: (value: string) => void;
-  profile?: Record<string, any>;
-  setProfile?: (value: Record<string, any>) => void;
+  currentUser?: Record<string, any>;
+  setCurrentUser?: (value: Record<string, any>) => void;
 }>({});
 
 export const useLayoutContext = () => {
   return useContext(LayoutContext);
 };
 
-export const LayoutProvider = (props: any) => {
+export const LayoutProvider: React.FC<{ appinfo: Record<string, any> }> = (
+  props
+) => {
+  const { appinfo } = props;
   const [theme, setTheme] = useLocalStorageState("li-theme", {
     defaultValue: "light",
   });
@@ -36,18 +40,19 @@ export const LayoutProvider = (props: any) => {
     }
   }, [theme]);
 
-  const result = useRequest("userGetProfile");
+  const result = useRequest("@getCurrentUser");
   if (result.loading) {
     return <Spin />;
   }
   if (result.error) {
-    return <Redirect to={"/signin"} />;
+    return <Redirect to={appinfo.entry + "/sign"} />;
   }
   return (
     <LayoutContext.Provider
       value={{
+        appinfo,
         lang: result?.data?.language,
-        profile: result.data,
+        currentUser: result.data,
         theme,
         setTheme,
       }}
@@ -61,12 +66,6 @@ export const Layout = () => {
   const route = useRoute();
   const history = useHistory();
   const match = useRouteMatch<any>();
-  const curKey =
-    match.params.name ??
-    route?.["schema"]?.["x-component-props"]?.["defaultSelectedKeys"]?.[0];
-  const onClickMenuItem = (key: string) => {
-    history.push(`/admin/${key}`);
-  };
 
   const {
     title = "Li Admin",
@@ -74,10 +73,18 @@ export const Layout = () => {
     navitems = [],
     home,
     menus = [],
+    entry,
   } = route.config;
 
+  const curKey =
+    match.params.name ??
+    route?.["schema"]?.["x-component-props"]?.["defaultSelectedKeys"]?.[0];
+  const onClickMenuItem = (key: string) => {
+    history.push(entry + `/${key}`);
+  };
+
   return (
-    <LayoutProvider>
+    <LayoutProvider appinfo={route.config}>
       <ArcoLayout className={styles.layout}>
         <div className={styles["layout-navbar"]}>
           <div className={styles.navbar}>

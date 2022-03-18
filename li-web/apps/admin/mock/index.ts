@@ -1,7 +1,7 @@
 import { MockMethod } from "vite-plugin-mock";
 import getAppConfig from "./getAppConfig";
 import getWelcomePageSchema from "./getWelcomePageSchema";
-import userGetProfile from "./userGetProfile";
+import getCurrentUser from "./getCurrentUser";
 
 export default [
   {
@@ -14,9 +14,9 @@ export default [
           data: getAppConfig,
         };
       }
-      if (operation === "userGetProfile") {
+      if (operation === "@getCurrentUser") {
         return {
-          data: userGetProfile,
+          data: getCurrentUser,
         };
       }
       if (operation == "@getAppView") {

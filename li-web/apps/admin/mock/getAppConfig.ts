@@ -72,36 +72,38 @@ export default {
       title: "Github",
     },
   ],
-  signpage: {
-    type: "object",
-    "x-component": "Form",
-    properties: {
-      email: {
-        type: "string",
-        required: true,
-        "x-component": "Input",
-        "x-validator": "email",
-        "x-decorator": "FormItem",
-        "x-component-props": { placeholder: "邮箱", style: {} },
-      },
-      password: {
-        type: "string",
-        "x-component": "Password",
-        required: true,
-        "x-decorator": "FormItem",
-        "x-component-props": { placeholder: "密码", style: {} },
-      },
-      submit: {
-        type: "void",
-        "x-content": "登录",
-        "x-component": "Submit",
-        "x-decorator": "FormItem",
-        "x-operation": "userSignIn",
-        "x-component-props": {
-          block: true,
-          type: "primary",
-          style: { width: "100%" },
-          onSubmitSuccessTo: "/admin/WelcomePage",
+  binding: {
+    signpage: {
+      type: "object",
+      "x-component": "Form",
+      properties: {
+        email: {
+          type: "string",
+          required: true,
+          "x-component": "Input",
+          "x-validator": "email",
+          "x-decorator": "FormItem",
+          "x-component-props": { placeholder: "邮箱", style: {} },
+        },
+        password: {
+          type: "string",
+          "x-component": "Password",
+          required: true,
+          "x-decorator": "FormItem",
+          "x-component-props": { placeholder: "密码", style: {} },
+        },
+        submit: {
+          type: "void",
+          "x-content": "登录",
+          "x-component": "Submit",
+          "x-decorator": "FormItem",
+          "x-operation": "userSignIn",
+          "x-component-props": {
+            block: true,
+            type: "primary",
+            style: { width: "100%" },
+            onSubmitSuccessTo: "/admin/WelcomePage",
+          },
         },
       },
     },
