@@ -7,4 +7,4 @@ export * from "./layout";
 export * from "./record-provider";
 export * from "./route-switch";
 export * from "./schema-components";
-export * from "./user";
+export * from "./sign-page";

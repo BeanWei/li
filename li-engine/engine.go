@@ -5,6 +5,7 @@ import (
 
 	"github.com/BeanWei/li/li-engine/control"
 	"github.com/BeanWei/li/li-engine/view"
+	"github.com/BeanWei/li/li-engine/view/ui"
 	"github.com/gogf/gf/v2/encoding/gjson"
 	"github.com/gogf/gf/v2/frame/g"
 	"github.com/gogf/gf/v2/net/ghttp"
@@ -12,14 +13,16 @@ import (
 
 type (
 	App struct {
-		Title    string
-		Logo     string
-		Menus    []*AppMenu
-		NavItems []view.Schema
+		Title     string
+		Logo      string
+		Copyright string
+		Menus     []*AppMenu
+		NavItems  []view.Node
+		SignPage  view.Schema
 	}
 
 	AppMenu struct {
-		Name     string
+		Title    string
 		Children []*AppMenu
 		Page     view.Schema
 		Target   string
@@ -27,15 +30,17 @@ type (
 	}
 
 	app struct {
-		Title    string        `json:"title"`
-		Logo     string        `json:"logo"`
-		NavItems []view.Schema `json:"navitems"`
-		Menus    []*appmenu    `json:"menus"`
-		Home     string        `json:"home"`
+		Title     string                 `json:"title"`
+		Logo      string                 `json:"logo"`
+		Copyright string                 `json:"copyright"`
+		NavItems  []*ui.Schema           `json:"navitems"`
+		Menus     []*appmenu             `json:"menus"`
+		Home      string                 `json:"home"`
+		SignPage  map[string]interface{} `json:"signpage"`
 	}
 
 	appmenu struct {
-		Name     string     `json:"name"`
+		Title    string     `json:"title"`
 		Key      string     `json:"key"`
 		Target   string     `json:"target"`
 		Children []*appmenu `json:"children"`
@@ -44,11 +49,14 @@ type (
 
 func NewApp(cfg *App) {
 	var (
-		appcfg = &app{
-			Title:    cfg.Title,
-			Logo:     cfg.Logo,
-			NavItems: cfg.NavItems,
-			Menus:    make([]*appmenu, len(cfg.Menus)),
+		_, signpage = view.ToPage(cfg.SignPage)
+		appcfg      = &app{
+			Title:     cfg.Title,
+			Logo:      cfg.Logo,
+			Copyright: cfg.Copyright,
+			Menus:     make([]*appmenu, len(cfg.Menus)),
+			NavItems:  make([]*ui.Schema, len(cfg.NavItems)),
+			SignPage:  signpage,
 		}
 		pages         = make(map[string]map[string]interface{})
 		recursionmenu func(menus []*AppMenu) []*appmenu
@@ -60,7 +68,7 @@ func NewApp(cfg *App) {
 			key, page := view.ToPage(menu.Page)
 			pages[key] = page
 			amenu := &appmenu{
-				Name:     menu.Name,
+				Title:    menu.Title,
 				Key:      key,
 				Target:   menu.Target,
 				Children: make([]*appmenu, len(menu.Children)),
@@ -73,8 +81,18 @@ func NewApp(cfg *App) {
 		}
 		return amenus
 	}
-
 	appcfg.Menus = recursionmenu(cfg.Menus)
+
+	for i, ni := range cfg.NavItems {
+		nischema := ni.Schema()
+		appcfg.NavItems[i] = &ui.Schema{
+			Name: nischema.Name,
+			Type: nischema.Type,
+			Properties: map[string]*ui.Schema{
+				nischema.Name: nischema,
+			},
+		}
+	}
 
 	control.RegisterController("@getAppConfig", func(ctx context.Context, variables *gjson.Json) (res interface{}, err error) {
 		return appcfg, nil

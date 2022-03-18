@@ -1,5 +1,6 @@
 export default {
   title: "Li Demo",
+  copyright: "Powered by ❤️璃❤️",
   home: "WelcomePage",
   navitems: [
     {
@@ -14,23 +15,23 @@ export default {
   menus: [
     {
       key: "WelcomePage",
-      name: "欢迎",
+      title: "欢迎",
     },
     {
       key: "AdminPage",
-      name: "管理页",
+      title: "管理页",
       children: [
         {
           key: "AdminPageSub1",
-          name: "一级页面",
+          title: "一级页面",
         },
         {
           key: "AdminPageSub2",
-          name: "二级页面",
+          title: "二级页面",
         },
         {
           key: "AdminPageSub3",
-          name: "三级页面",
+          title: "三级页面",
         },
       ],
     },
@@ -71,4 +72,36 @@ export default {
       name: "Github",
     },
   ],
+  signpage: {
+    type: "object",
+    "x-component": "Form",
+    properties: {
+      email: {
+        type: "string",
+        required: true,
+        "x-component": "Input",
+        "x-validator": "email",
+        "x-decorator": "FormItem",
+        "x-component-props": { placeholder: "邮箱", style: {} },
+      },
+      password: {
+        type: "string",
+        "x-component": "Password",
+        required: true,
+        "x-decorator": "FormItem",
+        "x-component-props": { placeholder: "密码", style: {} },
+      },
+      submit: {
+        type: "void",
+        "x-content": "登录",
+        "x-component": "Submit",
+        "x-decorator": "FormItem",
+        "x-component-props": {
+          block: true,
+          type: "primary",
+          style: { width: "100%" },
+        },
+      },
+    },
+  },
 };

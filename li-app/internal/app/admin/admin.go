@@ -10,24 +10,25 @@ func Init() {
 		Title: "Li Admin",
 		Menus: []*engine.AppMenu{
 			{
-				Name: "仪表盘",
+				Title: "仪表盘",
 				Children: []*engine.AppMenu{
 					{
-						Name:   "工作台",
+						Title:  "工作台",
 						Page:   new(view.DashboardWorkplace),
 						IsHome: true,
 					},
 				},
 			},
 			{
-				Name: "系统管理",
+				Title: "系统管理",
 				Children: []*engine.AppMenu{
 					{
-						Name: "用户管理",
-						Page: new(view.SystemUser),
+						Title: "用户管理",
+						Page:  new(view.SystemUser),
 					},
 				},
 			},
 		},
+		NavItems: view.NavItems(),
 	})
 }

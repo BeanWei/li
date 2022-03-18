@@ -14,6 +14,7 @@ import {
   Layout,
   RouteSwitch,
   RouteSwitchProvider,
+  SignPage,
   ThemeSwitch,
 } from "./modules";
 
@@ -23,11 +24,12 @@ const providers = [
   [SchemaComponentProvider, { components: { Link, NavLink, ThemeSwitch } }],
   UiSchemaComponentProvider,
   [DocumentTitleProvider, { addonAfter: "Li" }],
-  [RouteSwitchProvider, { components: { Layout } }],
+  [RouteSwitchProvider, { components: { SignPage, Layout } }],
 ];
 
 const App = compose(...providers)(() => {
   const { data, loading } = useRequest("@getAppConfig");
+  const entry = data?.data?.entry || "/admin";
 
   if (loading) {
     return <Spin />;
@@ -39,30 +41,27 @@ const App = compose(...providers)(() => {
           {
             type: "redirect",
             from: "/",
-            to: "/admin",
+            to: entry,
             exact: true,
           },
           {
             type: "route",
-            path: "/admin/:name(.+)?",
-            component: "Layout",
-            title: data?.data?.title || "Li Admin",
-            config: data?.data,
+            path: entry + "/sign",
+            component: "SignPage",
+            title: "Sign",
+            config: {
+              title: data?.data?.title,
+              logo: data?.data?.logo,
+              body: data?.data?.signpage,
+              footer: data?.data?.copyright,
+            },
           },
           {
             type: "route",
-            routes: [
-              {
-                type: "route",
-                path: "/signin",
-                component: "SigninPage",
-              },
-              {
-                type: "route",
-                path: "/signup",
-                component: "SignupPage",
-              },
-            ],
+            path: entry + "/:name(.+)?",
+            component: "Layout",
+            title: data?.data?.title || "Li Admin",
+            config: data?.data,
           },
         ]}
       />

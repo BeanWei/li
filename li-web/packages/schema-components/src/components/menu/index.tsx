@@ -13,8 +13,8 @@ export type MenuDataItem = {
   children?: MenuDataItem[];
   /** @name 菜单的icon */
   icon?: string;
-  /** @name 菜单的名字 */
-  name?: string;
+  /** @name 菜单的标题 */
+  title?: string;
   /** @name disable 菜单选项 */
   disabled?: boolean;
   /** @name 指定外链打开形式，同a标签 */
@@ -30,7 +30,7 @@ const getNavMenuItems = (menusData: MenuDataItem[] = []): React.ReactNode[] => {
           title={
             <>
               <Icon style={{ marginRight: 5 }} type={item.icon} />
-              {item.name}
+              {item.title}
             </>
           }
         >
@@ -54,7 +54,7 @@ const getNavMenuItems = (menusData: MenuDataItem[] = []): React.ReactNode[] => {
     if (isUrl(itemPath)) {
       return (
         <div
-          title={item.name}
+          title={item.title}
           onClick={(e) => {
             e.stopPropagation();
             e.preventDefault();
@@ -62,14 +62,14 @@ const getNavMenuItems = (menusData: MenuDataItem[] = []): React.ReactNode[] => {
           }}
         >
           <Icon style={{ marginRight: 5 }} type={item.icon} />
-          {item.name}
+          {item.title}
         </div>
       );
     }
     return (
       <>
         <Icon style={{ marginRight: 5 }} type={item.icon} />
-        {item.name}
+        {item.title}
       </>
     );
   };
