@@ -91,6 +91,7 @@ export function FormDrawer(title: any, id: any, renderer?: any): IFormDrawer {
   const drawer: IDrawerProps = {
     width: "50%",
     ...props,
+    footer: null,
     onCancel: () => {
       if (props?.onCancel?.() !== false) {
         formDrawer.close();
@@ -167,7 +168,7 @@ const DrawerFooter: React.FC = (props) => {
   const footerRef = useRef<HTMLDivElement | null>(null);
   const prefixCls = usePrefixCls("drawer");
   useLayoutEffect(() => {
-    const content = ref.current?.closest(`.${prefixCls}-wrapper-body`);
+    const content = ref.current?.closest(`.${prefixCls}-scroll`);
     if (content) {
       if (!footerRef.current) {
         footerRef.current = content.querySelector(`.${prefixCls}-footer`);

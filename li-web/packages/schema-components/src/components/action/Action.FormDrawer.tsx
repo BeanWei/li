@@ -1,4 +1,5 @@
-import { Button } from "@arco-design/web-react";
+import { useContext } from "react";
+import { Button, ConfigProvider } from "@arco-design/web-react";
 import { observer, useField, useFieldSchema } from "@formily/react";
 import { request } from "pro-utils";
 import FormLayout from "../form-layout";
@@ -11,6 +12,7 @@ import { SchemaComponent, UiSchemaComponentProvider } from "../..";
 export const ActionFormDrawer: ActionFormDrawerProps = observer((props) => {
   const schema = useFieldSchema();
   const field = useField();
+  const { locale } = useContext(ConfigProvider.ConfigContext);
 
   const handleClick = () => {
     const drawer = FormDrawer(props.drawerProps || field.title, () => {
@@ -27,7 +29,7 @@ export const ActionFormDrawer: ActionFormDrawerProps = observer((props) => {
                   drawer.close();
                 }}
               >
-                {props.drawerProps?.cancelText || "Cancel"}
+                {props.drawerProps?.cancelText || locale?.Drawer.cancelText}
               </Button>
               <Submit
                 {...props.drawerProps?.okButtonProps}
@@ -39,7 +41,7 @@ export const ActionFormDrawer: ActionFormDrawerProps = observer((props) => {
                   }
                 }}
               >
-                {props.drawerProps?.okText || "Submit"}
+                {props.drawerProps?.okText || locale?.Drawer.okText}
               </Submit>
             </FormButtonGroup>
           </FormDrawer.Footer>

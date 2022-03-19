@@ -18,8 +18,6 @@ export const DropdownMenu: ComposedDropdownMenu = observer((props) => {
   return (
     <Dropdown
       {...props}
-      // FIXME: 会影响弹窗的显示
-      unmountOnExit={false}
       droplist={
         <Menu>
           <RecursionField
