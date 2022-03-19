@@ -11,7 +11,7 @@ import { RemoteSchemaComponent } from "../route-switch/RemoteSchemaComponent";
 import styles from "./index.module.less";
 
 export const LayoutContext = createContext<{
-  appinfo?: Record<string, any>;
+  app?: Record<string, any>;
   lang?: string;
   setLang?: (value: string) => void;
   theme?: string;
@@ -24,10 +24,20 @@ export const useLayoutContext = () => {
   return useContext(LayoutContext);
 };
 
-export const LayoutProvider: React.FC<{ appinfo: Record<string, any> }> = (
-  props
-) => {
-  const { appinfo } = props;
+export const Layout = () => {
+  const route = useRoute();
+  const history = useHistory();
+  const match = useRouteMatch<any>();
+
+  const {
+    title = "Li Admin",
+    logo,
+    navitems = [],
+    home,
+    menus = [],
+    entry,
+  } = route.config;
+
   const [theme, setTheme] = useLocalStorageState("li-theme", {
     defaultValue: "light",
   });
@@ -45,36 +55,8 @@ export const LayoutProvider: React.FC<{ appinfo: Record<string, any> }> = (
     return <Spin />;
   }
   if (result.error) {
-    return <Redirect to={appinfo.entry + "/sign"} />;
+    return <Redirect to={entry + "/sign"} />;
   }
-  return (
-    <LayoutContext.Provider
-      value={{
-        appinfo,
-        lang: result?.data?.language,
-        currentUser: result.data,
-        theme,
-        setTheme,
-      }}
-    >
-      {props.children}
-    </LayoutContext.Provider>
-  );
-};
-
-export const Layout = () => {
-  const route = useRoute();
-  const history = useHistory();
-  const match = useRouteMatch<any>();
-
-  const {
-    title = "Li Admin",
-    logo,
-    navitems = [],
-    home,
-    menus = [],
-    entry,
-  } = route.config;
 
   const curKey =
     match.params.name ??
@@ -83,8 +65,25 @@ export const Layout = () => {
     history.push(entry + `/${key}`);
   };
 
+  const global = {
+    app: {
+      title,
+      logo,
+      home,
+      entry,
+    },
+    lang: result?.data?.language,
+    currentUser: result.data.data,
+  };
+
   return (
-    <LayoutProvider appinfo={route.config}>
+    <LayoutContext.Provider
+      value={{
+        ...global,
+        theme,
+        setTheme,
+      }}
+    >
       <ArcoLayout className={styles.layout}>
         <div className={styles["layout-navbar"]}>
           <div className={styles.navbar}>
@@ -98,7 +97,7 @@ export const Layout = () => {
               {navitems.map((item: any, i: number) => {
                 return (
                   <li key={i.toString()}>
-                    <SchemaComponent schema={item} />
+                    <SchemaComponent schema={item} scope={{ global }} />
                   </li>
                 );
               })}
@@ -129,7 +128,7 @@ export const Layout = () => {
                     },
                   },
                 }}
-                scope={{ onClickMenuItem }}
+                scope={{ onClickMenuItem, global }}
               />
             </div>
           </ArcoLayout.Sider>
@@ -145,6 +144,6 @@ export const Layout = () => {
           </ArcoLayout>
         </ArcoLayout>
       </ArcoLayout>
-    </LayoutProvider>
+    </LayoutContext.Provider>
   );
 };
