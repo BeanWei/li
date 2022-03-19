@@ -27,7 +27,9 @@ export const DropdownMenu: ComposedDropdownMenu = observer((props) => {
         </Menu>
       }
     >
-      <RecursionField schema={schema} onlyRenderProperties />
+      <div>
+        <RecursionField schema={schema} onlyRenderProperties />
+      </div>
     </Dropdown>
   );
 });
@@ -37,7 +39,11 @@ DropdownMenu.Item = observer((props) => {
   const field = useField();
   return (
     <Menu.Item {...props} key={schema.name as string}>
-      {field.title}
+      {schema.properties ? (
+        <RecursionField schema={schema} onlyRenderProperties />
+      ) : (
+        field.title
+      )}
     </Menu.Item>
   );
 });
@@ -46,7 +52,7 @@ DropdownMenu.SubMenu = observer((props) => {
   const schema = useFieldSchema();
   const field = useField();
   return (
-    <Menu.SubMenu key={schema.name as string} title={field.title}>
+    <Menu.SubMenu {...props} key={schema.name as string} title={field.title}>
       <RecursionField schema={schema} onlyRenderProperties />
     </Menu.SubMenu>
   );

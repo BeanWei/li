@@ -31,6 +31,23 @@ export const Action: ComposedAction = observer((props: any) => {
   const field = useField();
   const { run } = useAction();
   const fieldSchema = useFieldSchema();
+  const handleClick = (e: any) => {
+    e.preventDefault();
+    e.stopPropagation();
+    const onOk = () => {
+      onClick?.(e);
+      setVisible(true);
+      run();
+    };
+    if (confirm) {
+      Modal.confirm({
+        ...confirm,
+        onOk,
+      });
+    } else {
+      onOk();
+    }
+  };
   return (
     <ActionContext.Provider
       value={{ visible, setVisible, openMode, containerRefKey }}
@@ -42,30 +59,14 @@ export const Action: ComposedAction = observer((props: any) => {
           schema={fieldSchema}
         />
       )}
-      {!popover && (
-        <Button
-          {...rest}
-          onClick={(e) => {
-            e.preventDefault();
-            e.stopPropagation();
-            const onOk = () => {
-              onClick?.(e);
-              setVisible(true);
-              run();
-            };
-            if (confirm) {
-              Modal.confirm({
-                ...confirm,
-                onOk,
-              });
-            } else {
-              onOk();
-            }
-          }}
-        >
-          {field.title}
-        </Button>
-      )}
+      {!popover &&
+        (rest.type === "menu" ? (
+          <div onClick={handleClick}>{field.title}</div>
+        ) : (
+          <Button {...rest} onClick={handleClick}>
+            {field.title}
+          </Button>
+        ))}
       {!popover && props.children}
     </ActionContext.Provider>
   );

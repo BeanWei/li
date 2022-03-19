@@ -8,7 +8,7 @@ export const Avatar: React.FC<{
 }> = (props) => {
   if (props.src) {
     return (
-      <ArcoAvatar shape={props.shape} size={props.size} {...props}>
+      <ArcoAvatar shape={props.shape || "circle"} size={props.size} {...props}>
         <img alt={props.alt} src={props.src} />
       </ArcoAvatar>
     );

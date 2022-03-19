@@ -5,42 +5,113 @@ export default {
   navitems: [
     {
       type: "void",
-      properties: {
-        theme: {
-          "x-component": "ThemeSwitch",
-        },
-      },
+      name: "themeswitch",
+      "x-component": "ThemeSwitch",
     },
     {
       type: "void",
-      properties: {
-        theme: {
-          "x-component": "DropdownMenu",
-          items: {
-            editprofile: {
-              title: "用户设置",
-              "x-component": "DropdownMenu.Item",
-            },
-            changepwd: {
-              title: "修改密码",
-              "x-component": "DropdownMenu.Item",
-            },
-            switchlang: {
-              title: "切换语言",
-              "x-component": "DropdownMenu.Item",
-            },
-            signout: {
-              title: "退出登录",
-              "x-component": "DropdownMenu.Item",
-            },
+      name: "currentuser",
+      "x-component": "DropdownMenu",
+      "x-component-props": {
+        triggerProps: {
+          popupStyle: {
+            marginRight: "28px",
           },
-          properties: {
-            curUser: {
-              "x-component": "Avatar",
-              "x-component-props": {
-                src: "https://lf1-xgcdn-tos.pstatp.com/obj/vcloud/vadmin/start.8e0e4855ee346a46ccff8ff3e24db27b.png",
+        },
+      },
+      items: {
+        type: "void",
+        properties: {
+          editprofile: {
+            type: "void",
+            "x-component": "DropdownMenu.Item",
+            properties: {
+              action: {
+                title: "用户设置",
+                type: "void",
+                "x-component": "Action",
+                "x-component-props": {
+                  type: "menu",
+                },
+                properties: {
+                  drawer1: {
+                    "x-component": "Action.Drawer",
+                    type: "void",
+                    title: "Drawer Title",
+                    properties: {
+                      hello1: {
+                        "x-content": "Hello",
+                        title: "T1",
+                      },
+                      input: {
+                        type: "string",
+                        title: "Input",
+                        "x-component": "Input",
+                      },
+                      footer1: {
+                        "x-component": "Action.Drawer.Footer",
+                        type: "void",
+                        properties: {
+                          close1: {
+                            title: "Close",
+                            "x-component": "Action",
+                          },
+                        },
+                      },
+                    },
+                  },
+                },
               },
             },
+          },
+          changepwd: {
+            type: "void",
+            title: "修改密码",
+            "x-component": "DropdownMenu.Item",
+          },
+          switchlang: {
+            type: "void",
+            title: "切换语言",
+            "x-component": "DropdownMenu.SubMenu",
+            properties: {
+              switchlang2zh: {
+                type: "void",
+                title: "中文",
+                "x-component": "DropdownMenu.Item",
+              },
+              switchlang2en: {
+                type: "void",
+                title: "Englist",
+                "x-component": "DropdownMenu.Item",
+              },
+            },
+          },
+          divider: {
+            type: "void",
+            "x-component": "Divider",
+            "x-component-props": {
+              style: {
+                margin: "4px 0",
+              },
+            },
+          },
+          signout: {
+            type: "void",
+            title: "退出登录",
+            "x-component": "DropdownMenu.Item",
+          },
+        },
+      },
+      properties: {
+        curUser: {
+          type: "void",
+          "x-component": "Avatar",
+          "x-component-props": {
+            size: 32,
+            style: {
+              cursor: "pointer",
+            },
+            src: "https://lf1-xgcdn-tos.pstatp.com/obj/vcloud/vadmin/start.8e0e4855ee346a46ccff8ff3e24db27b.png",
           },
         },
       },
