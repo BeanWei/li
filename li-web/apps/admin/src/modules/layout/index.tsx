@@ -2,7 +2,13 @@ import { createContext, useContext, useEffect } from "react";
 import { useRequest } from "pro-utils";
 import { Redirect } from "react-router";
 import { useLocalStorageState } from "ahooks";
-import { Layout as ArcoLayout, Spin } from "@arco-design/web-react";
+import {
+  ConfigProvider,
+  Layout as ArcoLayout,
+  Spin,
+} from "@arco-design/web-react";
+import zhCN from "@arco-design/web-react/es/locale/zh-CN";
+import enUS from "@arco-design/web-react/es/locale/en-US";
 import { useHistory, useRouteMatch } from "react-router-dom";
 import { SchemaComponent } from "schema-components";
 import Logo from "@/assets/logo.svg";
@@ -41,6 +47,9 @@ export const Layout = () => {
   const [theme, setTheme] = useLocalStorageState("li-theme", {
     defaultValue: "light",
   });
+  const [lang, setLang] = useLocalStorageState("li-lang", {
+    defaultValue: "zh-CN",
+  });
 
   useEffect(() => {
     if (theme === "dark") {
@@ -72,78 +81,95 @@ export const Layout = () => {
       home,
       entry,
     },
-    lang: result?.data?.language,
+    lang,
     currentUser: result.data.data,
   };
 
   return (
-    <LayoutContext.Provider
-      value={{
-        ...global,
-        theme,
-        setTheme,
+    <ConfigProvider
+      locale={lang === "en-US" ? enUS : zhCN}
+      componentConfig={{
+        Card: {
+          bordered: false,
+        },
+        List: {
+          bordered: false,
+        },
+        Table: {
+          border: false,
+        },
       }}
     >
-      <ArcoLayout className={styles.layout}>
-        <div className={styles["layout-navbar"]}>
-          <div className={styles.navbar}>
-            <div className={styles.left}>
-              <div className={styles.logo}>
-                {logo ? <img src={logo} /> : <Logo />}
-                <div className={styles["logo-name"]}>{title}</div>
+      <LayoutContext.Provider
+        value={{
+          ...global,
+          lang,
+          setLang,
+          theme,
+          setTheme,
+        }}
+      >
+        <ArcoLayout className={styles.layout}>
+          <div className={styles["layout-navbar"]}>
+            <div className={styles.navbar}>
+              <div className={styles.left}>
+                <div className={styles.logo}>
+                  {logo ? <img src={logo} /> : <Logo />}
+                  <div className={styles["logo-name"]}>{title}</div>
+                </div>
               </div>
+              <ul className={styles.right}>
+                {navitems.map((item: any, i: number) => {
+                  return (
+                    <li key={i.toString()}>
+                      <SchemaComponent schema={item} scope={{ global }} />
+                    </li>
+                  );
+                })}
+              </ul>
             </div>
-            <ul className={styles.right}>
-              {navitems.map((item: any, i: number) => {
-                return (
-                  <li key={i.toString()}>
-                    <SchemaComponent schema={item} scope={{ global }} />
-                  </li>
-                );
-              })}
-            </ul>
           </div>
-        </div>
-        <ArcoLayout>
-          <ArcoLayout.Sider
-            className={styles["layout-sider"]}
-            trigger={null}
-            collapsible
-            breakpoint="xl"
-            width={220}
-            style={{ paddingTop: 60 }}
-          >
-            <div className={styles["menu-wrapper"]}>
-              <SchemaComponent
-                schema={{
-                  type: "void",
-                  properties: {
-                    menu: {
-                      "x-component": "Menu",
-                      "x-component-props": {
-                        defaultSelectedKeys: [home || menus[0]?.key],
-                        onClickMenuItem: "{{ onClickMenuItem }}",
-                        menuData: menus,
+          <ArcoLayout>
+            <ArcoLayout.Sider
+              className={styles["layout-sider"]}
+              trigger={null}
+              collapsible
+              breakpoint="xl"
+              width={220}
+              style={{ paddingTop: 60 }}
+            >
+              <div className={styles["menu-wrapper"]}>
+                <SchemaComponent
+                  schema={{
+                    type: "void",
+                    properties: {
+                      menu: {
+                        "x-component": "Menu",
+                        "x-component-props": {
+                          defaultSelectedKeys: [home || menus[0]?.key],
+                          onClickMenuItem: "{{ onClickMenuItem }}",
+                          menuData: menus,
+                        },
                       },
                     },
-                  },
-                }}
-                scope={{ onClickMenuItem, global }}
-              />
-            </div>
-          </ArcoLayout.Sider>
-          <ArcoLayout
-            className={styles["layout-content"]}
-            style={{ paddingLeft: 220, paddingTop: 60 }}
-          >
-            <div className={styles["layout-content-wrapper"]}>
-              <ArcoLayout.Content>
-                <RemoteSchemaComponent uid={curKey} />
-              </ArcoLayout.Content>
-            </div>
+                  }}
+                  scope={{ onClickMenuItem, global }}
+                />
+              </div>
+            </ArcoLayout.Sider>
+            <ArcoLayout
+              className={styles["layout-content"]}
+              style={{ paddingLeft: 220, paddingTop: 60 }}
+            >
+              <div className={styles["layout-content-wrapper"]}>
+                <ArcoLayout.Content>
+                  <RemoteSchemaComponent uid={curKey} />
+                </ArcoLayout.Content>
+              </div>
+            </ArcoLayout>
           </ArcoLayout>
         </ArcoLayout>
-      </ArcoLayout>
-    </LayoutContext.Provider>
+      </LayoutContext.Provider>
+    </ConfigProvider>
   );
 };

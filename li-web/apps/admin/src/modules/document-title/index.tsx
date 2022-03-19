@@ -18,8 +18,8 @@ export const DocumentTitleProvider: React.FC<{
   const { addonBefore, addonAfter } = props;
   const [title, setTitle] = useState("");
   const documentTitle = title
-    ? `${addonBefore ? `${addonBefore} - ` : ""}${title || ""}${
-        addonAfter ? ` - ${addonAfter}` : ""
+    ? `${addonBefore ? `${addonBefore} | ` : ""}${title || ""}${
+        addonAfter ? ` | ${addonAfter}` : ""
       }`
     : "Li Admin";
   return (

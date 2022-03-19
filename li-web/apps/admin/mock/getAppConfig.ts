@@ -5,6 +5,11 @@ export default {
   navitems: [
     {
       type: "void",
+      name: "langswitch",
+      "x-component": "LangSwitch",
+    },
+    {
+      type: "void",
       name: "themeswitch",
       "x-component": "ThemeSwitch",
     },
@@ -52,23 +57,6 @@ export default {
             type: "void",
             title: "修改密码",
             "x-component": "DropdownMenu.Item",
-          },
-          switchlang: {
-            type: "void",
-            title: "切换语言",
-            "x-component": "DropdownMenu.SubMenu",
-            properties: {
-              switchlang2zh: {
-                type: "void",
-                title: "中文",
-                "x-component": "DropdownMenu.Item",
-              },
-              switchlang2en: {
-                type: "void",
-                title: "Englist",
-                "x-component": "DropdownMenu.Item",
-              },
-            },
           },
           divider: {
             type: "void",

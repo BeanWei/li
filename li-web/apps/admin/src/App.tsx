@@ -11,6 +11,7 @@ import {
   ConfigProvider,
   DocumentTitleProvider,
   i18n,
+  LangSwitch,
   Layout,
   RouteSwitch,
   RouteSwitchProvider,
@@ -21,7 +22,10 @@ import {
 const providers = [
   [I18nextProvider, { i18n }],
   [ConfigProvider, { remoteLocale: true }],
-  [SchemaComponentProvider, { components: { Link, NavLink, ThemeSwitch } }],
+  [
+    SchemaComponentProvider,
+    { components: { Link, NavLink, LangSwitch, ThemeSwitch } },
+  ],
   UiSchemaComponentProvider,
   [DocumentTitleProvider, { addonAfter: "Li" }],
   [RouteSwitchProvider, { components: { SignPage, Layout } }],
