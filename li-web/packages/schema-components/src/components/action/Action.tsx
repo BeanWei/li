@@ -15,6 +15,7 @@ import { ActionContext } from "./context";
 import { ComposedAction } from "./types";
 import { Button, Modal } from "@arco-design/web-react";
 import { useA } from "./hooks";
+import ActionCancel from "./Action.Cancel";
 
 // TODO: Improve Typing
 export const Action: ComposedAction = observer((props: any) => {
@@ -78,5 +79,6 @@ Action.Drawer = ActionDrawer;
 Action.Modal = ActionModal;
 Action.Popover = ActionPopover;
 Action.Link = ActionLink;
+Action.Cancel = ActionCancel;
 
 export default Action;

@@ -22,6 +22,7 @@ export type ComposedAction = React.FC<ActionProps> & {
   Modal?: ComposedActionModal;
   Popover?: ComposedActionPopover;
   Link?: any;
+  Cancel?: React.FC<ButtonProps>;
   [key: string]: any;
 };
 

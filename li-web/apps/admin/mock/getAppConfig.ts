@@ -54,7 +54,7 @@ export default {
                         properties: {
                           close1: {
                             title: "Close",
-                            "x-component": "Action",
+                            "x-component": "Action.Cancel",
                           },
                         },
                       },
