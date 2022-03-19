@@ -6,7 +6,6 @@ import {
   useFieldSchema,
 } from "@formily/react";
 import { Drawer } from "@arco-design/web-react";
-import cls from "classnames";
 import { createPortal } from "react-dom";
 import { useActionContext } from "./hooks";
 import { ComposedActionDrawer } from "./types";
@@ -25,23 +24,14 @@ export const ActionDrawer: ComposedActionDrawer = observer((props) => {
 
   return createPortal(
     <Drawer
-      width={"50%"}
+      width="50%"
       title={field.title}
       autoFocus={false}
       {...rest}
       visible={visible}
       unmountOnExit
       onCancel={() => setVisible(false)}
-      className={cls(
-        rest.className,
-        css`
-          &.li-action-popup {
-            .arco-drawer-content {
-              background: #f0f2f5;
-            }
-          }
-        `
-      )}
+      className={rest.className}
       footer={
         footerSchema ? (
           <div

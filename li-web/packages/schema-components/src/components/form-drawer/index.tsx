@@ -89,7 +89,7 @@ export function FormDrawer(title: any, id: any, renderer?: any): IFormDrawer {
   const root = createPortalRoot(env.host, id);
   const props = getDrawerProps(title);
   const drawer: IDrawerProps = {
-    width: "40%",
+    width: "50%",
     ...props,
     onCancel: () => {
       if (props?.onCancel?.() !== false) {
