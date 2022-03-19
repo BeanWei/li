@@ -29,36 +29,20 @@ export default {
               action: {
                 title: "用户设置",
                 type: "void",
-                "x-component": "Action",
+                "x-component": "Action.FormDrawer",
                 "x-component-props": {
-                  type: "menu",
+                  isMenuItem: true,
+                  initialValues: {
+                    nickname: "{{global.currentUser.nickname}}",
+                  },
+                  forSubmit: "updateProfile",
                 },
                 properties: {
-                  drawer1: {
-                    "x-component": "Action.Drawer",
-                    type: "void",
-                    title: "用户设置",
-                    properties: {
-                      nickname: {
-                        type: "string",
-                        title: "昵称",
-                        "x-component": "Input",
-                      },
-                      footer: {
-                        "x-component": "Action.Drawer.Footer",
-                        type: "void",
-                        properties: {
-                          cancel: {
-                            title: "取消",
-                            "x-component": "Action.Cancel",
-                          },
-                          submit: {
-                            title: "确定",
-                            "x-component": "Submit",
-                          },
-                        },
-                      },
-                    },
+                  nickname: {
+                    type: "string",
+                    title: "昵称",
+                    "x-decorator": "FormItem",
+                    "x-component": "Input",
                   },
                 },
               },

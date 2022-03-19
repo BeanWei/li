@@ -1,6 +1,5 @@
 import {
   Action,
-  ActionBar,
   ArrayBase,
   ArrayItems,
   ArrayTable,
@@ -39,7 +38,6 @@ export const UiSchemaComponentProvider = (props: any) => {
     <SchemaComponentOptions
       components={{
         Action,
-        ActionBar,
         ArrayBase,
         ArrayItems,
         ArrayTable,

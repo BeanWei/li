@@ -1,12 +1,8 @@
 import { Button, Input, Popover, Select } from "@arco-design/web-react";
-import {
-  IconDelete,
-  IconFilter,
-  IconRefresh,
-} from "@arco-design/web-react/icon";
+import { IconFilter, IconRefresh } from "@arco-design/web-react/icon";
 import { observer } from "@formily/react";
 import { useContext } from "react";
-import { Action, ActionBar } from "../action";
+import { Action } from "../action";
 import Form from "../form";
 import FormButtonGroup from "../form-button-group";
 import FormGrid from "../form-grid";
@@ -16,7 +12,7 @@ import { ComposedListAction } from "./types";
 
 export const ListAction: ComposedListAction = observer((props) => {
   return (
-    <ActionBar
+    <div
       {...props}
       style={{
         marginBottom: 9,
