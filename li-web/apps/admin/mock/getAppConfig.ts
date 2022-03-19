@@ -37,24 +37,24 @@ export default {
                   drawer1: {
                     "x-component": "Action.Drawer",
                     type: "void",
-                    title: "Drawer Title",
+                    title: "用户设置",
                     properties: {
-                      hello1: {
-                        "x-content": "Hello",
-                        title: "T1",
-                      },
-                      input: {
+                      nickname: {
                         type: "string",
-                        title: "Input",
+                        title: "昵称",
                         "x-component": "Input",
                       },
-                      footer1: {
+                      footer: {
                         "x-component": "Action.Drawer.Footer",
                         type: "void",
                         properties: {
-                          close1: {
-                            title: "Close",
+                          cancel: {
+                            title: "取消",
                             "x-component": "Action.Cancel",
+                          },
+                          submit: {
+                            title: "确定",
+                            "x-component": "Submit",
                           },
                         },
                       },

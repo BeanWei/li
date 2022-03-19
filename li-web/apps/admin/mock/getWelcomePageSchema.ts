@@ -17,7 +17,7 @@ export default {
           properties: {
             card1: {
               type: "void",
-              "x-component": "Card",
+              "x-component": "CardItem",
               "x-component-props": {
                 title: "Li Card 1",
               },
@@ -34,7 +34,7 @@ export default {
           properties: {
             card1: {
               type: "void",
-              "x-component": "Card",
+              "x-component": "CardItem",
               "x-component-props": {
                 title: "Li Card 2",
               },
@@ -51,7 +51,7 @@ export default {
           properties: {
             card1: {
               type: "void",
-              "x-component": "Card",
+              "x-component": "CardItem",
               "x-component-props": {
                 title: "Li Card 2-1",
               },
@@ -77,7 +77,7 @@ export default {
           properties: {
             card1: {
               type: "void",
-              "x-component": "Card",
+              "x-component": "CardItem",
               "x-component-props": {
                 title: "Li Card 3",
               },
@@ -94,7 +94,7 @@ export default {
           properties: {
             card1: {
               type: "void",
-              "x-component": "Card",
+              "x-component": "CardItem",
               "x-component-props": {
                 title: "Li Card 4",
               },
