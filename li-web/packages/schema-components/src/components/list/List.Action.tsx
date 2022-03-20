@@ -33,7 +33,7 @@ export const ListAction: ComposedListAction = observer((props) => {
         justifyContent: "space-between",
         alignItems: "center",
         width: "100%",
-        marginBottom: 9,
+        marginBottom: 12,
       }}
     >
       <Space>

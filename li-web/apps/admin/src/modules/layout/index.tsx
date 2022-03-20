@@ -67,9 +67,7 @@ export const Layout = () => {
     return <Redirect to={entry + "/sign"} />;
   }
 
-  const curKey =
-    match.params.name ??
-    route?.["schema"]?.["x-component-props"]?.["defaultSelectedKeys"]?.[0];
+  const curKey = match.params.name || home || menus[0]?.key;
   const onClickMenuItem = (key: string) => {
     history.push(entry + `/${key}`);
   };
@@ -146,7 +144,7 @@ export const Layout = () => {
                       menu: {
                         "x-component": "Menu",
                         "x-component-props": {
-                          defaultSelectedKeys: [home || menus[0]?.key],
+                          defaultSelectedKeys: [curKey],
                           onClickMenuItem: "{{ onClickMenuItem }}",
                           menuData: menus,
                         },
