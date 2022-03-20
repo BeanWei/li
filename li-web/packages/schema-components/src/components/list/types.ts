@@ -40,7 +40,7 @@ export type ComposedListAction = React.FC & {
   RecordDelete?: React.FC<
     ButtonProps & {
       confirmProps?: PopconfirmProps;
-      forSubmit: string;
+      forSubmit?: string;
     }
   >;
 };

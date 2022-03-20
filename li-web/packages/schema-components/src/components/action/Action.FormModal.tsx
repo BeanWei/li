@@ -8,13 +8,25 @@ import { ActionFormModalProps } from "./types";
 
 export const ActionFormModal: React.FC<ActionFormModalProps> = observer(
   (props) => {
+    const {
+      initialValues,
+      forInit,
+      forInitVariables,
+      forSubmit,
+      forSubmitSuccess,
+      isMenuItem,
+      modalProps,
+      layoutProps,
+      ...buttonProps
+    } = props;
+
     const schema = useFieldSchema();
     const field = useField();
 
     const handleClick = () => {
-      FormModal(props.modalProps || field.title, () => {
+      FormModal(modalProps || field.title, () => {
         return (
-          <FormLayout {...props.layoutProps}>
+          <FormLayout {...layoutProps}>
             <UiSchemaComponentProvider>
               <SchemaComponent schema={schema} onlyRenderProperties />
             </UiSchemaComponentProvider>
@@ -22,23 +34,23 @@ export const ActionFormModal: React.FC<ActionFormModalProps> = observer(
         );
       })
         .forOpen(async (paylod, next) => {
-          if (props.forInit) {
-            const result = await request(props.forInit, props.forInitVariables);
+          if (forInit) {
+            const result = await request(forInit, forInitVariables);
             next({
               initialValues: {
-                ...props.initialValues,
+                ...initialValues,
                 ...result.data.data,
               },
             });
           } else {
-            next({ initialValues: props.initialValues });
+            next({ initialValues: initialValues });
           }
         })
         .forConfirm((payload, next) => {
-          if (props.forSubmit) {
-            request(props.forSubmit, payload).then(() => {
+          if (forSubmit) {
+            request(forSubmit, payload).then(() => {
               next(payload);
-              props.forSubmitSuccess?.(payload);
+              forSubmitSuccess?.(payload);
             });
           } else {
             next(payload);
@@ -49,10 +61,10 @@ export const ActionFormModal: React.FC<ActionFormModalProps> = observer(
 
     return (
       <FormModal.Portal>
-        {props.isMenuItem ? (
+        {isMenuItem ? (
           <div onClick={handleClick}>{field.title}</div>
         ) : (
-          <Button {...props.buttonProps} onClick={handleClick}>
+          <Button {...buttonProps} onClick={handleClick}>
             {field.title}
           </Button>
         )}

@@ -102,6 +102,7 @@ ListAction.RowSelection = observer((props) => {
   const handleOk = () => {
     if (forSubmit) {
       request(forSubmit, { ids: ctx.selectedRowKeys }).then(() => {
+        ctx.setSelectedRowKeys?.([]);
         afterReload && ctx.result?.run();
       });
     }

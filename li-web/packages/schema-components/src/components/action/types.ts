@@ -9,25 +9,23 @@ export type ComposedAction = React.FC & {
   FormModal?: React.FC<ActionFormModalProps>;
 };
 
-export type ActionFormDrawerProps = {
+export type ActionFormDrawerProps = ButtonProps & {
   initialValues?: Record<string, any>;
   forInit?: string;
   forInitVariables?: Record<string, any>;
   forSubmit?: string;
   forSubmitSuccess?: (payload: any) => void;
-  buttonProps?: ButtonProps;
   isMenuItem?: boolean;
   drawerProps?: IDrawerProps;
   layoutProps?: IFormLayoutProps;
 };
 
-export type ActionFormModalProps = {
+export type ActionFormModalProps = ButtonProps & {
   initialValues?: Record<string, any>;
   forInit?: string;
   forInitVariables?: Record<string, any>;
   forSubmit?: string;
   forSubmitSuccess?: (payload: any) => void;
-  buttonProps?: ButtonProps;
   isMenuItem?: boolean;
   modalProps?: IModalProps;
   layoutProps?: IFormLayoutProps;

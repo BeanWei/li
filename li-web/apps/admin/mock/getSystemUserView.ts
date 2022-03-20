@@ -31,6 +31,39 @@ export default {
                     refresh: {
                       type: "void",
                       "x-component": "List.Action.Refresh",
+                      "x-component-props": {
+                        position: "left",
+                      },
+                    },
+                    add: {
+                      type: "void",
+                      title: "新建用户",
+                      "x-component": "List.Action.RecordEditDrawer",
+                      "x-component-props": {
+                        forSubmit: "updateUser",
+                        type: "primary",
+                      },
+                      properties: {
+                        nickname: {
+                          type: "string",
+                          title: "昵称",
+                          "x-decorator": "FormItem",
+                          "x-component": "Input",
+                        },
+                      },
+                    },
+                    bulkdelete: {
+                      type: "void",
+                      title: "批量删除",
+                      "x-component": "List.Action.RowSelection",
+                      "x-component-props": {
+                        forSubmit: "deleteManyUser",
+                        afterReload: true,
+                        confirmProps: {
+                          title: "确认删除？",
+                        },
+                        status: "danger",
+                      },
                     },
                   },
                 },

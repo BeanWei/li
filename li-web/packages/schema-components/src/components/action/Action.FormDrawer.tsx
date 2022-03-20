@@ -11,63 +11,75 @@ import { SchemaComponent, UiSchemaComponentProvider } from "../..";
 
 export const ActionFormDrawer: React.FC<ActionFormDrawerProps> = observer(
   (props) => {
+    const {
+      initialValues,
+      forInit,
+      forInitVariables,
+      forSubmit,
+      forSubmitSuccess,
+      isMenuItem,
+      drawerProps,
+      layoutProps,
+      ...buttonProps
+    } = props;
+
     const schema = useFieldSchema();
     const field = useField();
     const { locale } = useContext(ConfigProvider.ConfigContext);
 
     const handleClick = () => {
-      const drawer = FormDrawer(props.drawerProps || field.title, () => {
+      const drawer = FormDrawer(drawerProps || field.title, () => {
         return (
-          <FormLayout {...props.layoutProps}>
+          <FormLayout {...layoutProps}>
             <UiSchemaComponentProvider>
               <SchemaComponent schema={schema} onlyRenderProperties />
             </UiSchemaComponentProvider>
             <FormDrawer.Footer>
               <FormButtonGroup align="right">
                 <Button
-                  {...props.drawerProps?.cancelButtonProps}
+                  {...drawerProps?.cancelButtonProps}
                   onClick={() => {
                     drawer.close();
                   }}
                 >
-                  {props.drawerProps?.cancelText || locale?.Drawer.cancelText}
+                  {drawerProps?.cancelText || locale?.Drawer.cancelText}
                 </Button>
                 <Submit
-                  {...props.drawerProps?.okButtonProps}
-                  forSubmit={props.forSubmit}
+                  {...drawerProps?.okButtonProps}
+                  forSubmit={forSubmit}
                   forSubmitSuccess={(paylod) => {
                     drawer.close();
-                    props.forSubmitSuccess?.(paylod);
+                    forSubmitSuccess?.(paylod);
                   }}
                 >
-                  {props.drawerProps?.okText || locale?.Drawer.okText}
+                  {drawerProps?.okText || locale?.Drawer.okText}
                 </Submit>
               </FormButtonGroup>
             </FormDrawer.Footer>
           </FormLayout>
         );
       }).forOpen(async (paylod, next) => {
-        if (props.forInit) {
-          const result = await request(props.forInit, props.forInitVariables);
+        if (forInit) {
+          const result = await request(forInit, forInitVariables);
           next({
             initialValues: {
-              ...props.initialValues,
+              ...initialValues,
               ...result.data.data,
             },
           });
         } else {
           next({
-            initialValues: props.initialValues,
+            initialValues: initialValues,
           });
         }
       });
       drawer.open();
     };
 
-    return props.isMenuItem ? (
+    return isMenuItem ? (
       <div onClick={handleClick}>{field.title}</div>
     ) : (
-      <Button {...props.buttonProps} onClick={handleClick}>
+      <Button {...buttonProps} onClick={handleClick}>
         {field.title}
       </Button>
     );
