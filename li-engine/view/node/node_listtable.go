@@ -7,11 +7,13 @@ import (
 
 func ListTable(name string) *listtableBuilder {
 	return &listtableBuilder{schema: &ui.Schema{
-		Name:            name,
-		Type:            ui.SchemaTypeArray,
-		XComponent:      ui.ComponentListTable,
-		XComponentProps: make(map[string]interface{}),
-		Properties:      make(map[string]*ui.Schema),
+		Name:       name,
+		Type:       ui.SchemaTypeArray,
+		XComponent: ui.ComponentListTable,
+		XComponentProps: map[string]interface{}{
+			"rowSelection": make(map[string]interface{}),
+		},
+		Properties: make(map[string]*ui.Schema),
 	}}
 }
 
@@ -49,9 +51,6 @@ func (b *listtableBuilder) Size(size string) *listtableBuilder {
 }
 
 func (b *listtableBuilder) RowSelectionType(typ string) *listtableBuilder {
-	if b.schema.XComponentProps["rowSelection"] == nil {
-		b.schema.XComponentProps["rowSelection"] = make(map[string]interface{})
-	}
 	rowsel, ok := b.schema.XComponentProps["rowSelection"].(map[string]interface{})
 	if ok {
 		rowsel["type"] = typ
@@ -61,9 +60,6 @@ func (b *listtableBuilder) RowSelectionType(typ string) *listtableBuilder {
 }
 
 func (b *listtableBuilder) RowSelectionColumnTitle(title string) *listtableBuilder {
-	if b.schema.XComponentProps["rowSelection"] == nil {
-		b.schema.XComponentProps["rowSelection"] = make(map[string]interface{})
-	}
 	rowsel, ok := b.schema.XComponentProps["rowSelection"].(map[string]interface{})
 	if ok {
 		rowsel["columnTitle"] = title
@@ -73,9 +69,6 @@ func (b *listtableBuilder) RowSelectionColumnTitle(title string) *listtableBuild
 }
 
 func (b *listtableBuilder) RowSelectionColumnWidth(width int) *listtableBuilder {
-	if b.schema.XComponentProps["rowSelection"] == nil {
-		b.schema.XComponentProps["rowSelection"] = make(map[string]interface{})
-	}
 	rowsel, ok := b.schema.XComponentProps["rowSelection"].(map[string]interface{})
 	if ok {
 		rowsel["columnWidth"] = width
@@ -85,9 +78,6 @@ func (b *listtableBuilder) RowSelectionColumnWidth(width int) *listtableBuilder 
 }
 
 func (b *listtableBuilder) RowSelectionFixed(fixed string) *listtableBuilder {
-	if b.schema.XComponentProps["rowSelection"] == nil {
-		b.schema.XComponentProps["rowSelection"] = make(map[string]interface{})
-	}
 	rowsel, ok := b.schema.XComponentProps["rowSelection"].(map[string]interface{})
 	if ok {
 		rowsel["fixed"] = fixed

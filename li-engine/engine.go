@@ -23,10 +23,11 @@ type (
 
 	AppMenu struct {
 		Title    string
-		Children []*AppMenu
+		Icon     string
 		Page     view.Schema
 		Target   string
 		IsHome   bool
+		Children []*AppMenu
 	}
 
 	AppBinding struct {
@@ -45,8 +46,9 @@ type (
 	}
 
 	appmenu struct {
-		Title    string     `json:"title"`
 		Key      string     `json:"key"`
+		Title    string     `json:"title"`
+		Icon     string     `json:"icon"`
 		Target   string     `json:"target"`
 		Children []*appmenu `json:"children"`
 	}
@@ -77,10 +79,13 @@ func NewApp(cfg *App) {
 		amenus := make([]*appmenu, len(menus))
 		for i, menu := range menus {
 			key, page := view.ToPage(menu.Page)
-			pages[key] = page
+			if key != "" {
+				pages[key] = page
+			}
 			amenu := &appmenu{
-				Title:    menu.Title,
 				Key:      key,
+				Title:    menu.Title,
+				Icon:     menu.Icon,
 				Target:   menu.Target,
 				Children: make([]*appmenu, len(menu.Children)),
 			}
@@ -95,14 +100,7 @@ func NewApp(cfg *App) {
 	appcfg.Menus = recursionmenu(cfg.Menus)
 
 	for i, ni := range cfg.NavItems {
-		nischema := ni.Schema()
-		appcfg.NavItems[i] = &ui.Schema{
-			Name: nischema.Name,
-			Type: nischema.Type,
-			Properties: map[string]*ui.Schema{
-				nischema.Name: nischema,
-			},
-		}
+		appcfg.NavItems[i] = ni.Schema()
 	}
 
 	control.RegisterController("@getCurrentUser", cfg.Binding.GetCurrentUserController)
@@ -110,7 +108,7 @@ func NewApp(cfg *App) {
 		return appcfg, nil
 	})
 	control.RegisterController("@getAppView", func(ctx context.Context, variables *gjson.Json) (res interface{}, err error) {
-		return pages[variables.Get("uid").String()], nil
+		return pages[variables.Get("key").String()], nil
 	})
 
 	s := g.Server()

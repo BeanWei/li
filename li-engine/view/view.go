@@ -31,6 +31,9 @@ func ToPage(schema Schema) (string, map[string]interface{}) {
 		nodes = append(nodes, mixin.Nodes()...)
 	}
 	nodes = append(nodes, schema.Nodes()...)
+	if len(nodes) == 0 {
+		return "", nil
+	}
 	for _, node := range nodes {
 		properties[node.Schema().Name] = node.Schema()
 	}
