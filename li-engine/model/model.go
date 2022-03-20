@@ -1,6 +1,8 @@
 package model
 
 import (
+	"context"
+	"fmt"
 	"reflect"
 	"strings"
 
@@ -9,6 +11,7 @@ import (
 	"github.com/BeanWei/li/li-engine/model/index"
 	"github.com/BeanWei/li/li-engine/view"
 	"github.com/BeanWei/li/li-engine/view/node"
+	"github.com/gogf/gf/v2/encoding/gjson"
 )
 
 type (
@@ -104,20 +107,6 @@ func ToDbSchema(schemas ...Schema) string {
 	return b.String()
 }
 
-func ToListNode(schema Schema) view.Node {
-	nodes := make([]view.Node, 0)
-	for _, mixin := range schema.Mixin() {
-		for _, mfield := range mixin.Fields() {
-			nodes = append(nodes, mfield.Descriptor().View)
-		}
-	}
-	for _, field := range schema.Fields() {
-		nodes = append(nodes, field.Descriptor().View)
-	}
-	return node.List(reflect.TypeOf(schema).Elem().Name()).
-		Child(nodes...)
-}
-
 func ToFormNode(schema Schema) view.Node {
 	nodes := make([]view.Node, 0)
 	for _, mixin := range schema.Mixin() {
@@ -130,4 +119,69 @@ func ToFormNode(schema Schema) view.Node {
 	}
 	return node.Form(reflect.TypeOf(schema).Elem().Name()).
 		Child(nodes...)
+}
+
+func ToListNode(schema Schema) view.Node {
+	var (
+		entity  = reflect.TypeOf(schema).Elem().Name()
+		fields  = make([]Field, 0)
+		columns = make([]view.Node, 0)
+	)
+	for _, mixin := range schema.Mixin() {
+		fields = append(fields, mixin.Fields()...)
+	}
+	fields = append(fields, schema.Fields()...)
+
+	for i, field := range fields {
+		columns = append(
+			columns,
+			node.ListTableColumn(fmt.Sprintf("column%d", i)).
+				Title("").
+				DataIndex(field.Descriptor().Name).
+				Render(field.Descriptor().View),
+		)
+	}
+	columns = append(
+		columns,
+		node.ListTableColumn(fmt.Sprintf("column%d", len(fields))).
+			Title("操作").
+			DataIndex("__action").
+			Render(
+				node.Space("actions").Child(
+					node.ListActionRecordEditDrawer("edit").
+						Child(columns...).
+						ForInit("@get"+entity, func(ctx context.Context, variables *gjson.Json) (res interface{}, err error) {
+							return
+						}).
+						ForSubmit("@update"+entity, func(ctx context.Context, variables *gjson.Json) (res interface{}, err error) {
+							return
+						}),
+					node.ListActionRecordDelete("delete").
+						ForSubmit("@delete"+entity, func(ctx context.Context, variables *gjson.Json) (res interface{}, err error) {
+							return
+						}),
+				),
+			),
+	)
+
+	return node.List(entity).
+		Child(
+			node.ListAction("actions").Child(
+				node.ListActionRecordEditDrawer("add"+entity).
+					Child(columns...).
+					ForSubmit("@add"+entity, func(ctx context.Context, variables *gjson.Json) (res interface{}, err error) {
+						return
+					}),
+				node.ListActionRowSelection("deleteMany"+entity).
+					ForSubmit("@deleteMany"+entity, func(ctx context.Context, variables *gjson.Json) (res interface{}, err error) {
+						return
+					}).
+					AfterReload().
+					ConfirmTitle("确认删除").
+					ButtonStatus("danger"),
+			),
+			node.ListTable("table").
+				RowSelectionType("checkbox").
+				Columns(columns...),
+		)
 }

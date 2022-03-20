@@ -2,6 +2,7 @@ package node
 
 import (
 	"github.com/BeanWei/li/li-engine/control"
+	"github.com/BeanWei/li/li-engine/view"
 	"github.com/BeanWei/li/li-engine/view/ui"
 )
 
@@ -27,6 +28,13 @@ func (b *listactionrecordeditmodalBuilder) Schema() *ui.Schema {
 
 func (b *listactionrecordeditmodalBuilder) Title(title string) *listactionrecordeditmodalBuilder {
 	b.schema.Title = title
+	return b
+}
+
+func (b *listactionrecordeditmodalBuilder) Child(elements ...view.Node) *listactionrecordeditmodalBuilder {
+	for _, element := range elements {
+		b.schema.Properties[element.Schema().Name] = element.Schema()
+	}
 	return b
 }
 

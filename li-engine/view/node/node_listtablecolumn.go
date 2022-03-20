@@ -23,6 +23,18 @@ func (b *listtablecolumnBuilder) Schema() *ui.Schema {
 	return b.schema
 }
 
+// Title 列标题
+func (b *listtablecolumnBuilder) Title(title string) *listtablecolumnBuilder {
+	b.schema.XComponentProps["title"] = title
+	return b
+}
+
+// DataIndex .
+func (b *listtablecolumnBuilder) DataIndex(dataIndex string) *listtablecolumnBuilder {
+	b.schema.XComponentProps["dataIndex"] = dataIndex
+	return b
+}
+
 // Align 设置列的对齐方式 'left' | 'center' | 'right'
 func (b *listtablecolumnBuilder) Align(align string) *listtablecolumnBuilder {
 	b.schema.XComponentProps["align"] = align
@@ -32,12 +44,6 @@ func (b *listtablecolumnBuilder) Align(align string) *listtablecolumnBuilder {
 // Ellipsis 单元格内容超出长度后，是否自动省略
 func (b *listtablecolumnBuilder) Ellipsis() *listtablecolumnBuilder {
 	b.schema.XComponentProps["ellipsis"] = true
-	return b
-}
-
-// Title 列标题
-func (b *listtablecolumnBuilder) Title(title string) *listtablecolumnBuilder {
-	b.schema.XComponentProps["title"] = title
 	return b
 }
 

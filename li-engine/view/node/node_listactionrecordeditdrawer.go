@@ -2,6 +2,7 @@ package node
 
 import (
 	"github.com/BeanWei/li/li-engine/control"
+	"github.com/BeanWei/li/li-engine/view"
 	"github.com/BeanWei/li/li-engine/view/ui"
 )
 
@@ -27,6 +28,13 @@ func (b *listactionrecordeditdrawerBuilder) Schema() *ui.Schema {
 
 func (b *listactionrecordeditdrawerBuilder) Title(title string) *listactionrecordeditdrawerBuilder {
 	b.schema.Title = title
+	return b
+}
+
+func (b *listactionrecordeditdrawerBuilder) Child(elements ...view.Node) *listactionrecordeditdrawerBuilder {
+	for _, element := range elements {
+		b.schema.Properties[element.Schema().Name] = element.Schema()
+	}
 	return b
 }
 
