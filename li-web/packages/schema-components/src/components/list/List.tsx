@@ -1,5 +1,3 @@
-import { Card } from "@arco-design/web-react";
-import { useField, useFieldSchema } from "@formily/react";
 import { observer } from "@formily/reactive-react";
 import { useRequest } from "pro-utils";
 import { useCallback, useState } from "react";
@@ -9,7 +7,6 @@ import ListTable from "./List.Table";
 import { ComposedList } from "./types";
 
 export const List: ComposedList = observer((props) => {
-  const field = useField();
   const result = useRequest(props.forInit, {
     ...props.forInitVariables,
     current: 1,
@@ -77,12 +74,7 @@ export const List: ComposedList = observer((props) => {
         setSelectedRowKeys: useCallback(setSelectedRowKeys, []),
       }}
     >
-      <Card
-        // title={field.title}
-        {...props.cardProps}
-      >
-        {props.children}
-      </Card>
+      {props.children}
     </ListContext.Provider>
   );
 });

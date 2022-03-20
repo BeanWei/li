@@ -18,6 +18,7 @@ export default {
             userlist: {
               type: "void",
               title: "用户列表",
+              "x-decorator": "CardItem",
               "x-component": "List",
               "x-component-props": {
                 forInit: "listUser",
@@ -42,49 +43,94 @@ export default {
                       type: "checkbox",
                     },
                   },
-                  properties: {
-                    column0: {
-                      type: "void",
-                      "x-component": "List.Table.Column",
-                      "x-component-props": {
-                        title: "编号",
-                        dataIndex: "id",
-                      },
-                      properties: {
-                        id: {
-                          type: "string",
-                          "x-component": "Input",
-                          "x-read-pretty": true,
+                  items: {
+                    type: "object",
+                    properties: {
+                      column0: {
+                        type: "void",
+                        "x-component": "List.Table.Column",
+                        "x-component-props": {
+                          title: "编号",
+                          dataIndex: "id",
+                        },
+                        properties: {
+                          id: {
+                            type: "string",
+                            "x-component": "Input",
+                            "x-read-pretty": true,
+                          },
                         },
                       },
-                    },
-                    column1: {
-                      type: "void",
-                      "x-component": "List.Table.Column",
-                      "x-component-props": {
-                        title: "昵称",
-                        dataIndex: "nickname",
-                      },
-                      properties: {
-                        nickname: {
-                          type: "string",
-                          "x-component": "Input",
-                          "x-read-pretty": true,
+                      column1: {
+                        type: "void",
+                        "x-component": "List.Table.Column",
+                        "x-component-props": {
+                          title: "昵称",
+                          dataIndex: "nickname",
+                        },
+                        properties: {
+                          nickname: {
+                            type: "string",
+                            "x-component": "Input",
+                            "x-read-pretty": true,
+                          },
                         },
                       },
-                    },
-                    column2: {
-                      type: "void",
-                      "x-component": "List.Table.Column",
-                      "x-component-props": {
-                        title: "邮箱",
-                        dataIndex: "email",
+                      column2: {
+                        type: "void",
+                        "x-component": "List.Table.Column",
+                        "x-component-props": {
+                          title: "邮箱",
+                          dataIndex: "email",
+                        },
+                        properties: {
+                          email: {
+                            type: "string",
+                            "x-component": "Input",
+                            "x-read-pretty": true,
+                          },
+                        },
                       },
-                      properties: {
-                        email: {
-                          type: "string",
-                          "x-component": "Input",
-                          "x-read-pretty": true,
+                      column3: {
+                        type: "void",
+                        "x-component": "List.Table.Column",
+                        "x-component-props": {
+                          title: "操作",
+                          dataIndex: "__action",
+                        },
+                        properties: {
+                          recordactions: {
+                            type: "void",
+                            "x-component": "Space",
+                            properties: {
+                              edit: {
+                                type: "void",
+                                title: "编辑",
+                                "x-component": "List.Action.RecordEditDrawer",
+                                "x-component-props": {
+                                  forInit: "getUser",
+                                  forSubmit: "updateUser",
+                                },
+                                properties: {
+                                  nickname: {
+                                    type: "string",
+                                    title: "昵称",
+                                    "x-decorator": "FormItem",
+                                    "x-component": "Input",
+                                  },
+                                },
+                              },
+                              delete: {
+                                type: "void",
+                                title: "删除",
+                                "x-component": "List.Action.RecordDelete",
+                                "x-component-props": {
+                                  status: "danger",
+                                  forSubmit: "deleteUser",
+                                },
+                              },
+                            },
+                          },
                         },
                       },
                     },

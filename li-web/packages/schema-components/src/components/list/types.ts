@@ -8,6 +8,7 @@ import {
 } from "@arco-design/web-react";
 import { ColumnProps } from "@arco-design/web-react/es/Table";
 import { FormProps } from "../form";
+import { ActionFormDrawerProps, ActionFormModalProps } from "../action/types";
 
 export type ComposedList = React.FC<{
   forInit: string;
@@ -34,4 +35,12 @@ export type ComposedListAction = React.FC & {
     }
   >;
   Refresh?: React.FC<ButtonProps>;
+  RecordEditDrawer?: React.FC<ActionFormDrawerProps>;
+  RecordEditModal?: React.FC<ActionFormModalProps>;
+  RecordDelete?: React.FC<
+    ButtonProps & {
+      confirmProps?: PopconfirmProps;
+      forSubmit: string;
+    }
+  >;
 };

@@ -1,6 +1,5 @@
 import {
   Button,
-  Input,
   Popconfirm,
   Popover,
   Select,
@@ -15,6 +14,9 @@ import {
 } from "@formily/react";
 import { request } from "pro-utils";
 import { useContext } from "react";
+import { useRecord } from "../../core";
+import ActionFormDrawer from "../action/Action.FormDrawer";
+import ActionFormModal from "../action/Action.FormModal";
 import Form from "../form";
 import FormButtonGroup from "../form-button-group";
 import FormGrid from "../form-grid";
@@ -118,7 +120,9 @@ ListAction.RowSelection = observer((props) => {
       {...rest}
       disabled={!!!ctx.selectedRowKeys?.length}
       onClick={handleOk}
-    />
+    >
+      {field.title}
+    </Button>
   );
 });
 
@@ -132,5 +136,56 @@ ListAction.Refresh = observer((props) => {
         ctx.result?.run();
       }}
     />
+  );
+});
+
+ListAction.RecordEditDrawer = observer((props) => {
+  const ctx = useContext(ListContext);
+  const forInitVariables = useRecord();
+  return (
+    <ActionFormDrawer
+      {...props}
+      forInitVariables={forInitVariables}
+      forSubmitSuccess={() => {
+        ctx.result?.run();
+      }}
+    />
+  );
+});
+
+ListAction.RecordEditModal = observer((props) => {
+  const ctx = useContext(ListContext);
+  const forInitVariables = useRecord();
+  return (
+    <ActionFormModal
+      {...props}
+      forInitVariables={forInitVariables}
+      forSubmitSuccess={() => {
+        ctx.result?.run();
+      }}
+    />
+  );
+});
+
+ListAction.RecordDelete = observer((props) => {
+  const { confirmProps, forSubmit, ...rest } = props;
+  const field = useField();
+  const ctx = useContext(ListContext);
+  const variables = useRecord();
+  const handleOk = () => {
+    if (forSubmit) {
+      request(forSubmit, variables).then(() => {
+        ctx.result?.run();
+      });
+    }
+  };
+  return (
+    <Popconfirm
+      title="Are you sure you want to delete?"
+      {...props.confirmProps}
+      onOk={handleOk}
+    >
+      <Button {...rest}>{field.title}</Button>
+    </Popconfirm>
   );
 });

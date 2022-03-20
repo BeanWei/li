@@ -38,7 +38,7 @@ type ComposedArrayTable = React.FC<TableProps<any>> &
 const SortableRow = SortableElement((props: any) => <tr {...props} />);
 const SortableBody = SortableContainer((props: any) => <tbody {...props} />);
 
-const isColumnComponent = (schema: Schema) => {
+export const isColumnComponent = (schema: Schema) => {
   return schema["x-component"]?.indexOf("Column") > -1;
 };
 
@@ -50,7 +50,7 @@ const isAdditionComponent = (schema: Schema) => {
   return schema["x-component"]?.indexOf("Addition") > -1;
 };
 
-const useArrayTableSources = () => {
+export const useArrayTableSources = () => {
   const arrayField = useField();
   const schema = useFieldSchema();
   const parseSources = (schema: Schema): ObservableColumnSource[] => {

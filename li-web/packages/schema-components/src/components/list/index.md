@@ -61,7 +61,7 @@ const schema: ISchema = {
               type: "checkbox",
             },
           },
-          properties: {
+          items: {
             column1: {
               type: "void",
               "x-component": "List.Table.Column",

@@ -1,74 +1,52 @@
 import { Fragment, useContext, useEffect, useMemo } from "react";
 import { Table } from "@arco-design/web-react";
-import { ColumnProps, TableProps } from "@arco-design/web-react/es/Table";
+import { TableProps } from "@arco-design/web-react/es/Table";
 import { ArrayField, createForm } from "@formily/core";
 import {
   FieldContext,
   FormContext,
   RecursionField,
-  Schema,
   useField,
   useFieldSchema,
 } from "@formily/react";
 import { observer } from "@formily/reactive-react";
 import { RecordIndexProvider, RecordProvider } from "../../core";
 import { useAttach } from "../../hooks";
+import { isColumnComponent, useArrayTableSources } from "../array-table";
 import { ComposedListTable } from "./types";
 import { ListContext } from "./context";
 
-const isColumnComponent = (schema: Schema) => {
-  return schema["x-component"]?.endsWith(".Column") > -1;
-};
-
-const useTableColumns = () => {
-  const field = useField<ArrayField>();
-  const schema = useFieldSchema();
-  // @ts-ignore
-  const columns = schema
-    .reduceProperties((buf: any, s) => {
-      if (isColumnComponent(s)) {
-        return buf.concat(
-          s.reduceProperties((buf_: any, s_) => {
-            return buf_.concat([
-              {
-                colProps: s["x-component-props"],
-                title: s?.["x-component-props"]?.["title"] || s.title,
-                key: s_.name,
-                schema: s,
-              },
-            ]);
-          }, [])
+const useListTableColumns = (dataSource: any[]): TableProps<any>["columns"] => {
+  const source = useArrayTableSources();
+  return source.reduce((buf, { name, columnProps, schema, display }, key) => {
+    if (display && display !== "visible") return buf;
+    if (!isColumnComponent(schema)) return buf;
+    return buf.concat({
+      ...columnProps,
+      // @ts-ignore
+      key,
+      dataIndex: name,
+      render: (value: any, record: any) => {
+        const index = dataSource.indexOf(record);
+        return (
+          <RecordIndexProvider index={index}>
+            <RecordProvider record={record}>
+              <RecursionField
+                schema={schema}
+                name={index}
+                onlyRenderProperties
+              />
+            </RecordProvider>
+          </RecordIndexProvider>
         );
-      }
-    }, [])
-    .map((col: any) => {
-      return {
-        ...col.colProps,
-        title: col.title,
-        dataIndex: col.key,
-        key: col.key,
-        render: (v, record) => {
-          const index = field.value?.indexOf(record);
-          return (
-            <RecordIndexProvider index={index}>
-              <RecordProvider record={record}>
-                <RecursionField
-                  schema={col.schema}
-                  name={index}
-                  onlyRenderProperties
-                />
-              </RecordProvider>
-            </RecordIndexProvider>
-          );
-        },
-      } as ColumnProps<any>;
+      },
     });
-  return columns;
+  }, []);
 };
 
 const BaseTable: React.FC<TableProps> = observer((props) => {
   const field = useField<ArrayField>();
-  const columns = useTableColumns();
+  const columns = useListTableColumns(field.value?.slice());
   return (
     <Table
       rowKey="id"
