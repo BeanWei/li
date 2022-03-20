@@ -9,7 +9,7 @@ func ActionForModal(name string) *actionformmodalBuilder {
 	return &actionformmodalBuilder{schema: &ui.Schema{
 		Name:       name,
 		Type:       ui.SchemaTypeVoid,
-		XComponent: ui.ComponentActionFormDrawer,
+		XComponent: ui.ComponentActionFormModal,
 		XComponentProps: map[string]interface{}{
 			"modalProps":  make(map[string]interface{}),
 			"layoutProps": make(map[string]interface{}),
