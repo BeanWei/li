@@ -21,8 +21,8 @@ export const ActionFormModal: ActionFormModalProps = observer((props) => {
       );
     })
       .forOpen(async (paylod, next) => {
-        if (props.forOpen) {
-          const result = await request(props.forOpen, props.forOpenVariables);
+        if (props.forInit) {
+          const result = await request(props.forInit, props.forInitVariables);
           next({
             initialValues: {
               ...props.initialValues,

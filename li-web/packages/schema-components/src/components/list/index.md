@@ -23,7 +23,9 @@ const schema: ISchema = {
     list: {
       type: "void",
       "x-component": "List",
-      "x-operation": "getUserList",
+      "x-component-props": {
+        forInit: "getUserList",
+      },
       properties: {
         actions: {
           type: "void",
@@ -43,22 +45,6 @@ const schema: ISchema = {
                   "x-component": "Input",
                 },
               },
-            },
-            search: {
-              type: "void",
-              "x-component": "List.Action.Search",
-              "x-component-props": {
-                position: "left",
-              },
-            },
-            filter2: {
-              type: "void",
-              "x-component": "List.Action.FilterSelect",
-            },
-            delete: {
-              type: "void",
-              title: "Delete",
-              "x-component": "List.Action.BulkDelete",
             },
             refresh: {
               type: "void",

@@ -48,8 +48,8 @@ export const ActionFormDrawer: ActionFormDrawerProps = observer((props) => {
         </FormLayout>
       );
     }).forOpen(async (paylod, next) => {
-      if (props.forOpen) {
-        const result = await request(props.forOpen, props.forOpenVariables);
+      if (props.forInit) {
+        const result = await request(props.forInit, props.forInitVariables);
         next({
           initialValues: {
             ...props.initialValues,

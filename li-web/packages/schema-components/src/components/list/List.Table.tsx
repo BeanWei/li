@@ -1,4 +1,4 @@
-import { Fragment, useContext, useMemo } from "react";
+import { Fragment, useContext, useEffect, useMemo } from "react";
 import { Table } from "@arco-design/web-react";
 import { ColumnProps, TableProps } from "@arco-design/web-react/es/Table";
 import { ArrayField, createForm } from "@formily/core";
@@ -84,18 +84,15 @@ export const ListTable: ComposedListTable = observer(
     const ctx = useContext(ListContext);
     const field = useField<ArrayField>();
     const schema = useFieldSchema();
-    const form = useMemo(
-      () =>
-        createForm({
-          initialValues: {
-            [schema.name as string]: ctx.tableProps?.data,
-          },
-        }),
-      []
-    );
+    const form = useMemo(() => createForm(), []);
     const f = useAttach(
       form.createArrayField({ ...field.props, basePath: "" })
     );
+    useEffect(() => {
+      form.setInitialValues({
+        [schema.name as string]: ctx.tableProps?.data,
+      });
+    }, [ctx.tableProps?.data]);
 
     return (
       <FormContext.Provider value={form}>

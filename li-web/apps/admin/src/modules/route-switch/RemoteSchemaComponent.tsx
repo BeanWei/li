@@ -29,7 +29,7 @@ const RequestSchemaComponent: React.FC<RemoteSchemaComponentProps> = (
   const { reset } = useSchemaComponentContext();
   const { data, loading } = useRequest(
     "@getAppView",
-    { uid },
+    { key: uid },
     {
       refreshDeps: [uid],
       onSuccess(data: any) {

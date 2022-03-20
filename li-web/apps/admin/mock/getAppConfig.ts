@@ -1,7 +1,7 @@
 export default {
   title: "Li Demo",
   copyright: "Powered by ❤️璃❤️",
-  home: "WelcomePage",
+  home: "Welcome",
   navitems: [
     {
       type: "void",
@@ -91,24 +91,16 @@ export default {
   ],
   menus: [
     {
-      key: "WelcomePage",
+      key: "Welcome",
       title: "欢迎",
     },
     {
-      key: "AdminPage",
-      title: "管理页",
+      key: "System",
+      title: "系统管理",
       children: [
         {
-          key: "AdminPageSub1",
-          title: "一级页面",
-        },
-        {
-          key: "AdminPageSub2",
-          title: "二级页面",
-        },
-        {
-          key: "AdminPageSub3",
-          title: "三级页面",
+          key: "SystemUser",
+          title: "用户管理",
         },
       ],
     },
@@ -174,12 +166,12 @@ export default {
           "x-content": "登录",
           "x-component": "Submit",
           "x-decorator": "FormItem",
-          "x-operation": "userSignIn",
           "x-component-props": {
             block: true,
             type: "primary",
             style: { width: "100%" },
-            onSubmitSuccessTo: "/admin/WelcomePage",
+            forSubmit: "userSignIn",
+            forSubmitSuccessTo: "/admin/Welcome",
           },
         },
       },

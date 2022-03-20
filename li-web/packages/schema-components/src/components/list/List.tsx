@@ -1,4 +1,5 @@
-import { useFieldSchema } from "@formily/react";
+import { Card } from "@arco-design/web-react";
+import { useField, useFieldSchema } from "@formily/react";
 import { observer } from "@formily/reactive-react";
 import { useRequest } from "pro-utils";
 import { useCallback, useState } from "react";
@@ -8,10 +9,9 @@ import ListTable from "./List.Table";
 import { ComposedList } from "./types";
 
 export const List: ComposedList = observer((props) => {
-  const schema = useFieldSchema();
-  const operation = schema["x-operation"];
-
-  const result = useRequest(operation, {
+  const field = useField();
+  const result = useRequest(props.forInit, {
+    ...props.forInitVariables,
     current: 1,
     pageSize: 10,
   });
@@ -60,7 +60,7 @@ export const List: ComposedList = observer((props) => {
       value={{
         result,
         tableProps: {
-          data: result.data?.data || [{ id: 1, name: "Bean", ok: true }],
+          data: result.data?.data || [],
           loading: result.loading,
           onChange: useCallback(onTableChange, []),
           pagination: total
@@ -68,8 +68,8 @@ export const List: ComposedList = observer((props) => {
                 current,
                 pageSize,
                 total,
-                onChange: useCallback(onPageChange, []),
-                onPageSizeChange: useCallback(changePageSize, []),
+                onChange: onPageChange,
+                onPageSizeChange: changePageSize,
               }
             : false,
         },
@@ -77,7 +77,12 @@ export const List: ComposedList = observer((props) => {
         setSelectedRowKeys: useCallback(setSelectedRowKeys, []),
       }}
     >
-      {props.children}
+      <Card
+        // title={field.title}
+        {...props.cardProps}
+      >
+        {props.children}
+      </Card>
     </ListContext.Provider>
   );
 });

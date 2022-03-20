@@ -7,27 +7,26 @@ import { request } from "pro-utils";
 
 export interface ISubmitProps extends ButtonProps {
   onClick?: (e: Event) => any;
-  onSubmit?: (values: any) => any;
-  onSubmitSuccess?: (payload: any) => void;
-  onSubmitSuccessTo?: string;
-  onSubmitFailed?: (feedbacks: IFormFeedback[]) => void;
+  forSubmit?: string;
+  forSubmitSuccess?: (payload: any) => void;
+  forSubmitSuccessTo?: string;
+  forSubmitFailed?: (feedbacks: IFormFeedback[]) => void;
 }
 
 export const Submit: React.FC<ISubmitProps> = observer(
   ({
-    onSubmit,
-    onSubmitFailed,
-    onSubmitSuccess,
-    onSubmitSuccessTo,
+    forSubmit,
+    forSubmitFailed,
+    forSubmitSuccess,
+    forSubmitSuccessTo,
     ...props
   }: ISubmitProps) => {
     const form = useParentForm();
-    const schema = useFieldSchema();
     const history = useHistory();
 
     return (
       <Button
-        htmlType={onSubmit ? "button" : "submit"}
+        htmlType={forSubmit ? "button" : "submit"}
         type="primary"
         {...props}
         loading={props.loading !== undefined ? props.loading : form.submitting}
@@ -35,20 +34,20 @@ export const Submit: React.FC<ISubmitProps> = observer(
           if (props.onClick) {
             if (props.onClick(e) === false) return;
           }
-          if (onSubmit) {
-            form.submit(onSubmit).then(onSubmitSuccess).catch(onSubmitFailed);
-          } else if (schema["x-operation"]) {
-            form
-              .submit((values) => request(schema["x-operation"], values))
-              .then(
-                onSubmitSuccessTo
-                  ? () => {
-                      history.push(onSubmitSuccessTo);
-                    }
-                  : onSubmitSuccess
-              )
-              .catch(onSubmitFailed);
-          }
+          form
+            .submit((values) => {
+              if (forSubmit) {
+                request(forSubmit, values);
+              }
+            })
+            .then(
+              forSubmitSuccessTo
+                ? () => {
+                    history.push(forSubmitSuccessTo);
+                  }
+                : forSubmitSuccess
+            )
+            .catch(forSubmitFailed);
         }}
       >
         {props.children}

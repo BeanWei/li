@@ -11,8 +11,8 @@ export type ComposedAction = React.FC & {
 
 export type ActionFormDrawerProps = React.FC<{
   initialValues?: Record<string, any>;
-  forOpen?: string;
-  forOpenVariables?: Record<string, any>;
+  forInit?: string;
+  forInitVariables?: Record<string, any>;
   forSubmit?: string;
   buttonProps?: ButtonProps;
   isMenuItem?: boolean;
@@ -22,8 +22,8 @@ export type ActionFormDrawerProps = React.FC<{
 
 export type ActionFormModalProps = React.FC<{
   initialValues?: Record<string, any>;
-  forOpen?: string;
-  forOpenVariables?: Record<string, any>;
+  forInit?: string;
+  forInitVariables?: Record<string, any>;
   forSubmit?: string;
   buttonProps?: ButtonProps;
   isMenuItem?: boolean;

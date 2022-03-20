@@ -1,20 +1,19 @@
+import React from "react";
 import {
   ButtonProps,
-  DrawerProps,
+  CardProps,
+  PopconfirmProps,
   SelectProps,
   TableProps,
 } from "@arco-design/web-react";
-import { InputSearchProps } from "@arco-design/web-react/es/Input";
 import { ColumnProps } from "@arco-design/web-react/es/Table";
-import React from "react";
-import {
-  ActionProps,
-  ComposedActionDrawer,
-  ComposedActionModal,
-} from "../action/types";
 import { FormProps } from "../form";
 
-export type ComposedList = React.FC & {
+export type ComposedList = React.FC<{
+  forInit: string;
+  forInitVariables?: Record<string, any>;
+  cardProps?: CardProps;
+}> & {
   Filter?: React.FC<FormProps>;
   Action?: ComposedListAction;
   Table?: ComposedListTable;
@@ -25,11 +24,14 @@ export type ComposedListTable = React.FC<TableProps<any>> & {
 };
 
 export type ComposedListAction = React.FC & {
-  FilterGroup?: React.FC<ActionProps>;
+  FilterGroup?: React.FC<ButtonProps>;
   FilterSelect?: React.FC<SelectProps>;
-  FilterItem?: React.FC;
-  RowSelection?: React.FC<ActionProps>;
-  Search?: React.FC<InputSearchProps>;
+  RowSelection?: React.FC<
+    ButtonProps & {
+      confirmProps: PopconfirmProps;
+      forSubmit?: string;
+      afterReload?: boolean;
+    }
+  >;
   Refresh?: React.FC<ButtonProps>;
-  BulkDelete?: React.FC<ActionProps>;
 };

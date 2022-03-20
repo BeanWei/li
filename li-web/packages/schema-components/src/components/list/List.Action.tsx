@@ -1,8 +1,20 @@
-import { Button, Input, Popover, Select } from "@arco-design/web-react";
+import {
+  Button,
+  Input,
+  Popconfirm,
+  Popover,
+  Select,
+  Space,
+} from "@arco-design/web-react";
 import { IconFilter, IconRefresh } from "@arco-design/web-react/icon";
-import { observer } from "@formily/react";
+import {
+  observer,
+  RecursionField,
+  useField,
+  useFieldSchema,
+} from "@formily/react";
+import { request } from "pro-utils";
 import { useContext } from "react";
-import { Action } from "../action";
 import Form from "../form";
 import FormButtonGroup from "../form-button-group";
 import FormGrid from "../form-grid";
@@ -11,13 +23,34 @@ import { ListContext } from "./context";
 import { ComposedListAction } from "./types";
 
 export const ListAction: ComposedListAction = observer((props) => {
+  const fieldSchema = useFieldSchema();
   return (
     <div
-      {...props}
       style={{
+        display: "flex",
+        justifyContent: "space-between",
+        alignItems: "center",
+        width: "100%",
         marginBottom: 9,
       }}
-    />
+    >
+      <Space>
+        {fieldSchema.mapProperties((schema, key) => {
+          if (schema["x-component-props"]?.["position"] !== "left") {
+            return null;
+          }
+          return <RecursionField key={key} name={key} schema={schema} />;
+        })}
+      </Space>
+      <Space>
+        {fieldSchema.mapProperties((schema, key) => {
+          if (schema["x-component-props"]?.["position"] === "left") {
+            return null;
+          }
+          return <RecursionField key={key} name={key} schema={schema} />;
+        })}
+      </Space>
+    </div>
   );
 });
 
@@ -60,26 +93,31 @@ ListAction.FilterSelect = observer((props) => {
   );
 });
 
-ListAction.Search = observer((props) => {
-  return (
-    <Input.Search
-      allowClear
-      placeholder="Search"
-      style={{ width: 150 }}
-      {...props}
-    />
-  );
-});
-
 ListAction.RowSelection = observer((props) => {
+  const { confirmProps, forSubmit, afterReload, ...rest } = props;
+  const field = useField();
   const ctx = useContext(ListContext);
+  const handleOk = () => {
+    if (forSubmit) {
+      request(forSubmit, { ids: ctx.selectedRowKeys }).then(() => {
+        afterReload && ctx.result?.run();
+      });
+    }
+  };
+  if (props.confirmProps) {
+    return (
+      <Popconfirm {...props.confirmProps} onOk={handleOk}>
+        <Button {...rest} disabled={!!!ctx.selectedRowKeys?.length}>
+          {field.title}
+        </Button>
+      </Popconfirm>
+    );
+  }
   return (
-    <Action
-      {...props}
+    <Button
+      {...rest}
       disabled={!!!ctx.selectedRowKeys?.length}
-      onClick={() => {
-        console.log(ctx.selectedRowKeys);
-      }}
+      onClick={handleOk}
     />
   );
 });
@@ -92,24 +130,6 @@ ListAction.Refresh = observer((props) => {
       {...props}
       onClick={() => {
         ctx.result?.run();
-      }}
-    />
-  );
-});
-
-ListAction.BulkDelete = observer((props) => {
-  const ctx = useContext(ListContext);
-  return (
-    <Action
-      {...props}
-      confirm={{
-        title: "Confirm deletion",
-        content: `Are you sure you want to delete the ${ctx.selectedRowKeys?.length} selected items? Once you press the delete button, the items will be deleted immediately. You can't undo this action.`,
-        okButtonProps: { status: "danger" },
-      }}
-      disabled={!!!ctx.selectedRowKeys?.length}
-      onClick={() => {
-        console.log(ctx.selectedRowKeys);
       }}
     />
   );

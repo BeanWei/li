@@ -1,7 +1,14 @@
 import { MockMethod } from "vite-plugin-mock";
 import getAppConfig from "./getAppConfig";
-import getWelcomePageSchema from "./getWelcomePageSchema";
 import getCurrentUser from "./getCurrentUser";
+import getSystemUserView from "./getSystemUserView";
+import getWelcomeView from "./getWelcomeView";
+import listUser from "./listUser";
+
+const views = {
+  Welcome: getWelcomeView,
+  SystemUser: getSystemUserView,
+};
 
 export default [
   {
@@ -20,14 +27,14 @@ export default [
         };
       }
       if (operation == "@getAppView") {
-        if (variables.uid === "WelcomePage") {
-          return {
-            data: getWelcomePageSchema,
-          };
-        }
         return {
-          code: 0,
-          data: {},
+          data: views[variables.key] || {},
+        };
+      }
+      if (operation == "listUser") {
+        return {
+          data: listUser,
+          total: listUser.length,
         };
       }
       return {
