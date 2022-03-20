@@ -93,10 +93,12 @@ export default {
     {
       key: "Welcome",
       title: "欢迎",
+      icon: "IconHome",
     },
     {
       key: "System",
       title: "系统管理",
+      icon: "IconSettings",
       children: [
         {
           key: "SystemUser",
@@ -107,6 +109,7 @@ export default {
     {
       title: "列表页",
       key: "ListPage",
+      icon: "IconList",
       children: [
         {
           key: "AdminPageSub1Sub",
@@ -139,6 +142,7 @@ export default {
     {
       target: "https://github.com/BeanWei",
       title: "Github",
+      icon: "IconGithub",
     },
   ],
   binding: {

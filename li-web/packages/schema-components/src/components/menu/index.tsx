@@ -1,10 +1,9 @@
 import {
-  Icon,
   Menu as ArcoMenu,
   MenuProps as ArcoMenuProps,
 } from "@arco-design/web-react";
 import { uid } from "@formily/shared";
-import { isUrl } from "../__builtins__";
+import { isUrl, Icon } from "../__builtins__";
 
 export type MenuDataItem = {
   /** @name 对应页面的key */
@@ -21,18 +20,33 @@ export type MenuDataItem = {
   target?: string;
 };
 
+const renderMenuItem = (item: MenuDataItem): React.ReactNode => {
+  if (item.icon) {
+    return (
+      <>
+        <Icon
+          style={{ fontSize: "18px", verticalAlign: "text-bottom" }}
+          type={item.icon}
+        />
+        {item.title}
+      </>
+    );
+  }
+  return (
+    <>
+      <div style={{ width: "12px", height: "18px", display: "inline-block" }} />
+      {item.title}
+    </>
+  );
+};
+
 const getNavMenuItems = (menusData: MenuDataItem[] = []): React.ReactNode[] => {
   const getSubMenuOrItem = (item: MenuDataItem): React.ReactNode => {
     if (Array.isArray(item.children) && item && item.children.length > 0) {
       return (
         <ArcoMenu.SubMenu
           key={item.key || item.target || uid()}
-          title={
-            <>
-              <Icon style={{ marginRight: 5 }} type={item.icon} />
-              {item.title}
-            </>
-          }
+          title={renderMenuItem(item)}
         >
           {getNavMenuItems(item.children)}
         </ArcoMenu.SubMenu>
@@ -61,17 +75,11 @@ const getNavMenuItems = (menusData: MenuDataItem[] = []): React.ReactNode[] => {
             window?.open?.(itemPath);
           }}
         >
-          <Icon style={{ marginRight: 5 }} type={item.icon} />
-          {item.title}
+          {renderMenuItem(item)}
         </div>
       );
     }
-    return (
-      <>
-        <Icon style={{ marginRight: 5 }} type={item.icon} />
-        {item.title}
-      </>
-    );
+    return renderMenuItem(item);
   };
 
   const conversionPath = (path: string) => {
