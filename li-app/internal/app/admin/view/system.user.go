@@ -14,16 +14,16 @@ type SystemUser struct {
 func (SystemUser) Nodes() []view.Node {
 	return []view.Node{
 		node.GridRow("row1").
-			Gutter(20).
-			Child(
+			Gutter(16).
+			Children(
 				node.GridCol("col1").
 					Span(16).
-					Child(
+					Children(
 						emodel.ToListNode(new(model.User)),
 					),
 				node.GridCol("col2").
 					Span(8).
-					Child(
+					Children(
 						emodel.ToFormNode(new(model.User)),
 					),
 			),

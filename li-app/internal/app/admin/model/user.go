@@ -9,6 +9,10 @@ type User struct {
 	model.Schema
 }
 
+func (User) Table() string {
+	return "users"
+}
+
 func (User) Fields() []model.Field {
 	return []model.Field{
 		field.String("email").Unique().Required(),

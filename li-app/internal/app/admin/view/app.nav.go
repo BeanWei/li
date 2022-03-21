@@ -7,6 +7,7 @@ import (
 
 func NavItems() []view.Node {
 	return []view.Node{
+		com.LangSwitch("navLangSwitch"),
 		com.ThemeSwitch("navThemeSwitch"),
 	}
 }

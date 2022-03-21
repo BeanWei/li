@@ -1,15 +1,1 @@
 version: '3'
-
-networks:
-  li:
-
-services:
-  edgedb:
-    container_name: li-edgedb
-    image: edgedb/edgedb
-    environment:
-      EDGEDB_SERVER_SECURITY: insecure_dev_mode
-    volumes:
-      - "./_PERSISTENT_/edgedb:/var/lib/edgedb/data"
-    ports:
-      - 5656:5656

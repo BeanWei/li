@@ -12,8 +12,8 @@ type DashboardWorkplace struct {
 func (DashboardWorkplace) Nodes() []view.Node {
 	return []view.Node{
 		node.GridRow("row1").
-			Gutter(20).
-			Child(
+			Gutter(16).
+			Children(
 				node.GridCol("col1").
 					Span(8).
 					Content("Col-1"),
@@ -25,8 +25,8 @@ func (DashboardWorkplace) Nodes() []view.Node {
 					Content("Col-3"),
 			),
 		node.GridRow("row2").
-			Gutter(20).
-			Child(
+			Gutter(16).
+			Children(
 				node.GridCol("col4").
 					Span(16).
 					Content("Col-4"),

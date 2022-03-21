@@ -7,10 +7,12 @@ import (
 
 func Init() {
 	engine.NewApp(&engine.App{
-		Title: "Li Admin",
+		Title:     "Li Admin",
+		Copyright: "Powered by ❤️璃❤️",
 		Menus: []*engine.AppMenu{
 			{
 				Title: "仪表盘",
+				Icon:  "IconDashboard",
 				Children: []*engine.AppMenu{
 					{
 						Title:  "工作台",
@@ -21,6 +23,7 @@ func Init() {
 			},
 			{
 				Title: "系统管理",
+				Icon:  "IconSettings",
 				Children: []*engine.AppMenu{
 					{
 						Title: "用户管理",
