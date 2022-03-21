@@ -13,7 +13,6 @@ import { ActionFormDrawerProps, ActionFormModalProps } from "../action/types";
 export type ComposedList = React.FC<{
   forInit: string;
   forInitVariables?: Record<string, any>;
-  cardProps?: CardProps;
 }> & {
   Filter?: React.FC<FormProps>;
   Action?: ComposedListAction;
