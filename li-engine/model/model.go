@@ -6,6 +6,7 @@ import (
 	"reflect"
 	"strings"
 
+	"github.com/BeanWei/li/li-engine/db"
 	"github.com/BeanWei/li/li-engine/model/edge"
 	"github.com/BeanWei/li/li-engine/model/field"
 	"github.com/BeanWei/li/li-engine/model/index"
@@ -118,21 +119,34 @@ func ToFormNode(schema Schema) view.Node {
 		nodes = append(nodes, field.Descriptor().View)
 	}
 	return node.Form(reflect.TypeOf(schema).Elem().Name()).
-		Child(nodes...)
+		Children(nodes...)
 }
 
 func ToListNode(schema Schema) view.Node {
 	var (
-		entity  = reflect.TypeOf(schema).Elem().Name()
-		fields  = make([]Field, 0)
-		columns = make([]view.Node, 0)
+		entity    = reflect.TypeOf(schema).Elem().Name()
+		fields    = make([]Field, 0)
+		columns   = make([]view.Node, 0)
+		createCmd string
+		getCmd    string
+		updateCmd string
+		deleteCmd string
 	)
 	for _, mixin := range schema.Mixin() {
 		fields = append(fields, mixin.Fields()...)
 	}
 	fields = append(fields, schema.Fields()...)
 
+	createCmd += "INSERT " + entity + " { "
+	getCmd += "SELECT " + entity + " { id"
+	updateCmd += "UPDATE " + entity + "FILTER " + entity + ".id = <uuid>$0 SET { "
+	deleteCmd += "DELETE " + entity + "FILTER " + entity + ".id = <uuid>$0"
+
 	for i, field := range fields {
+		getCmd += ", " + field.Descriptor().Name
+		updateCmd += field.Descriptor().Name + " := " + "<" + field.Descriptor().Type + fmt.Sprintf(">$%d,", i)
+		createCmd += field.Descriptor().Name + " := " + "<" + field.Descriptor().Type + fmt.Sprintf(">$%d,", i)
+
 		columns = append(
 			columns,
 			node.ListTableColumn(fmt.Sprintf("column%d", i)).
@@ -141,40 +155,59 @@ func ToListNode(schema Schema) view.Node {
 				Render(field.Descriptor().View),
 		)
 	}
+
+	createCmd += " }"
+	getCmd += " } FILTER " + entity + ".id = <uuid>$0"
+	updateCmd += " }"
+
 	columns = append(
 		columns,
 		node.ListTableColumn(fmt.Sprintf("column%d", len(fields))).
 			Title("操作").
 			DataIndex("__action").
 			Render(
-				node.Space("actions").Child(
+				node.Space("actions").Children(
 					node.ListActionRecordEditDrawer("edit").
-						Child(columns...).
+						Children(columns...).
 						ForInit("@get"+entity, func(ctx context.Context, variables *gjson.Json) (res interface{}, err error) {
-							return
+							return db.Exec(ctx, getCmd, variables.Get("id").String())
 						}).
 						ForSubmit("@update"+entity, func(ctx context.Context, variables *gjson.Json) (res interface{}, err error) {
-							return
+							args := make([]interface{}, len(fields))
+							for i, field := range fields {
+								args[i] = variables.Get(field.Descriptor().Name).Interface()
+							}
+							return db.Exec(ctx, updateCmd, args...)
 						}),
 					node.ListActionRecordDelete("delete").
 						ForSubmit("@delete"+entity, func(ctx context.Context, variables *gjson.Json) (res interface{}, err error) {
-							return
+							return db.Exec(ctx, deleteCmd, variables.Get("id").String())
 						}),
 				),
 			),
 	)
 
 	return node.List(entity).
-		Child(
-			node.ListAction("actions").Child(
+		Children(
+			node.ListAction("actions").Children(
 				node.ListActionRecordEditDrawer("add"+entity).
-					Child(columns...).
+					Children(columns...).
 					ForSubmit("@add"+entity, func(ctx context.Context, variables *gjson.Json) (res interface{}, err error) {
-						return
+						args := make([]interface{}, len(fields))
+						for i, field := range fields {
+							args[i] = variables.Get(field.Descriptor().Name).Interface()
+						}
+						return db.Exec(ctx, createCmd, args...)
 					}),
 				node.ListActionRowSelection("deleteMany"+entity).
 					ForSubmit("@deleteMany"+entity, func(ctx context.Context, variables *gjson.Json) (res interface{}, err error) {
-						return
+						var b strings.Builder
+						b.WriteString("DELETE " + entity + "FILTER " + entity + ".id IN {")
+						for _, id := range variables.Get("ids").Strings() {
+							b.WriteString(`"` + id + `", "`)
+						}
+						b.WriteString("")
+						return db.Exec(ctx, b.String())
 					}).
 					AfterReload().
 					ConfirmTitle("确认删除").

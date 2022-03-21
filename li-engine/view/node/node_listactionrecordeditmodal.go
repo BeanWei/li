@@ -31,7 +31,7 @@ func (b *listactionrecordeditmodalBuilder) Title(title string) *listactionrecord
 	return b
 }
 
-func (b *listactionrecordeditmodalBuilder) Child(elements ...view.Node) *listactionrecordeditmodalBuilder {
+func (b *listactionrecordeditmodalBuilder) Children(elements ...view.Node) *listactionrecordeditmodalBuilder {
 	for _, element := range elements {
 		b.schema.Properties[element.Schema().Name] = element.Schema()
 	}

@@ -22,7 +22,7 @@ func (b *listactionBuilder) Schema() *ui.Schema {
 	return b.schema
 }
 
-func (b *listactionBuilder) Child(elements ...view.Node) *listactionBuilder {
+func (b *listactionBuilder) Children(elements ...view.Node) *listactionBuilder {
 	for _, element := range elements {
 		b.schema.Properties[element.Schema().Name] = element.Schema()
 	}

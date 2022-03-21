@@ -26,7 +26,7 @@ func (b *formBuilder) DecoratorCard() *formBuilder {
 	return b
 }
 
-func (b *formBuilder) Child(elements ...view.Node) *formBuilder {
+func (b *formBuilder) Children(elements ...view.Node) *formBuilder {
 	for _, element := range elements {
 		b.schema.Properties[element.Schema().Name] = element.Schema()
 	}

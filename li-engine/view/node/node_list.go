@@ -35,7 +35,7 @@ func (b *listBuilder) ForInit(operation string, controller control.Controller) *
 	return b
 }
 
-func (b *listBuilder) Child(elements ...view.Node) *listBuilder {
+func (b *listBuilder) Children(elements ...view.Node) *listBuilder {
 	for _, element := range elements {
 		b.schema.Properties[element.Schema().Name] = element.Schema()
 	}

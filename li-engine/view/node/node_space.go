@@ -22,7 +22,7 @@ func (b *spaceBuilder) Schema() *ui.Schema {
 	return b.schema
 }
 
-func (b *spaceBuilder) Child(elements ...view.Node) *spaceBuilder {
+func (b *spaceBuilder) Children(elements ...view.Node) *spaceBuilder {
 	for _, element := range elements {
 		b.schema.Properties[element.Schema().Name] = element.Schema()
 	}

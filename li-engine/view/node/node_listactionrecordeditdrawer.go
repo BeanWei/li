@@ -31,7 +31,7 @@ func (b *listactionrecordeditdrawerBuilder) Title(title string) *listactionrecor
 	return b
 }
 
-func (b *listactionrecordeditdrawerBuilder) Child(elements ...view.Node) *listactionrecordeditdrawerBuilder {
+func (b *listactionrecordeditdrawerBuilder) Children(elements ...view.Node) *listactionrecordeditdrawerBuilder {
 	for _, element := range elements {
 		b.schema.Properties[element.Schema().Name] = element.Schema()
 	}
