@@ -7,8 +7,7 @@ import (
 )
 
 type (
-	Schema interface {
-		Type() string
+	Interface interface {
 		Mixin() []Mixin
 		Nodes() []Node
 	}
@@ -20,7 +19,14 @@ type (
 	Node interface {
 		Schema() *ui.Schema
 	}
+
+	Schema struct {
+		Interface
+	}
 )
+
+func (Schema) Mixin() []Mixin { return nil }
+func (Schema) Nodes() []Node  { return nil }
 
 func ToPage(schema Schema) (string, map[string]interface{}) {
 	var (

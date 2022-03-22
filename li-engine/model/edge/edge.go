@@ -1,9 +1,6 @@
 package edge
 
-import (
-	"reflect"
-	"strings"
-)
+import "reflect"
 
 func To(name string, t interface{}) *assocBuilder {
 	return &assocBuilder{desc: &Descriptor{
@@ -70,30 +67,4 @@ func typ(t interface{}) string {
 		return rt.In(0).Name()
 	}
 	return ""
-}
-
-func (d *Descriptor) ToESDL() string {
-	var b strings.Builder
-	if d.Required {
-		b.WriteString("required ")
-	}
-	if d.Multi {
-		b.WriteString("multi ")
-	}
-	b.WriteString("link ")
-	if d.Inverse {
-		b.WriteString(" := " + d.Type)
-	} else {
-		b.WriteString(" -> " + d.Type)
-	}
-	if len(d.Constraints) != 0 {
-		b.WriteString(" {")
-		for _, cst := range d.Constraints {
-			b.WriteString(" constraint " + cst + ";")
-		}
-		b.WriteString(" }")
-	} else {
-		b.WriteString(";")
-	}
-	return b.String()
 }

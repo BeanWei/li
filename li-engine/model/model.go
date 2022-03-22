@@ -16,7 +16,7 @@ import (
 )
 
 type (
-	Schema interface {
+	Interface interface {
 		Table() string
 		Mixin() []Mixin
 		Fields() []Field
@@ -41,7 +41,17 @@ type (
 	Index interface {
 		Descriptor() *index.Descriptor
 	}
+
+	Schema struct {
+		Interface
+	}
 )
+
+func (Schema) Table() string    { return "" }
+func (Schema) Mixin() []Mixin   { return nil }
+func (Schema) Fields() []Field  { return nil }
+func (Schema) Edges() []Edge    { return nil }
+func (Schema) Indexes() []Index { return nil }
 
 func ToFormNode(schema Schema) view.Node {
 	nodes := make([]view.Node, 0)
