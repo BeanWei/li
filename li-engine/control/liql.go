@@ -20,9 +20,15 @@ type LiqlReq struct {
 }
 
 func (c *cLiql) Liql(ctx context.Context, req *LiqlReq) (res interface{}, err error) {
-	controller, exists := controllers[req.Operation]
+	provider, exists := controllers[req.Operation]
 	if !exists {
 		return nil, gerror.NewCodef(gcode.CodeInvalidParameter, `parameter operation "%s" is a invalid controller name`, req.Operation)
 	}
-	return controller(ctx, req.Variables)
+	if provider.Validator != nil {
+		err = g.Validator().Rules(provider.Validator).Data(req.Variables).Run(ctx)
+		if err != nil {
+			return nil, err
+		}
+	}
+	return provider.Controller(ctx, req.Variables)
 }

@@ -112,24 +112,3 @@ const (
 	ComponentTimePicker                 = "TimePicker"
 	ComponentTimePickerRangPicker       = "TimePicker.RangPicker"
 )
-
-func NewSchema(xcomponent string) *Schema {
-	return &Schema{
-		XComponent: xcomponent,
-	}
-}
-
-func (s *Schema) SetName(name string) *Schema {
-	s.Name = name
-	return s
-}
-
-func (s *Schema) SetTitle(title string) *Schema {
-	s.Title = title
-	return s
-}
-
-func (s *Schema) SetXComponent(xcomponent string) *Schema {
-	s.XComponent = xcomponent
-	return s
-}

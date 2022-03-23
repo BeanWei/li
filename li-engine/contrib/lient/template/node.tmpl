@@ -1,6 +1,7 @@
 {{/* gotype: entgo.io/ent/entc/gen.Type */}}
 
 {{ define "import/additional/lient-node" }}
+    "github.com/BeanWei/li/li-engine/view/node"
     "github.com/BeanWei/li/li-engine/view/ui"
     "github.com/gogf/gf/v2/util/gconv"
 {{ end }}
@@ -9,7 +10,7 @@
 {{- range $f := $.Fields }}
     {{- if $annotation := $f.Annotations.LiEnt }}
         {{- if $annotation.View }}
-            func Node{{ $f.StructField }}() *ui.Schema {
+            func Node{{ $f.StructField }}() *node.NodeBuilder {
                 var schema *ui.Schema
                 if err := gconv.Struct({{ valast $annotation.View }}, &schema); err != nil {
                     panic(err)
@@ -17,7 +18,7 @@
                 if schema.Name == "" {
                     schema.Name = "{{ if $annotation.View.name }}{{ $annotation.View.name }}{{ else }}{{ $f.StorageKey }}{{ end }}"
                 }
-                return schema
+                return node.Node(schema.Name).SetSchema(schema)
             }
         {{- end }}
     {{- end }}

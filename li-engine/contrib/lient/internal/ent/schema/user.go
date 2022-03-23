@@ -21,7 +21,7 @@ func (User) Fields() []ent.Field {
 					View: &ui.Schema{
 						XComponent: ui.ComponentInput,
 						Properties: map[string]*ui.Schema{
-							"c": &ui.Schema{
+							"c": {
 								Name: "123",
 							},
 						},

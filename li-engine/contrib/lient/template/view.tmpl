@@ -1,0 +1,56 @@
+{{/* gotype: entgo.io/ent/entc/gen.Type */}}
+
+{{/* define "import/additional/lient-view" }}
+    "context"
+    "github.com/BeanWei/li/li-engine/view"
+	"github.com/BeanWei/li/li-engine/view/node"
+	"github.com/gogf/gf/v2/encoding/gjson"
+{{ end */}}
+
+{{ define "model/additional/lient-view" }}
+/*
+func {{ $.Name }}ListView() view.Node {
+	return node.List("{{ $.Name }}").
+		ForInit("@list{{ $.Name }}", func(ctx context.Context, variables *gjson.Json) (res interface{}, err error) {
+			return
+		}).
+		Children(
+			node.ListAction("actions").Children(
+				node.ListActionRecordEditDrawer("add{{ $.Name }}").
+					Title("新建").
+					Children(
+                        {{- range $f := $.Fields }}
+                            {{- if $annotation := $f.Annotations.LiEnt }}
+                                {{- if $annotation.View }}
+                                    {{ $.Package }}.Node{{ $f.StructField }}(),
+                                {{- end }}
+                            {{- end }}
+                        {{- end }}
+					).
+					ForSubmit("@add{{ $.Name }}", func(ctx context.Context, variables *gjson.Json) (res interface{}, err error) {
+						return
+					}),
+				node.ListActionRowSelection("deleteMany{{ $.Name }}").
+					Title("删除").
+					ForSubmit("@deleteMany{{ $.Name }}", func(ctx context.Context, variables *gjson.Json) (res interface{}, err error) {
+						return
+					}).
+					AfterReload().
+					ConfirmTitle("确认删除").
+					ButtonStatus("danger"),
+			),
+			node.ListTable("table").
+				RowSelectionType("checkbox").
+				Columns(
+                    {{- range $f := $.Fields }}
+                        {{- if $annotation := $f.Annotations.LiEnt }}
+                            {{- if $annotation.View }}
+                                {{ $.Package }}.Node{{ $f.StructField }}().SetXReadPretty(true),
+                            {{- end }}
+                        {{- end }}
+                    {{- end }}
+				),
+		)
+}
+*/
+{{ end }}
