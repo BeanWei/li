@@ -9,6 +9,7 @@ import (
 	"github.com/gogf/gf/v2/encoding/gjson"
 	"github.com/gogf/gf/v2/frame/g"
 	"github.com/gogf/gf/v2/net/ghttp"
+	"github.com/gogf/gf/v2/util/grand"
 )
 
 type (
@@ -24,7 +25,7 @@ type (
 	AppMenu struct {
 		Title    string
 		Icon     string
-		Page     view.Schema
+		Page     view.Interface
 		Target   string
 		IsHome   bool
 		Children []*AppMenu
@@ -60,16 +61,12 @@ type (
 
 func NewApp(cfg *App) {
 	var (
-		_, signpage = view.ToPage(cfg.Binding.SignPage)
-		appcfg      = &app{
+		appcfg = &app{
 			Title:     cfg.Title,
 			Logo:      cfg.Logo,
 			Copyright: cfg.Copyright,
 			Menus:     make([]*appmenu, len(cfg.Menus)),
 			NavItems:  make([]*ui.Schema, len(cfg.NavItems)),
-			Binding: &appbinding{
-				SignPage: signpage,
-			},
 		}
 		pages         = make(map[string]map[string]interface{})
 		recursionmenu func(menus []*AppMenu) []*appmenu
@@ -81,6 +78,8 @@ func NewApp(cfg *App) {
 			key, page := view.ToPage(menu.Page)
 			if key != "" {
 				pages[key] = page
+			} else {
+				key = grand.S(8)
 			}
 			amenu := &appmenu{
 				Key:      key,
@@ -103,7 +102,14 @@ func NewApp(cfg *App) {
 		appcfg.NavItems[i] = ni.Schema()
 	}
 
-	control.RegisterController("@getCurrentUser", cfg.Binding.GetCurrentUserController)
+	if cfg.Binding != nil {
+		_, signpage := view.ToPage(cfg.Binding.SignPage)
+		appcfg.Binding = &appbinding{
+			SignPage: signpage,
+		}
+		control.RegisterController("@getCurrentUser", cfg.Binding.GetCurrentUserController)
+	}
+
 	control.RegisterController("@getAppConfig", func(ctx context.Context, variables *gjson.Json) (res interface{}, err error) {
 		return appcfg, nil
 	})

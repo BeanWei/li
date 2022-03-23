@@ -28,7 +28,11 @@ type (
 func (Schema) Mixin() []Mixin { return nil }
 func (Schema) Nodes() []Node  { return nil }
 
-func ToPage(schema Schema) (string, map[string]interface{}) {
+func ToPage(schema Interface) (string, map[string]interface{}) {
+	if schema == nil {
+		return "", nil
+	}
+
 	var (
 		properties = make(map[string]interface{})
 		nodes      = make([]Node, 0)
