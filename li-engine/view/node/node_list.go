@@ -29,7 +29,7 @@ func (b *listBuilder) DecoratorCard() *listBuilder {
 	return b
 }
 
-func (b *listBuilder) ForInit(operation string, controller control.Controller) *listBuilder {
+func (b *listBuilder) ForInit(operation string, controller interface{}) *listBuilder {
 	b.schema.XComponentProps["forInit"] = operation
 	control.RegisterController(operation, controller)
 	return b

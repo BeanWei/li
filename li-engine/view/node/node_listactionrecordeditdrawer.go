@@ -38,13 +38,13 @@ func (b *listactionrecordeditdrawerBuilder) Children(elements ...view.Node) *lis
 	return b
 }
 
-func (b *listactionrecordeditdrawerBuilder) ForInit(operation string, controller control.Controller) *listactionrecordeditdrawerBuilder {
+func (b *listactionrecordeditdrawerBuilder) ForInit(operation string, controller interface{}) *listactionrecordeditdrawerBuilder {
 	b.schema.XComponentProps["forInit"] = operation
 	control.RegisterController(operation, controller)
 	return b
 }
 
-func (b *listactionrecordeditdrawerBuilder) ForSubmit(operation string, controller control.Controller) *listactionrecordeditdrawerBuilder {
+func (b *listactionrecordeditdrawerBuilder) ForSubmit(operation string, controller interface{}) *listactionrecordeditdrawerBuilder {
 	b.schema.XComponentProps["forSubmit"] = operation
 	control.RegisterController(operation, controller)
 	return b

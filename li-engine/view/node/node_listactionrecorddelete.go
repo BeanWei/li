@@ -30,7 +30,7 @@ func (b *listactionrecorddeleteBuilder) Title(title string) *listactionrecorddel
 	return b
 }
 
-func (b *listactionrecorddeleteBuilder) ForSubmit(operation string, controller control.Controller) *listactionrecorddeleteBuilder {
+func (b *listactionrecorddeleteBuilder) ForSubmit(operation string, controller interface{}) *listactionrecorddeleteBuilder {
 	b.schema.XComponentProps["forSubmit"] = operation
 	control.RegisterController(operation, controller)
 	return b

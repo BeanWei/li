@@ -34,7 +34,7 @@ func (b *listactionrowselectionBuilder) AfterReload() *listactionrowselectionBui
 	return b
 }
 
-func (b *listactionrowselectionBuilder) ForSubmit(operation string, controller control.Controller) *listactionrowselectionBuilder {
+func (b *listactionrowselectionBuilder) ForSubmit(operation string, controller interface{}) *listactionrowselectionBuilder {
 	b.schema.XComponentProps["forSubmit"] = operation
 	control.RegisterController(operation, controller)
 	return b

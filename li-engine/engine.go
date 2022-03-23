@@ -33,7 +33,7 @@ type (
 
 	AppBinding struct {
 		SignPage                 view.Schema
-		GetCurrentUserController control.Controller
+		GetCurrentUserController interface{}
 	}
 
 	app struct {
@@ -110,10 +110,10 @@ func NewApp(cfg *App) {
 		control.RegisterController("@getCurrentUser", cfg.Binding.GetCurrentUserController)
 	}
 
-	control.RegisterController("@getAppConfig", func(ctx context.Context, variables *gjson.Json) (res interface{}, err error) {
+	control.RegisterController("@getAppConfig", func(ctx context.Context, req interface{}) (res *app, err error) {
 		return appcfg, nil
 	})
-	control.RegisterController("@getAppView", func(ctx context.Context, variables *gjson.Json) (res interface{}, err error) {
+	control.RegisterController("@getAppView", func(ctx context.Context, variables *gjson.Json) (res map[string]interface{}, err error) {
 		return pages[variables.Get("key").String()], nil
 	})
 

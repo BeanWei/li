@@ -38,13 +38,13 @@ func (b *listactionrecordeditmodalBuilder) Children(elements ...view.Node) *list
 	return b
 }
 
-func (b *listactionrecordeditmodalBuilder) ForInit(operation string, controller control.Controller) *listactionrecordeditmodalBuilder {
+func (b *listactionrecordeditmodalBuilder) ForInit(operation string, controller interface{}) *listactionrecordeditmodalBuilder {
 	b.schema.XComponentProps["forInit"] = operation
 	control.RegisterController(operation, controller)
 	return b
 }
 
-func (b *listactionrecordeditmodalBuilder) ForSubmit(operation string, controller control.Controller) *listactionrecordeditmodalBuilder {
+func (b *listactionrecordeditmodalBuilder) ForSubmit(operation string, controller interface{}) *listactionrecordeditmodalBuilder {
 	b.schema.XComponentProps["forSubmit"] = operation
 	control.RegisterController(operation, controller)
 	return b

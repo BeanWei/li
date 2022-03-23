@@ -30,13 +30,13 @@ func (b *actionformmodalBuilder) Title(title string) *actionformmodalBuilder {
 	return b
 }
 
-func (b *actionformmodalBuilder) ForInit(operation string, controller control.Controller) *actionformmodalBuilder {
+func (b *actionformmodalBuilder) ForInit(operation string, controller interface{}) *actionformmodalBuilder {
 	b.schema.XComponentProps["forInit"] = operation
 	control.RegisterController(operation, controller)
 	return b
 }
 
-func (b *actionformmodalBuilder) ForSubmit(operation string, controller control.Controller) *actionformmodalBuilder {
+func (b *actionformmodalBuilder) ForSubmit(operation string, controller interface{}) *actionformmodalBuilder {
 	b.schema.XComponentProps["forSubmit"] = operation
 	control.RegisterController(operation, controller)
 	return b
