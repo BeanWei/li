@@ -1,8 +1,6 @@
 package view
 
 import (
-	"github.com/BeanWei/li/li-app/internal/app/admin/model"
-	emodel "github.com/BeanWei/li/li-engine/model"
 	"github.com/BeanWei/li/li-engine/view"
 	"github.com/BeanWei/li/li-engine/view/node"
 )
@@ -17,15 +15,9 @@ func (SystemUser) Nodes() []view.Node {
 			Gutter(16).
 			Children(
 				node.GridCol("col1").
-					Span(16).
-					Children(
-						emodel.ToListNode(new(model.User)),
-					),
+					Span(16),
 				node.GridCol("col2").
-					Span(8).
-					Children(
-						emodel.ToFormNode(new(model.User)),
-					),
+					Span(8),
 			),
 	}
 }
