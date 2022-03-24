@@ -1,0 +1,48 @@
+{{/* gotype: entgo.io/ent/entc/gen.Type */}}
+
+{{ define "lient_client" }}
+{{ template "header" $ }}
+/*
+import (
+	"context"
+	"sync"
+
+	"github.com/BeanWei/li/li-engine/contrib/lient/driver"
+	"github.com/gogf/gf/v2/frame/g"
+	"github.com/gogf/gf/v2/os/gctx"
+	"github.com/gogf/gf/v2/util/gmode"
+)
+
+var (
+	liclient     *Client
+	liclientOnce sync.Once
+)
+
+func LiClient() *Client {
+	liclientOnce.Do(func() {
+		drv, err := driver.NewDriver()
+		if err != nil {
+			g.Log().Fatalf(gctx.New(), "[LiEnt Client] - failed init: %+v", err)
+		}
+
+		if gmode.IsDevelop() {
+			liclient = NewClient(Driver(drv)).Debug()
+		} else {
+			liclient = NewClient(Driver(drv))
+		}
+
+		liclient.Use(func(next Mutator) Mutator {
+			return MutateFunc(func(ctx context.Context, m Mutation) (Value, error) {
+				v, err := next.Mutate(ctx, m)
+				if err != nil {
+					g.DB().GetLogger().Error(ctx, err.Error())
+					return nil, err
+				}
+				return v, nil
+			})
+		})
+	})
+	return liclient
+}
+*/
+{{ end }}

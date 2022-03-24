@@ -1,0 +1,147 @@
+{{/* gotype: entgo.io/ent/entc/gen.Type */}}
+
+{{ define "model/additional/lient-control" }}
+/*
+import (
+	"context"
+
+	"github.com/gogf/gf/v2/errors/gcode"
+	"github.com/gogf/gf/v2/errors/gerror"
+)
+type (
+	List{{ $.Name }}Req struct {
+		Page int `json:"page" d:"1" v:"min:1"`
+		Limit int `json:"limit" d:"20" v:"min:1|max:500"`
+        {{- range $f := $.Fields }}
+        {{- if not $f.Sensitive }}
+        	{{- $tag := printf `json:"%s"` $f.Name }}{{ with $tags := $.Annotations.Fields.StructTag }}{{ with index $tags $f.Name }}{{ $tag = . }}{{ end }}{{ end }}
+        	{{ $f.StructField }} *{{ $f.Type }} `{{ $tag }}`
+        {{- end }}
+        {{- end }}
+	}
+	List{{ $.Name }}Res struct {
+		List []*{{ $.Name }} `json:"list"`
+		Total int `json:"total"`
+	}
+	Create{{ $.Name }}Req struct {
+		{{- range $f := $.Fields }}
+            {{- $tag := printf `json:"%s"` $f.Name }}{{ with $tags := $.Annotations.Fields.StructTag }}{{ with index $tags $f.Name }}{{ $tag = . }}{{ end }}{{ end }}
+            {{- if $f.Optional }}
+                {{ $f.StructField }} *{{ $f.Type }} `{{ $tag }}`
+            {{- else }}
+                {{ $f.StructField }} {{ $f.Type }} `{{ $tag }} v:"required"`
+            {{- end }}
+        {{- end }}
+	}
+	Get{{ $.Name }}Req struct {
+		ID {{ $.ID.Type }} `json:"id" v:"required"`
+	}
+	Update{{ $.Name }}Req struct {
+        ID {{ $.ID.Type }} {{ with $.Annotations.Fields.StructTag.id }}`{{ . }}`{{ else }}`{{ $.ID.StructTag }}`{{ end }}
+		{{- range $f := $.Fields }}
+        {{- if not $f.Sensitive }}
+            {{- $tag := printf `json:"%s"` $f.Name }}{{ with $tags := $.Annotations.Fields.StructTag }}{{ with index $tags $f.Name }}{{ $tag = . }}{{ end }}{{ end }}
+            {{- if $f.Optional }}
+                {{ $f.StructField }} *{{ $f.Type }} `{{ $tag }}`
+            {{- else }}
+                {{ $f.StructField }} {{ $f.Type }} `{{ $tag }} v:"required"`
+            {{- end }}
+        {{- end }}
+        {{- end }}
+	}
+	Delete{{ $.Name }}Req struct {
+		ID {{ $.ID.Type }} `json:"id" v:"required"`
+	}
+	DeleteMany{{ $.Name }}Req struct {
+		IDs []{{ $.ID.Type }} `json:"ids" v:"required"`
+	}
+)
+
+func List{{ $.Name }}Controller(ctx context.Context, req *List{{ $.Name }}Req) (res *List{{ $.Name }}Res, err error) {
+	q := LiClient().{{ $.Name }}.Query()
+    {{- range $f := $.Fields }}
+    {{- if not $f.Sensitive }}
+        if req.{{ $f.StructField }} != nil {
+            q.Where(user.NicknameContainsFold(*req.{{ $f.StructField }}))
+        }
+    {{- end }}
+    {{- end }}
+	res.Total, err = q.Count(ctx)
+	if err != nil {
+		return nil, gerror.WrapCode(gcode.CodeDbOperationError, err)
+	}
+	res.List, err = q.Limit(req.Limit).Offset((req.Page - 1) * req.Limit).All(ctx)
+	if err != nil {
+		return nil, gerror.WrapCode(gcode.CodeDbOperationError, err)
+	}
+	return
+}
+
+func Create{{ $.Name }}Controller(ctx context.Context, req *Create{{ $.Name }}Req) (res *{{ $.Name }}, err error) {
+	b := LiClient().{{ $.Name }}.Create()
+    {{- range $f := $.Fields }}
+        {{- if $f.Optional }}
+            if req.{{ $f.StructField }} != nil {
+                b.Set{{ $f.StructField }}(*req.{{ $f.StructField }})
+            }
+        {{- else }}
+            b.Set{{ $f.StructField }}(req.{{ $f.StructField }})
+        {{- end }}
+    {{- end }}
+	res, err = b.Save(ctx)
+	if err != nil {
+		if IsConstraintError(err) {
+			return nil, gerror.WrapCode(gcode.CodeOperationFailed, err)
+		}
+		return nil, gerror.WrapCode(gcode.CodeDbOperationError, err)
+	}
+	return
+}
+
+func Update{{ $.Name }}Controller(ctx context.Context, req *Update{{ $.Name }}Req) (res *{{ $.Name }}, err error) {
+	b := LiClient().{{ $.Name }}.UpdateOneID(req.ID)
+	{{- range $f := $.Fields }}
+    {{- if not $f.Sensitive }}
+        {{- if $f.Optional }}
+            if req.{{ $f.StructField }} != nil {
+                b.Set{{ $f.StructField }}(*req.{{ $f.StructField }})
+            }
+        {{- else }}
+            b.Set{{ $f.StructField }}(req.{{ $f.StructField }})
+        {{- end }}
+    {{- end }}
+    {{- end }}
+	res, err = b.Save(ctx)
+	if err != nil {
+		if IsNotFound(err) {
+			return nil, gerror.WrapCode(gcode.CodeNotFound, err)
+		} else if IsConstraintError(err) {
+			return nil, gerror.WrapCode(gcode.CodeOperationFailed, err)
+		}
+		return nil, gerror.WrapCode(gcode.CodeDbOperationError, err)
+	}
+	return
+}
+
+func Delete{{ $.Name }}Controller(ctx context.Context, req *Delete{{ $.Name }}Req) (err error) {
+	err = LiClient().{{ $.Name }}.DeleteOneID(req.ID).Exec(ctx)
+	if err != nil {
+		if IsNotFound(err) {
+			return gerror.WrapCode(gcode.CodeNotFound, err)
+		} else if IsConstraintError(err) {
+			return gerror.WrapCode(gcode.CodeOperationFailed, err)
+		}
+		return gerror.WrapCode(gcode.CodeDbOperationError, err)
+	}
+	return
+}
+
+func DeleteMany{{ $.Name }}Controller(ctx context.Context, req *DeleteMany{{ $.Name }}Req) (err error) {
+	_, err = LiClient().{{ $.Name }}.Delete().Where(user.IDIn(req.IDs...)).Exec(ctx)
+	if err != nil {
+		return gerror.WrapCode(gcode.CodeDbOperationError, err)
+	}
+	return
+}
+*/
+{{ end }}

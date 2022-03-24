@@ -32,6 +32,7 @@ func (User) Fields() []ent.Field {
 			NotEmpty().
 			Unique(),
 		field.String("password").
+			Sensitive().
 			Optional(),
 	}
 }
