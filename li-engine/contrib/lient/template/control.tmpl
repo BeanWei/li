@@ -91,6 +91,17 @@ func Create{{ $.Name }}Controller(ctx context.Context, req *Create{{ $.Name }}Re
 	return
 }
 
+func Get{{ $.Name }}Controller(ctx context.Context, req *Get{{ $.Name }}Req) (res *{{ $.Name }}, err error) {
+	res, err = LiClient().{{ $.Name }}.Get(ctx, req.ID)
+	if err != nil {
+		if IsNotFound(err) {
+			return nil, gerror.WrapCode(gcode.CodeNotFound, err)
+		}
+		return nil, gerror.WrapCode(gcode.CodeDbOperationError, err)
+	}
+	return
+}
+
 func Update{{ $.Name }}Controller(ctx context.Context, req *Update{{ $.Name }}Req) (res *{{ $.Name }}, err error) {
 	b := LiClient().{{ $.Name }}.UpdateOneID(req.ID)
 	{{- range $f := $.Fields }}

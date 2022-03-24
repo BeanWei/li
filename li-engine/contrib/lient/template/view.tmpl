@@ -28,13 +28,37 @@ func List{{ $.Name }}View() view.Node {
 			node.ListTable("table").
 				RowSelectionType("checkbox").
 				Columns(
-                    {{- range $f := $.Fields }}
+                    {{- range $i, $f := $.Fields }}
                         {{- if $annotation := $f.Annotations.LiEnt }}
                             {{- if $annotation.View }}
-                                {{ $.Package }}.Node{{ $f.StructField }}().SetXReadPretty(true),
+								node.ListTableColumn("column{{ $i }}").
+									Title("{{ $f.StructField }}").
+									DataIndex("{{ $f.Name }}").
+									Render({{ $.Package }}.Node{{ $f.StructField }}().SetXReadPretty(true)),
                             {{- end }}
                         {{- end }}
                     {{- end }}
+					node.ListTableColumn("column{{ len $.Fields }}").
+						Title("操作").
+						DataIndex("__action").
+						Render(
+							node.Space("actions").Children(
+								node.ListActionRecordEditDrawer("edit").
+									Children(
+										{{- range $f := $.Fields }}
+											{{- if $annotation := $f.Annotations.LiEnt }}
+												{{- if $annotation.View }}
+													{{ $.Package }}.Node{{ $f.StructField }}(),
+												{{- end }}
+											{{- end }}
+										{{- end }}
+									).
+									ForInit("@get{{ $.Name }}", Get{{ $.Name }}Controller).
+									ForSubmit("@update{{ $.Name }}", Update{{ $.Name }}Controller),
+								node.ListActionRecordDelete("delete").
+									ForSubmit("@delete{{ $.Name }}", Delete{{ $.Name }}Controller),
+							),
+						),
 				),
 		)
 }
