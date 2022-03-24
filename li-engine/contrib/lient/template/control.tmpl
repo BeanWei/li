@@ -1,13 +1,6 @@
 {{/* gotype: entgo.io/ent/entc/gen.Type */}}
 
 {{ define "model/additional/lient-control" }}
-/*
-import (
-	"context"
-
-	"github.com/gogf/gf/v2/errors/gcode"
-	"github.com/gogf/gf/v2/errors/gerror"
-)
 type (
 	List{{ $.Name }}Req struct {
 		Page int `json:"page" d:"1" v:"min:1"`
@@ -143,5 +136,4 @@ func DeleteMany{{ $.Name }}Controller(ctx context.Context, req *DeleteMany{{ $.N
 	}
 	return
 }
-*/
 {{ end }}

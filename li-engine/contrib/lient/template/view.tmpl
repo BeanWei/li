@@ -1,19 +1,9 @@
 {{/* gotype: entgo.io/ent/entc/gen.Type */}}
 
-{{/* define "import/additional/lient-view" }}
-    "context"
-    "github.com/BeanWei/li/li-engine/view"
-	"github.com/BeanWei/li/li-engine/view/node"
-	"github.com/gogf/gf/v2/encoding/gjson"
-{{ end */}}
-
 {{ define "model/additional/lient-view" }}
-/*
-func {{ $.Name }}ListView() view.Node {
+func List{{ $.Name }}View() view.Node {
 	return node.List("{{ $.Name }}").
-		ForInit("@list{{ $.Name }}", func(ctx context.Context, variables *gjson.Json) (res interface{}, err error) {
-			return
-		}).
+		ForInit("@list{{ $.Name }}", List{{ $.Name }}Controller).
 		Children(
 			node.ListAction("actions").Children(
 				node.ListActionRecordEditDrawer("add{{ $.Name }}").
@@ -27,14 +17,10 @@ func {{ $.Name }}ListView() view.Node {
                             {{- end }}
                         {{- end }}
 					).
-					ForSubmit("@add{{ $.Name }}", func(ctx context.Context, variables *gjson.Json) (res interface{}, err error) {
-						return
-					}),
+					ForSubmit("@add{{ $.Name }}", Create{{ $.Name }}Controller),
 				node.ListActionRowSelection("deleteMany{{ $.Name }}").
 					Title("删除").
-					ForSubmit("@deleteMany{{ $.Name }}", func(ctx context.Context, variables *gjson.Json) (res interface{}, err error) {
-						return
-					}).
+					ForSubmit("@deleteMany{{ $.Name }}", DeleteMany{{ $.Name }}Controller).
 					AfterReload().
 					ConfirmTitle("确认删除").
 					ButtonStatus("danger"),
@@ -52,5 +38,4 @@ func {{ $.Name }}ListView() view.Node {
 				),
 		)
 }
-*/
 {{ end }}

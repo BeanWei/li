@@ -1,11 +1,5 @@
 {{/* gotype: entgo.io/ent/entc/gen.Type */}}
 
-{{ define "import/additional/lient-node" }}
-    "github.com/BeanWei/li/li-engine/view/node"
-    "github.com/BeanWei/li/li-engine/view/ui"
-    "github.com/gogf/gf/v2/util/gconv"
-{{ end }}
-
 {{ define "meta/additional/lient-node" }}
 {{- range $f := $.Fields }}
     {{- if $annotation := $f.Annotations.LiEnt }}
