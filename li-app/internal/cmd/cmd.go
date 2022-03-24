@@ -4,6 +4,8 @@ import (
 	"context"
 
 	"github.com/BeanWei/li/li-app/internal/app/admin"
+	"github.com/BeanWei/li/li-app/internal/data/ent"
+	"github.com/BeanWei/li/li-app/internal/data/ent/migrate"
 	"github.com/gogf/gf/v2/frame/g"
 	"github.com/gogf/gf/v2/os/gcmd"
 )
@@ -22,6 +24,17 @@ func init() {
 				admin.Init()
 				g.Server().Run()
 				return
+			},
+		},
+		&gcmd.Command{
+			Name:  "migrate",
+			Usage: "migrate schemas",
+			Func: func(ctx context.Context, parser *gcmd.Parser) (err error) {
+				return ent.LiClient().Schema.Create(ctx,
+					migrate.WithForeignKeys(false),
+					migrate.WithDropIndex(true),
+					migrate.WithDropColumn(true),
+				)
 			},
 		},
 	)
