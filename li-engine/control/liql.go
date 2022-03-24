@@ -25,53 +25,55 @@ func Liql(r *ghttp.Request) {
 		ctx = r.Context()
 		req *LiqlReq
 		res interface{}
-		err error
 	)
-	f, exists := controllers[req.Operation]
-	if exists {
-		var inputValues = []reflect.Value{
-			reflect.ValueOf(ctx),
-		}
-		if f.Type.NumIn() == 2 {
-			var (
-				inputObject reflect.Value
+	err := r.ParseForm(&req)
+	if err == nil {
+		f, exists := controllers[req.Operation]
+		if exists {
+			var inputValues = []reflect.Value{
+				reflect.ValueOf(ctx),
+			}
+			if f.Type.NumIn() == 2 {
+				var (
+					inputObject reflect.Value
+				)
+				if f.Type.In(1).Kind() == reflect.Ptr {
+					inputObject = reflect.New(f.Type.In(1).Elem())
+					err = doParse(ctx, req.Variables, inputObject.Interface())
+				} else {
+					inputObject = reflect.New(f.Type.In(1).Elem()).Elem()
+					err = doParse(ctx, req.Variables, inputObject.Addr().Interface())
+				}
+				if err == nil {
+					inputValues = append(inputValues, inputObject)
+				}
+			}
+			if len(inputValues) == 2 {
+				// Call handler with dynamic created parameter values.
+				results := f.Value.Call(inputValues)
+				switch len(results) {
+				case 1:
+					if !results[0].IsNil() {
+						if e, ok := results[0].Interface().(error); ok {
+							err = e
+						}
+					}
+				case 2:
+					res = results[0].Interface()
+					if !results[1].IsNil() {
+						if e, ok := results[1].Interface().(error); ok {
+							err = e
+						}
+					}
+				}
+			}
+		} else {
+			err = gerror.NewCodef(
+				gcode.CodeInvalidParameter,
+				`parameter operation "%s" is a invalid controller name`,
+				req.Operation,
 			)
-			if f.Type.In(1).Kind() == reflect.Ptr {
-				inputObject = reflect.New(f.Type.In(1).Elem())
-				err = doParse(ctx, req.Variables, inputObject.Interface())
-			} else {
-				inputObject = reflect.New(f.Type.In(1).Elem()).Elem()
-				err = doParse(ctx, req.Variables, inputObject.Addr().Interface())
-			}
-			if err == nil {
-				inputValues = append(inputValues, inputObject)
-			}
 		}
-		if len(inputValues) == 2 {
-			// Call handler with dynamic created parameter values.
-			results := f.Value.Call(inputValues)
-			switch len(results) {
-			case 1:
-				if !results[0].IsNil() {
-					if e, ok := results[0].Interface().(error); ok {
-						err = e
-					}
-				}
-			case 2:
-				res = results[0].Interface()
-				if !results[1].IsNil() {
-					if e, ok := results[1].Interface().(error); ok {
-						err = e
-					}
-				}
-			}
-		}
-	} else {
-		err = gerror.NewCodef(
-			gcode.CodeInvalidParameter,
-			`parameter operation "%s" is a invalid controller name`,
-			req.Operation,
-		)
 	}
 
 	var (
