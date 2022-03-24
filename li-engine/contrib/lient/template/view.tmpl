@@ -7,7 +7,8 @@ func List{{ $.Name }}View() view.Node {
 		Children(
 			node.ListAction("actions").Children(
 				node.ListActionRecordEditDrawer("add{{ $.Name }}").
-					Title("新建").
+					ForSubmit("@add{{ $.Name }}", Create{{ $.Name }}Controller).
+					SetTitle("新建").
 					Children(
                         {{- range $f := $.Fields }}
                             {{- if $annotation := $f.Annotations.LiEnt }}
@@ -16,14 +17,13 @@ func List{{ $.Name }}View() view.Node {
                                 {{- end }}
                             {{- end }}
                         {{- end }}
-					).
-					ForSubmit("@add{{ $.Name }}", Create{{ $.Name }}Controller),
+					),
 				node.ListActionRowSelection("deleteMany{{ $.Name }}").
-					Title("删除").
 					ForSubmit("@deleteMany{{ $.Name }}", DeleteMany{{ $.Name }}Controller).
 					AfterReload().
 					ConfirmTitle("确认删除").
-					ButtonStatus("danger"),
+					ButtonStatus("danger").
+					SetTitle("删除"),
 			),
 			node.ListTable("table").
 				RowSelectionType("checkbox").
@@ -44,6 +44,8 @@ func List{{ $.Name }}View() view.Node {
 						Render(
 							node.Space("actions").Children(
 								node.ListActionRecordEditDrawer("edit").
+									ForInit("@get{{ $.Name }}", Get{{ $.Name }}Controller).
+									ForSubmit("@update{{ $.Name }}", Update{{ $.Name }}Controller).
 									Children(
 										{{- range $f := $.Fields }}
 											{{- if $annotation := $f.Annotations.LiEnt }}
@@ -52,9 +54,7 @@ func List{{ $.Name }}View() view.Node {
 												{{- end }}
 											{{- end }}
 										{{- end }}
-									).
-									ForInit("@get{{ $.Name }}", Get{{ $.Name }}Controller).
-									ForSubmit("@update{{ $.Name }}", Update{{ $.Name }}Controller),
+									),
 								node.ListActionRecordDelete("delete").
 									ForSubmit("@delete{{ $.Name }}", Delete{{ $.Name }}Controller),
 							),

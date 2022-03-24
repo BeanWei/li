@@ -6,28 +6,21 @@ import (
 )
 
 func ActionForModal(name string) *actionformmodalBuilder {
-	return &actionformmodalBuilder{schema: &ui.Schema{
-		Name:       name,
-		Type:       ui.SchemaTypeVoid,
-		XComponent: ui.ComponentActionFormModal,
-		XComponentProps: map[string]interface{}{
-			"modalProps":  make(map[string]interface{}),
-			"layoutProps": make(map[string]interface{}),
+	return &actionformmodalBuilder{&NodeBuilder{
+		schema: &ui.Schema{
+			Name:       name,
+			Type:       ui.SchemaTypeVoid,
+			XComponent: ui.ComponentActionFormModal,
+			XComponentProps: map[string]interface{}{
+				"modalProps":  make(map[string]interface{}),
+				"layoutProps": make(map[string]interface{}),
+			},
 		},
 	}}
 }
 
 type actionformmodalBuilder struct {
-	schema *ui.Schema
-}
-
-func (b *actionformmodalBuilder) Schema() *ui.Schema {
-	return b.schema
-}
-
-func (b *actionformmodalBuilder) Title(title string) *actionformmodalBuilder {
-	b.schema.Title = title
-	return b
+	*NodeBuilder
 }
 
 func (b *actionformmodalBuilder) ForInit(operation string, controller interface{}) *actionformmodalBuilder {

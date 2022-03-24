@@ -1,38 +1,21 @@
 package node
 
-import (
-	"github.com/BeanWei/li/li-engine/view"
-	"github.com/BeanWei/li/li-engine/view/ui"
-)
+import "github.com/BeanWei/li/li-engine/view/ui"
 
 func GridCol(name string) *gridcolBuilder {
-	return &gridcolBuilder{schema: &ui.Schema{
-		Name:            name,
-		Type:            ui.SchemaTypeVoid,
-		XComponent:      ui.ComponentGridCol,
-		XComponentProps: make(map[string]interface{}),
-		Properties:      make(map[string]*ui.Schema),
+	return &gridcolBuilder{&NodeBuilder{
+		schema: &ui.Schema{
+			Name:            name,
+			Type:            ui.SchemaTypeVoid,
+			XComponent:      ui.ComponentGridCol,
+			XComponentProps: make(map[string]interface{}),
+			Properties:      make(map[string]*ui.Schema),
+		},
 	}}
 }
 
 type gridcolBuilder struct {
-	schema *ui.Schema
-}
-
-func (b *gridcolBuilder) Schema() *ui.Schema {
-	return b.schema
-}
-
-func (b *gridcolBuilder) Children(elements ...view.Node) *gridcolBuilder {
-	for _, element := range elements {
-		b.schema.Properties[element.Schema().Name] = element.Schema()
-	}
-	return b
-}
-
-func (b *gridcolBuilder) Content(text string) *gridcolBuilder {
-	b.schema.XContent = text
-	return b
+	*NodeBuilder
 }
 
 // https://arco.design/react/components/grid#api

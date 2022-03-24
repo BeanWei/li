@@ -6,28 +6,21 @@ import (
 )
 
 func ListActionRecordDelete(name string) *listactionrecorddeleteBuilder {
-	return &listactionrecorddeleteBuilder{schema: &ui.Schema{
-		Name:       name,
-		Type:       ui.SchemaTypeVoid,
-		XComponent: ui.ComponentListActionRecordDelete,
-		XComponentProps: map[string]interface{}{
-			"status":       "danger",
-			"confirmProps": make(map[string]interface{}),
+	return &listactionrecorddeleteBuilder{&NodeBuilder{
+		schema: &ui.Schema{
+			Name:       name,
+			Type:       ui.SchemaTypeVoid,
+			XComponent: ui.ComponentListActionRecordDelete,
+			XComponentProps: map[string]interface{}{
+				"status":       "danger",
+				"confirmProps": make(map[string]interface{}),
+			},
 		},
 	}}
 }
 
 type listactionrecorddeleteBuilder struct {
-	schema *ui.Schema
-}
-
-func (b *listactionrecorddeleteBuilder) Schema() *ui.Schema {
-	return b.schema
-}
-
-func (b *listactionrecorddeleteBuilder) Title(title string) *listactionrecorddeleteBuilder {
-	b.schema.Title = title
-	return b
+	*NodeBuilder
 }
 
 func (b *listactionrecorddeleteBuilder) ForSubmit(operation string, controller interface{}) *listactionrecorddeleteBuilder {

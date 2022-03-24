@@ -1,6 +1,9 @@
 package node
 
-import "github.com/BeanWei/li/li-engine/view/ui"
+import (
+	"github.com/BeanWei/li/li-engine/view"
+	"github.com/BeanWei/li/li-engine/view/ui"
+)
 
 func Node(name string) *NodeBuilder {
 	return &NodeBuilder{schema: &ui.Schema{
@@ -230,5 +233,15 @@ func (b *NodeBuilder) SetXData(xData map[string]interface{}) *NodeBuilder {
 
 func (b *NodeBuilder) SetProperties(properties map[string]*ui.Schema) *NodeBuilder {
 	b.schema.Properties = properties
+	return b
+}
+
+func (b *NodeBuilder) Children(elements ...view.Node) *NodeBuilder {
+	if b.schema.Properties == nil {
+		b.schema.Properties = make(map[string]*ui.Schema)
+	}
+	for _, element := range elements {
+		b.schema.Properties[element.Schema().Name] = element.Schema()
+	}
 	return b
 }

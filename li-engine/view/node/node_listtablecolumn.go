@@ -6,21 +6,19 @@ import (
 )
 
 func ListTableColumn(name string) *listtablecolumnBuilder {
-	return &listtablecolumnBuilder{schema: &ui.Schema{
-		Name:            name,
-		Type:            ui.SchemaTypeVoid,
-		XComponent:      ui.ComponentListTableColumn,
-		XComponentProps: make(map[string]interface{}),
-		Properties:      make(map[string]*ui.Schema),
+	return &listtablecolumnBuilder{&NodeBuilder{
+		schema: &ui.Schema{
+			Name:            name,
+			Type:            ui.SchemaTypeVoid,
+			XComponent:      ui.ComponentListTableColumn,
+			XComponentProps: make(map[string]interface{}),
+			Properties:      make(map[string]*ui.Schema),
+		},
 	}}
 }
 
 type listtablecolumnBuilder struct {
-	schema *ui.Schema
-}
-
-func (b *listtablecolumnBuilder) Schema() *ui.Schema {
-	return b.schema
+	*NodeBuilder
 }
 
 // Title 列标题

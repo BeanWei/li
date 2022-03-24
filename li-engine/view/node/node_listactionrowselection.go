@@ -6,27 +6,20 @@ import (
 )
 
 func ListActionRowSelection(name string) *listactionrowselectionBuilder {
-	return &listactionrowselectionBuilder{schema: &ui.Schema{
-		Name:       name,
-		Type:       ui.SchemaTypeVoid,
-		XComponent: ui.ComponentListActionRowSelection,
-		XComponentProps: map[string]interface{}{
-			"confirmProps": make(map[string]interface{}),
+	return &listactionrowselectionBuilder{&NodeBuilder{
+		schema: &ui.Schema{
+			Name:       name,
+			Type:       ui.SchemaTypeVoid,
+			XComponent: ui.ComponentListActionRowSelection,
+			XComponentProps: map[string]interface{}{
+				"confirmProps": make(map[string]interface{}),
+			},
 		},
 	}}
 }
 
 type listactionrowselectionBuilder struct {
-	schema *ui.Schema
-}
-
-func (b *listactionrowselectionBuilder) Schema() *ui.Schema {
-	return b.schema
-}
-
-func (b *listactionrowselectionBuilder) Title(title string) *listactionrowselectionBuilder {
-	b.schema.Title = title
-	return b
+	*NodeBuilder
 }
 
 func (b *listactionrowselectionBuilder) AfterReload() *listactionrowselectionBuilder {

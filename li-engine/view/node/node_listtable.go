@@ -6,23 +6,21 @@ import (
 )
 
 func ListTable(name string) *listtableBuilder {
-	return &listtableBuilder{schema: &ui.Schema{
-		Name:       name,
-		Type:       ui.SchemaTypeArray,
-		XComponent: ui.ComponentListTable,
-		XComponentProps: map[string]interface{}{
-			"rowSelection": make(map[string]interface{}),
+	return &listtableBuilder{&NodeBuilder{
+		schema: &ui.Schema{
+			Name:       name,
+			Type:       ui.SchemaTypeArray,
+			XComponent: ui.ComponentListTable,
+			XComponentProps: map[string]interface{}{
+				"rowSelection": make(map[string]interface{}),
+			},
+			Properties: make(map[string]*ui.Schema),
 		},
-		Properties: make(map[string]*ui.Schema),
 	}}
 }
 
 type listtableBuilder struct {
-	schema *ui.Schema
-}
-
-func (b *listtableBuilder) Schema() *ui.Schema {
-	return b.schema
+	*NodeBuilder
 }
 
 func (b *listtableBuilder) LayoutFixed() *listtableBuilder {
