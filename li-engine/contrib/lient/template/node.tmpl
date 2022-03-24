@@ -3,14 +3,14 @@
 {{ define "meta/additional/lient-node" }}
 {{- range $f := $.Fields }}
     {{- if $annotation := $f.Annotations.LiEnt }}
-        {{- if $annotation.View }}
+        {{- if $annotation.ViewSchema }}
             func Node{{ $f.StructField }}() *node.NodeBuilder {
                 var schema *ui.Schema
-                if err := gconv.Struct({{ valast $annotation.View }}, &schema); err != nil {
+                if err := gconv.Struct({{ valast $annotation.ViewSchema }}, &schema); err != nil {
                     panic(err)
                 }
                 if schema.Name == "" {
-                    schema.Name = "{{ if $annotation.View.name }}{{ $annotation.View.name }}{{ else }}{{ $f.StorageKey }}{{ end }}"
+                    schema.Name = "{{ if $annotation.ViewSchema.name }}{{ $annotation.ViewSchema.name }}{{ else }}{{ $f.StorageKey }}{{ end }}"
                 }
                 return node.Node(schema.Name).SetSchema(schema)
             }

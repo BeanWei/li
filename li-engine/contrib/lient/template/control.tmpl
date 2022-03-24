@@ -5,10 +5,33 @@ type (
 	List{{ $.Name }}Req struct {
 		Page int `json:"page" d:"1" v:"min:1"`
 		Limit int `json:"limit" d:"20" v:"min:1|max:500"`
-        {{- range $f := $.Fields }}
+		Filter *List{{ $.Name }}Filter `json:"filter"`
+		Sort *List{{ $.Name }}Sort `json:"sort"`
+	}
+	List{{ $.Name }}Filter struct {
+		{{- range $f := $.Fields }}
         {{- if not $f.Sensitive }}
-        	{{- $tag := printf `json:"%s"` $f.Name }}{{ with $tags := $.Annotations.Fields.StructTag }}{{ with index $tags $f.Name }}{{ $tag = . }}{{ end }}{{ end }}
-        	{{ $f.StructField }} *{{ $f.Type }} `{{ $tag }}`
+		{{- $annotation := $f.Annotations.LiEnt }}
+		{{- if and $annotation $annotation.ViewSchema $annotation.ColumnProps $annotation.ColumnProps.Filterable }}
+			{{- $component := index $annotation.ViewSchema "x-component"  }}
+			{{- if or (eq $component "DatePicker") (eq $component "TimePicker") }}
+				{{ $f.StructField }} []{{ $f.Type }} `json:"{{ $f.Name }}"`
+			{{- else if or (eq $component "Checkbox.Group") (eq $component "Select") }}
+				{{ $f.StructField }} []{{ $f.Type }} `json:"{{ $f.Name }}"`
+			{{- else }}
+			{{ $f.StructField }} *{{ $f.Type }} `json:"{{ $f.Name }}"`
+			{{- end }}
+		{{- end }}
+        {{- end }}
+        {{- end }}
+	}
+	List{{ $.Name }}Sort struct {
+		{{- range $f := $.Fields }}
+        {{- if not $f.Sensitive }}
+		{{- $annotation := $f.Annotations.LiEnt }}
+		{{- if and $annotation $annotation.ViewSchema $annotation.ColumnProps $annotation.ColumnProps.Sortable }}
+			{{ $f.StructField }} int `json:"{{ $f.Name }}"`
+		{{- end }}
         {{- end }}
         {{- end }}
 	}
@@ -18,29 +41,45 @@ type (
 	}
 	Create{{ $.Name }}Req struct {
 		{{- range $f := $.Fields }}
-            {{- $tag := printf `json:"%s"` $f.Name }}{{ with $tags := $.Annotations.Fields.StructTag }}{{ with index $tags $f.Name }}{{ $tag = . }}{{ end }}{{ end }}
-            {{- if $f.Optional }}
-                {{ $f.StructField }} *{{ $f.Type }} `{{ $tag }}`
-            {{- else }}
-                {{ $f.StructField }} {{ $f.Type }} `{{ $tag }} v:"required"`
-            {{- end }}
+		{{- $annotation := $f.Annotations.LiEnt }}
+		{{- if or (not $annotation) (not $annotation.DisableCreate) }}
+			{{- $tag := printf `json:"%s"` $f.Name }}{{ with $tags := $.Annotations.Fields.StructTag }}{{ with index $tags $f.Name }}{{ $tag = . }}{{ end }}{{ end }}
+            {{- if and $annotation $annotation.ValidateRule }}
+				{{- $tag = printf `%s v:"%s"` $tag $annotation.ValidateRule }}
+			{{- else if not $f.Optional }}
+				{{- $tag = printf `%s v:"required"` $tag }}
+			{{- end }}
+			{{- if $f.Optional }}
+				{{ $f.StructField }} *{{ $f.Type }} `{{ $tag }}`
+			{{- else }}
+				{{ $f.StructField }} {{ $f.Type }} `{{ $tag }}`
+			{{- end }}
+		{{- end }}
         {{- end }}
 	}
 	Get{{ $.Name }}Req struct {
 		ID {{ $.ID.Type }} `json:"id" v:"required"`
 	}
 	Update{{ $.Name }}Req struct {
-        ID {{ $.ID.Type }} {{ with $.Annotations.Fields.StructTag.id }}`{{ . }}`{{ else }}`{{ $.ID.StructTag }}`{{ end }}
+        ID {{ $.ID.Type }} `json:"id" v:"required"`
 		{{- range $f := $.Fields }}
-        {{- if not $f.Sensitive }}
-            {{- $tag := printf `json:"%s"` $f.Name }}{{ with $tags := $.Annotations.Fields.StructTag }}{{ with index $tags $f.Name }}{{ $tag = . }}{{ end }}{{ end }}
-            {{- if $f.Optional }}
-                {{ $f.StructField }} *{{ $f.Type }} `{{ $tag }}`
-            {{- else }}
-                {{ $f.StructField }} {{ $f.Type }} `{{ $tag }} v:"required"`
-            {{- end }}
+		{{- if not $f.Sensitive }}
+		{{- $annotation := $f.Annotations.LiEnt }}
+		{{- if or (not $annotation) (not $annotation.DisableUpdate) }}
+			{{- $tag := printf `json:"%s"` $f.Name }}
+            {{- if and $annotation $annotation.ValidateRule }}
+				{{- $tag = printf `%s v:"%s"` $tag $annotation.ValidateRule }}
+			{{- else if not $f.Optional }}
+				{{- $tag = printf `%s v:"required"` $tag }}
+			{{- end }}
+			{{- if $f.Optional }}
+				{{ $f.StructField }} *{{ $f.Type }} `{{ $tag }}`
+			{{- else }}
+				{{ $f.StructField }} {{ $f.Type }} `{{ $tag }}`
+			{{- end }}
+		{{- end }}
         {{- end }}
-        {{- end }}
+		{{- end }}
 	}
 	Delete{{ $.Name }}Req struct {
 		ID {{ $.ID.Type }} `json:"id" v:"required"`
@@ -52,13 +91,48 @@ type (
 
 func List{{ $.Name }}Controller(ctx context.Context, req *List{{ $.Name }}Req) (res *List{{ $.Name }}Res, err error) {
 	q := LiClient().{{ $.Name }}.Query()
-    {{- range $f := $.Fields }}
-    {{- if not $f.Sensitive }}
-        if req.{{ $f.StructField }} != nil {
-            q.Where(user.NicknameContainsFold(*req.{{ $f.StructField }}))
-        }
-    {{- end }}
-    {{- end }}
+	if req.Filter != nil {
+		{{- range $f := $.Fields }}
+        {{- if not $f.Sensitive }}
+		{{- $annotation := $f.Annotations.LiEnt }}
+		{{- if and $annotation $annotation.ViewSchema $annotation.ColumnProps $annotation.ColumnProps.Filterable }}
+			{{- $component := index $annotation.ViewSchema "x-component"  }}
+			{{- if or (eq $component "DatePicker") (eq $component "TimePicker") }}
+				if len(req.Filter.{{ $f.StructField }}) == 2 {
+					q.Where({{ $.Package }}.{{ $f.StructField }}GTE(req.Filter.{{ $f.StructField }}[0]), {{ $.Package }}.{{ $f.StructField }}LTE(req.Filter.{{ $f.StructField }}[1]))
+				}
+			{{- else if or (eq $component "Checkbox.Group") (eq $component "Select") }}
+				if len(req.Filter.{{ $f.StructField }}) > 0 {
+					q.Where({{ $.Package }}.{{ $f.StructField }}In(req.Filter.{{ $f.StructField }})...))
+				}
+			{{- else if eq $f.Type.String "string" }}
+				if req.Filter.{{ $f.StructField }} != nil {
+					q.Where({{ $.Package }}.{{ $f.StructField }}ContainsFold(*req.Filter.{{ $f.StructField }}))
+				}
+			{{- else }}
+				if req.Filter.{{ $f.StructField }} != nil {
+					q.Where({{ $.Package }}.{{ $f.StructField }}EQ(*req.Filter.{{ $f.StructField }}))
+				}
+			{{- end }}
+		{{- end }}
+        {{- end }}
+        {{- end }}
+	}
+	if req.Sort != nil {
+		{{- range $f := $.Fields }}
+        {{- if not $f.Sensitive }}
+		{{- $annotation := $f.Annotations.LiEnt }}
+		{{- if and $annotation $annotation.ViewSchema $annotation.ColumnProps $annotation.ColumnProps.Sortable }}
+			{{ $f.StructField }} int `json:"{{ $f.Name }}"`
+			if req.Sort.{{ $f.StructField }} > 0 {
+				q.Order(Asc({{ $.Package }}.{{ $f.StructField }}))
+			} else if req.Sort.{{ $f.StructField }} < 0 {
+				q.Order(Desc({{ $.Package }}.{{ $f.StructField }}))
+			}
+		{{- end }}
+        {{- end }}
+        {{- end }}
+	}
 	res.Total, err = q.Count(ctx)
 	if err != nil {
 		return nil, gerror.WrapCode(gcode.CodeDbOperationError, err)
@@ -72,15 +146,18 @@ func List{{ $.Name }}Controller(ctx context.Context, req *List{{ $.Name }}Req) (
 
 func Create{{ $.Name }}Controller(ctx context.Context, req *Create{{ $.Name }}Req) (res *{{ $.Name }}, err error) {
 	b := LiClient().{{ $.Name }}.Create()
-    {{- range $f := $.Fields }}
-        {{- if $f.Optional }}
+	{{- range $f := $.Fields }}
+	{{- $annotation := $f.Annotations.LiEnt }}
+	{{- if or (not $annotation) (not $annotation.DisableCreate) }}
+		{{- if $f.Optional }}
             if req.{{ $f.StructField }} != nil {
                 b.Set{{ $f.StructField }}(*req.{{ $f.StructField }})
             }
         {{- else }}
             b.Set{{ $f.StructField }}(req.{{ $f.StructField }})
         {{- end }}
-    {{- end }}
+	{{- end }}
+	{{- end }}
 	res, err = b.Save(ctx)
 	if err != nil {
 		if IsConstraintError(err) {
@@ -105,16 +182,19 @@ func Get{{ $.Name }}Controller(ctx context.Context, req *Get{{ $.Name }}Req) (re
 func Update{{ $.Name }}Controller(ctx context.Context, req *Update{{ $.Name }}Req) (res *{{ $.Name }}, err error) {
 	b := LiClient().{{ $.Name }}.UpdateOneID(req.ID)
 	{{- range $f := $.Fields }}
-    {{- if not $f.Sensitive }}
-        {{- if $f.Optional }}
+	{{- if not $f.Sensitive }}
+	{{- $annotation := $f.Annotations.LiEnt }}
+	{{- if or (not $annotation) (not $annotation.DisableUpdate) }}
+		{{- if $f.Optional }}
             if req.{{ $f.StructField }} != nil {
                 b.Set{{ $f.StructField }}(*req.{{ $f.StructField }})
             }
         {{- else }}
             b.Set{{ $f.StructField }}(req.{{ $f.StructField }})
         {{- end }}
-    {{- end }}
-    {{- end }}
+	{{- end }}
+	{{- end }}
+	{{- end }}
 	res, err = b.Save(ctx)
 	if err != nil {
 		if IsNotFound(err) {
@@ -141,7 +221,7 @@ func Delete{{ $.Name }}Controller(ctx context.Context, req *Delete{{ $.Name }}Re
 }
 
 func DeleteMany{{ $.Name }}Controller(ctx context.Context, req *DeleteMany{{ $.Name }}Req) (err error) {
-	_, err = LiClient().{{ $.Name }}.Delete().Where(user.IDIn(req.IDs...)).Exec(ctx)
+	_, err = LiClient().{{ $.Name }}.Delete().Where({{ $.Package }}.IDIn(req.IDs...)).Exec(ctx)
 	if err != nil {
 		return gerror.WrapCode(gcode.CodeDbOperationError, err)
 	}

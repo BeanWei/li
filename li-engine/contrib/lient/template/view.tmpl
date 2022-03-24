@@ -12,7 +12,7 @@ func List{{ $.Name }}View() view.Node {
 					Children(
                         {{- range $f := $.Fields }}
                             {{- if $annotation := $f.Annotations.LiEnt }}
-                                {{- if $annotation.View }}
+                                {{- if $annotation.ViewSchema }}
                                     {{ $.Package }}.Node{{ $f.StructField }}(),
                                 {{- end }}
                             {{- end }}
@@ -30,7 +30,7 @@ func List{{ $.Name }}View() view.Node {
 				Columns(
                     {{- range $i, $f := $.Fields }}
                         {{- if $annotation := $f.Annotations.LiEnt }}
-                            {{- if $annotation.View }}
+                            {{- if $annotation.ViewSchema }}
 								node.ListTableColumn("column{{ $i }}").
 									Title("{{ $f.StructField }}").
 									DataIndex("{{ $f.Name }}").
@@ -49,7 +49,7 @@ func List{{ $.Name }}View() view.Node {
 									Children(
 										{{- range $f := $.Fields }}
 											{{- if $annotation := $f.Annotations.LiEnt }}
-												{{- if $annotation.View }}
+												{{- if $annotation.ViewSchema }}
 													{{ $.Package }}.Node{{ $f.StructField }}(),
 												{{- end }}
 											{{- end }}

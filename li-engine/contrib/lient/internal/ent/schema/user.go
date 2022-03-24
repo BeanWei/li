@@ -4,7 +4,7 @@ import (
 	"entgo.io/ent"
 	"entgo.io/ent/schema/field"
 	"github.com/BeanWei/li/li-engine/contrib/lient"
-	"github.com/BeanWei/li/li-engine/view/ui"
+	"github.com/BeanWei/li/li-engine/view/node"
 )
 
 type User struct {
@@ -18,21 +18,37 @@ func (User) Fields() []ent.Field {
 			NotEmpty().
 			Annotations(
 				lient.Annotation{
-					View: &ui.Schema{
-						XComponent: ui.ComponentInput,
-						Properties: map[string]*ui.Schema{
-							"c": {
-								Name: "123",
-							},
-						},
+					ViewSchema: node.Text("nickname").Schema(),
+					ColumnProps: &lient.ColumnProps{
+						Title:      "昵称",
+						Filterable: true,
 					},
 				},
 			),
 		field.String("email").
 			NotEmpty().
-			Unique(),
+			Unique().
+			Annotations(
+				lient.Annotation{
+					ViewSchema: node.Email("email").Schema(),
+					ColumnProps: &lient.ColumnProps{
+						Title:      "邮箱",
+						Filterable: true,
+					},
+					ValidateRule:  "required|email",
+					DisableUpdate: true,
+				},
+			),
 		field.String("password").
 			Sensitive().
-			Optional(),
+			Optional().
+			Annotations(
+				lient.Annotation{
+					ViewSchema:    node.Password("password").Schema(),
+					ValidateRule:  "password|required",
+					DisableRead:   true,
+					DisableUpdate: true,
+				},
+			),
 	}
 }
