@@ -7,20 +7,19 @@ import (
 
 type (
 	Annotation struct {
-		ViewSchema    *ui.Schema
-		ColumnProps   *ColumnProps
-		ValidateRule  string
-		DisableCreate bool
-		DisableRead   bool
-		DisableUpdate bool
+		ViewSchema    *ui.Schema   `json:"ViewSchema,omitempty"`
+		ColumnProps   *ColumnProps `json:"ColumnProps,omitempty"`
+		ValidateRule  string       `json:"ValidateRule,omitempty"`
+		DisableCreate bool         `json:"DisableCreate,omitempty"`
+		DisableRead   bool         `json:"DisableRead,omitempty"`
+		DisableUpdate bool         `json:"DisableUpdate,omitempty"`
 	}
 	ColumnProps struct {
-		Title      string `json:"title,omitempty"`
-		Width      int    `json:"width,omitempty"`
-		Align      string `json:"align,omitempty"`
-		Ellipsis   bool   `json:"ellipsis,omitempty"`
-		Filterable bool
-		Sortable   bool
+		Width      int    `json:"Width,omitempty"`
+		Align      string `json:"Align,omitempty"`
+		Ellipsis   bool   `json:"Ellipsis,omitempty"`
+		Filterable bool   `json:"Filterable,omitempty"`
+		Sortable   bool   `json:"Sortable,omitempty"`
 	}
 )
 

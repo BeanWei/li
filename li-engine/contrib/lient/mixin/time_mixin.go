@@ -7,6 +7,7 @@ import (
 	"entgo.io/ent/schema/field"
 	"entgo.io/ent/schema/index"
 	"entgo.io/ent/schema/mixin"
+	"github.com/BeanWei/li/li-engine/contrib/lient"
 )
 
 type Time struct {
@@ -15,9 +16,19 @@ type Time struct {
 
 func (Time) Fields() []ent.Field {
 	return []ent.Field{
-		field.Time("created_at").Immutable().Default(time.Now),
-		field.Time("updated_at").Default(time.Now).UpdateDefault(time.Now),
-		field.Time("deleted_at").Nillable().Optional(),
+		field.Time("created_at").Immutable().Default(time.Now).Annotations(lient.Annotation{
+			DisableCreate: true,
+			DisableUpdate: true,
+		}),
+		field.Time("updated_at").Default(time.Now).UpdateDefault(time.Now).Annotations(lient.Annotation{
+			DisableCreate: true,
+			DisableUpdate: true,
+		}),
+		field.Time("deleted_at").Nillable().Optional().Annotations(lient.Annotation{
+			DisableCreate: true,
+			DisableRead:   true,
+			DisableUpdate: true,
+		}),
 	}
 }
 

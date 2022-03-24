@@ -4,11 +4,19 @@ import (
 	"entgo.io/ent"
 	"entgo.io/ent/schema/field"
 	"github.com/BeanWei/li/li-engine/contrib/lient"
+	"github.com/BeanWei/li/li-engine/contrib/lient/mixin"
 	"github.com/BeanWei/li/li-engine/view/node"
 )
 
 type User struct {
 	ent.Schema
+}
+
+func (User) Mixin() []ent.Mixin {
+	return []ent.Mixin{
+		mixin.XID{},
+		mixin.Time{},
+	}
 }
 
 // Fields of the User.
@@ -18,9 +26,8 @@ func (User) Fields() []ent.Field {
 			NotEmpty().
 			Annotations(
 				lient.Annotation{
-					ViewSchema: node.Text("nickname").Schema(),
+					ViewSchema: node.Text("nickname").SetTitle("昵称").Schema(),
 					ColumnProps: &lient.ColumnProps{
-						Title:      "昵称",
 						Filterable: true,
 					},
 				},
@@ -30,9 +37,8 @@ func (User) Fields() []ent.Field {
 			Unique().
 			Annotations(
 				lient.Annotation{
-					ViewSchema: node.Email("email").Schema(),
+					ViewSchema: node.Email("email").SetTitle("邮箱").Schema(),
 					ColumnProps: &lient.ColumnProps{
-						Title:      "邮箱",
 						Filterable: true,
 					},
 					ValidateRule:  "required|email",
@@ -44,8 +50,8 @@ func (User) Fields() []ent.Field {
 			Optional().
 			Annotations(
 				lient.Annotation{
-					ViewSchema:    node.Password("password").Schema(),
-					ValidateRule:  "password|required",
+					ViewSchema:    node.Password("password").SetTitle("密码").Schema(),
+					ValidateRule:  "required|password",
 					DisableRead:   true,
 					DisableUpdate: true,
 				},

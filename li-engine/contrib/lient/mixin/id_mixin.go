@@ -4,6 +4,7 @@ import (
 	"entgo.io/ent"
 	"entgo.io/ent/schema/field"
 	"entgo.io/ent/schema/mixin"
+	"github.com/BeanWei/li/li-engine/contrib/lient"
 	"github.com/rs/xid"
 )
 
@@ -19,6 +20,9 @@ func (XID) Fields() []ent.Field {
 			Immutable().
 			DefaultFunc(func() string {
 				return xid.New().String()
+			}).
+			Annotations(lient.Annotation{
+				DisableCreate: true,
 			}),
 	}
 }

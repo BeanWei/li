@@ -12,7 +12,7 @@ func List{{ $.Name }}View() view.Node {
 					Children(
                         {{- range $f := $.Fields }}
                             {{- if $annotation := $f.Annotations.LiEnt }}
-                                {{- if $annotation.ViewSchema }}
+                                {{- if and $annotation.ViewSchema (not $annotation.DisableCreate) }}
                                     {{ $.Package }}.Node{{ $f.StructField }}(),
                                 {{- end }}
                             {{- end }}
@@ -29,14 +29,19 @@ func List{{ $.Name }}View() view.Node {
 				RowSelectionType("checkbox").
 				Columns(
                     {{- range $i, $f := $.Fields }}
+						{{- if not $f.Sensitive }}
                         {{- if $annotation := $f.Annotations.LiEnt }}
-                            {{- if $annotation.ViewSchema }}
+                            {{- if and $annotation.ViewSchema (not $annotation.DisableRead) $annotation.ColumnProps }}
 								node.ListTableColumn("column{{ $i }}").
-									Title("{{ $f.StructField }}").
+									Title({{ $.Package }}.Node{{ $f.StructField }}Title).
 									DataIndex("{{ $f.Name }}").
+									{{- if $annotation.ColumnProps.Align }}Align("{{ $annotation.ColumnProps.Align }}").{{- end }}
+									{{- if $annotation.ColumnProps.Ellipsis }}Ellipsis().{{- end }}
+									{{- if $annotation.ColumnProps.Width }}Width({{ $annotation.ColumnProps.Width }}){{- end }}
 									Render({{ $.Package }}.Node{{ $f.StructField }}().SetXReadPretty(true)),
                             {{- end }}
                         {{- end }}
+						{{- end }}
                     {{- end }}
 					node.ListTableColumn("column{{ len $.Fields }}").
 						Title("操作").
@@ -49,7 +54,7 @@ func List{{ $.Name }}View() view.Node {
 									Children(
 										{{- range $f := $.Fields }}
 											{{- if $annotation := $f.Annotations.LiEnt }}
-												{{- if $annotation.ViewSchema }}
+												{{- if and $annotation.ViewSchema (not $annotation.DisableUpdate) }}
 													{{ $.Package }}.Node{{ $f.StructField }}(),
 												{{- end }}
 											{{- end }}
