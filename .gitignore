@@ -16,13 +16,20 @@
 .vscode/
 *exvim*
 *vendor*
-li-app/*go.sum
 
+# ent 仅保留schema文件目录和generate/entc文件
+**/ent/*
+!**/ent/schema
+!**/ent/generate.go
+!**/ent/entc.go
+
+# frontend
 node_modules/
 npm-debug.log
 yarn-error.log
 package-lock.json
 
+# backend
 vender/
 log/
 bin/
@@ -30,4 +37,6 @@ cbuild
 config.yaml
 main
 
+# app
+li-app/*go.sum
 _PERSISTENT_/
