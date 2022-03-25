@@ -14,16 +14,18 @@ func Ctx(r *ghttp.Request) {
 	}
 	shared.Ctx.Init(r, customCtx)
 	uid := shared.Session.GetUserID(r.Context())
-	usr, err := data.User.GetUser(r.Context(), uid)
-	if err != nil {
-		r.Response.WriteJson(ghttp.DefaultHandlerResponse{
-			Code:    gerror.Code(err).Code(),
-			Message: err.Error(),
-		})
-	} else {
-		customCtx.User = &shared.CtxUser{
-			ID:      usr.ID,
-			IsAdmin: usr.IsAdmin,
+	if uid != "" {
+		usr, err := data.User.GetUser(r.Context(), uid)
+		if err != nil {
+			r.Response.WriteJson(ghttp.DefaultHandlerResponse{
+				Code:    gerror.Code(err).Code(),
+				Message: err.Error(),
+			})
+		} else if usr != nil {
+			customCtx.User = &shared.CtxUser{
+				ID:      usr.ID,
+				IsAdmin: usr.IsAdmin,
+			}
 		}
 	}
 	r.Middleware.Next()

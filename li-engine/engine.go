@@ -6,7 +6,6 @@ import (
 	"github.com/BeanWei/li/li-engine/controller"
 	"github.com/BeanWei/li/li-engine/view"
 	"github.com/BeanWei/li/li-engine/view/ui"
-	"github.com/gogf/gf/v2/encoding/gjson"
 	"github.com/gogf/gf/v2/frame/g"
 	"github.com/gogf/gf/v2/net/ghttp"
 	"github.com/gogf/gf/v2/util/grand"
@@ -56,6 +55,10 @@ type (
 
 	appbinding struct {
 		SignPage map[string]interface{} `json:"signpage"`
+	}
+
+	GetAppViewReq struct {
+		Key string `p:"key" v:"required"`
 	}
 )
 
@@ -110,11 +113,11 @@ func NewApp(cfg *App) {
 		controller.Bind("@getCurrentUser", cfg.Binding.GetCurrentUserController)
 	}
 
-	controller.Bind("@getAppConfig", func(ctx context.Context, req interface{}) (res *app, err error) {
+	controller.Bind("@getAppConfig", func(ctx context.Context) (res *app, err error) {
 		return appcfg, nil
 	})
-	controller.Bind("@getAppView", func(ctx context.Context, variables *gjson.Json) (res map[string]interface{}, err error) {
-		return pages[variables.Get("key").String()], nil
+	controller.Bind("@getAppView", func(ctx context.Context, req *GetAppViewReq) (res map[string]interface{}, err error) {
+		return pages[req.Key], nil
 	})
 
 	s := g.Server()

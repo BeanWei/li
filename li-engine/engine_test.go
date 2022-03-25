@@ -6,7 +6,9 @@ import (
 	engine "github.com/BeanWei/li/li-engine"
 	"github.com/BeanWei/li/li-engine/view"
 	"github.com/BeanWei/li/li-engine/view/node"
+	"github.com/gogf/gf/v2/frame/g"
 	"github.com/gogf/gf/v2/test/gtest"
+	"github.com/gogf/gf/v2/util/gconv"
 )
 
 type Hello struct {
@@ -45,5 +47,14 @@ func Test_NewApp(t *testing.T) {
 				},
 			},
 		})
+	})
+}
+
+func Test_GF(t *testing.T) {
+	gtest.C(t, func(t *gtest.T) {
+		g.Dump(gconv.Map("") == nil)
+		var res *Hello
+		gconv.Struct(gconv.Map(""), &res)
+		g.Dump(res)
 	})
 }

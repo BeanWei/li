@@ -16,10 +16,10 @@ var handlers = make(map[string]*handler)
 
 func Bind(name string, f interface{}) {
 	reflectType := reflect.TypeOf(f)
-	if reflectType.NumIn() != 2 {
+	if reflectType.NumIn() == 0 || reflectType.NumIn() > 2 {
 		panic(gerror.NewCodef(
 			gcode.CodeInvalidParameter,
-			`invalid controller: defined as "%s", but "func(context.Context, BizRequest)" is required`,
+			`invalid controller: defined as "%s", but "func(context.Context)" or "func(context.Context, BizRequest)" is required`,
 			reflectType.String(),
 		))
 	}
@@ -27,6 +27,13 @@ func Bind(name string, f interface{}) {
 		panic(gerror.NewCodef(
 			gcode.CodeInvalidParameter,
 			`invalid controller: defined as "%s", but the first input parameter should be type of "context.Context"`,
+			reflectType.String(),
+		))
+	}
+	if reflectType.NumIn() == 2 && reflectType.In(1).String() == "interface {}" {
+		panic(gerror.NewCodef(
+			gcode.CodeInvalidParameter,
+			`invalid controller: defined as "%s", but the second input parameter should not be type of "interface {}"`,
 			reflectType.String(),
 		))
 	}

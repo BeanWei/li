@@ -1,0 +1,27 @@
+# HTTP Server.
+server:
+  address: ":8199"
+  serverAgent: "li"
+  sessionIdName: "x-api-sid"
+
+# Global logging.
+logger:
+  level: "all"
+  stdout: true
+
+# Database.
+database:
+  logger:
+    level: "all"
+    stdout: true
+  default:
+    link: "postgres://root:1234567890@127.0.0.1:5432/li-app?sslmode=disable"
+    type: "pgsql"
+    debug: true
+
+redis:
+  cache:
+    address: 127.0.0.1:6379
+    db: 1
+    pass: 123456
+    idleTimeout: 600

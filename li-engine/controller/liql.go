@@ -16,8 +16,8 @@ import (
 )
 
 type LiqlReq struct {
-	Operation string      `json:"operation" p:"operation" v:"required"`
-	Variables interface{} `json:"variables" p:"variables"`
+	Operation string `json:"operation" p:"operation" v:"required"`
+	Variables string `json:"variables" p:"variables"`
 }
 
 func Liql(r *ghttp.Request) {
@@ -48,7 +48,7 @@ func Liql(r *ghttp.Request) {
 					inputValues = append(inputValues, inputObject)
 				}
 			}
-			if len(inputValues) == 2 {
+			if err == nil {
 				// Call handler with dynamic created parameter values.
 				results := f.Value.Call(inputValues)
 				switch len(results) {
@@ -117,14 +117,7 @@ func doParse(ctx context.Context, variables interface{}, pointer interface{}) er
 	)
 	switch reflectKind2 {
 	case reflect.Ptr, reflect.Struct:
-		data, ok := variables.(map[string]interface{})
-		if !ok {
-			return gerror.NewCodef(
-				gcode.CodeInvalidParameter,
-				`parameter variables should be map but got "%T"`,
-				variables,
-			)
-		}
+		data := gconv.Map(variables)
 		tagFields, err := gstructs.TagFields(pointer, []string{"d", "default"})
 		if err != nil {
 			return err
@@ -145,8 +138,10 @@ func doParse(ctx context.Context, variables interface{}, pointer interface{}) er
 				}
 			}
 		}
-		if err = gconv.Struct(data, pointer); err != nil {
-			return err
+		if data != nil {
+			if err = gconv.Struct(data, pointer); err != nil {
+				return err
+			}
 		}
 		if err = gvalid.New().
 			Bail().
