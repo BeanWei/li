@@ -22,16 +22,6 @@ func (User) Mixin() []ent.Mixin {
 // Fields of the User.
 func (User) Fields() []ent.Field {
 	return []ent.Field{
-		field.String("nickname").
-			NotEmpty().
-			Annotations(
-				lient.Annotation{
-					ViewSchema: node.Text("nickname").SetTitle("昵称").Schema(),
-					ColumnProps: &lient.ColumnProps{
-						Filterable: true,
-					},
-				},
-			),
 		field.String("email").
 			NotEmpty().
 			Unique().
@@ -56,5 +46,27 @@ func (User) Fields() []ent.Field {
 					DisableUpdate: true,
 				},
 			),
+		field.String("salt").
+			Sensitive().
+			Comment("密码盐").
+			Annotations(
+				lient.Annotation{
+					DisableCreate: true,
+					DisableUpdate: true,
+				},
+			),
+		field.String("nickname").
+			NotEmpty().
+			Annotations(
+				lient.Annotation{
+					ViewSchema: node.Text("nickname").SetTitle("昵称").Schema(),
+					ColumnProps: &lient.ColumnProps{
+						Filterable: true,
+					},
+				},
+			),
+		field.String("avatar").
+			Optional().
+			Comment("头像"),
 	}
 }

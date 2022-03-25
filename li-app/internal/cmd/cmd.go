@@ -6,6 +6,7 @@ import (
 	"github.com/BeanWei/li/li-app/internal/app/admin"
 	"github.com/BeanWei/li/li-app/internal/data/ent"
 	"github.com/BeanWei/li/li-app/internal/data/ent/migrate"
+	_ "github.com/BeanWei/li/li-app/internal/data/hook"
 	"github.com/gogf/gf/v2/frame/g"
 	"github.com/gogf/gf/v2/os/gcmd"
 )
