@@ -1,6 +1,7 @@
 package admin
 
 import (
+	"github.com/BeanWei/li/li-app/internal/app/admin/controller"
 	"github.com/BeanWei/li/li-app/internal/app/admin/view"
 	engine "github.com/BeanWei/li/li-engine"
 )
@@ -33,5 +34,8 @@ func Init() {
 			},
 		},
 		NavItems: view.NavItems(),
+		Binding: &engine.AppBinding{
+			GetCurrentUserController: controller.UserProfile,
+		},
 	})
 }

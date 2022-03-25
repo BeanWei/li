@@ -66,7 +66,16 @@ func (User) Fields() []ent.Field {
 				},
 			),
 		field.String("avatar").
+			Optional(),
+		field.Bool("is_admin").
 			Optional().
-			Comment("头像"),
+			Annotations(
+				lient.Annotation{
+					ViewSchema: node.Checkbox("is_admin").SetTitle("管理员").Schema(),
+					ColumnProps: &lient.ColumnProps{
+						Filterable: true,
+					},
+				},
+			),
 	}
 }

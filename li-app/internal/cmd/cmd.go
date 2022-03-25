@@ -7,8 +7,10 @@ import (
 	"github.com/BeanWei/li/li-app/internal/data/ent"
 	"github.com/BeanWei/li/li-app/internal/data/ent/migrate"
 	_ "github.com/BeanWei/li/li-app/internal/data/hook"
+	"github.com/BeanWei/li/li-app/internal/middleware"
 	"github.com/gogf/gf/v2/frame/g"
 	"github.com/gogf/gf/v2/os/gcmd"
+	"github.com/gogf/gf/v2/os/gsession"
 )
 
 var Li = &gcmd.Command{
@@ -22,8 +24,18 @@ func init() {
 			Name:  "run",
 			Usage: "run app",
 			Func: func(ctx context.Context, parser *gcmd.Parser) (err error) {
+				s := g.Server()
+				s.SetConfigWithMap(g.Map{
+					"SessionStorage": gsession.NewStorageRedis(g.Redis()),
+				})
+				s.Use(
+					middleware.CORS,
+					middleware.Ctx,
+					// TODO: I18N
+					// middleware.I18N,
+				)
 				admin.Init()
-				g.Server().Run()
+				s.Run()
 				return
 			},
 		},

@@ -27,5 +27,22 @@ func init() {
 				hook.HasFields(user.FieldPassword),
 			),
 		),
+		hook.On(
+			func(next ent.Mutator) ent.Mutator {
+				return hook.UserFunc(func(ctx context.Context, m *ent.UserMutation) (ent.Value, error) {
+					val, err := next.Mutate(ctx, m)
+					if err != nil {
+						return val, err
+					}
+					var ids []string
+					if id, ok := m.ID(); ok {
+						ids = append(ids, id)
+					}
+					data.User.RemoveUserCache(ctx, ids...)
+					return val, err
+				})
+			},
+			ent.OpUpdate|ent.OpUpdateOne|ent.OpDelete|ent.OpDeleteOne,
+		),
 	)
 }
