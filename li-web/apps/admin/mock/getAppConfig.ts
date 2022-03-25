@@ -171,7 +171,7 @@ export default {
           "x-component": "Submit",
           "x-decorator": "FormItem",
           "x-component-props": {
-            block: true,
+            long: true,
             type: "primary",
             style: { width: "100%" },
             forSubmit: "userSignIn",
