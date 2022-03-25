@@ -1,7 +1,7 @@
 package node
 
 import (
-	"github.com/BeanWei/li/li-engine/control"
+	"github.com/BeanWei/li/li-engine/controller"
 	"github.com/BeanWei/li/li-engine/view/ui"
 )
 
@@ -26,8 +26,8 @@ func (b *listBuilder) DecoratorCard() *listBuilder {
 	return b
 }
 
-func (b *listBuilder) ForInit(operation string, controller interface{}) *listBuilder {
+func (b *listBuilder) ForInit(operation string, handler interface{}) *listBuilder {
 	b.schema.XComponentProps["forInit"] = operation
-	control.RegisterController(operation, controller)
+	controller.Bind(operation, handler)
 	return b
 }

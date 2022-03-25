@@ -1,7 +1,7 @@
 package node
 
 import (
-	"github.com/BeanWei/li/li-engine/control"
+	"github.com/BeanWei/li/li-engine/controller"
 	"github.com/BeanWei/li/li-engine/view/ui"
 )
 
@@ -25,14 +25,14 @@ type actionformdrawerBuilder struct {
 	*NodeBuilder
 }
 
-func (b *actionformdrawerBuilder) ForInit(operation string, controller interface{}) *actionformdrawerBuilder {
+func (b *actionformdrawerBuilder) ForInit(operation string, handler interface{}) *actionformdrawerBuilder {
 	b.schema.XComponentProps["forInit"] = operation
-	control.RegisterController(operation, controller)
+	controller.Bind(operation, handler)
 	return b
 }
 
-func (b *actionformdrawerBuilder) ForSubmit(operation string, controller interface{}) *actionformdrawerBuilder {
+func (b *actionformdrawerBuilder) ForSubmit(operation string, handler interface{}) *actionformdrawerBuilder {
 	b.schema.XComponentProps["forSubmit"] = operation
-	control.RegisterController(operation, controller)
+	controller.Bind(operation, handler)
 	return b
 }

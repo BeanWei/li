@@ -1,7 +1,7 @@
 package node
 
 import (
-	"github.com/BeanWei/li/li-engine/control"
+	"github.com/BeanWei/li/li-engine/controller"
 	"github.com/BeanWei/li/li-engine/view/ui"
 )
 
@@ -27,9 +27,9 @@ func (b *listactionrowselectionBuilder) AfterReload() *listactionrowselectionBui
 	return b
 }
 
-func (b *listactionrowselectionBuilder) ForSubmit(operation string, controller interface{}) *listactionrowselectionBuilder {
+func (b *listactionrowselectionBuilder) ForSubmit(operation string, handler interface{}) *listactionrowselectionBuilder {
 	b.schema.XComponentProps["forSubmit"] = operation
-	control.RegisterController(operation, controller)
+	controller.Bind(operation, handler)
 	return b
 }
 

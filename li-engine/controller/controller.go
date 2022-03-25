@@ -1,4 +1,4 @@
-package control
+package controller
 
 import (
 	"reflect"
@@ -7,14 +7,14 @@ import (
 	"github.com/gogf/gf/v2/errors/gerror"
 )
 
-type controller struct {
+type handler struct {
 	Type  reflect.Type
 	Value reflect.Value
 }
 
-var controllers = make(map[string]*controller)
+var handlers = make(map[string]*handler)
 
-func RegisterController(name string, f interface{}) {
+func Bind(name string, f interface{}) {
 	reflectType := reflect.TypeOf(f)
 	if reflectType.NumIn() != 2 {
 		panic(gerror.NewCodef(
@@ -37,7 +37,7 @@ func RegisterController(name string, f interface{}) {
 			reflectType.String(),
 		))
 	}
-	controllers[name] = &controller{
+	handlers[name] = &handler{
 		Type:  reflectType,
 		Value: reflect.ValueOf(f),
 	}

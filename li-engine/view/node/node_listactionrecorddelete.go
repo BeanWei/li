@@ -1,7 +1,7 @@
 package node
 
 import (
-	"github.com/BeanWei/li/li-engine/control"
+	"github.com/BeanWei/li/li-engine/controller"
 	"github.com/BeanWei/li/li-engine/view/ui"
 )
 
@@ -23,9 +23,9 @@ type listactionrecorddeleteBuilder struct {
 	*NodeBuilder
 }
 
-func (b *listactionrecorddeleteBuilder) ForSubmit(operation string, controller interface{}) *listactionrecorddeleteBuilder {
+func (b *listactionrecorddeleteBuilder) ForSubmit(operation string, handler interface{}) *listactionrecorddeleteBuilder {
 	b.schema.XComponentProps["forSubmit"] = operation
-	control.RegisterController(operation, controller)
+	controller.Bind(operation, handler)
 	return b
 }
 

@@ -1,7 +1,7 @@
 package node
 
 import (
-	"github.com/BeanWei/li/li-engine/control"
+	"github.com/BeanWei/li/li-engine/controller"
 	"github.com/BeanWei/li/li-engine/view/ui"
 )
 
@@ -23,14 +23,14 @@ type listactionrecordeditmodalBuilder struct {
 	*NodeBuilder
 }
 
-func (b *listactionrecordeditmodalBuilder) ForInit(operation string, controller interface{}) *listactionrecordeditmodalBuilder {
+func (b *listactionrecordeditmodalBuilder) ForInit(operation string, handler interface{}) *listactionrecordeditmodalBuilder {
 	b.schema.XComponentProps["forInit"] = operation
-	control.RegisterController(operation, controller)
+	controller.Bind(operation, handler)
 	return b
 }
 
-func (b *listactionrecordeditmodalBuilder) ForSubmit(operation string, controller interface{}) *listactionrecordeditmodalBuilder {
+func (b *listactionrecordeditmodalBuilder) ForSubmit(operation string, handler interface{}) *listactionrecordeditmodalBuilder {
 	b.schema.XComponentProps["forSubmit"] = operation
-	control.RegisterController(operation, controller)
+	controller.Bind(operation, handler)
 	return b
 }

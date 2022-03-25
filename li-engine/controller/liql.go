@@ -1,4 +1,4 @@
-package control
+package controller
 
 import (
 	"context"
@@ -28,7 +28,7 @@ func Liql(r *ghttp.Request) {
 	)
 	err := r.ParseForm(&req)
 	if err == nil {
-		f, exists := controllers[req.Operation]
+		f, exists := handlers[req.Operation]
 		if exists {
 			var inputValues = []reflect.Value{
 				reflect.ValueOf(ctx),

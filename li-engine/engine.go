@@ -3,7 +3,7 @@ package engine
 import (
 	"context"
 
-	"github.com/BeanWei/li/li-engine/control"
+	"github.com/BeanWei/li/li-engine/controller"
 	"github.com/BeanWei/li/li-engine/view"
 	"github.com/BeanWei/li/li-engine/view/ui"
 	"github.com/gogf/gf/v2/encoding/gjson"
@@ -107,18 +107,18 @@ func NewApp(cfg *App) {
 		appcfg.Binding = &appbinding{
 			SignPage: signpage,
 		}
-		control.RegisterController("@getCurrentUser", cfg.Binding.GetCurrentUserController)
+		controller.Bind("@getCurrentUser", cfg.Binding.GetCurrentUserController)
 	}
 
-	control.RegisterController("@getAppConfig", func(ctx context.Context, req interface{}) (res *app, err error) {
+	controller.Bind("@getAppConfig", func(ctx context.Context, req interface{}) (res *app, err error) {
 		return appcfg, nil
 	})
-	control.RegisterController("@getAppView", func(ctx context.Context, variables *gjson.Json) (res map[string]interface{}, err error) {
+	controller.Bind("@getAppView", func(ctx context.Context, variables *gjson.Json) (res map[string]interface{}, err error) {
 		return pages[variables.Get("key").String()], nil
 	})
 
 	s := g.Server()
 	s.Group("/", func(group *ghttp.RouterGroup) {
-		group.Bind(control.Liql)
+		group.POST("/api/liql", controller.Liql)
 	})
 }

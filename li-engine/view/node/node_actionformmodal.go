@@ -1,7 +1,7 @@
 package node
 
 import (
-	"github.com/BeanWei/li/li-engine/control"
+	"github.com/BeanWei/li/li-engine/controller"
 	"github.com/BeanWei/li/li-engine/view/ui"
 )
 
@@ -23,14 +23,14 @@ type actionformmodalBuilder struct {
 	*NodeBuilder
 }
 
-func (b *actionformmodalBuilder) ForInit(operation string, controller interface{}) *actionformmodalBuilder {
+func (b *actionformmodalBuilder) ForInit(operation string, handler interface{}) *actionformmodalBuilder {
 	b.schema.XComponentProps["forInit"] = operation
-	control.RegisterController(operation, controller)
+	controller.Bind(operation, handler)
 	return b
 }
 
-func (b *actionformmodalBuilder) ForSubmit(operation string, controller interface{}) *actionformmodalBuilder {
+func (b *actionformmodalBuilder) ForSubmit(operation string, handler interface{}) *actionformmodalBuilder {
 	b.schema.XComponentProps["forSubmit"] = operation
-	control.RegisterController(operation, controller)
+	controller.Bind(operation, handler)
 	return b
 }
