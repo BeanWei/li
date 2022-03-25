@@ -33,8 +33,10 @@ export default [
       }
       if (operation == "listUser") {
         return {
-          data: listUser,
-          total: listUser.length,
+          data: {
+            list: listUser,
+            total: listUser.length,
+          },
         };
       }
       return {

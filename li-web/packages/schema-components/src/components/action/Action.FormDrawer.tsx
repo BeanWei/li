@@ -64,7 +64,7 @@ export const ActionFormDrawer: React.FC<ActionFormDrawerProps> = observer(
           next({
             initialValues: {
               ...initialValues,
-              ...result.data.data,
+              ...result.data,
             },
           });
         } else {

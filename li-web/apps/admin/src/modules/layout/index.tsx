@@ -80,7 +80,7 @@ export const Layout = () => {
       entry,
     },
     lang,
-    currentUser: result.data.data,
+    currentUser: result.data,
   };
 
   return (

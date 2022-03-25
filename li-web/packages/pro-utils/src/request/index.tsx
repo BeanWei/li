@@ -138,7 +138,7 @@ const request: IRequest = (operation, variables = {}, opts = {}) => {
       .request({ ...opts, data: { operation, variables } })
       .then((res) => {
         const formatResultAdaptor =
-          defaultConfig?.formatResultAdaptor || ((res) => res.data);
+          defaultConfig?.formatResultAdaptor || ((res) => res.data?.data);
         resolve(formatResultAdaptor(res));
       })
       .catch((error) => {

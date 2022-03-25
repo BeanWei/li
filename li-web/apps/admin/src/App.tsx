@@ -33,7 +33,7 @@ const providers = [
 
 const App = compose(...providers)(() => {
   const { data, loading } = useRequest("@getAppConfig");
-  const entry = data?.data?.entry || "/admin";
+  const entry = data?.entry || "/admin";
 
   if (loading) {
     return <Spin />;
@@ -54,20 +54,20 @@ const App = compose(...providers)(() => {
             component: "SignPage",
             title: "Sign",
             config: {
-              title: data?.data?.title,
-              logo: data?.data?.logo,
-              body: data?.data?.binding.signpage,
-              footer: data?.data?.copyright,
+              title: data?.title,
+              logo: data?.logo,
+              body: data?.binding.signpage,
+              footer: data?.copyright,
             },
           },
           {
             type: "route",
             path: entry + "/:name(.+)?",
             component: "Layout",
-            title: data?.data?.title || "Li Admin",
+            title: data?.title || "Li Admin",
             config: {
-              ...data?.data,
-              title: data?.data?.title || "Li Admin",
+              ...data,
+              title: data?.title || "Li Admin",
               entry,
             },
           },

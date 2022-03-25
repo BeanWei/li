@@ -39,7 +39,7 @@ export const ActionFormModal: React.FC<ActionFormModalProps> = observer(
             next({
               initialValues: {
                 ...initialValues,
-                ...result.data.data,
+                ...result.data,
               },
             });
           } else {

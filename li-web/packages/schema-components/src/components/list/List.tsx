@@ -9,12 +9,12 @@ import { ComposedList } from "./types";
 export const List: ComposedList = observer((props) => {
   const result = useRequest(props.forInit, {
     ...props.forInitVariables,
-    current: 1,
-    pageSize: 10,
+    page: 1,
+    limit: 10,
   });
 
   const total = result.data?.total || 0;
-  const { current = 1, pageSize = 10 } = result.params[0] || {};
+  const { page: current = 1, limit: pageSize = 10 } = result.params[0] || {};
 
   const onPageChange = (p: number, c: number) => {
     let toCurrent = c <= 0 ? 1 : c;
@@ -27,8 +27,8 @@ export const List: ComposedList = observer((props) => {
     result.run({
       ...oldPaginationParams,
       ...restParams,
-      current: toCurrent,
-      pageSize: toPageSize,
+      page: toCurrent,
+      limit: toPageSize,
     });
   };
 
@@ -37,14 +37,11 @@ export const List: ComposedList = observer((props) => {
   };
 
   const onTableChange = (pagination: any, sorter: any, filters: any) => {
-    const [oldPaginationParams, ...restParams] = result.params || [];
     result.run({
-      ...oldPaginationParams,
-      ...restParams,
-      current: pagination.current,
-      pageSize: pagination.pageSize,
-      filters,
-      sorter,
+      page: pagination.current,
+      limit: pagination.pageSize,
+      // filter: filters,
+      // sort: sorter,
     });
   };
 
@@ -57,7 +54,7 @@ export const List: ComposedList = observer((props) => {
       value={{
         result,
         tableProps: {
-          data: result.data?.data || [],
+          data: result.data?.list || [],
           loading: result.loading,
           onChange: useCallback(onTableChange, []),
           pagination: total
