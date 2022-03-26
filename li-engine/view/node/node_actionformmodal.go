@@ -23,6 +23,22 @@ type actionformmodalBuilder struct {
 	*NodeBuilder
 }
 
+func (b *actionformmodalBuilder) Title(title string) *actionformmodalBuilder {
+	b.schema.Title = title
+	return b
+}
+
+func (b *actionformmodalBuilder) Description(description string) *actionformmodalBuilder {
+	b.schema.Description = description
+	return b
+}
+
+// TODO: 支持通过回调函数获取
+func (b *actionformmodalBuilder) InitialValues(initialValues map[string]interface{}) *actionformmodalBuilder {
+	b.schema.XComponentProps["initialValues"] = initialValues
+	return b
+}
+
 func (b *actionformmodalBuilder) ForInit(operation string, handler interface{}) *actionformmodalBuilder {
 	b.schema.XComponentProps["forInit"] = operation
 	controller.Bind(operation, handler)

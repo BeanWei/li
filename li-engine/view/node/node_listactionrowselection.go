@@ -22,6 +22,16 @@ type listactionrowselectionBuilder struct {
 	*NodeBuilder
 }
 
+func (b *listactionrowselectionBuilder) Title(title string) *listactionrowselectionBuilder {
+	b.schema.Title = title
+	return b
+}
+
+func (b *listactionrowselectionBuilder) Description(description string) *listactionrowselectionBuilder {
+	b.schema.Description = description
+	return b
+}
+
 func (b *listactionrowselectionBuilder) AfterReload() *listactionrowselectionBuilder {
 	b.schema.XComponentProps["afterReload"] = true
 	return b

@@ -23,6 +23,16 @@ type listactionrecordeditmodalBuilder struct {
 	*NodeBuilder
 }
 
+func (b *listactionrecordeditmodalBuilder) Title(title string) *listactionrecordeditmodalBuilder {
+	b.schema.Title = title
+	return b
+}
+
+func (b *listactionrecordeditmodalBuilder) Description(description string) *listactionrecordeditmodalBuilder {
+	b.schema.Description = description
+	return b
+}
+
 func (b *listactionrecordeditmodalBuilder) ForInit(operation string, handler interface{}) *listactionrecordeditmodalBuilder {
 	b.schema.XComponentProps["forInit"] = operation
 	controller.Bind(operation, handler)

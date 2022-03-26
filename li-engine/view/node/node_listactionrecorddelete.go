@@ -23,6 +23,16 @@ type listactionrecorddeleteBuilder struct {
 	*NodeBuilder
 }
 
+func (b *listactionrecorddeleteBuilder) Title(title string) *listactionrecorddeleteBuilder {
+	b.schema.Title = title
+	return b
+}
+
+func (b *listactionrecorddeleteBuilder) Description(description string) *listactionrecorddeleteBuilder {
+	b.schema.Description = description
+	return b
+}
+
 func (b *listactionrecorddeleteBuilder) ForSubmit(operation string, handler interface{}) *listactionrecorddeleteBuilder {
 	b.schema.XComponentProps["forSubmit"] = operation
 	controller.Bind(operation, handler)

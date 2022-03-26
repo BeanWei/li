@@ -17,3 +17,13 @@ func ListCard(name string) *listcardBuilder {
 type listcardBuilder struct {
 	*NodeBuilder
 }
+
+func (b *listcardBuilder) Title(title string) *listcardBuilder {
+	b.schema.Title = title
+	return b
+}
+
+func (b *listcardBuilder) Description(description string) *listcardBuilder {
+	b.schema.Description = description
+	return b
+}

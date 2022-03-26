@@ -21,6 +21,16 @@ type submitBuilder struct {
 	*NodeBuilder
 }
 
+func (b *submitBuilder) Title(title string) *submitBuilder {
+	b.schema.Title = title
+	return b
+}
+
+func (b *submitBuilder) Description(description string) *submitBuilder {
+	b.schema.Description = description
+	return b
+}
+
 func (b *submitBuilder) ForSubmit(operation string, handler interface{}) *submitBuilder {
 	b.schema.XComponentProps["forSubmit"] = operation
 	controller.Bind(operation, handler)

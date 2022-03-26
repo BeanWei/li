@@ -22,6 +22,21 @@ type percentBuilder struct {
 	*NodeBuilder
 }
 
+func (b *percentBuilder) Title(title string) *percentBuilder {
+	b.schema.Title = title
+	return b
+}
+
+func (b *percentBuilder) Description(description string) *percentBuilder {
+	b.schema.Description = description
+	return b
+}
+
+func (b *percentBuilder) Default(value interface{}) *percentBuilder {
+	b.schema.Default = value
+	return b
+}
+
 func (b *percentBuilder) Step(step int) *percentBuilder {
 	b.schema.XComponentProps["step"] = step
 	return b

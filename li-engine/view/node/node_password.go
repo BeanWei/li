@@ -17,3 +17,28 @@ func Password(name string) *passwordBuilder {
 type passwordBuilder struct {
 	*textBuilder
 }
+
+func (b *passwordBuilder) Title(title string) *passwordBuilder {
+	b.schema.Title = title
+	return b
+}
+
+func (b *passwordBuilder) Description(description string) *passwordBuilder {
+	b.schema.Description = description
+	return b
+}
+
+func (b *passwordBuilder) Default(value interface{}) *passwordBuilder {
+	b.schema.Default = value
+	return b
+}
+
+func (b *passwordBuilder) VisibilityToggle() *passwordBuilder {
+	b.schema.XComponentProps["visibilityToggle"] = true
+	return b
+}
+
+func (b *passwordBuilder) DefaultVisibility() *passwordBuilder {
+	b.schema.XComponentProps["defaultVisibility"] = true
+	return b
+}

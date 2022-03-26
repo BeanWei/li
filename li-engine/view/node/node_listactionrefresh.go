@@ -16,6 +16,16 @@ type listactionrefreshBuilder struct {
 	*NodeBuilder
 }
 
+func (b *listactionrefreshBuilder) Title(title string) *listactionrefreshBuilder {
+	b.schema.Title = title
+	return b
+}
+
+func (b *listactionrefreshBuilder) Description(description string) *listactionrefreshBuilder {
+	b.schema.Description = description
+	return b
+}
+
 func (b *listactionrefreshBuilder) ButtonStyle(style map[string]interface{}) *listactionrefreshBuilder {
 	b.schema.XComponentProps["style"] = style
 	return b

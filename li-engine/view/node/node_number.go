@@ -18,6 +18,21 @@ type numberBuilder struct {
 	*NodeBuilder
 }
 
+func (b *numberBuilder) Title(title string) *numberBuilder {
+	b.schema.Title = title
+	return b
+}
+
+func (b *numberBuilder) Description(description string) *numberBuilder {
+	b.schema.Description = description
+	return b
+}
+
+func (b *numberBuilder) Default(value interface{}) *numberBuilder {
+	b.schema.Default = value
+	return b
+}
+
 func (b *numberBuilder) Step(step int) *numberBuilder {
 	b.schema.XComponentProps["step"] = step
 	return b

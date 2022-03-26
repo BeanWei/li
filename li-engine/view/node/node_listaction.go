@@ -18,3 +18,13 @@ func ListAction(name string) *listactionBuilder {
 type listactionBuilder struct {
 	*NodeBuilder
 }
+
+func (b *listactionBuilder) Title(title string) *listactionBuilder {
+	b.schema.Title = title
+	return b
+}
+
+func (b *listactionBuilder) Description(description string) *listactionBuilder {
+	b.schema.Description = description
+	return b
+}

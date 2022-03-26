@@ -16,3 +16,18 @@ func ColorSelect(name string) *colorselectBuilder {
 type colorselectBuilder struct {
 	*NodeBuilder
 }
+
+func (b *colorselectBuilder) Title(title string) *colorselectBuilder {
+	b.schema.Title = title
+	return b
+}
+
+func (b *colorselectBuilder) Description(description string) *colorselectBuilder {
+	b.schema.Description = description
+	return b
+}
+
+func (b *colorselectBuilder) Default(value interface{}) *colorselectBuilder {
+	b.schema.Default = value
+	return b
+}

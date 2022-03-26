@@ -18,6 +18,21 @@ type rateBuilder struct {
 	*NodeBuilder
 }
 
+func (b *rateBuilder) Title(title string) *rateBuilder {
+	b.schema.Title = title
+	return b
+}
+
+func (b *rateBuilder) Description(description string) *rateBuilder {
+	b.schema.Description = description
+	return b
+}
+
+func (b *rateBuilder) Default(value interface{}) *rateBuilder {
+	b.schema.Default = value
+	return b
+}
+
 func (b *rateBuilder) Count(count int) *rateBuilder {
 	b.schema.XComponentProps["count"] = count
 	return b

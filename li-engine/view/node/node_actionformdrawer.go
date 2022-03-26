@@ -25,6 +25,22 @@ type actionformdrawerBuilder struct {
 	*NodeBuilder
 }
 
+func (b *actionformdrawerBuilder) Title(title string) *actionformdrawerBuilder {
+	b.schema.Title = title
+	return b
+}
+
+func (b *actionformdrawerBuilder) Description(description string) *actionformdrawerBuilder {
+	b.schema.Description = description
+	return b
+}
+
+// TODO: 支持通过回调函数获取
+func (b *actionformdrawerBuilder) InitialValues(initialValues map[string]interface{}) *actionformdrawerBuilder {
+	b.schema.XComponentProps["initialValues"] = initialValues
+	return b
+}
+
 func (b *actionformdrawerBuilder) ForInit(operation string, handler interface{}) *actionformdrawerBuilder {
 	b.schema.XComponentProps["forInit"] = operation
 	controller.Bind(operation, handler)

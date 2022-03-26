@@ -23,6 +23,16 @@ type listactionrecordeditdrawerBuilder struct {
 	*NodeBuilder
 }
 
+func (b *listactionrecordeditdrawerBuilder) Title(title string) *listactionrecordeditdrawerBuilder {
+	b.schema.Title = title
+	return b
+}
+
+func (b *listactionrecordeditdrawerBuilder) Description(description string) *listactionrecordeditdrawerBuilder {
+	b.schema.Description = description
+	return b
+}
+
 func (b *listactionrecordeditdrawerBuilder) ForInit(operation string, handler interface{}) *listactionrecordeditdrawerBuilder {
 	b.schema.XComponentProps["forInit"] = operation
 	controller.Bind(operation, handler)

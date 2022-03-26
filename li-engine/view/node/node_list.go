@@ -21,6 +21,16 @@ type listBuilder struct {
 	*NodeBuilder
 }
 
+func (b *listBuilder) Title(title string) *listBuilder {
+	b.schema.Title = title
+	return b
+}
+
+func (b *listBuilder) Description(description string) *listBuilder {
+	b.schema.Description = description
+	return b
+}
+
 func (b *listBuilder) DecoratorCard() *listBuilder {
 	b.schema.XDecorator = ui.DecoratorCardItem
 	return b

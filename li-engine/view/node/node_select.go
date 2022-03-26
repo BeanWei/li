@@ -19,8 +19,28 @@ type selectBuilder struct {
 	*NodeBuilder
 }
 
+func (b *selectBuilder) Title(title string) *selectBuilder {
+	b.schema.Title = title
+	return b
+}
+
+func (b *selectBuilder) Description(description string) *selectBuilder {
+	b.schema.Description = description
+	return b
+}
+
+func (b *selectBuilder) Default(value interface{}) *selectBuilder {
+	b.schema.Default = value
+	return b
+}
+
 func (b *selectBuilder) Multiple() *selectBuilder {
 	b.schema.XComponentProps["mode"] = "multiple"
+	return b
+}
+
+func (b *selectBuilder) Size(size string) *selectBuilder {
+	b.schema.XComponentProps["size"] = size
 	return b
 }
 
@@ -31,6 +51,16 @@ func (b *selectBuilder) AllowCreate() *selectBuilder {
 
 func (b *selectBuilder) MaxTagCount(max int) *selectBuilder {
 	b.schema.XComponentProps["maxTagCount"] = max
+	return b
+}
+
+func (b *selectBuilder) Prefix(prefix string) *selectBuilder {
+	b.schema.XComponentProps["prefix"] = prefix
+	return b
+}
+
+func (b *selectBuilder) DragToSort() *selectBuilder {
+	b.schema.XComponentProps["dragToSort"] = true
 	return b
 }
 
