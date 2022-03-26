@@ -12,13 +12,15 @@ func List{{ $.Name }}View() view.Node {
 					ForSubmit("@add{{ $.Name }}", Create{{ $.Name }}Controller).
 					ButtonType("primary").
 					Children(
-                        {{- range $f := $.Fields }}
-                            {{- if $annotation := $f.Annotations.LiEnt }}
-                                {{- if and $annotation.ViewSchema (not $annotation.DisableCreate) }}
-                                    {{ $.Package }}.Node{{ $f.StructField }}(),
-                                {{- end }}
-                            {{- end }}
-                        {{- end }}
+						node.FormGrid("grid").MaxColumns(2).Children(
+							{{- range $f := $.Fields }}
+								{{- if $annotation := $f.Annotations.LiEnt }}
+									{{- if and $annotation.ViewSchema (not $annotation.DisableCreate) }}
+										{{ $.Package }}.Node{{ $f.StructField }}(),
+									{{- end }}
+								{{- end }}
+							{{- end }}
+						),
 					),
 				node.ListActionRowSelection("deleteMany{{ $.Name }}").
 					Title("删除").
@@ -56,13 +58,15 @@ func List{{ $.Name }}View() view.Node {
 									ForInit("@get{{ $.Name }}", Get{{ $.Name }}Controller).
 									ForSubmit("@update{{ $.Name }}", Update{{ $.Name }}Controller).
 									Children(
-										{{- range $f := $.Fields }}
-											{{- if $annotation := $f.Annotations.LiEnt }}
-												{{- if and $annotation.ViewSchema (not $annotation.DisableUpdate) }}
-													{{ $.Package }}.Node{{ $f.StructField }}(),
+										node.FormGrid("grid").MaxColumns(2).Children(
+											{{- range $f := $.Fields }}
+												{{- if $annotation := $f.Annotations.LiEnt }}
+													{{- if and $annotation.ViewSchema (not $annotation.DisableUpdate) }}
+														{{ $.Package }}.Node{{ $f.StructField }}(),
+													{{- end }}
 												{{- end }}
 											{{- end }}
-										{{- end }}
+										),
 									),
 								node.ListActionRecordDelete("delete").
 									Title("删除").
