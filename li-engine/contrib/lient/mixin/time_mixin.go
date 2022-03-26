@@ -16,23 +16,29 @@ type Time struct {
 
 func (Time) Fields() []ent.Field {
 	return []ent.Field{
-		field.Time("created_at").
+		field.Int64("created_at").
 			Immutable().
-			Default(time.Now).
+			DefaultFunc(func() int64 {
+				return time.Now().Unix()
+			}).
 			Annotations(lient.Annotation{
 				DisableCreate: true,
 				DisableUpdate: true,
 			}),
-		field.Time("updated_at").
-			Default(time.Now).
-			UpdateDefault(time.Now).
+		field.Int64("updated_at").
+			DefaultFunc(func() int64 {
+				return time.Now().Unix()
+			}).
+			UpdateDefault(func() int64 {
+				return time.Now().Unix()
+			}).
 			Annotations(lient.Annotation{
 				DisableCreate: true,
 				DisableUpdate: true,
 			}),
-		field.Time("deleted_at").
-			Nillable().
+		field.Int64("deleted_at").
 			Optional().
+			Default(0).
 			StructTag(`json:"-"`).
 			Annotations(lient.Annotation{
 				DisableCreate: true,
