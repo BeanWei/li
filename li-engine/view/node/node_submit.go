@@ -32,8 +32,8 @@ func (b *submitBuilder) ForSubmitSuccessTo(to string) *submitBuilder {
 	return b
 }
 
-func (b *submitBuilder) ButtonLong() *submitBuilder {
-	b.schema.XComponentProps["long"] = true
+func (b *submitBuilder) ButtonStyle(style map[string]interface{}) *submitBuilder {
+	b.schema.XComponentProps["style"] = style
 	return b
 }
 
@@ -42,7 +42,32 @@ func (b *submitBuilder) ButtonType(typ string) *submitBuilder {
 	return b
 }
 
-func (b *submitBuilder) ButtonStyle(style map[string]interface{}) *submitBuilder {
-	b.schema.XComponentProps["style"] = style
+func (b *submitBuilder) ButtonStatus(status string) *submitBuilder {
+	b.schema.XComponentProps["status"] = status
+	return b
+}
+
+func (b *submitBuilder) ButtonSize(size string) *submitBuilder {
+	b.schema.XComponentProps["size"] = size
+	return b
+}
+
+func (b *submitBuilder) ButtonShape(shape string) *submitBuilder {
+	b.schema.XComponentProps["shape"] = shape
+	return b
+}
+
+func (b *submitBuilder) ButtonIcon(icon string) *submitBuilder {
+	b.schema.XComponentProps["icon"] = icon
+	return b
+}
+
+func (b *submitBuilder) ButtonIconOnly() *submitBuilder {
+	b.schema.XComponentProps["iconOnly"] = true
+	return b
+}
+
+func (b *submitBuilder) ButtonLong() *submitBuilder {
+	b.schema.XComponentProps["long"] = true
 	return b
 }

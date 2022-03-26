@@ -37,3 +37,43 @@ func (b *listactionrecorddeleteBuilder) ConfirmTitle(title string) *listactionre
 	}
 	return b
 }
+
+func (b *listactionrecorddeleteBuilder) ButtonStyle(style map[string]interface{}) *listactionrecorddeleteBuilder {
+	b.schema.XComponentProps["style"] = style
+	return b
+}
+
+func (b *listactionrecorddeleteBuilder) ButtonType(typ string) *listactionrecorddeleteBuilder {
+	b.schema.XComponentProps["type"] = typ
+	return b
+}
+
+func (b *listactionrecorddeleteBuilder) ButtonStatus(status string) *listactionrecorddeleteBuilder {
+	b.schema.XComponentProps["status"] = status
+	return b
+}
+
+func (b *listactionrecorddeleteBuilder) ButtonSize(size string) *listactionrecorddeleteBuilder {
+	b.schema.XComponentProps["size"] = size
+	return b
+}
+
+func (b *listactionrecorddeleteBuilder) ButtonShape(shape string) *listactionrecorddeleteBuilder {
+	b.schema.XComponentProps["shape"] = shape
+	return b
+}
+
+func (b *listactionrecorddeleteBuilder) ButtonIcon(icon string) *listactionrecorddeleteBuilder {
+	b.schema.XComponentProps["icon"] = icon
+	return b
+}
+
+func (b *listactionrecorddeleteBuilder) ButtonIconOnly() *listactionrecorddeleteBuilder {
+	b.schema.XComponentProps["iconOnly"] = true
+	return b
+}
+
+func (b *listactionrecorddeleteBuilder) ButtonLong() *listactionrecorddeleteBuilder {
+	b.schema.XComponentProps["long"] = true
+	return b
+}

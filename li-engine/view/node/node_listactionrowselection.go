@@ -33,8 +33,17 @@ func (b *listactionrowselectionBuilder) ForSubmit(operation string, handler inte
 	return b
 }
 
-func (b *listactionrowselectionBuilder) ButtonStatus(status string) *listactionrowselectionBuilder {
-	b.schema.XComponentProps["status"] = status
+func (b *listactionrowselectionBuilder) ConfirmTitle(title string) *listactionrowselectionBuilder {
+	confirmProps, ok := b.schema.XComponentProps["confirmProps"].(map[string]interface{})
+	if ok {
+		confirmProps["title"] = title
+		b.schema.XComponentProps["confirmProps"] = confirmProps
+	}
+	return b
+}
+
+func (b *listactionrowselectionBuilder) ButtonStyle(style map[string]interface{}) *listactionrowselectionBuilder {
+	b.schema.XComponentProps["style"] = style
 	return b
 }
 
@@ -43,11 +52,32 @@ func (b *listactionrowselectionBuilder) ButtonType(typ string) *listactionrowsel
 	return b
 }
 
-func (b *listactionrowselectionBuilder) ConfirmTitle(title string) *listactionrowselectionBuilder {
-	confirmProps, ok := b.schema.XComponentProps["confirmProps"].(map[string]interface{})
-	if ok {
-		confirmProps["title"] = title
-		b.schema.XComponentProps["confirmProps"] = confirmProps
-	}
+func (b *listactionrowselectionBuilder) ButtonStatus(status string) *listactionrowselectionBuilder {
+	b.schema.XComponentProps["status"] = status
+	return b
+}
+
+func (b *listactionrowselectionBuilder) ButtonSize(size string) *listactionrowselectionBuilder {
+	b.schema.XComponentProps["size"] = size
+	return b
+}
+
+func (b *listactionrowselectionBuilder) ButtonShape(shape string) *listactionrowselectionBuilder {
+	b.schema.XComponentProps["shape"] = shape
+	return b
+}
+
+func (b *listactionrowselectionBuilder) ButtonIcon(icon string) *listactionrowselectionBuilder {
+	b.schema.XComponentProps["icon"] = icon
+	return b
+}
+
+func (b *listactionrowselectionBuilder) ButtonIconOnly() *listactionrowselectionBuilder {
+	b.schema.XComponentProps["iconOnly"] = true
+	return b
+}
+
+func (b *listactionrowselectionBuilder) ButtonLong() *listactionrowselectionBuilder {
+	b.schema.XComponentProps["long"] = true
 	return b
 }

@@ -35,7 +35,42 @@ func (b *listactionrecordeditdrawerBuilder) ForSubmit(operation string, handler 
 	return b
 }
 
+func (b *listactionrecordeditdrawerBuilder) ButtonStyle(style map[string]interface{}) *listactionrecordeditdrawerBuilder {
+	b.schema.XComponentProps["style"] = style
+	return b
+}
+
 func (b *listactionrecordeditdrawerBuilder) ButtonType(typ string) *listactionrecordeditdrawerBuilder {
 	b.schema.XComponentProps["type"] = typ
+	return b
+}
+
+func (b *listactionrecordeditdrawerBuilder) ButtonStatus(status string) *listactionrecordeditdrawerBuilder {
+	b.schema.XComponentProps["status"] = status
+	return b
+}
+
+func (b *listactionrecordeditdrawerBuilder) ButtonSize(size string) *listactionrecordeditdrawerBuilder {
+	b.schema.XComponentProps["size"] = size
+	return b
+}
+
+func (b *listactionrecordeditdrawerBuilder) ButtonShape(shape string) *listactionrecordeditdrawerBuilder {
+	b.schema.XComponentProps["shape"] = shape
+	return b
+}
+
+func (b *listactionrecordeditdrawerBuilder) ButtonIcon(icon string) *listactionrecordeditdrawerBuilder {
+	b.schema.XComponentProps["icon"] = icon
+	return b
+}
+
+func (b *listactionrecordeditdrawerBuilder) ButtonIconOnly() *listactionrecordeditdrawerBuilder {
+	b.schema.XComponentProps["iconOnly"] = true
+	return b
+}
+
+func (b *listactionrecordeditdrawerBuilder) ButtonLong() *listactionrecordeditdrawerBuilder {
+	b.schema.XComponentProps["long"] = true
 	return b
 }

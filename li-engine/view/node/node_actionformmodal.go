@@ -34,3 +34,43 @@ func (b *actionformmodalBuilder) ForSubmit(operation string, handler interface{}
 	controller.Bind(operation, handler)
 	return b
 }
+
+func (b *actionformmodalBuilder) ButtonStyle(style map[string]interface{}) *actionformmodalBuilder {
+	b.schema.XComponentProps["style"] = style
+	return b
+}
+
+func (b *actionformmodalBuilder) ButtonType(typ string) *actionformmodalBuilder {
+	b.schema.XComponentProps["type"] = typ
+	return b
+}
+
+func (b *actionformmodalBuilder) ButtonStatus(status string) *actionformmodalBuilder {
+	b.schema.XComponentProps["status"] = status
+	return b
+}
+
+func (b *actionformmodalBuilder) ButtonSize(size string) *actionformmodalBuilder {
+	b.schema.XComponentProps["size"] = size
+	return b
+}
+
+func (b *actionformmodalBuilder) ButtonShape(shape string) *actionformmodalBuilder {
+	b.schema.XComponentProps["shape"] = shape
+	return b
+}
+
+func (b *actionformmodalBuilder) ButtonIcon(icon string) *actionformmodalBuilder {
+	b.schema.XComponentProps["icon"] = icon
+	return b
+}
+
+func (b *actionformmodalBuilder) ButtonIconOnly() *actionformmodalBuilder {
+	b.schema.XComponentProps["iconOnly"] = true
+	return b
+}
+
+func (b *actionformmodalBuilder) ButtonLong() *actionformmodalBuilder {
+	b.schema.XComponentProps["long"] = true
+	return b
+}

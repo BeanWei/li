@@ -35,7 +35,42 @@ func (b *listactionrecordeditmodalBuilder) ForSubmit(operation string, handler i
 	return b
 }
 
+func (b *listactionrecordeditmodalBuilder) ButtonStyle(style map[string]interface{}) *listactionrecordeditmodalBuilder {
+	b.schema.XComponentProps["style"] = style
+	return b
+}
+
 func (b *listactionrecordeditmodalBuilder) ButtonType(typ string) *listactionrecordeditmodalBuilder {
 	b.schema.XComponentProps["type"] = typ
+	return b
+}
+
+func (b *listactionrecordeditmodalBuilder) ButtonStatus(status string) *listactionrecordeditmodalBuilder {
+	b.schema.XComponentProps["status"] = status
+	return b
+}
+
+func (b *listactionrecordeditmodalBuilder) ButtonSize(size string) *listactionrecordeditmodalBuilder {
+	b.schema.XComponentProps["size"] = size
+	return b
+}
+
+func (b *listactionrecordeditmodalBuilder) ButtonShape(shape string) *listactionrecordeditmodalBuilder {
+	b.schema.XComponentProps["shape"] = shape
+	return b
+}
+
+func (b *listactionrecordeditmodalBuilder) ButtonIcon(icon string) *listactionrecordeditmodalBuilder {
+	b.schema.XComponentProps["icon"] = icon
+	return b
+}
+
+func (b *listactionrecordeditmodalBuilder) ButtonIconOnly() *listactionrecordeditmodalBuilder {
+	b.schema.XComponentProps["iconOnly"] = true
+	return b
+}
+
+func (b *listactionrecordeditmodalBuilder) ButtonLong() *listactionrecordeditmodalBuilder {
+	b.schema.XComponentProps["long"] = true
 	return b
 }
