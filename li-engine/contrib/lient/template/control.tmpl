@@ -6,7 +6,7 @@ type (
 		Page int `json:"page" d:"1" v:"min:1"`
 		Limit int `json:"limit" d:"20" v:"min:1|max:500"`
 		Filter *List{{ $.Name }}Filter `json:"filter"`
-		Sort *List{{ $.Name }}Sort `json:"sort"`
+		Sorter *List{{ $.Name }}Sorter `json:"sorter"`
 	}
 	List{{ $.Name }}Filter struct {
 		{{- range $f := $.Fields }}
@@ -25,7 +25,7 @@ type (
         {{- end }}
         {{- end }}
 	}
-	List{{ $.Name }}Sort struct {
+	List{{ $.Name }}Sorter struct {
 		{{- range $f := $.Fields }}
         {{- if not $f.Sensitive }}
 		{{- $annotation := $f.Annotations.LiEnt }}
@@ -118,15 +118,15 @@ func List{{ $.Name }}Controller(ctx context.Context, req *List{{ $.Name }}Req) (
         {{- end }}
         {{- end }}
 	}
-	if req.Sort != nil {
+	if req.Sorter != nil {
 		{{- range $f := $.Fields }}
         {{- if not $f.Sensitive }}
 		{{- $annotation := $f.Annotations.LiEnt }}
 		{{- if and $annotation $annotation.ViewSchema $annotation.ColumnProps $annotation.ColumnProps.Sortable }}
 			{{ $f.StructField }} int `json:"{{ $f.Name }}"`
-			if req.Sort.{{ $f.StructField }} > 0 {
+			if req.Sorter.{{ $f.StructField }} > 0 {
 				q.Order(Asc({{ $.Package }}.{{ $f.StructField }}))
-			} else if req.Sort.{{ $f.StructField }} < 0 {
+			} else if req.Sorter.{{ $f.StructField }} < 0 {
 				q.Order(Desc({{ $.Package }}.{{ $f.StructField }}))
 			}
 		{{- end }}

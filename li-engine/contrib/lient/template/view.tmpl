@@ -48,6 +48,7 @@ func List{{ $.Name }}View() view.Node {
 					node.ListTableColumn("column{{ len $.Fields }}").
 						Title("操作").
 						DataIndex("__action").
+						Width(150).
 						Render(
 							node.Space("actions").Children(
 								node.ListActionRecordEditDrawer("edit").
