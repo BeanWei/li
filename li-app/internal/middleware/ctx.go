@@ -21,10 +21,12 @@ func Ctx(r *ghttp.Request) {
 				Code:    gerror.Code(err).Code(),
 				Message: err.Error(),
 			})
-		} else if usr != nil {
-			customCtx.User = &shared.CtxUser{
-				ID:      usr.ID,
-				IsAdmin: usr.IsAdmin,
+		} else {
+			if usr != nil {
+				customCtx.User = &shared.CtxUser{
+					ID:      usr.ID,
+					IsAdmin: usr.IsAdmin,
+				}
 			}
 			r.Middleware.Next()
 		}

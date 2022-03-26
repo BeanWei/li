@@ -37,7 +37,7 @@ func (usersvc) GetUser(ctx context.Context, uid string) (usr *ent.User, err erro
 	return
 }
 
-func (usersvc) RemoveUserCache(ctx context.Context, uids ...string) (err error) {
-	_, err = gcache.Remove(ctx, uids)
+func (usersvc) RemoveUserCache(ctx context.Context, uids ...interface{}) (err error) {
+	_, err = gcache.Remove(ctx, uids...)
 	return
 }

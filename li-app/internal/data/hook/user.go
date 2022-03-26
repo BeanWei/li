@@ -36,7 +36,7 @@ func init() {
 					if err != nil {
 						return val, err
 					}
-					var ids []string
+					var ids []interface{}
 					if id, ok := m.ID(); ok {
 						ids = append(ids, id)
 					}
