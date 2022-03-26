@@ -50,6 +50,12 @@ export default {
                           "x-decorator": "FormItem",
                           "x-component": "Input",
                         },
+                        money: {
+                          type: "string",
+                          title: "收入",
+                          "x-decorator": "FormItem",
+                          "x-component": "Money",
+                        },
                       },
                     },
                     bulkdelete: {
@@ -127,6 +133,20 @@ export default {
                         },
                       },
                       column3: {
+                        type: "void",
+                        "x-component": "List.Table.Column",
+                        "x-component-props": {
+                          title: "收入",
+                          dataIndex: "money",
+                        },
+                        properties: {
+                          money: {
+                            type: "string",
+                            "x-component": "Money",
+                          },
+                        },
+                      },
+                      column4: {
                         type: "void",
                         "x-component": "List.Table.Column",
                         "x-component-props": {

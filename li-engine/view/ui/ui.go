@@ -102,6 +102,7 @@ const (
 	ComponentListTable                  = "List.Table"
 	ComponentListTableColumn            = "List.Table.Column"
 	ComponentListCard                   = "List.Card"
+	ComponentMoney                      = "Money"
 	ComponentPassword                   = "Password"
 	ComponentRadio                      = "Radio"
 	ComponentRadioGroup                 = "Radio.Group"
