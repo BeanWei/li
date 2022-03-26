@@ -119,6 +119,8 @@ export default {
                         properties: {
                           email: {
                             type: "string",
+                            title: "NO-USED",
+                            "x-decorator": "FormItem",
                             "x-component": "Input",
                             "x-read-pretty": true,
                           },
@@ -130,6 +132,7 @@ export default {
                         "x-component-props": {
                           title: "操作",
                           dataIndex: "__action",
+                          width: 150,
                         },
                         properties: {
                           recordactions: {

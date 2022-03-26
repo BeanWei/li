@@ -18,21 +18,25 @@ export default [
       const { operation, variables } = body;
       if (operation === "@getAppConfig") {
         return {
+          code: 0,
           data: getAppConfig,
         };
       }
       if (operation === "@getCurrentUser") {
         return {
+          code: 0,
           data: getCurrentUser,
         };
       }
       if (operation == "@getAppView") {
         return {
+          code: 0,
           data: views[variables.key] || {},
         };
       }
       if (operation == "listUser") {
         return {
+          code: 0,
           data: {
             list: listUser,
             total: listUser.length,

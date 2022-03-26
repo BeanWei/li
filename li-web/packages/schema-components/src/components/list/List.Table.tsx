@@ -22,10 +22,12 @@ const useListTableColumns = (dataSource: any[]): TableProps<any>["columns"] => {
     if (display && display !== "visible") return buf;
     if (!isColumnComponent(schema)) return buf;
     schema.reduceProperties((buf, s) => {
-      s.title = "";
+      s["x-decorator"] = undefined;
+      s["x-decorator-props"] = undefined;
       s["x-read-pretty"] = true;
     });
     return buf.concat({
+      align: "center",
       ...columnProps,
       // @ts-ignore
       key,
