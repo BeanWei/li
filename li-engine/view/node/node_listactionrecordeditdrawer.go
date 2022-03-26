@@ -34,3 +34,8 @@ func (b *listactionrecordeditdrawerBuilder) ForSubmit(operation string, handler 
 	controller.Bind(operation, handler)
 	return b
 }
+
+func (b *listactionrecordeditdrawerBuilder) ButtonType(typ string) *listactionrecordeditdrawerBuilder {
+	b.schema.XComponentProps["type"] = typ
+	return b
+}

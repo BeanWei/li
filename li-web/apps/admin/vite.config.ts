@@ -3,7 +3,10 @@ import react from "@vitejs/plugin-react";
 import svgrPlugin from "@arco-plugins/vite-plugin-svgr";
 import vitePluginForArco from "@arco-plugins/vite-react";
 import { viteMockServe } from "vite-plugin-mock";
+import proxy from "./config/proxy";
 import setting from "./src/settings.json";
+
+const { REACT_APP_ENV = "" } = process.env;
 
 // https://vitejs.dev/config/
 export default defineConfig({
@@ -12,6 +15,9 @@ export default defineConfig({
       { find: "@", replacement: "/src" },
       { find: /^~/, replacement: "" }, // https://github.com/vitejs/vite/issues/2185
     ],
+  },
+  server: {
+    proxy: proxy[REACT_APP_ENV],
   },
   plugins: [
     react(),
@@ -26,6 +32,7 @@ export default defineConfig({
     }),
     viteMockServe({
       mockPath: "./mock",
+      localEnabled: !!!REACT_APP_ENV,
     }),
   ],
   css: {

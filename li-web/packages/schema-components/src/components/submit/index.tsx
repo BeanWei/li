@@ -1,7 +1,7 @@
 import React from "react";
 import { Button, ButtonProps } from "@arco-design/web-react";
 import { IFormFeedback } from "@formily/core";
-import { useParentForm, observer, useFieldSchema } from "@formily/react";
+import { useParentForm, observer } from "@formily/react";
 import { useHistory } from "react-router-dom";
 import { request } from "pro-utils";
 
@@ -37,7 +37,7 @@ export const Submit: React.FC<ISubmitProps> = observer(
           form
             .submit((values) => {
               if (forSubmit) {
-                request(forSubmit, values);
+                return request(forSubmit, values);
               }
             })
             .then(

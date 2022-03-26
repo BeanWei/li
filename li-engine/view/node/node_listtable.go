@@ -85,8 +85,14 @@ func (b *listtableBuilder) RowSelectionFixed(fixed string) *listtableBuilder {
 }
 
 func (b *listtableBuilder) Columns(elements ...view.Node) *listtableBuilder {
+	if b.schema.Items == nil {
+		b.schema.Items = &ui.Schema{
+			Type:       ui.SchemaTypeObject,
+			Properties: make(map[string]*ui.Schema),
+		}
+	}
 	for _, element := range elements {
-		b.schema.Properties[element.Schema().Name] = element.Schema()
+		b.schema.Items.Properties[element.Schema().Name] = element.Schema()
 	}
 	return b
 }

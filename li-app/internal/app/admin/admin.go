@@ -1,6 +1,7 @@
 package admin
 
 import (
+	"github.com/BeanWei/li/li-app/internal/app/admin/consts"
 	"github.com/BeanWei/li/li-app/internal/app/admin/controller"
 	"github.com/BeanWei/li/li-app/internal/app/admin/view"
 	engine "github.com/BeanWei/li/li-engine"
@@ -10,6 +11,7 @@ func Init() {
 	engine.NewApp(&engine.App{
 		Title:     "Li Admin",
 		Copyright: "Powered by ❤️璃❤️",
+		Entry:     consts.AppEntry,
 		Menus: []*engine.AppMenu{
 			{
 				Title: "仪表盘",
@@ -36,6 +38,7 @@ func Init() {
 		NavItems: view.NavItems(),
 		Binding: &engine.AppBinding{
 			GetCurrentUserController: controller.UserProfile,
+			SignForm:                 view.SignFormNode(),
 		},
 	})
 }

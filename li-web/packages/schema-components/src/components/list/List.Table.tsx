@@ -21,6 +21,10 @@ const useListTableColumns = (dataSource: any[]): TableProps<any>["columns"] => {
   return source.reduce((buf, { name, columnProps, schema, display }, key) => {
     if (display && display !== "visible") return buf;
     if (!isColumnComponent(schema)) return buf;
+    schema.reduceProperties((buf, s) => {
+      s.title = "";
+      s["x-read-pretty"] = true;
+    });
     return buf.concat({
       ...columnProps,
       // @ts-ignore

@@ -2,12 +2,14 @@
 
 {{ define "model/additional/lient-view" }}
 func List{{ $.Name }}View() view.Node {
-	return node.List("{{ $.Name }}").
+	return node.List("{{ $.Package }}List").
 		ForInit("@list{{ $.Name }}", List{{ $.Name }}Controller).
+		DecoratorCard().
 		Children(
-			node.ListAction("actions").Children(
+			node.ListAction("{{ $.Package }}ListActions").Children(
 				node.ListActionRecordEditDrawer("add{{ $.Name }}").
 					ForSubmit("@add{{ $.Name }}", Create{{ $.Name }}Controller).
+					ButtonType("primary").
 					SetTitle("新建").
 					Children(
                         {{- range $f := $.Fields }}
@@ -25,7 +27,7 @@ func List{{ $.Name }}View() view.Node {
 					ButtonStatus("danger").
 					SetTitle("删除"),
 			),
-			node.ListTable("table").
+			node.ListTable("{{ $.Package }}ListTable").
 				RowSelectionType("checkbox").
 				Columns(
                     {{- range $i, $f := $.Fields }}
@@ -38,7 +40,7 @@ func List{{ $.Name }}View() view.Node {
 									{{- if $annotation.ColumnProps.Align }}Align("{{ $annotation.ColumnProps.Align }}").{{- end }}
 									{{- if $annotation.ColumnProps.Ellipsis }}Ellipsis().{{- end }}
 									{{- if $annotation.ColumnProps.Width }}Width({{ $annotation.ColumnProps.Width }}){{- end }}
-									Render({{ $.Package }}.Node{{ $f.StructField }}().SetXReadPretty(true)),
+									Render({{ $.Package }}.Node{{ $f.StructField }}()),
                             {{- end }}
                         {{- end }}
 						{{- end }}
@@ -51,6 +53,7 @@ func List{{ $.Name }}View() view.Node {
 								node.ListActionRecordEditDrawer("edit").
 									ForInit("@get{{ $.Name }}", Get{{ $.Name }}Controller).
 									ForSubmit("@update{{ $.Name }}", Update{{ $.Name }}Controller).
+									SetTitle("编辑").
 									Children(
 										{{- range $f := $.Fields }}
 											{{- if $annotation := $f.Annotations.LiEnt }}
@@ -61,7 +64,8 @@ func List{{ $.Name }}View() view.Node {
 										{{- end }}
 									),
 								node.ListActionRecordDelete("delete").
-									ForSubmit("@delete{{ $.Name }}", Delete{{ $.Name }}Controller),
+									ForSubmit("@delete{{ $.Name }}", Delete{{ $.Name }}Controller).
+									SetTitle("删除"),
 							),
 						),
 				),

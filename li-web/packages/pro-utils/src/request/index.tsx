@@ -25,8 +25,8 @@ export enum ErrorShowType {
 export interface IErrorInfo {
   success: boolean;
   data?: any;
-  errorCode?: string;
-  errorMessage?: string;
+  code?: string;
+  message?: string;
   showType?: ErrorShowType;
   traceId?: string;
   host?: string;
@@ -70,7 +70,7 @@ const defaultErrorHandler: IErrorHandler = (error, opts, config) => {
     // 请求成功发出且服务器也响应了状态码，但状态代码超出了 2xx 的范围 或者 成功响应，success字段为false 由我们抛出的错误
     let errorInfo: IErrorInfo | undefined;
     // 不是我们的错误
-    if (error.name === "ResponseError") {
+    if (error.name === "Error") {
       const adaptor: IAdaptor =
         errorConfig?.adaptor || ((errorData) => errorData);
       errorInfo = adaptor(error.response.data, error.response);
@@ -79,25 +79,25 @@ const defaultErrorHandler: IErrorHandler = (error, opts, config) => {
     }
     errorInfo = error.info;
     if (errorInfo) {
-      const { errorMessage = "(ノ﹏ヽ)", errorCode } = errorInfo;
+      const { message = "(ノ﹏ヽ)", code } = errorInfo;
       switch (errorInfo.showType) {
         case ErrorShowType.SILENT:
           // do nothong
           break;
         case ErrorShowType.WARN_MESSAGE:
-          Message.warning(errorMessage);
+          Message.warning(message);
           break;
         case ErrorShowType.ERROR_MESSAGE:
-          Message.error(errorMessage);
+          Message.error(message);
           break;
         case ErrorShowType.NOTIFICATION:
-          Notification.error({ content: errorMessage, title: errorCode });
+          Notification.error({ content: message, title: code });
           break;
         case ErrorShowType.REDIRECT:
           // TODO: redirect
           break;
         default:
-          Message.error(errorMessage);
+          Message.error(message);
       }
     }
   } else if (error.request) {
@@ -137,9 +137,26 @@ const request: IRequest = (operation, variables = {}, opts = {}) => {
     requestInstance
       .request({ ...opts, data: { operation, variables } })
       .then((res) => {
-        const formatResultAdaptor =
-          defaultConfig?.formatResultAdaptor || ((res) => res.data?.data);
-        resolve(formatResultAdaptor(res));
+        if (res.data.code !== 0) {
+          try {
+            const handler =
+              defaultConfig.errorConfig?.errorHandler || defaultErrorHandler;
+            handler(
+              {
+                response: res,
+                info: res.data,
+              },
+              opts,
+              defaultConfig
+            );
+          } catch (e) {
+            reject(e);
+          }
+        } else {
+          const formatResultAdaptor =
+            defaultConfig?.formatResultAdaptor || ((res) => res.data?.data);
+          resolve(formatResultAdaptor(res));
+        }
       })
       .catch((error) => {
         try {

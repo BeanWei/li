@@ -7,7 +7,6 @@ import (
 	"github.com/BeanWei/li/li-engine/view"
 	"github.com/BeanWei/li/li-engine/view/ui"
 	"github.com/gogf/gf/v2/frame/g"
-	"github.com/gogf/gf/v2/net/ghttp"
 	"github.com/gogf/gf/v2/util/grand"
 )
 
@@ -16,12 +15,14 @@ type (
 		Title     string
 		Logo      string
 		Copyright string
+		Entry     string
 		Menus     []*AppMenu
 		NavItems  []view.Node
 		Binding   *AppBinding
 	}
 
 	AppMenu struct {
+		Key      string
 		Title    string
 		Icon     string
 		Page     view.Interface
@@ -31,7 +32,7 @@ type (
 	}
 
 	AppBinding struct {
-		SignPage                 view.Schema
+		SignForm                 view.Node
 		GetCurrentUserController interface{}
 	}
 
@@ -39,6 +40,7 @@ type (
 		Title     string       `json:"title"`
 		Logo      string       `json:"logo"`
 		Copyright string       `json:"copyright"`
+		Entry     string       `json:"entry"`
 		NavItems  []*ui.Schema `json:"navitems"`
 		Menus     []*appmenu   `json:"menus"`
 		Home      string       `json:"home"`
@@ -54,7 +56,7 @@ type (
 	}
 
 	appbinding struct {
-		SignPage map[string]interface{} `json:"signpage"`
+		SignForm *ui.Schema `json:"signform"`
 	}
 
 	GetAppViewReq struct {
@@ -70,6 +72,7 @@ func NewApp(cfg *App) {
 			Copyright: cfg.Copyright,
 			Menus:     make([]*appmenu, len(cfg.Menus)),
 			NavItems:  make([]*ui.Schema, len(cfg.NavItems)),
+			Entry:     cfg.Entry,
 		}
 		pages         = make(map[string]map[string]interface{})
 		recursionmenu func(menus []*AppMenu) []*appmenu
@@ -79,6 +82,9 @@ func NewApp(cfg *App) {
 		amenus := make([]*appmenu, len(menus))
 		for i, menu := range menus {
 			key, page := view.ToPage(menu.Page)
+			if menu.Key != "" {
+				key = menu.Key
+			}
 			if key != "" {
 				pages[key] = page
 			} else {
@@ -106,9 +112,8 @@ func NewApp(cfg *App) {
 	}
 
 	if cfg.Binding != nil {
-		_, signpage := view.ToPage(cfg.Binding.SignPage)
 		appcfg.Binding = &appbinding{
-			SignPage: signpage,
+			SignForm: cfg.Binding.SignForm.Schema(),
 		}
 		controller.Bind("@getCurrentUser", cfg.Binding.GetCurrentUserController)
 	}
@@ -120,8 +125,5 @@ func NewApp(cfg *App) {
 		return pages[req.Key], nil
 	})
 
-	s := g.Server()
-	s.Group("/", func(group *ghttp.RouterGroup) {
-		group.POST("/api/liql", controller.Liql)
-	})
+	g.Server().BindHandler("POST:/api/liql", controller.Liql)
 }

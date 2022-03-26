@@ -19,24 +19,26 @@ const (
 
 // UserSignIn 用户登录
 func UserSignIn(ctx context.Context, req *dto.UserSignInReq) (res *dto.UserSignInRes, err error) {
-	user, err := ent.LiClient().User.
+	usr, err := ent.LiClient().User.
 		Query().
-		Where(user.EmailEQ(req.Passport)).
+		Where(user.EmailEQ(req.Email)).
 		Only(ctx)
 	if err != nil {
 		if ent.IsNotFound(err) {
-			return nil, gerror.WrapCode(gcode.CodeNotFound, err, "账号不存在")
+			return nil, gerror.NewCode(gcode.CodeNotFound, "账号不存在")
 		}
 		return nil, gerror.WrapCode(gcode.CodeDbOperationError, err)
 	}
-	res.ID = user.ID
-	res.Sid, err = shared.Session.SetUser(ctx, user.ID)
+	res = &dto.UserSignInRes{
+		ID: usr.ID,
+	}
+	res.Sid, err = shared.Session.SetUser(ctx, usr.ID)
 	return
 }
 
 // UserProfile 当前用户信息
-func UserProfile(ctx context.Context, req *dto.UserProfileReq) (res *dto.UserProfileRes, err error) {
+func UserProfile(ctx context.Context) (res *ent.User, err error) {
 	ctxUser := shared.Ctx.Get(ctx).User
-	res.User, err = data.User.GetUser(ctx, ctxUser.ID)
+	res, err = data.User.GetUser(ctx, ctxUser.ID)
 	return
 }

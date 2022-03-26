@@ -10,14 +10,18 @@ import (
 // Authentication 登录验证
 func Authentication(r *ghttp.Request) {
 	operation := r.GetForm("operation").String()
-	if operation != controller.OperationUserSignIn {
+	// TODO: getAppConfig 移入登录后
+	if operation != controller.OperationUserSignIn && operation != "@getAppConfig" {
 		ctxUser := shared.Ctx.Get(r.Context()).User
 		if ctxUser == nil {
 			r.Response.WriteJson(ghttp.DefaultHandlerResponse{
 				Code:    gcode.CodeNotAuthorized.Code(),
 				Message: "请登录",
 			})
+		} else {
+			r.Middleware.Next()
 		}
+	} else {
+		r.Middleware.Next()
 	}
-	r.Middleware.Next()
 }

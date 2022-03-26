@@ -4,6 +4,7 @@ import (
 	"reflect"
 
 	"github.com/BeanWei/li/li-engine/view/ui"
+	"github.com/gogf/gf/v2/text/gstr"
 )
 
 type (
@@ -47,7 +48,7 @@ func ToPage(schema Interface) (string, map[string]interface{}) {
 	for _, node := range nodes {
 		properties[node.Schema().Name] = node.Schema()
 	}
-	return reflect.TypeOf(schema).Elem().Name(), map[string]interface{}{
+	return gstr.CaseKebab(reflect.TypeOf(schema).Elem().Name()), map[string]interface{}{
 		"type":       "object",
 		"properties": properties,
 	}

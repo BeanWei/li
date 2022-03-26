@@ -146,7 +146,7 @@ export default {
     },
   ],
   binding: {
-    signpage: {
+    signform: {
       type: "object",
       "x-component": "Form",
       properties: {

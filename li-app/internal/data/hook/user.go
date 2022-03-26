@@ -12,6 +12,7 @@ import (
 
 func init() {
 	ent.LiClient().User.Use(
+		// 生成盐值和加密密码
 		hook.If(
 			func(next ent.Mutator) ent.Mutator {
 				return hook.UserFunc(func(ctx context.Context, m *ent.UserMutation) (ent.Value, error) {
@@ -27,6 +28,7 @@ func init() {
 				hook.HasFields(user.FieldPassword),
 			),
 		),
+		// 移除缓存中的用户信息
 		hook.On(
 			func(next ent.Mutator) ent.Mutator {
 				return hook.UserFunc(func(ctx context.Context, m *ent.UserMutation) (ent.Value, error) {

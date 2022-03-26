@@ -26,7 +26,9 @@ func Ctx(r *ghttp.Request) {
 				ID:      usr.ID,
 				IsAdmin: usr.IsAdmin,
 			}
+			r.Middleware.Next()
 		}
+	} else {
+		r.Middleware.Next()
 	}
-	r.Middleware.Next()
 }

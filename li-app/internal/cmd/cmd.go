@@ -1,18 +1,10 @@
 package cmd
 
 import (
-	"context"
-
 	_ "github.com/gogf/gf/contrib/drivers/pgsql/v2"
 
-	"github.com/BeanWei/li/li-app/internal/app/admin"
-	"github.com/BeanWei/li/li-app/internal/data/ent"
-	"github.com/BeanWei/li/li-app/internal/data/ent/migrate"
 	_ "github.com/BeanWei/li/li-app/internal/data/hook"
-	"github.com/BeanWei/li/li-app/internal/middleware"
-	"github.com/gogf/gf/v2/frame/g"
 	"github.com/gogf/gf/v2/os/gcmd"
-	"github.com/gogf/gf/v2/os/gsession"
 )
 
 var Li = &gcmd.Command{
@@ -25,30 +17,22 @@ func init() {
 		&gcmd.Command{
 			Name:  "run",
 			Usage: "run app",
-			Func: func(ctx context.Context, parser *gcmd.Parser) (err error) {
-				s := g.Server()
-				s.SetSessionStorage(gsession.NewStorageRedis(g.Redis()))
-				s.Use(
-					middleware.ErrorHandler,
-					middleware.CORS,
-					middleware.Ctx,
-					// TODO: I18N
-					// middleware.I18N,
-				)
-				admin.Init()
-				s.Run()
-				return
-			},
+			Func:  run,
 		},
 		&gcmd.Command{
 			Name:  "migrate",
 			Usage: "migrate schemas",
-			Func: func(ctx context.Context, parser *gcmd.Parser) (err error) {
-				return ent.LiClient().Schema.Create(ctx,
-					migrate.WithForeignKeys(false),
-					migrate.WithDropIndex(true),
-					migrate.WithDropColumn(true),
-				)
+			Func:  migrate,
+		},
+		&gcmd.Command{
+			Name:  "user-create",
+			Usage: "create user",
+			Func:  userCreate,
+			Arguments: []gcmd.Argument{
+				{Name: "email", Short: "u"},
+				{Name: "password", Short: "p"},
+				{Name: "nickname", Short: "n"},
+				{Name: "isAdmin", Short: "a"},
 			},
 		},
 	)

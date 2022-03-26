@@ -16,3 +16,8 @@ func Text(name string) *textBuilder {
 type textBuilder struct {
 	*NodeBuilder
 }
+
+func (b *textBuilder) Placeholder(placeholder string) *textBuilder {
+	b.schema.XComponentProps["placeholder"] = placeholder
+	return b
+}

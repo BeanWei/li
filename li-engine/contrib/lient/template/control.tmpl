@@ -133,6 +133,7 @@ func List{{ $.Name }}Controller(ctx context.Context, req *List{{ $.Name }}Req) (
         {{- end }}
         {{- end }}
 	}
+	res = &List{{ $.Name }}Res{}
 	res.Total, err = q.Count(ctx)
 	if err != nil {
 		return nil, gerror.WrapCode(gcode.CodeDbOperationError, err)

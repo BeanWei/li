@@ -56,7 +56,7 @@ const App = compose(...providers)(() => {
             config: {
               title: data?.title,
               logo: data?.logo,
-              body: data?.binding.signpage,
+              body: data?.binding.signform,
               footer: data?.copyright,
             },
           },

@@ -43,6 +43,7 @@ type Schema struct {
 	XReadOnly        bool                     `json:"x-read-only,omitempty"`
 	XReadPretty      bool                     `json:"x-read-pretty,omitempty"`
 	XData            map[string]interface{}   `json:"x-data,omitempty"`
+	Items            *Schema                  `json:"items,omitempty"`
 	Properties       map[string]*Schema       `json:"properties,omitempty"`
 }
 
