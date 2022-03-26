@@ -33,14 +33,15 @@ export const ActionFormModal: React.FC<ActionFormModalProps> = observer(
           </FormLayout>
         );
       })
-        .forOpen(async (paylod, next) => {
+        .forOpen((paylod, next) => {
           if (forInit) {
-            const result = await request(forInit, forInitVariables);
-            next({
-              initialValues: {
-                ...initialValues,
-                ...result.data,
-              },
+            request(forInit, forInitVariables).then((data) => {
+              next({
+                initialValues: {
+                  ...initialValues,
+                  ...data,
+                },
+              });
             });
           } else {
             next({ initialValues: initialValues });
