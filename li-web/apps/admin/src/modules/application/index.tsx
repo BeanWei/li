@@ -1,5 +1,5 @@
-import { Spin } from "@arco-design/web-react";
 import { Suspense } from "react";
+import { Loading } from "../components";
 
 const Blank = ({ children }: any) => children || null;
 
@@ -15,7 +15,7 @@ export const compose = (...components: any[]) => {
   });
   return (LastChild?: any) => (props?: any) => {
     return (
-      <Suspense fallback={<Spin dot />}>
+      <Suspense fallback={<Loading />}>
         <Root>{LastChild && <LastChild {...props} />}</Root>
       </Suspense>
     );

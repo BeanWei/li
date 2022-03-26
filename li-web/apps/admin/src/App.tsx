@@ -18,6 +18,7 @@ import {
   SignPage,
   ThemeSwitch,
 } from "./modules";
+import { Loading } from "./modules/components";
 
 const providers = [
   [I18nextProvider, { i18n }],
@@ -36,7 +37,7 @@ const App = compose(...providers)(() => {
   const entry = data?.entry || "/admin";
 
   if (loading) {
-    return <Spin />;
+    return <Loading />;
   }
   return (
     <BrowserRouter>

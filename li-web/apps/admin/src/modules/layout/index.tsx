@@ -2,11 +2,7 @@ import { createContext, useContext, useEffect } from "react";
 import { useRequest } from "pro-utils";
 import { Redirect } from "react-router";
 import { useLocalStorageState } from "ahooks";
-import {
-  ConfigProvider,
-  Layout as ArcoLayout,
-  Spin,
-} from "@arco-design/web-react";
+import { ConfigProvider, Layout as ArcoLayout } from "@arco-design/web-react";
 import zhCN from "@arco-design/web-react/es/locale/zh-CN";
 import enUS from "@arco-design/web-react/es/locale/en-US";
 import { useHistory, useRouteMatch } from "react-router-dom";
@@ -15,6 +11,7 @@ import Logo from "@/assets/logo.svg";
 import { useRoute } from "../route-switch/hooks";
 import { RemoteSchemaComponent } from "../route-switch/RemoteSchemaComponent";
 import styles from "./index.module.less";
+import { Loading } from "../components";
 
 export const LayoutContext = createContext<{
   app?: Record<string, any>;
@@ -61,7 +58,7 @@ export const Layout = () => {
 
   const result = useRequest("@getCurrentUser");
   if (result.loading) {
-    return <Spin />;
+    return <Loading />;
   }
   if (result.error) {
     return <Redirect to={entry + "/sign"} />;

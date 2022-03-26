@@ -16,6 +16,21 @@ export interface RemoteSchemaComponentProps {
 
 const defaultTransform = (s: Schema) => s;
 
+const Loading: React.FC = () => {
+  return (
+    <div
+      style={{
+        display: "flex",
+        alignItems: "center",
+        justifyContent: "center",
+        width: "100%",
+      }}
+    >
+      <Spin />
+    </div>
+  );
+};
+
 const RequestSchemaComponent: React.FC<RemoteSchemaComponentProps> = (
   props
 ) => {
@@ -40,10 +55,10 @@ const RequestSchemaComponent: React.FC<RemoteSchemaComponentProps> = (
   );
 
   if (loading) {
-    return <Spin />;
+    return <Loading />;
   }
   if (hidden) {
-    return <Spin />;
+    return <Loading />;
   }
   return (
     <SchemaComponent
