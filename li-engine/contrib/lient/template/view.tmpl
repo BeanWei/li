@@ -16,7 +16,7 @@ func List{{ $.Name }}View() view.Node {
 							{{- range $f := $.Fields }}
 								{{- if $annotation := $f.Annotations.LiEnt }}
 									{{- if and $annotation.ViewSchema (not $annotation.DisableCreate) }}
-										{{ $.Package }}.Node{{ $f.StructField }}(),
+										{{ $.Package }}.Node{{ $f.StructField }}(){{- if contains $annotation.ValidateRule "required" }}.SetRequired(true){{- end }},
 									{{- end }}
 								{{- end }}
 							{{- end }}
@@ -62,7 +62,7 @@ func List{{ $.Name }}View() view.Node {
 											{{- range $f := $.Fields }}
 												{{- if $annotation := $f.Annotations.LiEnt }}
 													{{- if and $annotation.ViewSchema (not $annotation.DisableUpdate) }}
-														{{ $.Package }}.Node{{ $f.StructField }}(),
+														{{ $.Package }}.Node{{ $f.StructField }}(){{- if contains $annotation.ValidateRule "required" }}.SetRequired(true){{- end }},
 													{{- end }}
 												{{- end }}
 											{{- end }}

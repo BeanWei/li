@@ -20,6 +20,9 @@
                 if schema.Title == "" {
                     schema.Title = Node{{ $f.StructField }}Title
                 }
+                {{- if not $f.Optional }}
+                schema.Required = true
+                {{- end }}
                 return node.Node(schema.Name).SetSchema(schema)
             }
         {{- end }}
