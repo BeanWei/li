@@ -96,3 +96,13 @@ func (b *listtableBuilder) Columns(elements ...view.Node) *listtableBuilder {
 	}
 	return b
 }
+
+func (b *listtableBuilder) EnableFilter() *listtableBuilder {
+	b.schema.XComponentProps["filter"] = true
+	return b
+}
+
+func (b *listtableBuilder) EnableLightFilter() *listtableBuilder {
+	b.schema.XComponentProps["filter"] = "light"
+	return b
+}

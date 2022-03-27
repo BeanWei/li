@@ -55,3 +55,13 @@ func (b *listtablecolumnBuilder) Render(element view.Node) *listtablecolumnBuild
 	b.schema.Properties[element.Schema().Name] = element.Schema()
 	return b
 }
+
+func (b *listtablecolumnBuilder) Filterable() *listtablecolumnBuilder {
+	b.schema.XComponentProps["filterable"] = true
+	return b
+}
+
+func (b *listtablecolumnBuilder) Sortable() *listtablecolumnBuilder {
+	b.schema.XComponentProps["sortable"] = true
+	return b
+}

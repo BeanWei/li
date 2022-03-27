@@ -30,6 +30,7 @@ func List{{ $.Name }}View() view.Node {
 					ButtonStatus("danger"),
 			),
 			node.ListTable("{{ $.Package }}ListTable").
+				EnableLightFilter().
 				RowSelectionType("checkbox").
 				Columns(
                     {{- range $i, $f := $.Fields }}
@@ -42,6 +43,8 @@ func List{{ $.Name }}View() view.Node {
 									{{- if $annotation.ColumnProps.Align }}Align("{{ $annotation.ColumnProps.Align }}").{{- end }}
 									{{- if $annotation.ColumnProps.Ellipsis }}Ellipsis().{{- end }}
 									{{- if $annotation.ColumnProps.Width }}Width({{ $annotation.ColumnProps.Width }}){{- end }}
+									{{- if $annotation.ColumnProps.Filterable }}Filterable().{{- end }}
+									{{- if $annotation.ColumnProps.Sortable }}Sortable().{{- end }}
 									Render({{ $.Package }}.Node{{ $f.StructField }}()),
                             {{- end }}
                         {{- end }}
