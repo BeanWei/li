@@ -6,32 +6,34 @@ func List{{ $.Name }}View() view.Node {
 		ForInit("@list{{ $.Name }}", List{{ $.Name }}Controller).
 		DecoratorCard().
 		Children(
-			node.ListAction("{{ $.Package }}ListActions").Children(
-				node.ListActionRecordEditDrawer("add{{ $.Name }}").
-					Title("新建").
-					ForSubmit("@add{{ $.Name }}", Create{{ $.Name }}Controller).
-					ButtonType("primary").
-					Children(
-						node.FormGrid("grid").MaxColumns(2).Children(
-							{{- range $f := $.Fields }}
-								{{- if $annotation := $f.Annotations.LiEnt }}
-									{{- if and $annotation.ViewSchema (not $annotation.DisableCreate) }}
-										{{ $.Package }}.Node{{ $f.StructField }}(){{- if contains $annotation.ValidateRule "required" }}.SetRequired(true){{- end }},
-									{{- end }}
-								{{- end }}
-							{{- end }}
-						),
-					),
-				node.ListActionRowSelection("deleteMany{{ $.Name }}").
-					Title("删除").
-					ForSubmit("@deleteMany{{ $.Name }}", DeleteMany{{ $.Name }}Controller).
-					AfterReload().
-					ConfirmTitle("确认删除").
-					ButtonStatus("danger"),
-			),
 			node.ListTable("{{ $.Package }}ListTable").
 				EnableFilter().
 				RowSelectionType("checkbox").
+				ActionBar(
+					node.ListAction("{{ $.Package }}ListActions").Children(
+						node.ListActionRecordEditDrawer("add{{ $.Name }}").
+							Title("新建").
+							ForSubmit("@add{{ $.Name }}", Create{{ $.Name }}Controller).
+							ButtonType("primary").
+							Children(
+								node.FormGrid("grid").MaxColumns(2).Children(
+									{{- range $f := $.Fields }}
+										{{- if $annotation := $f.Annotations.LiEnt }}
+											{{- if and $annotation.ViewSchema (not $annotation.DisableCreate) }}
+												{{ $.Package }}.Node{{ $f.StructField }}(){{- if contains $annotation.ValidateRule "required" }}.SetRequired(true){{- end }},
+											{{- end }}
+										{{- end }}
+									{{- end }}
+								),
+							),
+						node.ListActionRowSelection("deleteMany{{ $.Name }}").
+							Title("删除").
+							ForSubmit("@deleteMany{{ $.Name }}", DeleteMany{{ $.Name }}Controller).
+							AfterReload().
+							ConfirmTitle("确认删除").
+							ButtonStatus("danger"),
+					),
+				).
 				Columns(
                     {{- range $i, $f := $.Fields }}
 						{{- if not $f.Sensitive }}

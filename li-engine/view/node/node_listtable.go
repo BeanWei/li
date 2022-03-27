@@ -84,6 +84,11 @@ func (b *listtableBuilder) RowSelectionFixed(fixed string) *listtableBuilder {
 	return b
 }
 
+func (b *listtableBuilder) ActionBar(element view.Node) *listtableBuilder {
+	b.schema.Properties[element.Schema().Name] = element.Schema()
+	return b
+}
+
 func (b *listtableBuilder) Columns(elements ...view.Node) *listtableBuilder {
 	if b.schema.Items == nil {
 		b.schema.Items = &ui.Schema{
