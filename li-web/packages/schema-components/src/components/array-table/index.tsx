@@ -17,7 +17,7 @@ import "./index.less";
 
 interface ObservableColumnSource {
   field: GeneralField;
-  columnProps: ColumnProps<any>;
+  columnProps: ColumnProps<any> & { [key: string]: any };
   schema: Schema;
   display: FieldDisplayTypes;
   name: string;

@@ -81,6 +81,7 @@ export default {
                     rowSelection: {
                       type: "checkbox",
                     },
+                    filter: "light",
                   },
                   items: {
                     type: "object",
@@ -106,6 +107,7 @@ export default {
                         "x-component-props": {
                           title: "昵称",
                           dataIndex: "nickname",
+                          filterable: true,
                         },
                         properties: {
                           nickname: {
@@ -136,17 +138,49 @@ export default {
                         type: "void",
                         "x-component": "List.Table.Column",
                         "x-component-props": {
-                          title: "收入",
-                          dataIndex: "money",
+                          title: "爱好",
+                          dataIndex: "likes",
+                          filterable: true,
                         },
                         properties: {
-                          money: {
+                          likes: {
                             type: "string",
-                            "x-component": "Money",
+                            "x-component": "Select",
+                            enum: ["篮球", "LOL", "兵乓球"],
                           },
                         },
                       },
                       column4: {
+                        type: "void",
+                        "x-component": "List.Table.Column",
+                        "x-component-props": {
+                          title: "出生日期",
+                          dataIndex: "birth_day",
+                          filterable: true,
+                        },
+                        properties: {
+                          birth_day: {
+                            type: "string",
+                            "x-component": "DatePicker",
+                          },
+                        },
+                      },
+                      column5: {
+                        type: "void",
+                        "x-component": "List.Table.Column",
+                        "x-component-props": {
+                          title: "是否管理员",
+                          dataIndex: "is_admin",
+                          filterable: true,
+                        },
+                        properties: {
+                          is_admin: {
+                            type: "bool",
+                            "x-component": "Checkbox",
+                          },
+                        },
+                      },
+                      column6: {
                         type: "void",
                         "x-component": "List.Table.Column",
                         "x-component-props": {
