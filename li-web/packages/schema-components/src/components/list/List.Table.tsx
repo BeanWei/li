@@ -3,10 +3,19 @@ import {
   Button,
   ConfigProvider,
   DatePicker,
+  Form,
   Input,
+  Select,
+  SelectProps,
+  Space,
   Table,
   TimePicker,
 } from "@arco-design/web-react";
+import {
+  IconFilter,
+  IconRefresh,
+  IconSearch,
+} from "@arco-design/web-react/icon";
 import { ColumnProps, TableProps } from "@arco-design/web-react/es/Table";
 import { ArrayField, createForm } from "@formily/core";
 import {
@@ -18,13 +27,19 @@ import {
   useFieldSchema,
 } from "@formily/react";
 import { observer } from "@formily/reactive-react";
+import { isObject, pickBy } from "lodash";
 import { RecordIndexProvider, RecordProvider } from "../../core";
 import { useAttach } from "../../hooks";
-import { isColumnComponent, useArrayTableSources } from "../array-table";
+import {
+  isColumnComponent,
+  ObservableColumnSource,
+  useArrayTableSources,
+} from "../array-table";
 import { ComposedListTable } from "./types";
 import { ListContext } from "./context";
-import { isObject } from "lodash";
-import { IconFilter } from "@arco-design/web-react/icon";
+import { useCollapseGrid } from "../__builtins__";
+import FormGrid from "../form-grid";
+import { isValid } from "@formily/shared";
 
 type FilterConfig = Pick<
   ColumnProps,
@@ -127,10 +142,10 @@ const getLightFilterConfig = (schema: Schema): FilterConfig => {
 };
 
 const useListTableColumns = (
+  source: ObservableColumnSource[],
   dataSource: any[],
   filterRender?: boolean
 ): TableProps<any>["columns"] => {
-  const source = useArrayTableSources();
   return source.reduce((buf, { name, columnProps, schema, display }, key) => {
     if (display && display !== "visible") return buf;
     if (!isColumnComponent(schema)) return buf;
@@ -170,23 +185,163 @@ const useListTableColumns = (
   }, []);
 };
 
-const BaseTable: React.FC<TableProps & { filter?: true | "light" }> = observer(
-  (props) => {
-    const field = useField<ArrayField>();
-    const columns = useListTableColumns(
-      field.value?.slice(),
-      props.filter === "light"
-    );
+const FilterForm: React.FC<{
+  source: ObservableColumnSource[];
+  onSearch?: (values: Record<string, any>) => void;
+}> = ({ source, onSearch }) => {
+  const { grid, expanded, toggle, type } = useCollapseGrid(2);
+  const [form] = Form.useForm();
+  const fieldSchemas: Schema[] = [];
+  source.forEach((item) => {
+    if (item.schema["x-component-props"]?.filterable) {
+      item.schema.reduceProperties((b: any, s) => {
+        if (!s.title) {
+          s.title = item.schema["x-component-props"]?.title;
+        }
+        fieldSchemas.push(s);
+      });
+    }
+  });
+
+  const handleSubmit = () => {
+    const values = form.getFieldsValue();
+    onSearch?.(pickBy(values, isValid));
+  };
+
+  const handleReset = () => {
+    form.resetFields();
+    onSearch?.({});
+  };
+
+  const renderActions = () => {
     return (
+      <Space style={{ marginTop: 30 }}>
+        <Button type="primary" icon={<IconSearch />} onClick={handleSubmit}>
+          搜索
+        </Button>
+        <Button icon={<IconRefresh />} onClick={handleReset}>
+          重置
+        </Button>
+      </Space>
+    );
+  };
+
+  return (
+    <div
+      style={{
+        borderBottom: "1px solid var(--color-border-1)",
+        display: "flex",
+        marginBottom: 16,
+      }}
+    >
+      <Form form={form} layout="vertical">
+        <FormGrid grid={grid}>
+          {fieldSchemas.map((schema) => {
+            let filterNode = null;
+            let span = 1;
+            switch (schema["x-component"]) {
+              case "Checkbox":
+              case "Switch":
+                filterNode = (
+                  <Select
+                    options={
+                      [
+                        { label: "Yes", value: true },
+                        { label: "No", value: false },
+                      ] as any
+                    }
+                    allowClear
+                  />
+                );
+                break;
+              case "DatePicker":
+              case "DatePicker.RangePicker":
+                filterNode = (
+                  <DatePicker.RangePicker
+                    allowClear
+                    mode={schema["x-component-props"]?.mode}
+                  />
+                );
+                span = 2;
+                break;
+              case "TimePicker":
+              case "TimePicker.RangePicker":
+                filterNode = <TimePicker.RangePicker allowClear />;
+                span = 2;
+                break;
+              case "InputNumber":
+              case "Money":
+              case "Rate":
+              case "Slider":
+              // TODO: 数字范围选择器
+              default:
+                if (schema.enum?.length) {
+                  filterNode = (
+                    <Select
+                      options={schema.enum as SelectProps["options"]}
+                      mode="multiple"
+                      allowClear
+                    />
+                  );
+                } else {
+                  filterNode = <Input allowClear />;
+                }
+                break;
+            }
+            return (
+              <FormGrid.GridColumn gridSpan={span} key={schema.name}>
+                <Form.Item
+                  label={schema.title}
+                  field={schema.name}
+                  style={{
+                    display: "block",
+                    marginBottom: 16,
+                  }}
+                >
+                  {filterNode}
+                </Form.Item>
+              </FormGrid.GridColumn>
+            );
+          })}
+          <FormGrid.GridColumn gridSpan={1}>
+            {renderActions()}
+          </FormGrid.GridColumn>
+        </FormGrid>
+      </Form>
+    </div>
+  );
+};
+
+const BaseTable: React.FC<
+  TableProps & {
+    filter?: true | "light";
+    onSearch?: (values: Record<string, any>) => void;
+  }
+> = observer((props) => {
+  const { onSearch, ...rest } = props;
+  const field = useField<ArrayField>();
+  const schema = useFieldSchema();
+  const source = useArrayTableSources();
+  const columns = useListTableColumns(
+    source,
+    field.value?.slice(),
+    props.filter === "light"
+  );
+  return (
+    <>
+      {props.filter === true && (
+        <FilterForm source={source} onSearch={onSearch} />
+      )}
+      <RecursionField schema={schema} onlyRenderProperties />
       <Table
         rowKey="id"
-        {...props}
+        {...rest}
         columns={columns}
         data={field.value?.slice()}
       />
-    );
-  }
-);
+    </>
+  );
+});
 
 export const ListTable: ComposedListTable = observer(
   (props: TableProps<any>) => {
@@ -207,9 +362,8 @@ export const ListTable: ComposedListTable = observer(
       <FormContext.Provider value={form}>
         <FieldContext.Provider value={f}>
           <BaseTable
-            {...ctx.tableProps}
             {...props}
-            onChange={ctx.tableProps?.onChange}
+            {...ctx.tableProps}
             rowSelection={
               props.rowSelection
                 ? {

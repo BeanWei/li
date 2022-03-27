@@ -182,4 +182,4 @@ const useRequest = (
 
 export { useRequest, request };
 
-export type { AxiosRequestConfig, AxiosInstance, AxiosResponse };
+export type { Result, AxiosRequestConfig, AxiosInstance, AxiosResponse };

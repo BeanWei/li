@@ -1,10 +1,12 @@
 import { TableProps } from "@arco-design/web-react";
-import { BaseResult } from "pro-utils";
+import { Result } from "pro-utils";
 import { createContext } from "react";
 
 export const ListContext = createContext<{
-  result?: BaseResult<any, any>;
-  tableProps?: TableProps;
+  result?: Result<any, any>;
+  tableProps?: TableProps & {
+    onSearch?: (values: Record<string, any>) => void;
+  };
   selectedRowKeys?: (string | number)[];
   setSelectedRowKeys?: (keys: (string | number)[]) => void;
 }>({});

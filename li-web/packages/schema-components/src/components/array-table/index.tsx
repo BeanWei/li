@@ -15,7 +15,7 @@ import { usePrefixCls } from "../__builtins__";
 import { ArrayBase, ArrayBaseMixins } from "../array-base";
 import "./index.less";
 
-interface ObservableColumnSource {
+export interface ObservableColumnSource {
   field: GeneralField;
   columnProps: ColumnProps<any> & { [key: string]: any };
   schema: Schema;

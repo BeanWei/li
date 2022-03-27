@@ -45,6 +45,14 @@ export const List: ComposedList = observer((props) => {
     });
   };
 
+  const onSearch = (values: Record<string, any>) => {
+    result.run({
+      page: current,
+      limit: pageSize,
+      filter: values,
+    });
+  };
+
   const [selectedRowKeys, setSelectedRowKeys] = useState<(string | number)[]>(
     []
   );
@@ -57,6 +65,7 @@ export const List: ComposedList = observer((props) => {
           data: result.data?.list || [],
           loading: result.loading,
           onChange: useCallback(onTableChange, []),
+          onSearch: useCallback(onSearch, []),
           pagination: total
             ? {
                 current,
