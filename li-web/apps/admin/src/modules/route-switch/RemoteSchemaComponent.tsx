@@ -41,6 +41,7 @@ const RequestSchemaComponent: React.FC<RemoteSchemaComponentProps> = (
     onSuccess,
     schemaTransform = defaultTransform,
   } = props;
+  // const cacheKey = "@getAppView|" + uid;
   const { reset } = useSchemaComponentContext();
   const { data, loading } = useRequest(
     "@getAppView",
@@ -64,7 +65,7 @@ const RequestSchemaComponent: React.FC<RemoteSchemaComponentProps> = (
     <SchemaComponent
       memoized
       scope={scope}
-      schema={schemaTransform(data || ({} as any))}
+      schema={schemaTransform(data ? JSON.parse(data) : {})}
     />
   );
 };

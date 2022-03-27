@@ -1,7 +1,7 @@
 import axios, { AxiosInstance, AxiosRequestConfig, AxiosResponse } from "axios";
 import { useRequest as useAhookRequest } from "ahooks";
 import { Message, Notification } from "@arco-design/web-react";
-import { Result } from "ahooks/lib/useRequest/src/types";
+import { Options, Result } from "ahooks/lib/useRequest/src/types";
 
 export interface RequestConfig extends AxiosRequestConfig {
   errorConfig?: {
@@ -172,8 +172,8 @@ const request: IRequest = (operation, variables = {}, opts = {}) => {
 
 const useRequest = (
   operation: string,
-  variables: Record<string, any> = {},
-  options: any = {}
+  variables?: Record<string, any>,
+  options?: Options<any, any>
 ): Result<any, any> => {
   return useAhookRequest((params) => {
     return request(operation, params || variables);
