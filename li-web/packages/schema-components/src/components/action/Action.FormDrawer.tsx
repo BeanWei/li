@@ -8,6 +8,7 @@ import { ActionFormDrawerProps } from "./types";
 import FormButtonGroup from "../form-button-group";
 import Submit from "../submit";
 import { SchemaComponent, UiSchemaComponentProvider } from "../..";
+import { Icon } from "../__builtins__";
 
 export const ActionFormDrawer: React.FC<ActionFormDrawerProps> = observer(
   (props) => {
@@ -80,7 +81,17 @@ export const ActionFormDrawer: React.FC<ActionFormDrawerProps> = observer(
     return isMenuItem ? (
       <div onClick={handleClick}>{field.title}</div>
     ) : (
-      <Button {...buttonProps} onClick={handleClick}>
+      <Button
+        {...buttonProps}
+        onClick={handleClick}
+        icon={
+          buttonProps.icon && typeof buttonProps.icon === "string" ? (
+            <Icon type={buttonProps.icon} />
+          ) : (
+            buttonProps.icon
+          )
+        }
+      >
         {field.title}
       </Button>
     );

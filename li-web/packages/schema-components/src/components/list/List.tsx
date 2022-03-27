@@ -1,7 +1,8 @@
+import { TableProps } from "@arco-design/web-react";
 import { observer } from "@formily/reactive-react";
 import { useRequest } from "pro-utils";
 import { useCallback, useState } from "react";
-import { ListContext } from "./context";
+import { ListContext, ReloadData } from "./context";
 import { ListAction } from "./List.Action";
 import ListTable from "./List.Table";
 import { ComposedList } from "./types";
@@ -16,6 +17,19 @@ export const List: ComposedList = observer((props) => {
   const total = result.data?.total || 0;
   const { page: current = 1, limit: pageSize = 10 } = result.params[0] || {};
 
+  const reload = (values?: ReloadData) => {
+    if (!values) {
+      result.refresh();
+    } else {
+      result.run({
+        page: current,
+        limit: pageSize,
+        ...result.params[0],
+        ...values,
+      });
+    }
+  };
+
   const onPageChange = (p: number, c: number) => {
     let toCurrent = c <= 0 ? 1 : c;
     const toPageSize = p <= 0 ? 1 : p;
@@ -23,10 +37,7 @@ export const List: ComposedList = observer((props) => {
     if (toCurrent > tempTotalPage) {
       toCurrent = Math.max(1, tempTotalPage);
     }
-    const [oldPaginationParams = {}, ...restParams] = result.params || [];
-    result.run({
-      ...oldPaginationParams,
-      ...restParams,
+    reload({
       page: toCurrent,
       limit: toPageSize,
     });
@@ -36,20 +47,23 @@ export const List: ComposedList = observer((props) => {
     onPageChange(current, p);
   };
 
-  const onTableChange = (pagination: any, sorter: any, filters: any) => {
-    result.run({
+  const onTableChange: TableProps["onChange"] = (
+    pagination,
+    sorter,
+    filters
+  ) => {
+    reload({
       page: pagination.current,
       limit: pagination.pageSize,
-      // filter: filters,
-      // sort: sorter,
-    });
-  };
-
-  const onSearch = (values: Record<string, any>) => {
-    result.run({
-      page: current,
-      limit: pageSize,
-      filter: values,
+      filter: filters,
+      sorter: {
+        [sorter.field as string]:
+          sorter.direction === "ascend"
+            ? 1
+            : sorter.direction === "descend"
+            ? -1
+            : 0,
+      },
     });
   };
 
@@ -61,11 +75,11 @@ export const List: ComposedList = observer((props) => {
     <ListContext.Provider
       value={{
         result,
+        reload: useCallback(reload, []),
         tableProps: {
           data: result.data?.list || [],
           loading: result.loading,
           onChange: useCallback(onTableChange, []),
-          onSearch: useCallback(onSearch, []),
           pagination: total
             ? {
                 current,

@@ -39,9 +39,23 @@ export default {
                       type: "void",
                       "x-component": "List.Action",
                       properties: {
-                        refresh: {
+                        reloadandreset: {
                           type: "void",
-                          "x-component": "List.Action.Refresh",
+                          title: "刷新并重置",
+                          "x-component": "List.Action.Reload",
+                          "x-component-props": {
+                            position: "left",
+                            data: {
+                              sorter: {},
+                              filter: {},
+                              page: 1,
+                            },
+                          },
+                        },
+                        reload: {
+                          type: "void",
+                          title: "刷新",
+                          "x-component": "List.Action.Reload",
                           "x-component-props": {
                             position: "left",
                           },

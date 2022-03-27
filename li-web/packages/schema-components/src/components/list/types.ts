@@ -9,6 +9,7 @@ import {
 import { ColumnProps } from "@arco-design/web-react/es/Table";
 import { FormProps } from "../form";
 import { ActionFormDrawerProps, ActionFormModalProps } from "../action/types";
+import { ReloadData } from "./context";
 
 export type ComposedList = React.FC<{
   forInit: string;
@@ -24,8 +25,6 @@ export type ComposedListTable = React.FC<TableProps<any>> & {
 };
 
 export type ComposedListAction = React.FC & {
-  FilterGroup?: React.FC<ButtonProps>;
-  FilterSelect?: React.FC<SelectProps>;
   RowSelection?: React.FC<
     ButtonProps & {
       confirmProps: PopconfirmProps;
@@ -33,7 +32,11 @@ export type ComposedListAction = React.FC & {
       afterReload?: boolean;
     }
   >;
-  Refresh?: React.FC<ButtonProps>;
+  Reload?: React.FC<
+    ButtonProps & {
+      data?: ReloadData;
+    }
+  >;
   RecordEditDrawer?: React.FC<ActionFormDrawerProps>;
   RecordEditModal?: React.FC<ActionFormModalProps>;
   RecordDelete?: React.FC<

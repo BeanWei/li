@@ -5,6 +5,7 @@ import FormLayout from "../form-layout";
 import FormModal from "../form-modal";
 import { SchemaComponent, UiSchemaComponentProvider } from "../..";
 import { ActionFormModalProps } from "./types";
+import { Icon } from "../__builtins__";
 
 export const ActionFormModal: React.FC<ActionFormModalProps> = observer(
   (props) => {
@@ -65,7 +66,17 @@ export const ActionFormModal: React.FC<ActionFormModalProps> = observer(
         {isMenuItem ? (
           <div onClick={handleClick}>{field.title}</div>
         ) : (
-          <Button {...buttonProps} onClick={handleClick}>
+          <Button
+            {...buttonProps}
+            onClick={handleClick}
+            icon={
+              buttonProps.icon && typeof buttonProps.icon === "string" ? (
+                <Icon type={buttonProps.icon} />
+              ) : (
+                buttonProps.icon
+              )
+            }
+          >
             {field.title}
           </Button>
         )}

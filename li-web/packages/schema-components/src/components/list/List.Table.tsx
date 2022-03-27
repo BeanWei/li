@@ -1,4 +1,4 @@
-import { Fragment, useContext, useEffect, useMemo } from "react";
+import React, { Fragment, useContext, useEffect, useMemo } from "react";
 import {
   Button,
   ConfigProvider,
@@ -12,9 +12,11 @@ import {
   TimePicker,
 } from "@arco-design/web-react";
 import {
+  IconDown,
   IconFilter,
   IconRefresh,
   IconSearch,
+  IconUp,
 } from "@arco-design/web-react/icon";
 import { ColumnProps, TableProps } from "@arco-design/web-react/es/Table";
 import { ArrayField, createForm } from "@formily/core";
@@ -36,10 +38,11 @@ import {
   useArrayTableSources,
 } from "../array-table";
 import { ComposedListTable } from "./types";
-import { ListContext } from "./context";
+import { ListContext, ListContextProps } from "./context";
 import { useCollapseGrid } from "../__builtins__";
 import FormGrid from "../form-grid";
 import { isValid } from "@formily/shared";
+import FormButtonGroup from "../form-button-group";
 
 type FilterConfig = Pick<
   ColumnProps,
@@ -188,8 +191,8 @@ const useListTableColumns = (
 const FilterForm: React.FC<{
   source: ObservableColumnSource[];
   onSearch?: (values: Record<string, any>) => void;
-}> = ({ source, onSearch }) => {
-  const { grid, expanded, toggle, type } = useCollapseGrid(2);
+}> = observer(({ source, onSearch }) => {
+  const { grid, toggle, expanded, type } = useCollapseGrid(2);
   const [form] = Form.useForm();
   const fieldSchemas: Schema[] = [];
   source.forEach((item) => {
@@ -215,15 +218,49 @@ const FilterForm: React.FC<{
 
   const renderActions = () => {
     return (
-      <Space style={{ marginTop: 30 }}>
-        <Button type="primary" icon={<IconSearch />} onClick={handleSubmit}>
+      <FormButtonGroup
+        align="right"
+        style={{
+          marginTop: 30,
+          marginBottom: 16,
+          width: "100%",
+          justifyContent: "end",
+        }}
+      >
+        <Button
+          key="submit"
+          type="primary"
+          icon={<IconSearch />}
+          onClick={handleSubmit}
+        >
           搜索
         </Button>
-        <Button icon={<IconRefresh />} onClick={handleReset}>
+        <Button key="reset" icon={<IconRefresh />} onClick={handleReset}>
           重置
         </Button>
-      </Space>
+      </FormButtonGroup>
     );
+  };
+
+  const renderButtonGroup = () => {
+    if (type === "collapsible") {
+      return (
+        <>
+          {renderActions()}
+          <FormButtonGroup
+            align="right"
+            style={{ marginLeft: 8, marginTop: 14 }}
+          >
+            <Button
+              type="text"
+              icon={expanded ? <IconUp /> : <IconDown />}
+              onClick={toggle}
+            />
+          </FormButtonGroup>
+        </>
+      );
+    }
+    return renderActions();
   };
 
   return (
@@ -303,22 +340,25 @@ const FilterForm: React.FC<{
               </FormGrid.GridColumn>
             );
           })}
-          <FormGrid.GridColumn gridSpan={1}>
-            {renderActions()}
+          <FormGrid.GridColumn
+            gridSpan={-1}
+            style={{ display: "flex", justifyContent: "space-end" }}
+          >
+            {renderButtonGroup()}
           </FormGrid.GridColumn>
         </FormGrid>
       </Form>
     </div>
   );
-};
+});
 
 const BaseTable: React.FC<
   TableProps & {
     filter?: true | "light";
-    onSearch?: (values: Record<string, any>) => void;
+    reload?: ListContextProps["reload"];
   }
 > = observer((props) => {
-  const { onSearch, ...rest } = props;
+  const { reload, ...rest } = props;
   const field = useField<ArrayField>();
   const schema = useFieldSchema();
   const source = useArrayTableSources();
@@ -330,7 +370,10 @@ const BaseTable: React.FC<
   return (
     <>
       {props.filter === true && (
-        <FilterForm source={source} onSearch={onSearch} />
+        <FilterForm
+          source={source}
+          onSearch={(values) => reload?.({ filter: values })}
+        />
       )}
       <RecursionField schema={schema} onlyRenderProperties />
       <Table
@@ -372,6 +415,7 @@ export const ListTable: ComposedListTable = observer(
                   }
                 : undefined
             }
+            reload={ctx.reload}
           />
         </FieldContext.Provider>
       </FormContext.Provider>

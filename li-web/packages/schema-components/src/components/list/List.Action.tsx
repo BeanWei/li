@@ -1,11 +1,4 @@
-import {
-  Button,
-  Popconfirm,
-  Popover,
-  Select,
-  Space,
-} from "@arco-design/web-react";
-import { IconFilter, IconRefresh } from "@arco-design/web-react/icon";
+import { Button, Popconfirm, Space } from "@arco-design/web-react";
 import {
   observer,
   RecursionField,
@@ -17,10 +10,7 @@ import { useContext } from "react";
 import { useRecord } from "../../core";
 import ActionFormDrawer from "../action/Action.FormDrawer";
 import ActionFormModal from "../action/Action.FormModal";
-import Form from "../form";
-import FormButtonGroup from "../form-button-group";
-import FormGrid from "../form-grid";
-import Submit from "../submit";
+import { Icon } from "../__builtins__";
 import { ListContext } from "./context";
 import { ComposedListAction } from "./types";
 
@@ -56,45 +46,6 @@ export const ListAction: ComposedListAction = observer((props) => {
   );
 });
 
-ListAction.FilterGroup = observer((props) => {
-  return (
-    <Popover
-      trigger="click"
-      content={
-        <Form>
-          <FormGrid>{props.children}</FormGrid>
-          <FormButtonGroup align="right">
-            <Submit onSubmit={console.log}>查询</Submit>
-          </FormButtonGroup>
-        </Form>
-      }
-    >
-      <Button icon={<IconFilter />} />
-    </Popover>
-  );
-});
-
-ListAction.FilterSelect = observer((props) => {
-  return (
-    <Select
-      {...props}
-      mode="multiple"
-      maxTagCount={1}
-      placeholder="Quick filter"
-      style={{ width: 150 }}
-      allowClear
-    >
-      {["Beijing", "Shanghai", "Guangzhou", "Shenzhen", "Chengdu", "Wuhan"].map(
-        (option) => (
-          <Select.Option key={option} value={option}>
-            {option}
-          </Select.Option>
-        )
-      )}
-    </Select>
-  );
-});
-
 ListAction.RowSelection = observer((props) => {
   const { confirmProps, forSubmit, afterReload, ...rest } = props;
   const field = useField();
@@ -121,22 +72,39 @@ ListAction.RowSelection = observer((props) => {
       {...rest}
       disabled={!!!ctx.selectedRowKeys?.length}
       onClick={handleOk}
+      icon={
+        props.icon && typeof props.icon === "string" ? (
+          <Icon type={props.icon} />
+        ) : (
+          props.icon
+        )
+      }
     >
       {field.title}
     </Button>
   );
 });
 
-ListAction.Refresh = observer((props) => {
+ListAction.Reload = observer((props) => {
+  const { data, ...rest } = props;
+  const field = useField();
   const ctx = useContext(ListContext);
   return (
     <Button
-      icon={<IconRefresh />}
-      {...props}
+      {...rest}
+      icon={
+        props.icon && typeof props.icon === "string" ? (
+          <Icon type={props.icon} />
+        ) : (
+          props.icon
+        )
+      }
       onClick={() => {
-        ctx.result?.run();
+        ctx.reload?.(data);
       }}
-    />
+    >
+      {field.title}
+    </Button>
   );
 });
 
@@ -186,7 +154,18 @@ ListAction.RecordDelete = observer((props) => {
       {...props.confirmProps}
       onOk={handleOk}
     >
-      <Button {...rest}>{field.title}</Button>
+      <Button
+        {...rest}
+        icon={
+          props.icon && typeof props.icon === "string" ? (
+            <Icon type={props.icon} />
+          ) : (
+            props.icon
+          )
+        }
+      >
+        {field.title}
+      </Button>
     </Popconfirm>
   );
 });

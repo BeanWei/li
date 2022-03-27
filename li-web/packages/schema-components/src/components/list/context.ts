@@ -2,11 +2,21 @@ import { TableProps } from "@arco-design/web-react";
 import { Result } from "pro-utils";
 import { createContext } from "react";
 
-export const ListContext = createContext<{
+export type ReloadData = {
+  page?: number;
+  limit?: number;
+  sorter?: Record<string, number>;
+  filter?: Record<string, any>;
+};
+
+export type ListContextProps = {
   result?: Result<any, any>;
+  reload?: (values?: ReloadData) => void;
   tableProps?: TableProps & {
     onSearch?: (values: Record<string, any>) => void;
   };
   selectedRowKeys?: (string | number)[];
   setSelectedRowKeys?: (keys: (string | number)[]) => void;
-}>({});
+};
+
+export const ListContext = createContext<ListContextProps>({});
