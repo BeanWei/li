@@ -95,7 +95,7 @@ const (
 	ComponentList                       = "List"
 	ComponentListAction                 = "List.Action"
 	ComponentListActionRowSelection     = "List.Action.RowSelection"
-	ComponentListActionRefresh          = "List.Action.Refresh"
+	ComponentListActionReload           = "List.Action.Reload"
 	ComponentListActionRecordEditDrawer = "List.Action.RecordEditDrawer"
 	ComponentListActionRecordEditModal  = "List.Action.RecordEditModal"
 	ComponentListActionRecordDelete     = "List.Action.RecordDelete"

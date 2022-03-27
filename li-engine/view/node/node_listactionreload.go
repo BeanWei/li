@@ -2,12 +2,12 @@ package node
 
 import "github.com/BeanWei/li/li-engine/view/ui"
 
-func ListActionRefresh(name string) *listactionrefreshBuilder {
+func ListActionReload(name string) *listactionrefreshBuilder {
 	return &listactionrefreshBuilder{&NodeBuilder{
 		schema: &ui.Schema{
 			Name:       name,
 			Type:       ui.SchemaTypeVoid,
-			XComponent: ui.ComponentListActionRefresh,
+			XComponent: ui.ComponentListActionReload,
 		},
 	}}
 }
@@ -23,6 +23,11 @@ func (b *listactionrefreshBuilder) Title(title string) *listactionrefreshBuilder
 
 func (b *listactionrefreshBuilder) Description(description string) *listactionrefreshBuilder {
 	b.schema.Description = description
+	return b
+}
+
+func (b *listactionrefreshBuilder) Data(data map[string]interface{}) *listactionrefreshBuilder {
+	b.schema.XComponentProps["data"] = data
 	return b
 }
 

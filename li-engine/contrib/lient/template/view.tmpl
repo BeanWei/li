@@ -30,7 +30,7 @@ func List{{ $.Name }}View() view.Node {
 					ButtonStatus("danger"),
 			),
 			node.ListTable("{{ $.Package }}ListTable").
-				EnableLightFilter().
+				EnableFilter().
 				RowSelectionType("checkbox").
 				Columns(
                     {{- range $i, $f := $.Fields }}
