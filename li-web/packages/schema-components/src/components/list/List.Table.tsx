@@ -396,7 +396,7 @@ export const ListTable: ComposedListTable = observer(
       form.createArrayField({ ...field.props, basePath: "" })
     );
     useEffect(() => {
-      form.setInitialValues({
+      form.setValues({
         [schema.name as string]: ctx.tableProps?.data,
       });
     }, [ctx.tableProps?.data]);
