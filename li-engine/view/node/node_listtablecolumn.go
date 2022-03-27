@@ -3,6 +3,7 @@ package node
 import (
 	"github.com/BeanWei/li/li-engine/view"
 	"github.com/BeanWei/li/li-engine/view/ui"
+	"github.com/gogf/gf/v2/container/gmap"
 )
 
 func ListTableColumn(name string) *listtablecolumnBuilder {
@@ -12,7 +13,7 @@ func ListTableColumn(name string) *listtablecolumnBuilder {
 			Type:            ui.SchemaTypeVoid,
 			XComponent:      ui.ComponentListTableColumn,
 			XComponentProps: make(map[string]interface{}),
-			Properties:      make(map[string]*ui.Schema),
+			Properties:      gmap.NewListMap(),
 		},
 	}}
 }
@@ -52,7 +53,7 @@ func (b *listtablecolumnBuilder) Width(width int) *listtablecolumnBuilder {
 }
 
 func (b *listtablecolumnBuilder) Render(element view.Node) *listtablecolumnBuilder {
-	b.schema.Properties[element.Schema().Name] = element.Schema()
+	b.schema.Properties.Set(element.Schema().Name, element.Schema())
 	return b
 }
 

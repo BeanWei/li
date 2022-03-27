@@ -1,6 +1,9 @@
 package node
 
-import "github.com/BeanWei/li/li-engine/view/ui"
+import (
+	"github.com/BeanWei/li/li-engine/view/ui"
+	"github.com/gogf/gf/v2/container/gmap"
+)
 
 func GridRow(name string) *gridrowBuilder {
 	return &gridrowBuilder{&NodeBuilder{
@@ -9,7 +12,7 @@ func GridRow(name string) *gridrowBuilder {
 			Type:            ui.SchemaTypeVoid,
 			XComponent:      ui.ComponentGridRow,
 			XComponentProps: make(map[string]interface{}),
-			Properties:      make(map[string]*ui.Schema),
+			Properties:      gmap.NewListMap(),
 		},
 	}}
 }

@@ -1,5 +1,7 @@
 package ui
 
+import "github.com/gogf/gf/v2/container/gmap"
+
 // https://react.formilyjs.org/zh-CN/api/shared/schema
 type Schema struct {
 	Name             string                   `json:"name,omitempty"`
@@ -44,7 +46,7 @@ type Schema struct {
 	XReadPretty      bool                     `json:"x-read-pretty,omitempty"`
 	XData            map[string]interface{}   `json:"x-data,omitempty"`
 	Items            *Schema                  `json:"items,omitempty"`
-	Properties       map[string]*Schema       `json:"properties,omitempty"`
+	Properties       *gmap.ListMap            `json:"properties,omitempty"`
 }
 
 const (

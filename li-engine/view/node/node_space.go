@@ -2,6 +2,7 @@ package node
 
 import (
 	"github.com/BeanWei/li/li-engine/view/ui"
+	"github.com/gogf/gf/v2/container/gmap"
 )
 
 func Space(name string) *spaceBuilder {
@@ -10,7 +11,7 @@ func Space(name string) *spaceBuilder {
 			Name:       name,
 			Type:       ui.SchemaTypeVoid,
 			XComponent: ui.ComponentSpace,
-			Properties: make(map[string]*ui.Schema),
+			Properties: gmap.NewListMap(),
 		},
 	}}
 }

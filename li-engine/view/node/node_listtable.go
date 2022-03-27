@@ -3,6 +3,7 @@ package node
 import (
 	"github.com/BeanWei/li/li-engine/view"
 	"github.com/BeanWei/li/li-engine/view/ui"
+	"github.com/gogf/gf/v2/container/gmap"
 )
 
 func ListTable(name string) *listtableBuilder {
@@ -14,7 +15,7 @@ func ListTable(name string) *listtableBuilder {
 			XComponentProps: map[string]interface{}{
 				"rowSelection": make(map[string]interface{}),
 			},
-			Properties: make(map[string]*ui.Schema),
+			Properties: gmap.NewListMap(),
 		},
 	}}
 }
@@ -85,7 +86,7 @@ func (b *listtableBuilder) RowSelectionFixed(fixed string) *listtableBuilder {
 }
 
 func (b *listtableBuilder) ActionBar(element view.Node) *listtableBuilder {
-	b.schema.Properties[element.Schema().Name] = element.Schema()
+	b.schema.Properties.Set(element.Schema().Name, element.Schema())
 	return b
 }
 
@@ -93,11 +94,11 @@ func (b *listtableBuilder) Columns(elements ...view.Node) *listtableBuilder {
 	if b.schema.Items == nil {
 		b.schema.Items = &ui.Schema{
 			Type:       ui.SchemaTypeObject,
-			Properties: make(map[string]*ui.Schema),
+			Properties: gmap.NewListMap(),
 		}
 	}
 	for _, element := range elements {
-		b.schema.Items.Properties[element.Schema().Name] = element.Schema()
+		b.schema.Items.Properties.Set(element.Schema().Name, element.Schema())
 	}
 	return b
 }

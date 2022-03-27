@@ -74,7 +74,7 @@ func NewApp(cfg *App) {
 			NavItems:  make([]*ui.Schema, len(cfg.NavItems)),
 			Entry:     cfg.Entry,
 		}
-		pages         = make(map[string]map[string]interface{})
+		pages         = make(map[string]string)
 		recursionmenu func(menus []*AppMenu) []*appmenu
 	)
 
@@ -121,7 +121,7 @@ func NewApp(cfg *App) {
 	controller.Bind("@getAppConfig", func(ctx context.Context) (res *app, err error) {
 		return appcfg, nil
 	})
-	controller.Bind("@getAppView", func(ctx context.Context, req *GetAppViewReq) (res map[string]interface{}, err error) {
+	controller.Bind("@getAppView", func(ctx context.Context, req *GetAppViewReq) (res string, err error) {
 		return pages[req.Key], nil
 	})
 

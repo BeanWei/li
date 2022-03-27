@@ -1,6 +1,9 @@
 package node
 
-import "github.com/BeanWei/li/li-engine/view/ui"
+import (
+	"github.com/BeanWei/li/li-engine/view/ui"
+	"github.com/gogf/gf/v2/container/gmap"
+)
 
 func GridCol(name string) *gridcolBuilder {
 	return &gridcolBuilder{&NodeBuilder{
@@ -9,7 +12,7 @@ func GridCol(name string) *gridcolBuilder {
 			Type:            ui.SchemaTypeVoid,
 			XComponent:      ui.ComponentGridCol,
 			XComponentProps: make(map[string]interface{}),
-			Properties:      make(map[string]*ui.Schema),
+			Properties:      gmap.NewListMap(),
 		},
 	}}
 }

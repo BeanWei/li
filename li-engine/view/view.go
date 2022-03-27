@@ -4,6 +4,7 @@ import (
 	"reflect"
 
 	"github.com/BeanWei/li/li-engine/view/ui"
+	"github.com/gogf/gf/v2/container/gmap"
 	"github.com/gogf/gf/v2/text/gstr"
 )
 
@@ -29,13 +30,13 @@ type (
 func (Schema) Mixin() []Mixin { return nil }
 func (Schema) Nodes() []Node  { return nil }
 
-func ToPage(schema Interface) (string, map[string]interface{}) {
+func ToPage(schema Interface) (string, string) {
 	if schema == nil {
-		return "", nil
+		return "", ""
 	}
 
 	var (
-		properties = make(map[string]interface{})
+		properties = gmap.NewListMap()
 		nodes      = make([]Node, 0)
 	)
 	for _, mixin := range schema.Mixin() {
@@ -43,13 +44,13 @@ func ToPage(schema Interface) (string, map[string]interface{}) {
 	}
 	nodes = append(nodes, schema.Nodes()...)
 	if len(nodes) == 0 {
-		return "", nil
+		return "", ""
 	}
 	for _, node := range nodes {
-		properties[node.Schema().Name] = node.Schema()
+		properties.Set(node.Schema().Name, node.Schema())
 	}
-	return gstr.CaseKebab(reflect.TypeOf(schema).Elem().Name()), map[string]interface{}{
-		"type":       "object",
-		"properties": properties,
-	}
+	schemaMap := gmap.NewListMap()
+	schemaMap.Set("type", "object")
+	schemaMap.Set("properties", properties)
+	return gstr.CaseKebab(reflect.TypeOf(schema).Elem().Name()), schemaMap.String()
 }
