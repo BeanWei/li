@@ -87,3 +87,8 @@ func (b *listactionrecorddeleteBuilder) ButtonLong() *listactionrecorddeleteBuil
 	b.schema.XComponentProps["long"] = true
 	return b
 }
+
+func (b *listactionrecorddeleteBuilder) ButtonPosition(position string) *listactionrecorddeleteBuilder {
+	b.schema.XComponentProps["position"] = position
+	return b
+}

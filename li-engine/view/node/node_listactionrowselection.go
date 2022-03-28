@@ -91,3 +91,8 @@ func (b *listactionrowselectionBuilder) ButtonLong() *listactionrowselectionBuil
 	b.schema.XComponentProps["long"] = true
 	return b
 }
+
+func (b *listactionrowselectionBuilder) ButtonPosition(position string) *listactionrowselectionBuilder {
+	b.schema.XComponentProps["position"] = position
+	return b
+}

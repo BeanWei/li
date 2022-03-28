@@ -84,3 +84,8 @@ func (b *listactionrecordeditmodalBuilder) ButtonLong() *listactionrecordeditmod
 	b.schema.XComponentProps["long"] = true
 	return b
 }
+
+func (b *listactionrecordeditmodalBuilder) ButtonPosition(position string) *listactionrecordeditmodalBuilder {
+	b.schema.XComponentProps["position"] = position
+	return b
+}
