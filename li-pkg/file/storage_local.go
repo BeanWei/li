@@ -3,10 +3,13 @@ package file
 import (
 	"context"
 	"io"
+	"net/http"
 
 	"github.com/gogf/gf/v2/errors/gcode"
 	"github.com/gogf/gf/v2/errors/gerror"
+	"github.com/gogf/gf/v2/net/ghttp"
 	"github.com/gogf/gf/v2/os/gfile"
+	"github.com/gogf/gf/v2/os/gres"
 )
 
 type storageLocalClient struct {
@@ -24,10 +27,10 @@ func NewStorageLocalClient(dir string) (*storageLocalClient, error) {
 }
 
 func (s *storageLocalClient) PutObject(ctx context.Context, input *PutObjectInput) (*PutObjectOutput, error) {
-	dir := s.Dir
-	if input.BucketName != "" {
-		dir = gfile.Join(dir, input.BucketName)
+	if input.BucketName == "" {
+		return nil, gerror.NewCode(gcode.CodeInvalidParameter, `parameter "input.BucketName" is required`)
 	}
+	dir := gfile.Join(s.Dir, input.BucketName)
 	if !gfile.Exists(dir) {
 		if err := gfile.Mkdir(dir); err != nil {
 			return nil, gerror.Wrapf(err, `StorageLocalClient.PutObject.Mkdir failed`)
@@ -50,7 +53,10 @@ func (s *storageLocalClient) PutObject(ctx context.Context, input *PutObjectInpu
 	if _, err = io.Copy(newFile, file); err != nil {
 		return nil, gerror.Wrapf(err, `io.Copy failed from "%s" to "%s"`, input.File.Filename, filePath)
 	}
-	return input.output(key), nil
+	return &PutObjectOutput{
+		FileName: key,
+		FileUrl:  "/" + input.BucketName + "/" + key,
+	}, nil
 }
 
 func (s *storageLocalClient) DeleteObject(ctx context.Context, input *DeleteObjectInput) error {
@@ -59,6 +65,14 @@ func (s *storageLocalClient) DeleteObject(ctx context.Context, input *DeleteObje
 		return gerror.Wrapf(err, `StorageLocalClient.DeleteObject.Remove failed`)
 	}
 	return nil
+}
+
+func (s *storageLocalClient) Proxy(r *ghttp.Request, input *ProxyInput) {
+	file := gres.Get(gfile.Join(s.Dir, input.BucketName, input.FileName))
+	if file != nil {
+		info := file.FileInfo()
+		http.ServeContent(r.Response.Writer.RawWriter(), r.Request, info.Name(), info.ModTime(), file)
+	}
 }
 
 var _ Storage = (*storageLocalClient)(nil)

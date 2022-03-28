@@ -2,11 +2,17 @@ package file
 
 import (
 	"context"
+	"net/http"
+	"net/http/httputil"
+	"net/url"
 
 	"github.com/aws/aws-sdk-go/aws"
 	"github.com/aws/aws-sdk-go/aws/credentials"
 	"github.com/aws/aws-sdk-go/aws/session"
 	"github.com/aws/aws-sdk-go/service/s3"
+	"github.com/gogf/gf/v2/errors/gcode"
+	"github.com/gogf/gf/v2/errors/gerror"
+	"github.com/gogf/gf/v2/net/ghttp"
 )
 
 type storageAwsClient struct {
@@ -40,6 +46,9 @@ func NewStorageAwsClient(opt *AwsClientOption) (*storageAwsClient, error) {
 }
 
 func (s *storageAwsClient) PutObject(ctx context.Context, input *PutObjectInput) (*PutObjectOutput, error) {
+	if input.BucketName == "" {
+		return nil, gerror.NewCode(gcode.CodeInvalidParameter, `parameter "input.BucketName" is required`)
+	}
 	file, err := input.File.Open()
 	if err != nil {
 		return nil, err
@@ -54,7 +63,10 @@ func (s *storageAwsClient) PutObject(ctx context.Context, input *PutObjectInput)
 	if err != nil {
 		return nil, err
 	}
-	return input.output(key), nil
+	return &PutObjectOutput{
+		FileName: key,
+		FileUrl:  "/" + input.BucketName + "/" + key,
+	}, nil
 }
 
 func (s *storageAwsClient) DeleteObject(ctx context.Context, input *DeleteObjectInput) error {
@@ -63,6 +75,27 @@ func (s *storageAwsClient) DeleteObject(ctx context.Context, input *DeleteObject
 		Key:    aws.String(input.FileName),
 	})
 	return err
+}
+
+func (s *storageAwsClient) Proxy(r *ghttp.Request, input *ProxyInput) {
+	objuri := "/" + input.BucketName + "/" + input.FileName
+	remote, err := url.Parse(s.Client.Endpoint + objuri)
+	if err != nil {
+		r.Response.WriteStatus(http.StatusInternalServerError)
+		return
+	}
+	proxy := httputil.NewSingleHostReverseProxy(remote)
+	proxy.Director = func(req *http.Request) {
+		req.Host = s.Client.Endpoint
+		req.URL.Host = req.Host
+		req.URL.Path = objuri
+	}
+	// 浏览器缓存 30 天
+	proxy.ModifyResponse = func(resp *http.Response) error {
+		resp.Header.Set("Cache-Control", "max-age=2592000")
+		return nil
+	}
+	proxy.ServeHTTP(r.Response.Writer, r.Request)
 }
 
 var _ Storage = (*storageAwsClient)(nil)
