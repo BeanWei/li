@@ -36,6 +36,7 @@ const UploadAttachment: React.FC<UploadAttachmentProps> = connect(
     return (
       <ArcoUpload
         {...rest}
+        withCredentials
         fileList={normalizeFileList(value)}
         onChange={(fileList) => {
           onChange?.(fileList.map((file) => file.url));
@@ -73,6 +74,7 @@ const UploadAvatar: React.FC<UploadAvatarProps> = connect(
     return (
       <ArcoUpload
         {...rest}
+        withCredentials
         showUploadList={false}
         fileList={normalizeFileList(value)}
         onChange={(fileList) => {
