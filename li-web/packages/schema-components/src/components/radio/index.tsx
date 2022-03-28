@@ -24,10 +24,10 @@ Radio.Group = connect(
     dataSource: "options",
   }),
   mapReadPretty((props) => {
-    if (!isValid(props.value)) {
+    const { value } = props;
+    if (!isValid(value)) {
       return <div></div>;
     }
-    const { value } = props;
     const field = useField<any>();
     const dataSource = field.dataSource || [];
 

@@ -30,6 +30,7 @@ import {
   Submit,
   Switch,
   TimePicker,
+  Upload,
 } from "../components";
 import { SchemaComponentOptions } from "./SchemaComponentOptions";
 
@@ -69,6 +70,7 @@ export const UiSchemaComponentProvider = (props: any) => {
         Submit,
         Switch,
         TimePicker,
+        Upload,
       }}
     >
       {children}

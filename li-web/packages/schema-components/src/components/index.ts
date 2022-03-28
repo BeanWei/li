@@ -31,3 +31,4 @@ export * from "./space";
 export * from "./submit";
 export * from "./switch";
 export * from "./time-picker";
+export * from "./upload";

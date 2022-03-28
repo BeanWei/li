@@ -31,7 +31,7 @@ export default [
       if (operation == "@getAppView") {
         return {
           code: 0,
-          data: views[variables.key] || {},
+          data: JSON.stringify(views[variables.key] || {}),
         };
       }
       if (operation == "listUser") {

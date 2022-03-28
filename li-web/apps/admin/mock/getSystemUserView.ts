@@ -200,6 +200,20 @@ export default {
                         type: "void",
                         "x-component": "List.Table.Column",
                         "x-component-props": {
+                          title: "头像",
+                          dataIndex: "avatar",
+                        },
+                        properties: {
+                          avatar: {
+                            type: "string",
+                            "x-component": "Upload.Avatar",
+                          },
+                        },
+                      },
+                      column7: {
+                        type: "void",
+                        "x-component": "List.Table.Column",
+                        "x-component-props": {
                           title: "操作",
                           dataIndex: "__action",
                           width: 150,

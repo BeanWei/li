@@ -49,6 +49,12 @@ export default {
                     "x-decorator": "FormItem",
                     "x-component": "Input",
                   },
+                  avatar: {
+                    type: "string",
+                    title: "头像",
+                    "x-decorator": "FormItem",
+                    "x-component": "Upload.Avatar",
+                  },
                 },
               },
             },
