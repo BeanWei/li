@@ -61,7 +61,17 @@ ListAction.RowSelection = observer((props) => {
   if (props.confirmProps) {
     return (
       <Popconfirm {...props.confirmProps} onOk={handleOk}>
-        <Button {...rest} disabled={!!!ctx.selectedRowKeys?.length}>
+        <Button
+          {...rest}
+          disabled={!!!ctx.selectedRowKeys?.length}
+          icon={
+            props.icon && typeof props.icon === "string" ? (
+              <Icon type={props.icon} />
+            ) : (
+              props.icon
+            )
+          }
+        >
           {field.title}
         </Button>
       </Popconfirm>
