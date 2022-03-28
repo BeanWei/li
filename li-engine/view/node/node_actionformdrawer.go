@@ -35,6 +35,11 @@ func (b *actionformdrawerBuilder) Description(description string) *actionformdra
 	return b
 }
 
+func (b *actionformdrawerBuilder) IsMenuItem() *actionformdrawerBuilder {
+	b.schema.XComponentProps["isMenuItem"] = true
+	return b
+}
+
 // TODO: 支持通过回调函数获取
 func (b *actionformdrawerBuilder) InitialValues(initialValues map[string]interface{}) *actionformdrawerBuilder {
 	b.schema.XComponentProps["initialValues"] = initialValues

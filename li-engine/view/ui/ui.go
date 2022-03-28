@@ -71,6 +71,7 @@ const (
 	ComponentActionFormModal            = "Action.FormModal"
 	ComponentArrayItems                 = "ArrayItems"
 	ComponentArrayTable                 = "ArrayTable"
+	ComponentAvatar                     = "Avatar"
 	ComponentCascader                   = "Cascader"
 	ComponentCheckbox                   = "Checkbox"
 	ComponentCheckboxGroup              = "Checkbox.Group"
