@@ -116,4 +116,6 @@ const (
 	ComponentSwitch                     = "Switch"
 	ComponentTimePicker                 = "TimePicker"
 	ComponentTimePickerRangPicker       = "TimePicker.RangPicker"
+	ComponentUploadAvatar               = "Upload.Avatar"
+	ComponentUploadAttachment           = "Upload.Attachment"
 )
