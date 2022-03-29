@@ -4,6 +4,7 @@ import (
 	"context"
 	"reflect"
 
+	"github.com/BeanWei/li/li-engine/controller/internal/empty"
 	"github.com/gogf/gf/v2/encoding/gjson"
 	"github.com/gogf/gf/v2/errors/gcode"
 	"github.com/gogf/gf/v2/errors/gerror"
@@ -132,7 +133,7 @@ func doParse(ctx context.Context, variables interface{}, pointer interface{}) er
 				if foundKey == "" {
 					data[field.Name()] = field.TagValue
 				} else {
-					if isEmpty(foundValue) {
+					if empty.IsEmpty(foundValue) {
 						data[foundKey] = field.TagValue
 					}
 				}

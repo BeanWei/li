@@ -124,6 +124,7 @@ func NewApp(cfg *App) {
 	controller.Bind("@getAppView", func(ctx context.Context, req *GetAppViewReq) (res string, err error) {
 		return pages[req.Key], nil
 	})
+	controller.Bind("@uploadFile", controller.FileUpload)
 
 	g.Server().BindHandler("POST:/api/liql", controller.Liql)
 }

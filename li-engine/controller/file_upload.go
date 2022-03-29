@@ -1,0 +1,44 @@
+package controller
+
+import (
+	"context"
+
+	"github.com/BeanWei/li/li-engine/service"
+	"github.com/BeanWei/li/li-pkg/file"
+	"github.com/gogf/gf/v2/errors/gcode"
+	"github.com/gogf/gf/v2/errors/gerror"
+	"github.com/gogf/gf/v2/net/ghttp"
+	"github.com/gogf/gf/v2/os/gtime"
+)
+
+type FileUploadRes struct {
+	Name string `json:"name"`
+	URL  string `json:"url"`
+}
+
+// FileUpload 单文件上传
+func FileUpload(ctx context.Context) (res *FileUploadRes, err error) {
+	client, err := service.NewFileClient(ctx)
+	if err != nil {
+		return nil, err
+	}
+
+	f := ghttp.RequestFromCtx(ctx).GetUploadFile("file")
+	if f == nil {
+		err = gerror.NewCode(gcode.CodeMissingParameter, "请选择文件")
+		return
+	}
+
+	output, err := client.PutObject(ctx, &file.PutObjectInput{
+		File:       f.FileHeader,
+		BucketName: gtime.Now().Format("Ym"),
+	})
+	if err != nil {
+		return nil, err
+	}
+	res = &FileUploadRes{
+		Name: output.FileName,
+		URL:  output.FileUrl,
+	}
+	return
+}

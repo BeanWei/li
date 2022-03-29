@@ -1,8 +1,10 @@
-package controller
+package empty
 
 import (
 	"reflect"
 	"time"
+
+	"github.com/BeanWei/li/li-engine/controller/internal/reflection"
 )
 
 // iString is used for type assert api for String().
@@ -25,10 +27,10 @@ type iTime interface {
 	IsZero() bool
 }
 
-// isEmpty checks whether given `value` empty.
+// IsEmpty checks whether given `value` empty.
 // It returns true if `value` is in: 0, nil, false, "", len(slice/map/chan) == 0,
 // or else it returns false.
-func isEmpty(value interface{}) bool {
+func IsEmpty(value interface{}) bool {
 	if value == nil {
 		return true
 	}
@@ -146,8 +148,8 @@ func isEmpty(value interface{}) bool {
 		case reflect.Struct:
 			var fieldValueInterface interface{}
 			for i := 0; i < rv.NumField(); i++ {
-				fieldValueInterface, _ = valueToInterface(rv.Field(i))
-				if !isEmpty(fieldValueInterface) {
+				fieldValueInterface, _ = reflection.ValueToInterface(rv.Field(i))
+				if !IsEmpty(fieldValueInterface) {
 					return false
 				}
 			}
@@ -171,30 +173,4 @@ func isEmpty(value interface{}) bool {
 		}
 	}
 	return false
-}
-
-func valueToInterface(v reflect.Value) (value interface{}, ok bool) {
-	if v.IsValid() && v.CanInterface() {
-		return v.Interface(), true
-	}
-	switch v.Kind() {
-	case reflect.Bool:
-		return v.Bool(), true
-	case reflect.Int, reflect.Int8, reflect.Int16, reflect.Int32, reflect.Int64:
-		return v.Int(), true
-	case reflect.Uint, reflect.Uint8, reflect.Uint16, reflect.Uint32, reflect.Uint64, reflect.Uintptr:
-		return v.Uint(), true
-	case reflect.Float32, reflect.Float64:
-		return v.Float(), true
-	case reflect.Complex64, reflect.Complex128:
-		return v.Complex(), true
-	case reflect.String:
-		return v.String(), true
-	case reflect.Ptr:
-		return valueToInterface(v.Elem())
-	case reflect.Interface:
-		return valueToInterface(v.Elem())
-	default:
-		return nil, false
-	}
 }
