@@ -18,8 +18,8 @@ import (
 type Storage interface {
 	PutObject(ctx context.Context, input *PutObjectInput) (out *PutObjectOutput, err error)
 	DeleteObject(ctx context.Context, input *DeleteObjectInput) (err error)
-	// TODO: 代理层实现 图片裁剪 + office 预览
-	Proxy(r *ghttp.Request, input *ProxyInput)
+	// TODO: 文件服务实现 图片裁剪 + office 预览
+	ServeFile(r *ghttp.Request, input *ProxyInput)
 }
 
 type (

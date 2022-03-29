@@ -77,7 +77,7 @@ func (s *storageAwsClient) DeleteObject(ctx context.Context, input *DeleteObject
 	return err
 }
 
-func (s *storageAwsClient) Proxy(r *ghttp.Request, input *ProxyInput) {
+func (s *storageAwsClient) ServeFile(r *ghttp.Request, input *ProxyInput) {
 	objuri := "/" + input.BucketName + "/" + input.FileName
 	remote, err := url.Parse(s.Client.Endpoint + objuri)
 	if err != nil {

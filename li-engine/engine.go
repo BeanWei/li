@@ -126,5 +126,7 @@ func NewApp(cfg *App) {
 	})
 	controller.Bind("@uploadFile", controller.FileUpload)
 
-	g.Server().BindHandler("POST:/api/liql", controller.Liql)
+	s := g.Server()
+	s.BindHandler("POST:/api/liql", controller.Liql)
+	s.BindHandler("GET:/upload/{bucket_name}/{file_name}", controller.FilePreviw)
 }

@@ -3,8 +3,8 @@ package controller
 import (
 	"context"
 
+	"github.com/BeanWei/li/li-engine/contrib/file"
 	"github.com/BeanWei/li/li-engine/service"
-	"github.com/BeanWei/li/li-pkg/file"
 	"github.com/gogf/gf/v2/errors/gcode"
 	"github.com/gogf/gf/v2/errors/gerror"
 	"github.com/gogf/gf/v2/net/ghttp"
@@ -38,7 +38,7 @@ func FileUpload(ctx context.Context) (res *FileUploadRes, err error) {
 	}
 	res = &FileUploadRes{
 		Name: output.FileName,
-		URL:  output.FileUrl,
+		URL:  "/upload" + output.FileUrl,
 	}
 	return
 }

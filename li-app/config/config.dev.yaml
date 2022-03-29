@@ -19,9 +19,24 @@ database:
     type: "pgsql"
     debug: true
 
+# Redis.
 redis:
   cache:
     address: 127.0.0.1:6379
     db: 1
     pass: 123456
     idleTimeout: 600
+
+# OSS.
+file:
+  default:
+    adapter: "local"
+  local:
+    dir: "./tmp/upload"
+  aws: # 兼容 minio
+    accessKeyID: ""
+    secretAccessKey: ""
+    endpoint: "" # for minio
+    region: ""
+    disableSSL: true
+    forcePathStyle: true

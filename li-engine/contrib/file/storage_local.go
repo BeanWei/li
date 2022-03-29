@@ -3,13 +3,11 @@ package file
 import (
 	"context"
 	"io"
-	"net/http"
 
 	"github.com/gogf/gf/v2/errors/gcode"
 	"github.com/gogf/gf/v2/errors/gerror"
 	"github.com/gogf/gf/v2/net/ghttp"
 	"github.com/gogf/gf/v2/os/gfile"
-	"github.com/gogf/gf/v2/os/gres"
 )
 
 type storageLocalClient struct {
@@ -71,12 +69,9 @@ func (s *storageLocalClient) DeleteObject(ctx context.Context, input *DeleteObje
 	return nil
 }
 
-func (s *storageLocalClient) Proxy(r *ghttp.Request, input *ProxyInput) {
-	file := gres.Get(gfile.Join(s.Dir, input.BucketName, input.FileName))
-	if file != nil {
-		info := file.FileInfo()
-		http.ServeContent(r.Response.Writer.RawWriter(), r.Request, info.Name(), info.ModTime(), file)
-	}
+func (s *storageLocalClient) ServeFile(r *ghttp.Request, input *ProxyInput) {
+	fileRealPath := gfile.Join(s.Dir, input.BucketName, input.FileName)
+	r.Response.ServeFile(fileRealPath)
 }
 
 var _ Storage = (*storageLocalClient)(nil)

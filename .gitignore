@@ -38,5 +38,6 @@ config.yaml
 main
 
 # app
+li-app/tmp/
 li-app/*go.sum
 _PERSISTENT_/

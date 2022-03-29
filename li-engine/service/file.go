@@ -4,7 +4,7 @@ import (
 	"context"
 	"sync"
 
-	"github.com/BeanWei/li/li-pkg/file"
+	"github.com/BeanWei/li/li-engine/contrib/file"
 	"github.com/gogf/gf/v2/frame/g"
 )
 
