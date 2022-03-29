@@ -66,7 +66,16 @@ func (User) Fields() []ent.Field {
 				},
 			),
 		field.String("avatar").
-			Optional(),
+			Optional().
+			Annotations(
+				lient.Annotation{
+					ViewSchema: node.UploadAvatar("avatar").SetTitle("头像").Schema(),
+					ColumnProps: &lient.ColumnProps{
+						Filterable: false,
+						Sortable:   false,
+					},
+				},
+			),
 		field.Bool("is_admin").
 			Optional().
 			Annotations(
