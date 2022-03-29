@@ -16,13 +16,17 @@ type storageLocalClient struct {
 	Dir string
 }
 
-// NewStorageAwsClient .
-func NewStorageLocalClient(dir string) (*storageLocalClient, error) {
-	if !gfile.IsDir(dir) {
+type LocalClientOption struct {
+	Dir string
+}
+
+// NewStorageLocalClient .
+func NewStorageLocalClient(opt *LocalClientOption) (*storageLocalClient, error) {
+	if !gfile.IsDir(opt.Dir) {
 		return nil, gerror.NewCode(gcode.CodeInvalidParameter, `parameter "dir" should be a directory path`)
 	}
 	return &storageLocalClient{
-		Dir: dir,
+		Dir: opt.Dir,
 	}, nil
 }
 
