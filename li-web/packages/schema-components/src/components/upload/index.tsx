@@ -37,7 +37,7 @@ const UploadAttachment: React.FC<UploadAttachmentProps> = connect(
       <ArcoUpload
         {...rest}
         withCredentials
-        fileList={normalizeFileList(value)}
+        defaultFileList={normalizeFileList(value)}
         onChange={(fileList) => {
           onChange?.(fileList.map((file) => file.url));
         }}
@@ -66,7 +66,10 @@ const UploadAttachment: React.FC<UploadAttachmentProps> = connect(
 const UploadAvatar: React.FC<UploadAvatarProps> = connect(
   (props: UploadAvatarProps) => {
     const { onChange, value, ...rest } = props;
-    const [file, setFile] = useState<UploadItem>();
+    const [file, setFile] = useState<UploadItem>({
+      url: value,
+      uid: "-1",
+    });
     const prefixCls = getPrefixCls();
     const cs = `${prefixCls}-upload-list-item${
       file && file.status === "error" ? " is-error" : ""
@@ -76,12 +79,16 @@ const UploadAvatar: React.FC<UploadAvatarProps> = connect(
         {...rest}
         withCredentials
         showUploadList={false}
-        fileList={normalizeFileList(value)}
-        onChange={(fileList) => {
-          onChange?.(fileList[0].url);
-        }}
-        onProgress={(currentFile) => {
-          setFile(currentFile);
+        onChange={(_, currentFile) => {
+          if (currentFile.status == "done") {
+            // @ts-ignore
+            const { data = {} } = currentFile.response;
+            onChange?.(data.url);
+            setFile({
+              ...file,
+              url: data.url,
+            });
+          }
         }}
       >
         <div className={cs} style={{ marginTop: 0 }}>

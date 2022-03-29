@@ -5,10 +5,10 @@ export default {
       changeOrigin: true,
       rewrite: (path) => path.replace(/^\/api/, ""),
     },
-    "/storage": {
-      target: "http://localhost:8299/storage/",
+    "/upload": {
+      target: "http://localhost:8299/upload/",
       changeOrigin: true,
-      rewrite: (path) => path.replace(/^\/storage/, ""),
+      rewrite: (path) => path.replace(/^\/upload/, ""),
     },
   },
   test: {
