@@ -10,7 +10,10 @@ func UploadAttachment(name string) *uploadattachmentBuilder {
 			XComponent: ui.ComponentUploadAttachment,
 			XDecorator: ui.DecoratorFormItem,
 			XComponentProps: map[string]interface{}{
-				"action": "@uploadFile",
+				"action": "/api/liql",
+				"data": map[string]string{
+					"operation": "@uploadFile",
+				},
 			},
 		},
 	}}

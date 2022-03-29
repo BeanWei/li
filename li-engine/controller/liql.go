@@ -89,13 +89,14 @@ func Liql(r *ghttp.Request) {
 	} else {
 		code = gcode.CodeOK
 	}
-	internalErr := r.Response.WriteJson(ghttp.DefaultHandlerResponse{
+
+	err = r.Response.WriteJson(ghttp.DefaultHandlerResponse{
 		Code:    code.Code(),
 		Message: msg,
 		Data:    res,
 	})
-	if internalErr != nil {
-		g.Log().Errorf(ctx, `%+v`, internalErr)
+	if err != nil {
+		g.Log().Errorf(ctx, `%+v`, err)
 	}
 }
 

@@ -56,5 +56,16 @@ func (User) Fields() []ent.Field {
 					DisableUpdate: true,
 				},
 			),
+		field.String("avatar").
+			Optional().
+			Annotations(
+				lient.Annotation{
+					ViewSchema: node.UploadAvatar("avatar").SetTitle("头像").Schema(),
+					ColumnProps: &lient.ColumnProps{
+						Filterable: false,
+						Sortable:   false,
+					},
+				},
+			),
 	}
 }

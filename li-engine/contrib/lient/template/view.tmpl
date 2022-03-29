@@ -42,7 +42,7 @@ func List{{ $.Name }}View() view.Node {
                     {{- range $i, $f := $.Fields }}
 						{{- if not $f.Sensitive }}
                         {{- if $annotation := $f.Annotations.LiEnt }}
-                            {{- if and $annotation.ViewSchema (not $annotation.DisableRead) $annotation.ColumnProps }}
+                            {{- if and $annotation.ViewSchema (not $annotation.DisableRead) (not (isNil $annotation.ColumnProps)) }}
 								node.ListTableColumn("column{{ $i }}").
 									Title({{ $.Package }}.Node{{ $f.StructField }}Title).
 									DataIndex("{{ $f.Name }}").

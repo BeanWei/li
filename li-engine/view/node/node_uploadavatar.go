@@ -10,7 +10,10 @@ func UploadAvatar(name string) *uploadavatarBuilder {
 			XComponent: ui.ComponentUploadAvatar,
 			XDecorator: ui.DecoratorFormItem,
 			XComponentProps: map[string]interface{}{
-				"action": "@uploadFile",
+				"action": "/api/liql",
+				"data": map[string]string{
+					"operation": "@uploadFile",
+				},
 			},
 		},
 	}}
