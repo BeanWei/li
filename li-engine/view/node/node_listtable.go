@@ -10,6 +10,7 @@ func ListTable(name string) *listtableBuilder {
 	return &listtableBuilder{&NodeBuilder{
 		schema: &ui.Schema{
 			Name:       name,
+			XPath:      name,
 			Type:       ui.SchemaTypeArray,
 			XComponent: ui.ComponentListTable,
 			XComponentProps: map[string]interface{}{
@@ -91,15 +92,7 @@ func (b *listtableBuilder) ActionBar(element view.Node) *listtableBuilder {
 }
 
 func (b *listtableBuilder) Columns(elements ...view.Node) *listtableBuilder {
-	if b.schema.Items == nil {
-		b.schema.Items = &ui.Schema{
-			Type:       ui.SchemaTypeObject,
-			Properties: gmap.NewListMap(),
-		}
-	}
-	for _, element := range elements {
-		b.schema.Items.Properties.Set(element.Schema().Name, element.Schema())
-	}
+	b.Items(elements...)
 	return b
 }
 

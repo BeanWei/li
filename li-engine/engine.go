@@ -2,11 +2,16 @@ package engine
 
 import (
 	"context"
+	"sync"
 
+	"github.com/BeanWei/li/li-engine/ac"
 	"github.com/BeanWei/li/li-engine/controller"
 	"github.com/BeanWei/li/li-engine/view"
 	"github.com/BeanWei/li/li-engine/view/ui"
+	"github.com/gogf/gf/v2/errors/gcode"
+	"github.com/gogf/gf/v2/errors/gerror"
 	"github.com/gogf/gf/v2/frame/g"
+	"github.com/gogf/gf/v2/text/gstr"
 	"github.com/gogf/gf/v2/util/grand"
 )
 
@@ -62,6 +67,10 @@ type (
 	GetAppViewReq struct {
 		Key string `p:"key" v:"required"`
 	}
+	GetAppViewRes struct {
+		Schema  string   `json:"schema"`
+		Removes []string `json:"removes"`
+	}
 )
 
 func NewApp(cfg *App) {
@@ -75,6 +84,7 @@ func NewApp(cfg *App) {
 			Entry:     cfg.Entry,
 		}
 		pages         = make(map[string]string)
+		pageacl       = make(map[string][]string)
 		recursionmenu func(menus []*AppMenu) []*appmenu
 	)
 
@@ -87,6 +97,30 @@ func NewApp(cfg *App) {
 			}
 			if key != "" {
 				pages[key] = page
+				var (
+					wg      sync.WaitGroup
+					acpaths = make(chan string)
+					acl     = ac.GetAll()
+				)
+				wg.Add(len(acl))
+				for k := range acl {
+					k := k
+					go func() {
+						defer wg.Done()
+						if gstr.Contains(page, k) {
+							acpaths <- key
+						}
+					}()
+				}
+				go func() {
+					wg.Wait()
+					close(acpaths)
+				}()
+				pageacl[key] = make([]string, 0)
+				for p := range acpaths {
+					pageacl[key] = append(pageacl[key], p)
+				}
+
 			} else {
 				key = grand.S(8)
 			}
@@ -121,8 +155,16 @@ func NewApp(cfg *App) {
 	controller.Bind("@getAppConfig", func(ctx context.Context) (res *app, err error) {
 		return appcfg, nil
 	})
-	controller.Bind("@getAppView", func(ctx context.Context, req *GetAppViewReq) (res string, err error) {
-		return pages[req.Key], nil
+	controller.Bind("@getAppView", func(ctx context.Context, req *GetAppViewReq) (res *GetAppViewRes, err error) {
+		page, exists := pages[req.Key]
+		if !exists {
+			err = gerror.NewCode(gcode.CodeInvalidParameter, "无效的key")
+		}
+		res = &GetAppViewRes{
+			Schema: page,
+		}
+		res.Removes, err = ac.CheckForView(ctx, pageacl[req.Key]...)
+		return
 	})
 	controller.Bind("@uploadFile", controller.FileUpload)
 

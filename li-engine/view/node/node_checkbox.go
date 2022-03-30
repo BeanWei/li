@@ -6,6 +6,7 @@ func Checkbox(name string) *checkboxBuilder {
 	return &checkboxBuilder{&NodeBuilder{
 		schema: &ui.Schema{
 			Name:       name,
+			XPath:      name,
 			Type:       ui.SchemaTypeBool,
 			XComponent: ui.ComponentCheckbox,
 			XDecorator: ui.DecoratorFormItem,

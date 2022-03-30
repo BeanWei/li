@@ -6,6 +6,7 @@ func Email(name string) *emailBuilder {
 	return &emailBuilder{&textBuilder{&NodeBuilder{
 		schema: &ui.Schema{
 			Name:            name,
+			XPath:           name,
 			Type:            ui.SchemaTypeString,
 			XComponent:      ui.ComponentInput,
 			XComponentProps: make(map[string]interface{}),

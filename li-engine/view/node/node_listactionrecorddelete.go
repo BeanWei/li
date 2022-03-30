@@ -10,11 +10,13 @@ func ListActionRecordDelete(name string) *listactionrecorddeleteBuilder {
 		schema: &ui.Schema{
 			Name:       name,
 			Type:       ui.SchemaTypeVoid,
+			XPath:      name,
 			XComponent: ui.ComponentListActionRecordDelete,
 			XComponentProps: map[string]interface{}{
 				"status":       "danger",
 				"confirmProps": make(map[string]interface{}),
 			},
+			HandlerNames: make([]string, 0),
 		},
 	}}
 }
@@ -35,6 +37,7 @@ func (b *listactionrecorddeleteBuilder) Description(description string) *listact
 
 func (b *listactionrecorddeleteBuilder) ForSubmit(operation string, handler interface{}) *listactionrecorddeleteBuilder {
 	b.schema.XComponentProps["forSubmit"] = operation
+	b.schema.HandlerNames = append(b.schema.HandlerNames, operation)
 	controller.Bind(operation, handler)
 	return b
 }

@@ -9,12 +9,14 @@ func ActionForModal(name string) *actionformmodalBuilder {
 	return &actionformmodalBuilder{&NodeBuilder{
 		schema: &ui.Schema{
 			Name:       name,
+			XPath:      name,
 			Type:       ui.SchemaTypeVoid,
 			XComponent: ui.ComponentActionFormModal,
 			XComponentProps: map[string]interface{}{
 				"modalProps":  make(map[string]interface{}),
 				"layoutProps": make(map[string]interface{}),
 			},
+			HandlerNames: make([]string, 0),
 		},
 	}}
 }
@@ -41,12 +43,14 @@ func (b *actionformmodalBuilder) InitialValues(initialValues map[string]interfac
 
 func (b *actionformmodalBuilder) ForInit(operation string, handler interface{}) *actionformmodalBuilder {
 	b.schema.XComponentProps["forInit"] = operation
+	b.schema.HandlerNames = append(b.schema.HandlerNames, operation)
 	controller.Bind(operation, handler)
 	return b
 }
 
 func (b *actionformmodalBuilder) ForSubmit(operation string, handler interface{}) *actionformmodalBuilder {
 	b.schema.XComponentProps["forSubmit"] = operation
+	b.schema.HandlerNames = append(b.schema.HandlerNames, operation)
 	controller.Bind(operation, handler)
 	return b
 }

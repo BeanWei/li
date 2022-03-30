@@ -4,6 +4,7 @@ import (
 	"context"
 	"reflect"
 
+	"github.com/BeanWei/li/li-engine/ac"
 	"github.com/BeanWei/li/li-engine/controller/internal/empty"
 	"github.com/gogf/gf/v2/encoding/gjson"
 	"github.com/gogf/gf/v2/errors/gcode"
@@ -31,39 +32,50 @@ func Liql(r *ghttp.Request) {
 	if err == nil {
 		f, exists := handlers[req.Operation]
 		if exists {
-			var inputValues = []reflect.Value{
-				reflect.ValueOf(ctx),
+			var acpass bool
+			acl := f.ACL
+			for _, p := range f.ACPaths {
+				acl = append(acl, ac.Get(p))
 			}
-			if f.Type.NumIn() == 2 {
-				var (
-					inputObject reflect.Value
-				)
-				if f.Type.In(1).Kind() == reflect.Ptr {
-					inputObject = reflect.New(f.Type.In(1).Elem())
-					err = doParse(ctx, req.Variables, inputObject.Interface())
-				} else {
-					inputObject = reflect.New(f.Type.In(1).Elem()).Elem()
-					err = doParse(ctx, req.Variables, inputObject.Addr().Interface())
-				}
-				if err == nil {
-					inputValues = append(inputValues, inputObject)
-				}
+			acpass, err = ac.CheckForController(ctx, acl...)
+			if err == nil && !acpass {
+				err = gerror.NewCode(gcode.CodeOperationFailed, "权限不足")
 			}
 			if err == nil {
-				// Call handler with dynamic created parameter values.
-				results := f.Value.Call(inputValues)
-				switch len(results) {
-				case 1:
-					if !results[0].IsNil() {
-						if e, ok := results[0].Interface().(error); ok {
-							err = e
-						}
+				var inputValues = []reflect.Value{
+					reflect.ValueOf(ctx),
+				}
+				if f.Type.NumIn() == 2 {
+					var (
+						inputObject reflect.Value
+					)
+					if f.Type.In(1).Kind() == reflect.Ptr {
+						inputObject = reflect.New(f.Type.In(1).Elem())
+						err = doParse(ctx, req.Variables, inputObject.Interface())
+					} else {
+						inputObject = reflect.New(f.Type.In(1).Elem()).Elem()
+						err = doParse(ctx, req.Variables, inputObject.Addr().Interface())
 					}
-				case 2:
-					res = results[0].Interface()
-					if !results[1].IsNil() {
-						if e, ok := results[1].Interface().(error); ok {
-							err = e
+					if err == nil {
+						inputValues = append(inputValues, inputObject)
+					}
+				}
+				if err == nil {
+					// Call handler with dynamic created parameter values.
+					results := f.Value.Call(inputValues)
+					switch len(results) {
+					case 1:
+						if !results[0].IsNil() {
+							if e, ok := results[0].Interface().(error); ok {
+								err = e
+							}
+						}
+					case 2:
+						res = results[0].Interface()
+						if !results[1].IsNil() {
+							if e, ok := results[1].Interface().(error); ok {
+								err = e
+							}
 						}
 					}
 				}

@@ -6,6 +6,7 @@ func Time(name string) *timeBuilder {
 	return &timeBuilder{&NodeBuilder{
 		schema: &ui.Schema{
 			Name:            name,
+			XPath:           name,
 			Type:            ui.SchemaTypeString,
 			XComponent:      ui.ComponentTimePicker,
 			XComponentProps: make(map[string]interface{}),

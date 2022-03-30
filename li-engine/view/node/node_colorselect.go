@@ -6,6 +6,7 @@ func ColorSelect(name string) *colorselectBuilder {
 	return &colorselectBuilder{&NodeBuilder{
 		schema: &ui.Schema{
 			Name:       name,
+			XPath:      name,
 			Type:       ui.SchemaTypeString,
 			XComponent: ui.ComponentColorSelect,
 			XDecorator: ui.DecoratorFormItem,

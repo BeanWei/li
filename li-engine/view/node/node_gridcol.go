@@ -9,6 +9,7 @@ func GridCol(name string) *gridcolBuilder {
 	return &gridcolBuilder{&NodeBuilder{
 		schema: &ui.Schema{
 			Name:            name,
+			XPath:           name,
 			Type:            ui.SchemaTypeVoid,
 			XComponent:      ui.ComponentGridCol,
 			XComponentProps: make(map[string]interface{}),

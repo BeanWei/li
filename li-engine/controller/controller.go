@@ -3,13 +3,16 @@ package controller
 import (
 	"reflect"
 
+	"github.com/BeanWei/li/li-engine/ac"
 	"github.com/gogf/gf/v2/errors/gcode"
 	"github.com/gogf/gf/v2/errors/gerror"
 )
 
 type handler struct {
-	Type  reflect.Type
-	Value reflect.Value
+	Type    reflect.Type
+	Value   reflect.Value
+	ACPaths []string
+	ACL     []ac.AC
 }
 
 var handlers = make(map[string]*handler)
@@ -45,7 +48,17 @@ func Bind(name string, f interface{}) {
 		))
 	}
 	handlers[name] = &handler{
-		Type:  reflectType,
-		Value: reflect.ValueOf(f),
+		Type:    reflectType,
+		Value:   reflect.ValueOf(f),
+		ACPaths: make([]string, 0),
+		ACL:     make([]ac.AC, 0),
 	}
+}
+
+func Use(name string, f ac.AC) {
+	handlers[name].ACL = append(handlers[name].ACL, f)
+}
+
+func UseWithSchemaPath(name string, path ...string) {
+	handlers[name].ACPaths = append(handlers[name].ACPaths, path...)
 }

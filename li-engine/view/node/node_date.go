@@ -6,6 +6,7 @@ func Date(name string) *dateBuilder {
 	return &dateBuilder{&NodeBuilder{
 		schema: &ui.Schema{
 			Name:            name,
+			XPath:           name,
 			Type:            ui.SchemaTypeString,
 			XComponent:      ui.ComponentDatePicker,
 			XComponentProps: make(map[string]interface{}),

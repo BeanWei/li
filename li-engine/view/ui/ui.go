@@ -1,6 +1,9 @@
 package ui
 
-import "github.com/gogf/gf/v2/container/gmap"
+import (
+	"github.com/BeanWei/li/li-engine/ac"
+	"github.com/gogf/gf/v2/container/gmap"
+)
 
 // https://react.formilyjs.org/zh-CN/api/shared/schema
 type Schema struct {
@@ -47,6 +50,11 @@ type Schema struct {
 	XData            map[string]interface{}   `json:"x-data,omitempty"`
 	Items            *Schema                  `json:"items,omitempty"`
 	Properties       *gmap.ListMap            `json:"properties,omitempty"`
+	// XPath 节点在整个 schema-tree 的路径, 服务于 ACL
+	// !!!key需要导出方便最后生成的页面能够匹配acl对应的路径
+	XPath        string   `json:"x-path,omitempty"`
+	HandlerNames []string `json:"-"`
+	AC           ac.AC    `json:"-"`
 }
 
 const (

@@ -9,12 +9,14 @@ func ListActionRecordEditModal(name string) *listactionrecordeditmodalBuilder {
 	return &listactionrecordeditmodalBuilder{&NodeBuilder{
 		schema: &ui.Schema{
 			Name:       name,
+			XPath:      name,
 			Type:       ui.SchemaTypeVoid,
 			XComponent: ui.ComponentListActionRecordEditModal,
 			XComponentProps: map[string]interface{}{
 				"modalProps":  make(map[string]interface{}),
 				"layoutProps": make(map[string]interface{}),
 			},
+			HandlerNames: make([]string, 0),
 		},
 	}}
 }
@@ -35,12 +37,14 @@ func (b *listactionrecordeditmodalBuilder) Description(description string) *list
 
 func (b *listactionrecordeditmodalBuilder) ForInit(operation string, handler interface{}) *listactionrecordeditmodalBuilder {
 	b.schema.XComponentProps["forInit"] = operation
+	b.schema.HandlerNames = append(b.schema.HandlerNames, operation)
 	controller.Bind(operation, handler)
 	return b
 }
 
 func (b *listactionrecordeditmodalBuilder) ForSubmit(operation string, handler interface{}) *listactionrecordeditmodalBuilder {
 	b.schema.XComponentProps["forSubmit"] = operation
+	b.schema.HandlerNames = append(b.schema.HandlerNames, operation)
 	controller.Bind(operation, handler)
 	return b
 }

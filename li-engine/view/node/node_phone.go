@@ -6,6 +6,7 @@ func Phone(name string) *phoneBuilder {
 	return &phoneBuilder{&NodeBuilder{
 		schema: &ui.Schema{
 			Name:       name,
+			XPath:      name,
 			Type:       ui.SchemaTypeString,
 			XComponent: ui.ComponentInput,
 			XDecorator: ui.DecoratorFormItem,

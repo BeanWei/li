@@ -6,6 +6,7 @@ func Money(name string) *moneyBuilder {
 	return &moneyBuilder{&NodeBuilder{
 		schema: &ui.Schema{
 			Name:            name,
+			XPath:           name,
 			Type:            ui.SchemaTypeString,
 			XComponent:      ui.ComponentMoney,
 			XComponentProps: make(map[string]interface{}),

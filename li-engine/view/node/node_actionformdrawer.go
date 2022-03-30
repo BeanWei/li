@@ -10,12 +10,14 @@ func ActionFormDrawer(name string) *actionformdrawerBuilder {
 		&NodeBuilder{
 			schema: &ui.Schema{
 				Name:       name,
+				XPath:      name,
 				Type:       ui.SchemaTypeVoid,
 				XComponent: ui.ComponentActionFormDrawer,
 				XComponentProps: map[string]interface{}{
 					"drawerProps": make(map[string]interface{}),
 					"layoutProps": make(map[string]interface{}),
 				},
+				HandlerNames: make([]string, 0),
 			},
 		},
 	}
@@ -48,12 +50,14 @@ func (b *actionformdrawerBuilder) InitialValues(initialValues map[string]interfa
 
 func (b *actionformdrawerBuilder) ForInit(operation string, handler interface{}) *actionformdrawerBuilder {
 	b.schema.XComponentProps["forInit"] = operation
+	b.schema.HandlerNames = append(b.schema.HandlerNames, operation)
 	controller.Bind(operation, handler)
 	return b
 }
 
 func (b *actionformdrawerBuilder) ForSubmit(operation string, handler interface{}) *actionformdrawerBuilder {
 	b.schema.XComponentProps["forSubmit"] = operation
+	b.schema.HandlerNames = append(b.schema.HandlerNames, operation)
 	controller.Bind(operation, handler)
 	return b
 }

@@ -6,6 +6,7 @@ func FormLayout(name string) *formlayoutBuilder {
 	return &formlayoutBuilder{&NodeBuilder{
 		schema: &ui.Schema{
 			Name:            name,
+			XPath:           name,
 			Type:            ui.SchemaTypeVoid,
 			XComponent:      ui.ComponentFormLayout,
 			XComponentProps: make(map[string]interface{}),

@@ -9,12 +9,14 @@ func ListActionRecordEditDrawer(name string) *listactionrecordeditdrawerBuilder 
 	return &listactionrecordeditdrawerBuilder{&NodeBuilder{
 		schema: &ui.Schema{
 			Name:       name,
+			XPath:      name,
 			Type:       ui.SchemaTypeVoid,
 			XComponent: ui.ComponentListActionRecordEditDrawer,
 			XComponentProps: map[string]interface{}{
 				"drawerProps": make(map[string]interface{}),
 				"layoutProps": make(map[string]interface{}),
 			},
+			HandlerNames: make([]string, 0),
 		},
 	}}
 }
@@ -35,12 +37,14 @@ func (b *listactionrecordeditdrawerBuilder) Description(description string) *lis
 
 func (b *listactionrecordeditdrawerBuilder) ForInit(operation string, handler interface{}) *listactionrecordeditdrawerBuilder {
 	b.schema.XComponentProps["forInit"] = operation
+	b.schema.HandlerNames = append(b.schema.HandlerNames, operation)
 	controller.Bind(operation, handler)
 	return b
 }
 
 func (b *listactionrecordeditdrawerBuilder) ForSubmit(operation string, handler interface{}) *listactionrecordeditdrawerBuilder {
 	b.schema.XComponentProps["forSubmit"] = operation
+	b.schema.HandlerNames = append(b.schema.HandlerNames, operation)
 	controller.Bind(operation, handler)
 	return b
 }

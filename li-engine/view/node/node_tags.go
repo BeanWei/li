@@ -6,6 +6,7 @@ func Tags(name string) *tagsBuilder {
 	return &tagsBuilder{&NodeBuilder{
 		schema: &ui.Schema{
 			Name:       name,
+			XPath:      name,
 			Type:       ui.SchemaTypeArray,
 			XComponent: ui.ComponentInputTag,
 			XDecorator: ui.DecoratorFormItem,

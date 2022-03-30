@@ -6,6 +6,7 @@ func TextArea(name string) *textareaBuilder {
 	return &textareaBuilder{&NodeBuilder{
 		schema: &ui.Schema{
 			Name:       name,
+			XPath:      name,
 			Type:       ui.SchemaTypeString,
 			XComponent: ui.ComponentInputTextArea,
 			XDecorator: ui.DecoratorFormItem,

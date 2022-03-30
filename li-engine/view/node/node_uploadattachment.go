@@ -6,6 +6,7 @@ func UploadAttachment(name string) *uploadattachmentBuilder {
 	return &uploadattachmentBuilder{&NodeBuilder{
 		schema: &ui.Schema{
 			Name:       name,
+			XPath:      name,
 			Type:       ui.SchemaTypeArray,
 			XComponent: ui.ComponentUploadAttachment,
 			XDecorator: ui.DecoratorFormItem,

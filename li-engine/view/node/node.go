@@ -1,9 +1,12 @@
 package node
 
 import (
+	"github.com/BeanWei/li/li-engine/ac"
+	"github.com/BeanWei/li/li-engine/controller"
 	"github.com/BeanWei/li/li-engine/view"
 	"github.com/BeanWei/li/li-engine/view/ui"
 	"github.com/gogf/gf/v2/container/gmap"
+	"github.com/gogf/gf/v2/text/gstr"
 )
 
 func Node(name string) *NodeBuilder {
@@ -237,12 +240,69 @@ func (b *NodeBuilder) SetProperties(properties *gmap.ListMap) *NodeBuilder {
 	return b
 }
 
+func (b *NodeBuilder) Items(elements ...view.Node) *NodeBuilder {
+	b.children(true, elements...)
+	return b
+}
+
 func (b *NodeBuilder) Children(elements ...view.Node) *NodeBuilder {
-	if b.schema.Properties == nil {
-		b.schema.Properties = gmap.NewListMap()
+	b.children(false, elements...)
+	return b
+}
+
+func (b *NodeBuilder) children(isItems bool, elements ...view.Node) *NodeBuilder {
+	if isItems {
+		if b.schema.Items == nil {
+			b.schema.Items = &ui.Schema{
+				Type:       ui.SchemaTypeObject,
+				Properties: gmap.NewListMap(),
+			}
+		}
+	} else {
+		if b.schema.Properties == nil {
+			b.schema.Properties = gmap.NewListMap()
+		}
 	}
 	for _, element := range elements {
-		b.schema.Properties.Set(element.Schema().Name, element.Schema())
+		es := element.Schema()
+		if es.XPath == "" {
+			es.XPath = es.Name
+		}
+		if isItems {
+			es.XPath = b.schema.XPath + ".items.properties." + es.XPath
+		} else {
+			es.XPath = b.schema.XPath + ".properties." + es.XPath
+		}
+		if es.AC != nil {
+			ac.Bind(es.XPath, es.AC)
+			for _, hn := range es.HandlerNames {
+				controller.UseWithSchemaPath(hn, es.XPath)
+			}
+		} else if len(es.HandlerNames) > 0 {
+			// 如果当前节点上定义了 controller 但是没有定义 AC.
+			// 则向上查找离的最近的父节点上的 AC.
+			pathItems := gstr.Split(b.schema.XPath, ".")
+			pathItemsLen := len(pathItems)
+			parentPaths := make([]string, pathItemsLen)
+			for i := 0; i < pathItemsLen; i++ {
+				// 把路径最短(离的最远)的放在最后面
+				parentPaths[pathItemsLen-1-i] = gstr.Join(pathItems[0:i+1], ".")
+			}
+			for _, path := range parentPaths {
+				f := ac.Get(path)
+				if f != nil {
+					for _, hn := range es.HandlerNames {
+						controller.UseWithSchemaPath(hn, path)
+					}
+					break
+				}
+			}
+		}
+		if isItems {
+			b.schema.Items.Properties.Set(es.Name, es)
+		} else {
+			b.schema.Properties.Set(es.Name, es)
+		}
 	}
 	return b
 }

@@ -9,10 +9,12 @@ func Submit(name string) *submitBuilder {
 	return &submitBuilder{&NodeBuilder{
 		schema: &ui.Schema{
 			Name:            name,
+			XPath:           name,
 			Type:            ui.SchemaTypeVoid,
 			XComponent:      ui.ComponentSubmit,
 			XDecorator:      ui.DecoratorFormItem,
 			XComponentProps: make(map[string]interface{}),
+			HandlerNames:    make([]string, 0),
 		},
 	}}
 }
@@ -33,6 +35,7 @@ func (b *submitBuilder) Description(description string) *submitBuilder {
 
 func (b *submitBuilder) ForSubmit(operation string, handler interface{}) *submitBuilder {
 	b.schema.XComponentProps["forSubmit"] = operation
+	b.schema.HandlerNames = append(b.schema.HandlerNames, operation)
 	controller.Bind(operation, handler)
 	return b
 }

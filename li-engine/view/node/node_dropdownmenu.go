@@ -3,13 +3,13 @@ package node
 import (
 	"github.com/BeanWei/li/li-engine/view"
 	"github.com/BeanWei/li/li-engine/view/ui"
-	"github.com/gogf/gf/v2/container/gmap"
 )
 
 func DropdownMenu(name string) *dropdownmenuBuilder {
 	return &dropdownmenuBuilder{&NodeBuilder{
 		schema: &ui.Schema{
 			Name:       name,
+			XPath:      name,
 			Type:       ui.SchemaTypeVoid,
 			XComponent: ui.ComponentDropdownMenu,
 			XComponentProps: map[string]interface{}{
@@ -26,15 +26,7 @@ type dropdownmenuBuilder struct {
 }
 
 func (b *dropdownmenuBuilder) Droplist(elements ...view.Node) *dropdownmenuBuilder {
-	if b.schema.Items == nil {
-		b.schema.Items = &ui.Schema{
-			Type:       ui.SchemaTypeVoid,
-			Properties: gmap.NewListMap(),
-		}
-	}
-	for _, element := range elements {
-		b.schema.Items.Properties.Set(element.Schema().Name, element.Schema())
-	}
+	b.Items(elements...)
 	return b
 }
 

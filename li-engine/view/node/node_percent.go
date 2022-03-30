@@ -6,6 +6,7 @@ func Percent(name string) *percentBuilder {
 	return &percentBuilder{&NodeBuilder{
 		schema: &ui.Schema{
 			Name:       name,
+			XPath:      name,
 			Type:       ui.SchemaTypeNumber,
 			XComponent: ui.ComponentInputNumber,
 			XComponentProps: map[string]interface{}{

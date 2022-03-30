@@ -6,6 +6,7 @@ func FormGrid(name string) *formgridBuilder {
 	return &formgridBuilder{&NodeBuilder{
 		schema: &ui.Schema{
 			Name:            name,
+			XPath:           name,
 			Type:            ui.SchemaTypeVoid,
 			XComponent:      ui.ComponentFormGrid,
 			XComponentProps: make(map[string]interface{}),

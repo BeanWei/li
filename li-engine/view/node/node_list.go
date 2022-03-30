@@ -10,10 +10,12 @@ func List(name string) *listBuilder {
 	return &listBuilder{&NodeBuilder{
 		schema: &ui.Schema{
 			Name:            name,
+			XPath:           name,
 			Type:            ui.SchemaTypeVoid,
 			XComponent:      ui.ComponentList,
 			XComponentProps: make(map[string]interface{}),
 			Properties:      gmap.NewListMap(),
+			HandlerNames:    make([]string, 0),
 		},
 	}}
 }
@@ -39,6 +41,7 @@ func (b *listBuilder) DecoratorCard() *listBuilder {
 
 func (b *listBuilder) ForInit(operation string, handler interface{}) *listBuilder {
 	b.schema.XComponentProps["forInit"] = operation
+	b.schema.HandlerNames = append(b.schema.HandlerNames, operation)
 	controller.Bind(operation, handler)
 	return b
 }
