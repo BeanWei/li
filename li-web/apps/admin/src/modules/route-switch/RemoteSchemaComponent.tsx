@@ -65,7 +65,7 @@ const RequestSchemaComponent: React.FC<RemoteSchemaComponentProps> = (
     <SchemaComponent
       memoized
       scope={scope}
-      schema={schemaTransform(data ? JSON.parse(data) : {})}
+      schema={schemaTransform(data ? JSON.parse(data.schema) : {})}
     />
   );
 };
