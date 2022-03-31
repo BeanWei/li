@@ -1,8 +1,11 @@
 package schema
 
 import (
+	"context"
+
 	"entgo.io/ent"
 	"entgo.io/ent/schema/field"
+	"github.com/BeanWei/li/li-engine/ac"
 	"github.com/BeanWei/li/li-engine/contrib/lient"
 	"github.com/BeanWei/li/li-engine/contrib/lient/mixin"
 	"github.com/BeanWei/li/li-engine/view/node"
@@ -27,7 +30,7 @@ func (User) Fields() []ent.Field {
 			Unique().
 			Annotations(
 				lient.Annotation{
-					ViewSchema: node.Email("email").SetTitle("邮箱").Schema(),
+					ViewSchema: node.Email("email").Title("邮箱").Schema(),
 					ColumnProps: &lient.ColumnProps{
 						Filterable: true,
 					},
@@ -40,7 +43,7 @@ func (User) Fields() []ent.Field {
 			Optional().
 			Annotations(
 				lient.Annotation{
-					ViewSchema:    node.Password("password").SetTitle("密码").Schema(),
+					ViewSchema:    node.Password("password").Title("密码").Schema(),
 					ValidateRule:  "required|password",
 					DisableRead:   true,
 					DisableUpdate: true,
@@ -59,7 +62,7 @@ func (User) Fields() []ent.Field {
 			NotEmpty().
 			Annotations(
 				lient.Annotation{
-					ViewSchema: node.Text("nickname").SetTitle("昵称").Schema(),
+					ViewSchema: node.Text("nickname").Title("昵称").Schema(),
 					ColumnProps: &lient.ColumnProps{
 						Filterable: true,
 					},
@@ -80,11 +83,23 @@ func (User) Fields() []ent.Field {
 			Optional().
 			Annotations(
 				lient.Annotation{
-					ViewSchema: node.Checkbox("is_admin").SetTitle("管理员").Schema(),
+					ViewSchema: node.Checkbox("is_admin").Title("管理员").Schema(),
 					ColumnProps: &lient.ColumnProps{
 						Filterable: true,
 					},
 				},
 			),
+	}
+}
+
+func (User) ACL() map[string]ac.AC {
+	return map[string]ac.AC{
+		"@listUser":       nil,
+		"@addUser":        nil,
+		"@updateUser":     nil,
+		"@deleteManyUser": nil,
+		"@deleteUser": func(ctx context.Context) (pass bool, err error) {
+			return false, nil
+		},
 	}
 }
