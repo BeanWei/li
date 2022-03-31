@@ -6,7 +6,6 @@ func Password(name string) *passwordBuilder {
 	return &passwordBuilder{&textBuilder{&NodeBuilder{
 		schema: &ui.Schema{
 			Name:            name,
-			XPath:           name,
 			Type:            ui.SchemaTypeString,
 			XComponent:      ui.ComponentPassword,
 			XComponentProps: make(map[string]interface{}),

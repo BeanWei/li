@@ -10,7 +10,6 @@ func ListActionRecordDelete(name string) *listactionrecorddeleteBuilder {
 		schema: &ui.Schema{
 			Name:       name,
 			Type:       ui.SchemaTypeVoid,
-			XPath:      name,
 			XComponent: ui.ComponentListActionRecordDelete,
 			XComponentProps: map[string]interface{}{
 				"status":       "danger",

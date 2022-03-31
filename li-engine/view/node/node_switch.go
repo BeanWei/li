@@ -6,7 +6,6 @@ func Switch(name string) *switchBuilder {
 	return &switchBuilder{&NodeBuilder{
 		schema: &ui.Schema{
 			Name:       name,
-			XPath:      name,
 			Type:       ui.SchemaTypeBool,
 			XComponent: ui.ComponentSwitch,
 			XDecorator: ui.DecoratorFormItem,

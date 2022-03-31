@@ -10,7 +10,6 @@ func ActionFormDrawer(name string) *actionformdrawerBuilder {
 		&NodeBuilder{
 			schema: &ui.Schema{
 				Name:       name,
-				XPath:      name,
 				Type:       ui.SchemaTypeVoid,
 				XComponent: ui.ComponentActionFormDrawer,
 				XComponentProps: map[string]interface{}{

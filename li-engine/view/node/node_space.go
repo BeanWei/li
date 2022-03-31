@@ -9,7 +9,6 @@ func Space(name string) *spaceBuilder {
 	return &spaceBuilder{&NodeBuilder{
 		schema: &ui.Schema{
 			Name:       name,
-			XPath:      name,
 			Type:       ui.SchemaTypeVoid,
 			XComponent: ui.ComponentSpace,
 			Properties: gmap.NewListMap(),

@@ -6,6 +6,7 @@ import (
 	engine "github.com/BeanWei/li/li-engine"
 	"github.com/BeanWei/li/li-engine/view"
 	"github.com/BeanWei/li/li-engine/view/node"
+	"github.com/gogf/gf/v2/encoding/gjson"
 	"github.com/gogf/gf/v2/test/gtest"
 )
 
@@ -15,13 +16,19 @@ type Hello struct {
 
 func (Hello) Nodes() []view.Node {
 	return []view.Node{
-		node.GridRow("row1").
+		node.GridRow("row_1").
 			Gutter(16).
 			Children(
-				node.GridCol("col1").
-					Span(16),
-				node.GridCol("col2").
-					Span(8),
+				node.GridRow("row_1_1").
+					Children(
+						node.GridRow("row_1_1_1").
+							Children(
+								node.GridRow("row_1_1_1_1").
+									Children(
+										node.GridRow("row_1_1_1_1_1"),
+									),
+							),
+					),
 			),
 	}
 }
@@ -45,6 +52,14 @@ func Test_NewApp(t *testing.T) {
 				},
 			},
 		})
+	})
+}
+
+func Test_Node(t *testing.T) {
+	gtest.C(t, func(t *gtest.T) {
+		_, s := view.ToPage(new(Hello))
+		j, _ := gjson.LoadContent(s)
+		j.Dump()
 	})
 }
 

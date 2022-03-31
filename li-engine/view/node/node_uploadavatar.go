@@ -6,7 +6,6 @@ func UploadAvatar(name string) *uploadavatarBuilder {
 	return &uploadavatarBuilder{&NodeBuilder{
 		schema: &ui.Schema{
 			Name:       name,
-			XPath:      name,
 			Type:       ui.SchemaTypeString,
 			XComponent: ui.ComponentUploadAvatar,
 			XDecorator: ui.DecoratorFormItem,

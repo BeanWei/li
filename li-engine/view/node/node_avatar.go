@@ -6,7 +6,6 @@ func Avatar(name string) *avatarBuilder {
 	return &avatarBuilder{&NodeBuilder{
 		schema: &ui.Schema{
 			Name:            name,
-			XPath:           name,
 			Type:            ui.SchemaTypeVoid,
 			XComponent:      ui.ComponentAvatar,
 			XComponentProps: make(map[string]interface{}),

@@ -6,7 +6,6 @@ func Form(name string) *formBuilder {
 	return &formBuilder{&NodeBuilder{
 		schema: &ui.Schema{
 			Name:       name,
-			XPath:      name,
 			Type:       ui.SchemaTypeObject,
 			XComponent: ui.ComponentForm,
 		},

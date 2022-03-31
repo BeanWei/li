@@ -6,7 +6,6 @@ func RadioGroup(name string) *radiogroupBuilder {
 	return &radiogroupBuilder{&NodeBuilder{
 		schema: &ui.Schema{
 			Name:       name,
-			XPath:      name,
 			Type:       ui.SchemaTypeAny,
 			XComponent: ui.ComponentRadioGroup,
 			XDecorator: ui.DecoratorFormItem,

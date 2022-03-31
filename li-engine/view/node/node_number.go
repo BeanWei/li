@@ -6,7 +6,6 @@ func Number(name string) *numberBuilder {
 	return &numberBuilder{&NodeBuilder{
 		schema: &ui.Schema{
 			Name:            name,
-			XPath:           name,
 			Type:            ui.SchemaTypeNumber,
 			XComponent:      ui.ComponentInputNumber,
 			XComponentProps: make(map[string]interface{}),

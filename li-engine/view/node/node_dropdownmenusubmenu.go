@@ -6,7 +6,6 @@ func DropdownMenuSubMenu(name string) *dropdownmenusubmenuBuilder {
 	return &dropdownmenusubmenuBuilder{&NodeBuilder{
 		schema: &ui.Schema{
 			Name:            name,
-			XPath:           name,
 			Type:            ui.SchemaTypeVoid,
 			XComponent:      ui.ComponentDropdownMenuSubMenu,
 			XComponentProps: make(map[string]interface{}),

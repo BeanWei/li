@@ -10,7 +10,6 @@ func ListTableColumn(name string) *listtablecolumnBuilder {
 	return &listtablecolumnBuilder{&NodeBuilder{
 		schema: &ui.Schema{
 			Name:            name,
-			XPath:           name,
 			Type:            ui.SchemaTypeVoid,
 			XComponent:      ui.ComponentListTableColumn,
 			XComponentProps: make(map[string]interface{}),

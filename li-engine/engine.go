@@ -2,7 +2,6 @@ package engine
 
 import (
 	"context"
-	"sync"
 
 	"github.com/BeanWei/li/li-engine/ac"
 	"github.com/BeanWei/li/li-engine/controller"
@@ -97,30 +96,11 @@ func NewApp(cfg *App) {
 			}
 			if key != "" {
 				pages[key] = page
-				var (
-					wg      sync.WaitGroup
-					acpaths = make(chan string)
-					acl     = ac.GetAll()
-				)
-				wg.Add(len(acl))
-				for k := range acl {
-					k := k
-					go func() {
-						defer wg.Done()
-						if gstr.Contains(page, k) {
-							acpaths <- key
-						}
-					}()
+				for p := range ac.GetAll() {
+					if gstr.HasPrefix(p, key) {
+						pageacl[key] = append(pageacl[key], p)
+					}
 				}
-				go func() {
-					wg.Wait()
-					close(acpaths)
-				}()
-				pageacl[key] = make([]string, 0)
-				for p := range acpaths {
-					pageacl[key] = append(pageacl[key], p)
-				}
-
 			} else {
 				key = grand.S(8)
 			}
@@ -159,6 +139,7 @@ func NewApp(cfg *App) {
 		page, exists := pages[req.Key]
 		if !exists {
 			err = gerror.NewCode(gcode.CodeInvalidParameter, "无效的key")
+			return
 		}
 		res = &GetAppViewRes{
 			Schema: page,

@@ -6,7 +6,6 @@ func Divider(name string) *dividerBuilder {
 	return &dividerBuilder{&NodeBuilder{
 		schema: &ui.Schema{
 			Name:            name,
-			XPath:           name,
 			Type:            ui.SchemaTypeVoid,
 			XComponent:      ui.ComponentDivider,
 			XComponentProps: make(map[string]interface{}),

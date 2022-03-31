@@ -9,7 +9,6 @@ func ListActionRecordEditModal(name string) *listactionrecordeditmodalBuilder {
 	return &listactionrecordeditmodalBuilder{&NodeBuilder{
 		schema: &ui.Schema{
 			Name:       name,
-			XPath:      name,
 			Type:       ui.SchemaTypeVoid,
 			XComponent: ui.ComponentListActionRecordEditModal,
 			XComponentProps: map[string]interface{}{

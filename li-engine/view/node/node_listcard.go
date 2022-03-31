@@ -9,7 +9,6 @@ func ListCard(name string) *listcardBuilder {
 	return &listcardBuilder{&NodeBuilder{
 		schema: &ui.Schema{
 			Name:            name,
-			XPath:           name,
 			Type:            ui.SchemaTypeVoid,
 			XComponent:      ui.ComponentListCard,
 			XComponentProps: make(map[string]interface{}),

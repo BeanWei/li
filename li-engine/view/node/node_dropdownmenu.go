@@ -9,7 +9,6 @@ func DropdownMenu(name string) *dropdownmenuBuilder {
 	return &dropdownmenuBuilder{&NodeBuilder{
 		schema: &ui.Schema{
 			Name:       name,
-			XPath:      name,
 			Type:       ui.SchemaTypeVoid,
 			XComponent: ui.ComponentDropdownMenu,
 			XComponentProps: map[string]interface{}{

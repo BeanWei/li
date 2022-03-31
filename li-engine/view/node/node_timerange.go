@@ -6,7 +6,6 @@ func TimeRange(name string) *timerangeBuilder {
 	return &timerangeBuilder{&NodeBuilder{
 		schema: &ui.Schema{
 			Name:            name,
-			XPath:           name,
 			Type:            ui.SchemaTypeArray,
 			XComponent:      ui.ComponentDatePickerRangePicker,
 			XComponentProps: make(map[string]interface{}),

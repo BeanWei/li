@@ -9,7 +9,6 @@ func ListAction(name string) *listactionBuilder {
 	return &listactionBuilder{&NodeBuilder{
 		schema: &ui.Schema{
 			Name:       name,
-			XPath:      name,
 			Type:       ui.SchemaTypeVoid,
 			XComponent: ui.ComponentListAction,
 			Properties: gmap.NewListMap(),

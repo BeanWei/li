@@ -9,7 +9,6 @@ func ListActionRecordEditDrawer(name string) *listactionrecordeditdrawerBuilder 
 	return &listactionrecordeditdrawerBuilder{&NodeBuilder{
 		schema: &ui.Schema{
 			Name:       name,
-			XPath:      name,
 			Type:       ui.SchemaTypeVoid,
 			XComponent: ui.ComponentListActionRecordEditDrawer,
 			XComponentProps: map[string]interface{}{

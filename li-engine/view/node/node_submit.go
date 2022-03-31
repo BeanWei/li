@@ -9,7 +9,6 @@ func Submit(name string) *submitBuilder {
 	return &submitBuilder{&NodeBuilder{
 		schema: &ui.Schema{
 			Name:            name,
-			XPath:           name,
 			Type:            ui.SchemaTypeVoid,
 			XComponent:      ui.ComponentSubmit,
 			XDecorator:      ui.DecoratorFormItem,

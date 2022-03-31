@@ -6,7 +6,6 @@ func Select(name string) *selectBuilder {
 	return &selectBuilder{&NodeBuilder{
 		schema: &ui.Schema{
 			Name:            name,
-			XPath:           name,
 			Type:            ui.SchemaTypeAny,
 			XComponent:      ui.ComponentSelect,
 			XDecorator:      ui.DecoratorFormItem,

@@ -9,7 +9,6 @@ func ListActionRowSelection(name string) *listactionrowselectionBuilder {
 	return &listactionrowselectionBuilder{&NodeBuilder{
 		schema: &ui.Schema{
 			Name:       name,
-			XPath:      name,
 			Type:       ui.SchemaTypeVoid,
 			XComponent: ui.ComponentListActionRowSelection,
 			XComponentProps: map[string]interface{}{

@@ -51,8 +51,7 @@ type Schema struct {
 	Items            *Schema                  `json:"items,omitempty"`
 	Properties       *gmap.ListMap            `json:"properties,omitempty"`
 	// XPath 节点在整个 schema-tree 的路径, 服务于 ACL
-	// !!!key需要导出方便最后生成的页面能够匹配acl对应的路径
-	XPath        string   `json:"x-path,omitempty"`
+	XPath        string   `json:"-"`
 	HandlerNames []string `json:"-"`
 	AC           ac.AC    `json:"-"`
 }

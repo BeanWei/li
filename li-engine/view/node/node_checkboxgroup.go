@@ -6,7 +6,6 @@ func CheckboxGroup(name string) *checkboxgroupBuilder {
 	return &checkboxgroupBuilder{&NodeBuilder{
 		schema: &ui.Schema{
 			Name:            name,
-			XPath:           name,
 			Type:            ui.SchemaTypeArray,
 			XComponent:      ui.ComponentCheckboxGroup,
 			XComponentProps: make(map[string]interface{}),

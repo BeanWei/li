@@ -9,7 +9,6 @@ func GridRow(name string) *gridrowBuilder {
 	return &gridrowBuilder{&NodeBuilder{
 		schema: &ui.Schema{
 			Name:            name,
-			XPath:           name,
 			Type:            ui.SchemaTypeVoid,
 			XComponent:      ui.ComponentGridRow,
 			XComponentProps: make(map[string]interface{}),

@@ -6,7 +6,6 @@ func Rate(name string) *rateBuilder {
 	return &rateBuilder{&NodeBuilder{
 		schema: &ui.Schema{
 			Name:            name,
-			XPath:           name,
 			Type:            ui.SchemaTypeNumber,
 			XComponent:      ui.ComponentRate,
 			XComponentProps: make(map[string]interface{}),

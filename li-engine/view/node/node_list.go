@@ -10,7 +10,6 @@ func List(name string) *listBuilder {
 	return &listBuilder{&NodeBuilder{
 		schema: &ui.Schema{
 			Name:            name,
-			XPath:           name,
 			Type:            ui.SchemaTypeVoid,
 			XComponent:      ui.ComponentList,
 			XComponentProps: make(map[string]interface{}),

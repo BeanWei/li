@@ -6,7 +6,6 @@ func ListActionReload(name string) *listactionreloadBuilder {
 	return &listactionreloadBuilder{&NodeBuilder{
 		schema: &ui.Schema{
 			Name:       name,
-			XPath:      name,
 			Type:       ui.SchemaTypeVoid,
 			XComponent: ui.ComponentListActionReload,
 		},
