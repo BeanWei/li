@@ -2,7 +2,7 @@ generate:
 	go generate ./...
 
 migrate:
-	go run fits.go migrate
+	go run li.go migrate
 
 entclean:
 	bash ./script/entclean.sh
