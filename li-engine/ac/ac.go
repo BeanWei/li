@@ -63,7 +63,7 @@ func CheckForView(ctx context.Context, paths ...string) (removes []string, err e
 	}
 	g := errgroup.WithCancel(context.Background())
 	g.GOMAXPROCS(runtime.NumCPU())
-	ch := make(chan string)
+	ch := make(chan string, len(paths))
 	for _, path := range paths {
 		f := acl[path]
 		if f == nil {
@@ -78,13 +78,13 @@ func CheckForView(ctx context.Context, paths ...string) (removes []string, err e
 			return e
 		})
 	}
-	go func() {
-		g.Wait()
-		close(ch)
-	}()
+	err = g.Wait()
+	close(ch)
+	if err != nil {
+		return
+	}
 	for path := range ch {
 		removes = append(removes, path)
 	}
-	err = g.Wait()
 	return
 }

@@ -1,11 +1,11 @@
-package engine_test
+package engine
 
 import (
 	"testing"
 
-	engine "github.com/BeanWei/li/li-engine"
 	"github.com/BeanWei/li/li-engine/view"
 	"github.com/BeanWei/li/li-engine/view/node"
+	"github.com/gogf/gf/v2/container/garray"
 	"github.com/gogf/gf/v2/encoding/gjson"
 	"github.com/gogf/gf/v2/test/gtest"
 )
@@ -35,14 +35,14 @@ func (Hello) Nodes() []view.Node {
 
 func Test_NewApp(t *testing.T) {
 	gtest.C(t, func(t *gtest.T) {
-		engine.NewApp(&engine.App{
+		NewApp(&App{
 			Title:     "Li Admin",
 			Copyright: "Powered by ❤️璃❤️",
-			Menus: []*engine.AppMenu{
+			Menus: []*AppMenu{
 				{
 					Title: "Welcome",
 					Icon:  "IconSmile",
-					Children: []*engine.AppMenu{
+					Children: []*AppMenu{
 						{
 							Title:  "Hello",
 							Page:   new(Hello),
@@ -52,6 +52,39 @@ func Test_NewApp(t *testing.T) {
 				},
 			},
 		})
+	})
+}
+
+func Test_MenuRebuild(t *testing.T) {
+	gtest.C(t, func(t *gtest.T) {
+		res := rebuildAppMenu([]*appmenu{
+			{Key: "0", Children: []*appmenu{{
+				Key: "0-0",
+				Children: []*appmenu{
+					{
+						Key: "0-0-0",
+						Children: []*appmenu{
+							{
+								Key: "0-0-0-0",
+							},
+						},
+					},
+				},
+			}}},
+			{Key: "1", Children: []*appmenu{{
+				Key: "1-0",
+			}, {
+				Key: "1-1",
+				Children: []*appmenu{
+					{
+						Key: "1-1-0",
+					},
+				},
+			}}},
+		}, garray.NewStrArrayFrom([]string{"0-0-0", "1-1"}))
+		t.AssertEQ(len(res), 1)
+		t.AssertEQ(res[0].Key, "1")
+		t.AssertEQ(res[0].Children[0].Key, "1-0")
 	})
 }
 
