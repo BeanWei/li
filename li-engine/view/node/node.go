@@ -1,6 +1,7 @@
 package node
 
 import (
+	"github.com/BeanWei/li/li-engine/ac"
 	"github.com/BeanWei/li/li-engine/view"
 	"github.com/BeanWei/li/li-engine/view/ui"
 	"github.com/gogf/gf/v2/container/gmap"
@@ -234,6 +235,11 @@ func (b *NodeBuilder) SetXData(xData map[string]interface{}) *NodeBuilder {
 
 func (b *NodeBuilder) SetProperties(properties *gmap.ListMap) *NodeBuilder {
 	b.schema.Properties = properties
+	return b
+}
+
+func (b *NodeBuilder) SetAC(f ac.AC) *NodeBuilder {
+	b.schema.AC = f
 	return b
 }
 

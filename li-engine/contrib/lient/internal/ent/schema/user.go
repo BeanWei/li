@@ -3,6 +3,7 @@ package schema
 import (
 	"entgo.io/ent"
 	"entgo.io/ent/schema/field"
+	"github.com/BeanWei/li/li-engine/ac"
 	"github.com/BeanWei/li/li-engine/contrib/lient"
 	"github.com/BeanWei/li/li-engine/contrib/lient/mixin"
 	"github.com/BeanWei/li/li-engine/view/node"
@@ -67,5 +68,14 @@ func (User) Fields() []ent.Field {
 					},
 				},
 			),
+	}
+}
+
+func (User) ACL() map[string]ac.AC {
+	return map[string]ac.AC{
+		"@listUser":       nil,
+		"@addUser":        nil,
+		"@deleteManyUser": nil,
+		"@deleteUser":     nil,
 	}
 }

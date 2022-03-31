@@ -15,7 +15,9 @@ type (
 var acl = make(map[string]AC)
 
 func Bind(path string, f AC) {
-	acl[path] = f
+	if path != "" && f != nil {
+		acl[path] = f
+	}
 }
 
 func Get(path string) AC {

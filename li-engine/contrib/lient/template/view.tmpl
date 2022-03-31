@@ -3,6 +3,7 @@
 {{ define "model/additional/lient-view" }}
 func List{{ $.Name }}View() view.Node {
 	return node.List("{{ $.Package }}List").
+		AC({{ $.Package }}ViewACL["@list{{ $.Name }}"]).
 		ForInit("@list{{ $.Name }}", List{{ $.Name }}Controller).
 		DecoratorCard().
 		Children(
@@ -13,6 +14,7 @@ func List{{ $.Name }}View() view.Node {
 					node.ListAction("{{ $.Package }}ListActions").Children(
 						node.ListActionRecordEditDrawer("add{{ $.Name }}").
 							Title("新建").
+							AC({{ $.Package }}ViewACL["@add{{ $.Name }}"]).
 							ForSubmit("@add{{ $.Name }}", Create{{ $.Name }}Controller).
 							ButtonType("primary").
 							ButtonIcon("IconPlus").
@@ -22,7 +24,7 @@ func List{{ $.Name }}View() view.Node {
 									{{- range $f := $.Fields }}
 										{{- if $annotation := $f.Annotations.LiEnt }}
 											{{- if and $annotation.ViewSchema (not $annotation.DisableCreate) }}
-												{{ $.Package }}.Node{{ $f.StructField }}(){{- if contains $annotation.ValidateRule "required" }}.SetRequired(true){{- end }},
+												{{ $.Package }}.Node{{ $f.StructField }}().SetAC({{ $.Package }}ViewACL["{{ $f.Name }}"]){{- if contains $annotation.ValidateRule "required" }}.SetRequired(true){{- end }},
 											{{- end }}
 										{{- end }}
 									{{- end }}
@@ -30,6 +32,7 @@ func List{{ $.Name }}View() view.Node {
 							),
 						node.ListActionRowSelection("deleteMany{{ $.Name }}").
 							Title("删除").
+							AC({{ $.Package }}ViewACL["@deleteMany{{ $.Name }}"]).
 							ForSubmit("@deleteMany{{ $.Name }}", DeleteMany{{ $.Name }}Controller).
 							AfterReload().
 							ConfirmTitle("确认删除").
@@ -44,6 +47,7 @@ func List{{ $.Name }}View() view.Node {
                         {{- if $annotation := $f.Annotations.LiEnt }}
                             {{- if and $annotation.ViewSchema (not $annotation.DisableRead) (not (isNil $annotation.ColumnProps)) }}
 								node.ListTableColumn("column{{ $i }}").
+									AC({{ $.Package }}ViewACL["{{ $f.Name }}"]).
 									Title({{ $.Package }}.Node{{ $f.StructField }}Title).
 									DataIndex("{{ $f.Name }}").
 									{{- if $annotation.ColumnProps.Align }}Align("{{ $annotation.ColumnProps.Align }}").{{- end }}
@@ -79,10 +83,20 @@ func List{{ $.Name }}View() view.Node {
 									),
 								node.ListActionRecordDelete("delete").
 									Title("删除").
+									AC({{ $.Package }}ViewACL["@delete{{ $.Name }}"]).
 									ForSubmit("@delete{{ $.Name }}", Delete{{ $.Name }}Controller),
 							),
 						),
 				),
 		)
+}
+
+var {{ $.Package }}ViewACL = map[string]ac.AC{}
+
+func init() {
+	rf := reflect.ValueOf(schema.{{ $.Name }}{}).MethodByName("ACL")
+	if rf.IsValid() {
+		{{ $.Package }}ViewACL, _ = rf.Call([]reflect.Value{})[0].Interface().(map[string]ac.AC)
+	}
 }
 {{ end }}
