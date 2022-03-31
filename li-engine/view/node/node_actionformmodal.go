@@ -1,6 +1,7 @@
 package node
 
 import (
+	"github.com/BeanWei/li/li-engine/ac"
 	"github.com/BeanWei/li/li-engine/controller"
 	"github.com/BeanWei/li/li-engine/view/ui"
 )
@@ -22,6 +23,11 @@ func ActionForModal(name string) *actionformmodalBuilder {
 
 type actionformmodalBuilder struct {
 	*NodeBuilder
+}
+
+func (b *actionformmodalBuilder) AC(f ac.AC) *actionformmodalBuilder {
+	b.schema.AC = f
+	return b
 }
 
 func (b *actionformmodalBuilder) Title(title string) *actionformmodalBuilder {

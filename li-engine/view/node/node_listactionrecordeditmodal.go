@@ -1,6 +1,7 @@
 package node
 
 import (
+	"github.com/BeanWei/li/li-engine/ac"
 	"github.com/BeanWei/li/li-engine/controller"
 	"github.com/BeanWei/li/li-engine/view/ui"
 )
@@ -22,6 +23,11 @@ func ListActionRecordEditModal(name string) *listactionrecordeditmodalBuilder {
 
 type listactionrecordeditmodalBuilder struct {
 	*NodeBuilder
+}
+
+func (b *listactionrecordeditmodalBuilder) AC(f ac.AC) *listactionrecordeditmodalBuilder {
+	b.schema.AC = f
+	return b
 }
 
 func (b *listactionrecordeditmodalBuilder) Title(title string) *listactionrecordeditmodalBuilder {

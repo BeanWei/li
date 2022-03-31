@@ -1,6 +1,9 @@
 package node
 
-import "github.com/BeanWei/li/li-engine/view/ui"
+import (
+	"github.com/BeanWei/li/li-engine/ac"
+	"github.com/BeanWei/li/li-engine/view/ui"
+)
 
 func Avatar(name string) *avatarBuilder {
 	return &avatarBuilder{&NodeBuilder{
@@ -15,6 +18,11 @@ func Avatar(name string) *avatarBuilder {
 
 type avatarBuilder struct {
 	*NodeBuilder
+}
+
+func (b *avatarBuilder) AC(f ac.AC) *avatarBuilder {
+	b.schema.AC = f
+	return b
 }
 
 func (b *avatarBuilder) Shape(shape string) *avatarBuilder {

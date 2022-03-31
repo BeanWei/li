@@ -1,6 +1,9 @@
 package node
 
-import "github.com/BeanWei/li/li-engine/view/ui"
+import (
+	"github.com/BeanWei/li/li-engine/ac"
+	"github.com/BeanWei/li/li-engine/view/ui"
+)
 
 func DateRange(name string) *daterangeBuilder {
 	return &daterangeBuilder{&NodeBuilder{
@@ -16,6 +19,11 @@ func DateRange(name string) *daterangeBuilder {
 
 type daterangeBuilder struct {
 	*NodeBuilder
+}
+
+func (b *daterangeBuilder) AC(f ac.AC) *daterangeBuilder {
+	b.schema.AC = f
+	return b
 }
 
 func (b *daterangeBuilder) Title(title string) *daterangeBuilder {

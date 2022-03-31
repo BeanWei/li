@@ -1,6 +1,9 @@
 package node
 
-import "github.com/BeanWei/li/li-engine/view/ui"
+import (
+	"github.com/BeanWei/li/li-engine/ac"
+	"github.com/BeanWei/li/li-engine/view/ui"
+)
 
 func Switch(name string) *switchBuilder {
 	return &switchBuilder{&NodeBuilder{
@@ -15,6 +18,11 @@ func Switch(name string) *switchBuilder {
 
 type switchBuilder struct {
 	*NodeBuilder
+}
+
+func (b *switchBuilder) AC(f ac.AC) *switchBuilder {
+	b.schema.AC = f
+	return b
 }
 
 func (b *switchBuilder) Title(title string) *switchBuilder {

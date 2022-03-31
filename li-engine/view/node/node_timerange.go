@@ -1,6 +1,9 @@
 package node
 
-import "github.com/BeanWei/li/li-engine/view/ui"
+import (
+	"github.com/BeanWei/li/li-engine/ac"
+	"github.com/BeanWei/li/li-engine/view/ui"
+)
 
 func TimeRange(name string) *timerangeBuilder {
 	return &timerangeBuilder{&NodeBuilder{
@@ -16,6 +19,11 @@ func TimeRange(name string) *timerangeBuilder {
 
 type timerangeBuilder struct {
 	*NodeBuilder
+}
+
+func (b *timerangeBuilder) AC(f ac.AC) *timerangeBuilder {
+	b.schema.AC = f
+	return b
 }
 
 func (b *timerangeBuilder) Title(title string) *timerangeBuilder {

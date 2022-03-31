@@ -1,6 +1,9 @@
 package node
 
-import "github.com/BeanWei/li/li-engine/view/ui"
+import (
+	"github.com/BeanWei/li/li-engine/ac"
+	"github.com/BeanWei/li/li-engine/view/ui"
+)
 
 func Percent(name string) *percentBuilder {
 	return &percentBuilder{&NodeBuilder{
@@ -20,6 +23,11 @@ func Percent(name string) *percentBuilder {
 
 type percentBuilder struct {
 	*NodeBuilder
+}
+
+func (b *percentBuilder) AC(f ac.AC) *percentBuilder {
+	b.schema.AC = f
+	return b
 }
 
 func (b *percentBuilder) Title(title string) *percentBuilder {

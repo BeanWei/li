@@ -1,6 +1,7 @@
 package node
 
 import (
+	"github.com/BeanWei/li/li-engine/ac"
 	"github.com/BeanWei/li/li-engine/controller"
 	"github.com/BeanWei/li/li-engine/view/ui"
 )
@@ -24,6 +25,11 @@ func ActionFormDrawer(name string) *actionformdrawerBuilder {
 
 type actionformdrawerBuilder struct {
 	*NodeBuilder
+}
+
+func (b *actionformdrawerBuilder) AC(f ac.AC) *actionformdrawerBuilder {
+	b.schema.AC = f
+	return b
 }
 
 func (b *actionformdrawerBuilder) Title(title string) *actionformdrawerBuilder {

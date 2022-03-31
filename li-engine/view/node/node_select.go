@@ -1,6 +1,9 @@
 package node
 
-import "github.com/BeanWei/li/li-engine/view/ui"
+import (
+	"github.com/BeanWei/li/li-engine/ac"
+	"github.com/BeanWei/li/li-engine/view/ui"
+)
 
 func Select(name string) *selectBuilder {
 	return &selectBuilder{&NodeBuilder{
@@ -17,6 +20,11 @@ func Select(name string) *selectBuilder {
 
 type selectBuilder struct {
 	*NodeBuilder
+}
+
+func (b *selectBuilder) AC(f ac.AC) *selectBuilder {
+	b.schema.AC = f
+	return b
 }
 
 func (b *selectBuilder) Title(title string) *selectBuilder {

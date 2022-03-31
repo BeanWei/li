@@ -1,6 +1,9 @@
 package node
 
-import "github.com/BeanWei/li/li-engine/view/ui"
+import (
+	"github.com/BeanWei/li/li-engine/ac"
+	"github.com/BeanWei/li/li-engine/view/ui"
+)
 
 func UploadAttachment(name string) *uploadattachmentBuilder {
 	return &uploadattachmentBuilder{&NodeBuilder{
@@ -21,6 +24,11 @@ func UploadAttachment(name string) *uploadattachmentBuilder {
 
 type uploadattachmentBuilder struct {
 	*NodeBuilder
+}
+
+func (b *uploadattachmentBuilder) AC(f ac.AC) *uploadattachmentBuilder {
+	b.schema.AC = f
+	return b
 }
 
 func (b *uploadattachmentBuilder) Title(title string) *uploadattachmentBuilder {

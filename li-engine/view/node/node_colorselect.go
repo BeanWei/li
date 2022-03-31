@@ -1,6 +1,9 @@
 package node
 
-import "github.com/BeanWei/li/li-engine/view/ui"
+import (
+	"github.com/BeanWei/li/li-engine/ac"
+	"github.com/BeanWei/li/li-engine/view/ui"
+)
 
 func ColorSelect(name string) *colorselectBuilder {
 	return &colorselectBuilder{&NodeBuilder{
@@ -15,6 +18,11 @@ func ColorSelect(name string) *colorselectBuilder {
 
 type colorselectBuilder struct {
 	*NodeBuilder
+}
+
+func (b *colorselectBuilder) AC(f ac.AC) *colorselectBuilder {
+	b.schema.AC = f
+	return b
 }
 
 func (b *colorselectBuilder) Title(title string) *colorselectBuilder {

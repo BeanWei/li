@@ -1,6 +1,9 @@
 package node
 
-import "github.com/BeanWei/li/li-engine/view/ui"
+import (
+	"github.com/BeanWei/li/li-engine/ac"
+	"github.com/BeanWei/li/li-engine/view/ui"
+)
 
 func Money(name string) *moneyBuilder {
 	return &moneyBuilder{&NodeBuilder{
@@ -16,6 +19,11 @@ func Money(name string) *moneyBuilder {
 
 type moneyBuilder struct {
 	*NodeBuilder
+}
+
+func (b *moneyBuilder) AC(f ac.AC) *moneyBuilder {
+	b.schema.AC = f
+	return b
 }
 
 func (b *moneyBuilder) Title(title string) *moneyBuilder {

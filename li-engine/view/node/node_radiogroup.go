@@ -1,6 +1,9 @@
 package node
 
-import "github.com/BeanWei/li/li-engine/view/ui"
+import (
+	"github.com/BeanWei/li/li-engine/ac"
+	"github.com/BeanWei/li/li-engine/view/ui"
+)
 
 func RadioGroup(name string) *radiogroupBuilder {
 	return &radiogroupBuilder{&NodeBuilder{
@@ -16,6 +19,11 @@ func RadioGroup(name string) *radiogroupBuilder {
 
 type radiogroupBuilder struct {
 	*NodeBuilder
+}
+
+func (b *radiogroupBuilder) AC(f ac.AC) *radiogroupBuilder {
+	b.schema.AC = f
+	return b
 }
 
 func (b *radiogroupBuilder) Title(title string) *radiogroupBuilder {

@@ -1,6 +1,9 @@
 package node
 
-import "github.com/BeanWei/li/li-engine/view/ui"
+import (
+	"github.com/BeanWei/li/li-engine/ac"
+	"github.com/BeanWei/li/li-engine/view/ui"
+)
 
 func FormGrid(name string) *formgridBuilder {
 	return &formgridBuilder{&NodeBuilder{
@@ -15,6 +18,11 @@ func FormGrid(name string) *formgridBuilder {
 
 type formgridBuilder struct {
 	*NodeBuilder
+}
+
+func (b *formgridBuilder) AC(f ac.AC) *formgridBuilder {
+	b.schema.AC = f
+	return b
 }
 
 func (b *formgridBuilder) MaxRows(maxRows int) *formgridBuilder {

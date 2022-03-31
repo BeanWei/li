@@ -1,6 +1,9 @@
 package node
 
-import "github.com/BeanWei/li/li-engine/view/ui"
+import (
+	"github.com/BeanWei/li/li-engine/ac"
+	"github.com/BeanWei/li/li-engine/view/ui"
+)
 
 func ListActionReload(name string) *listactionreloadBuilder {
 	return &listactionreloadBuilder{&NodeBuilder{
@@ -14,6 +17,11 @@ func ListActionReload(name string) *listactionreloadBuilder {
 
 type listactionreloadBuilder struct {
 	*NodeBuilder
+}
+
+func (b *listactionreloadBuilder) AC(f ac.AC) *listactionreloadBuilder {
+	b.schema.AC = f
+	return b
 }
 
 func (b *listactionreloadBuilder) Title(title string) *listactionreloadBuilder {

@@ -1,6 +1,9 @@
 package node
 
-import "github.com/BeanWei/li/li-engine/view/ui"
+import (
+	"github.com/BeanWei/li/li-engine/ac"
+	"github.com/BeanWei/li/li-engine/view/ui"
+)
 
 func FormLayout(name string) *formlayoutBuilder {
 	return &formlayoutBuilder{&NodeBuilder{
@@ -15,6 +18,11 @@ func FormLayout(name string) *formlayoutBuilder {
 
 type formlayoutBuilder struct {
 	*NodeBuilder
+}
+
+func (b *formlayoutBuilder) AC(f ac.AC) *formlayoutBuilder {
+	b.schema.AC = f
+	return b
 }
 
 func (b *formlayoutBuilder) Colon() *formlayoutBuilder {

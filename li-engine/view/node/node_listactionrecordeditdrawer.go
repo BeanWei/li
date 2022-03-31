@@ -1,6 +1,7 @@
 package node
 
 import (
+	"github.com/BeanWei/li/li-engine/ac"
 	"github.com/BeanWei/li/li-engine/controller"
 	"github.com/BeanWei/li/li-engine/view/ui"
 )
@@ -22,6 +23,11 @@ func ListActionRecordEditDrawer(name string) *listactionrecordeditdrawerBuilder 
 
 type listactionrecordeditdrawerBuilder struct {
 	*NodeBuilder
+}
+
+func (b *listactionrecordeditdrawerBuilder) AC(f ac.AC) *listactionrecordeditdrawerBuilder {
+	b.schema.AC = f
+	return b
 }
 
 func (b *listactionrecordeditdrawerBuilder) Title(title string) *listactionrecordeditdrawerBuilder {

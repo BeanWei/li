@@ -1,6 +1,9 @@
 package node
 
-import "github.com/BeanWei/li/li-engine/view/ui"
+import (
+	"github.com/BeanWei/li/li-engine/ac"
+	"github.com/BeanWei/li/li-engine/view/ui"
+)
 
 func CheckboxGroup(name string) *checkboxgroupBuilder {
 	return &checkboxgroupBuilder{&NodeBuilder{
@@ -17,6 +20,11 @@ func CheckboxGroup(name string) *checkboxgroupBuilder {
 
 type checkboxgroupBuilder struct {
 	*NodeBuilder
+}
+
+func (b *checkboxgroupBuilder) AC(f ac.AC) *checkboxgroupBuilder {
+	b.schema.AC = f
+	return b
 }
 
 func (b *checkboxgroupBuilder) Title(title string) *checkboxgroupBuilder {

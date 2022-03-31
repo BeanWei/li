@@ -1,6 +1,9 @@
 package node
 
-import "github.com/BeanWei/li/li-engine/view/ui"
+import (
+	"github.com/BeanWei/li/li-engine/ac"
+	"github.com/BeanWei/li/li-engine/view/ui"
+)
 
 func Tags(name string) *tagsBuilder {
 	return &tagsBuilder{&NodeBuilder{
@@ -15,6 +18,11 @@ func Tags(name string) *tagsBuilder {
 
 type tagsBuilder struct {
 	*NodeBuilder
+}
+
+func (b *tagsBuilder) AC(f ac.AC) *tagsBuilder {
+	b.schema.AC = f
+	return b
 }
 
 func (b *tagsBuilder) Title(title string) *tagsBuilder {

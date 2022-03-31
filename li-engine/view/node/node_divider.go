@@ -1,6 +1,9 @@
 package node
 
-import "github.com/BeanWei/li/li-engine/view/ui"
+import (
+	"github.com/BeanWei/li/li-engine/ac"
+	"github.com/BeanWei/li/li-engine/view/ui"
+)
 
 func Divider(name string) *dividerBuilder {
 	return &dividerBuilder{&NodeBuilder{
@@ -15,6 +18,11 @@ func Divider(name string) *dividerBuilder {
 
 type dividerBuilder struct {
 	*NodeBuilder
+}
+
+func (b *dividerBuilder) AC(f ac.AC) *dividerBuilder {
+	b.schema.AC = f
+	return b
 }
 
 func (b *dividerBuilder) Type(typ string) *dividerBuilder {

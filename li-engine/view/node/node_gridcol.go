@@ -1,6 +1,7 @@
 package node
 
 import (
+	"github.com/BeanWei/li/li-engine/ac"
 	"github.com/BeanWei/li/li-engine/view/ui"
 	"github.com/gogf/gf/v2/container/gmap"
 )
@@ -19,6 +20,11 @@ func GridCol(name string) *gridcolBuilder {
 
 type gridcolBuilder struct {
 	*NodeBuilder
+}
+
+func (b *gridcolBuilder) AC(f ac.AC) *gridcolBuilder {
+	b.schema.AC = f
+	return b
 }
 
 // https://arco.design/react/components/grid#api

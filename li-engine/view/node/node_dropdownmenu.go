@@ -1,6 +1,7 @@
 package node
 
 import (
+	"github.com/BeanWei/li/li-engine/ac"
 	"github.com/BeanWei/li/li-engine/view"
 	"github.com/BeanWei/li/li-engine/view/ui"
 )
@@ -22,6 +23,11 @@ func DropdownMenu(name string) *dropdownmenuBuilder {
 
 type dropdownmenuBuilder struct {
 	*NodeBuilder
+}
+
+func (b *dropdownmenuBuilder) AC(f ac.AC) *dropdownmenuBuilder {
+	b.schema.AC = f
+	return b
 }
 
 func (b *dropdownmenuBuilder) Droplist(elements ...view.Node) *dropdownmenuBuilder {

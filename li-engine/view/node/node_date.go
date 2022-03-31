@@ -1,6 +1,9 @@
 package node
 
-import "github.com/BeanWei/li/li-engine/view/ui"
+import (
+	"github.com/BeanWei/li/li-engine/ac"
+	"github.com/BeanWei/li/li-engine/view/ui"
+)
 
 func Date(name string) *dateBuilder {
 	return &dateBuilder{&NodeBuilder{
@@ -16,6 +19,11 @@ func Date(name string) *dateBuilder {
 
 type dateBuilder struct {
 	*NodeBuilder
+}
+
+func (b *dateBuilder) AC(f ac.AC) *dateBuilder {
+	b.schema.AC = f
+	return b
 }
 
 func (b *dateBuilder) Title(title string) *dateBuilder {

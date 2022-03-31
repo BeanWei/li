@@ -1,6 +1,7 @@
 package node
 
 import (
+	"github.com/BeanWei/li/li-engine/ac"
 	"github.com/BeanWei/li/li-engine/view"
 	"github.com/BeanWei/li/li-engine/view/ui"
 	"github.com/gogf/gf/v2/container/gmap"
@@ -22,6 +23,11 @@ func ListTable(name string) *listtableBuilder {
 
 type listtableBuilder struct {
 	*NodeBuilder
+}
+
+func (b *listtableBuilder) AC(f ac.AC) *listtableBuilder {
+	b.schema.AC = f
+	return b
 }
 
 func (b *listtableBuilder) LayoutFixed() *listtableBuilder {

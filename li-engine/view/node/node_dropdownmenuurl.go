@@ -1,6 +1,9 @@
 package node
 
-import "github.com/BeanWei/li/li-engine/view/ui"
+import (
+	"github.com/BeanWei/li/li-engine/ac"
+	"github.com/BeanWei/li/li-engine/view/ui"
+)
 
 func DropdownMenuURL(name string) *dropdownmenuurlBuilder {
 	return &dropdownmenuurlBuilder{&NodeBuilder{
@@ -15,6 +18,11 @@ func DropdownMenuURL(name string) *dropdownmenuurlBuilder {
 
 type dropdownmenuurlBuilder struct {
 	*NodeBuilder
+}
+
+func (b *dropdownmenuurlBuilder) AC(f ac.AC) *dropdownmenuurlBuilder {
+	b.schema.AC = f
+	return b
 }
 
 func (b *dropdownmenuurlBuilder) Title(title string) *dropdownmenuurlBuilder {

@@ -1,6 +1,7 @@
 package node
 
 import (
+	"github.com/BeanWei/li/li-engine/ac"
 	"github.com/BeanWei/li/li-engine/controller"
 	"github.com/BeanWei/li/li-engine/view/ui"
 )
@@ -20,6 +21,11 @@ func Submit(name string) *submitBuilder {
 
 type submitBuilder struct {
 	*NodeBuilder
+}
+
+func (b *submitBuilder) AC(f ac.AC) *submitBuilder {
+	b.schema.AC = f
+	return b
 }
 
 func (b *submitBuilder) Title(title string) *submitBuilder {

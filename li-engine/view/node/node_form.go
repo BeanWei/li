@@ -1,6 +1,9 @@
 package node
 
-import "github.com/BeanWei/li/li-engine/view/ui"
+import (
+	"github.com/BeanWei/li/li-engine/ac"
+	"github.com/BeanWei/li/li-engine/view/ui"
+)
 
 func Form(name string) *formBuilder {
 	return &formBuilder{&NodeBuilder{
@@ -14,6 +17,11 @@ func Form(name string) *formBuilder {
 
 type formBuilder struct {
 	*NodeBuilder
+}
+
+func (b *formBuilder) AC(f ac.AC) *formBuilder {
+	b.schema.AC = f
+	return b
 }
 
 func (b *formBuilder) DecoratorCard() *formBuilder {

@@ -1,6 +1,7 @@
 package node
 
 import (
+	"github.com/BeanWei/li/li-engine/ac"
 	"github.com/BeanWei/li/li-engine/controller"
 	"github.com/BeanWei/li/li-engine/view/ui"
 )
@@ -22,6 +23,11 @@ func ListActionRecordDelete(name string) *listactionrecorddeleteBuilder {
 
 type listactionrecorddeleteBuilder struct {
 	*NodeBuilder
+}
+
+func (b *listactionrecorddeleteBuilder) AC(f ac.AC) *listactionrecorddeleteBuilder {
+	b.schema.AC = f
+	return b
 }
 
 func (b *listactionrecorddeleteBuilder) Title(title string) *listactionrecorddeleteBuilder {

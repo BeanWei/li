@@ -1,6 +1,9 @@
 package node
 
-import "github.com/BeanWei/li/li-engine/view/ui"
+import (
+	"github.com/BeanWei/li/li-engine/ac"
+	"github.com/BeanWei/li/li-engine/view/ui"
+)
 
 func Rate(name string) *rateBuilder {
 	return &rateBuilder{&NodeBuilder{
@@ -16,6 +19,11 @@ func Rate(name string) *rateBuilder {
 
 type rateBuilder struct {
 	*NodeBuilder
+}
+
+func (b *rateBuilder) AC(f ac.AC) *rateBuilder {
+	b.schema.AC = f
+	return b
 }
 
 func (b *rateBuilder) Title(title string) *rateBuilder {

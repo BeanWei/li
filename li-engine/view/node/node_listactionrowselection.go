@@ -1,6 +1,7 @@
 package node
 
 import (
+	"github.com/BeanWei/li/li-engine/ac"
 	"github.com/BeanWei/li/li-engine/controller"
 	"github.com/BeanWei/li/li-engine/view/ui"
 )
@@ -21,6 +22,11 @@ func ListActionRowSelection(name string) *listactionrowselectionBuilder {
 
 type listactionrowselectionBuilder struct {
 	*NodeBuilder
+}
+
+func (b *listactionrowselectionBuilder) AC(f ac.AC) *listactionrowselectionBuilder {
+	b.schema.AC = f
+	return b
 }
 
 func (b *listactionrowselectionBuilder) Title(title string) *listactionrowselectionBuilder {

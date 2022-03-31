@@ -1,6 +1,7 @@
 package node
 
 import (
+	"github.com/BeanWei/li/li-engine/ac"
 	"github.com/BeanWei/li/li-engine/view"
 	"github.com/BeanWei/li/li-engine/view/ui"
 	"github.com/gogf/gf/v2/container/gmap"
@@ -20,6 +21,11 @@ func ListTableColumn(name string) *listtablecolumnBuilder {
 
 type listtablecolumnBuilder struct {
 	*NodeBuilder
+}
+
+func (b *listtablecolumnBuilder) AC(f ac.AC) *listtablecolumnBuilder {
+	b.schema.AC = f
+	return b
 }
 
 // Title 列标题

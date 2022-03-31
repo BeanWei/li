@@ -1,6 +1,9 @@
 package node
 
-import "github.com/BeanWei/li/li-engine/view/ui"
+import (
+	"github.com/BeanWei/li/li-engine/ac"
+	"github.com/BeanWei/li/li-engine/view/ui"
+)
 
 func Text(name string) *textBuilder {
 	return &textBuilder{&NodeBuilder{
@@ -15,6 +18,11 @@ func Text(name string) *textBuilder {
 
 type textBuilder struct {
 	*NodeBuilder
+}
+
+func (b *textBuilder) AC(f ac.AC) *textBuilder {
+	b.schema.AC = f
+	return b
 }
 
 func (b *textBuilder) Title(title string) *textBuilder {

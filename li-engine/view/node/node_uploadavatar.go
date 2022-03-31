@@ -1,6 +1,9 @@
 package node
 
-import "github.com/BeanWei/li/li-engine/view/ui"
+import (
+	"github.com/BeanWei/li/li-engine/ac"
+	"github.com/BeanWei/li/li-engine/view/ui"
+)
 
 func UploadAvatar(name string) *uploadavatarBuilder {
 	return &uploadavatarBuilder{&NodeBuilder{
@@ -21,6 +24,11 @@ func UploadAvatar(name string) *uploadavatarBuilder {
 
 type uploadavatarBuilder struct {
 	*NodeBuilder
+}
+
+func (b *uploadavatarBuilder) AC(f ac.AC) *uploadavatarBuilder {
+	b.schema.AC = f
+	return b
 }
 
 func (b *uploadavatarBuilder) Title(title string) *uploadavatarBuilder {

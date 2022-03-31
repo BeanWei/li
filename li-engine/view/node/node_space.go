@@ -1,6 +1,7 @@
 package node
 
 import (
+	"github.com/BeanWei/li/li-engine/ac"
 	"github.com/BeanWei/li/li-engine/view/ui"
 	"github.com/gogf/gf/v2/container/gmap"
 )
@@ -18,6 +19,11 @@ func Space(name string) *spaceBuilder {
 
 type spaceBuilder struct {
 	*NodeBuilder
+}
+
+func (b *spaceBuilder) AC(f ac.AC) *spaceBuilder {
+	b.schema.AC = f
+	return b
 }
 
 func (b *spaceBuilder) Title(title string) *spaceBuilder {

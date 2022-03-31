@@ -1,6 +1,9 @@
 package node
 
-import "github.com/BeanWei/li/li-engine/view/ui"
+import (
+	"github.com/BeanWei/li/li-engine/ac"
+	"github.com/BeanWei/li/li-engine/view/ui"
+)
 
 func Password(name string) *passwordBuilder {
 	return &passwordBuilder{&textBuilder{&NodeBuilder{
@@ -16,6 +19,11 @@ func Password(name string) *passwordBuilder {
 
 type passwordBuilder struct {
 	*textBuilder
+}
+
+func (b *passwordBuilder) AC(f ac.AC) *passwordBuilder {
+	b.schema.AC = f
+	return b
 }
 
 func (b *passwordBuilder) Title(title string) *passwordBuilder {

@@ -1,6 +1,9 @@
 package node
 
-import "github.com/BeanWei/li/li-engine/view/ui"
+import (
+	"github.com/BeanWei/li/li-engine/ac"
+	"github.com/BeanWei/li/li-engine/view/ui"
+)
 
 func TextArea(name string) *textareaBuilder {
 	return &textareaBuilder{&NodeBuilder{
@@ -15,6 +18,11 @@ func TextArea(name string) *textareaBuilder {
 
 type textareaBuilder struct {
 	*NodeBuilder
+}
+
+func (b *textareaBuilder) AC(f ac.AC) *textareaBuilder {
+	b.schema.AC = f
+	return b
 }
 
 func (b *textareaBuilder) Title(title string) *textareaBuilder {

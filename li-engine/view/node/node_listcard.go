@@ -1,6 +1,7 @@
 package node
 
 import (
+	"github.com/BeanWei/li/li-engine/ac"
 	"github.com/BeanWei/li/li-engine/view/ui"
 	"github.com/gogf/gf/v2/container/gmap"
 )
@@ -19,6 +20,11 @@ func ListCard(name string) *listcardBuilder {
 
 type listcardBuilder struct {
 	*NodeBuilder
+}
+
+func (b *listcardBuilder) AC(f ac.AC) *listcardBuilder {
+	b.schema.AC = f
+	return b
 }
 
 func (b *listcardBuilder) Title(title string) *listcardBuilder {
