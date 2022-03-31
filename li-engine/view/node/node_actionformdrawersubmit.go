@@ -12,7 +12,7 @@ func ActionFormDrawerSubmit(name string) *actionformdrawersubmitBuilder {
 			schema: &ui.Schema{
 				Name:            name,
 				Type:            ui.SchemaTypeVoid,
-				XComponent:      ui.ComponentActionFormDrawer,
+				XComponent:      ui.ComponentActionFormDrawerSubmit,
 				XComponentProps: make(map[string]interface{}),
 				HandlerNames:    make([]string, 0),
 			},

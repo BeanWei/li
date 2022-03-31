@@ -11,7 +11,7 @@ func ActionForModalSubmit(name string) *actionformmodalsubmitBuilder {
 		schema: &ui.Schema{
 			Name:            name,
 			Type:            ui.SchemaTypeVoid,
-			XComponent:      ui.ComponentActionFormModal,
+			XComponent:      ui.ComponentActionFormModalSubmit,
 			XComponentProps: make(map[string]interface{}),
 			HandlerNames:    make([]string, 0),
 		},

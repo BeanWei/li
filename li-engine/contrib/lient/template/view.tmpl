@@ -30,8 +30,8 @@ func List{{ $.Name }}View() view.Node {
 								),
 							).
 							Footer(
-								node.ActionForModalCancel("cancel"),
-								node.ActionForModalSubmit("submit").ForSubmit("@add{{ $.Name }}", Create{{ $.Name }}Controller),
+								node.ActionFormDrawerCancel("cancel"),
+								node.ActionFormDrawerSubmit("submit").ForSubmit("@add{{ $.Name }}", Create{{ $.Name }}Controller),
 							),
 						node.ListActionRowSelection("deleteMany{{ $.Name }}").
 							Title("删除").
@@ -84,8 +84,8 @@ func List{{ $.Name }}View() view.Node {
 										),
 									).
 									Footer(
-										node.ActionForModalCancel("cancel"),
-										node.ActionForModalSubmit("submit").
+										node.ActionFormDrawerCancel("cancel"),
+										node.ActionFormDrawerSubmit("submit").
 											AC({{ $.Package }}ViewACL["@update{{ $.Name }}"]).
 											ForSubmit("@update{{ $.Name }}", Update{{ $.Name }}Controller),
 									),
