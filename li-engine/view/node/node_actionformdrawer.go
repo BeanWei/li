@@ -3,6 +3,7 @@ package node
 import (
 	"github.com/BeanWei/li/li-engine/ac"
 	"github.com/BeanWei/li/li-engine/controller"
+	"github.com/BeanWei/li/li-engine/view"
 	"github.com/BeanWei/li/li-engine/view/ui"
 )
 
@@ -60,13 +61,6 @@ func (b *actionformdrawerBuilder) ForInit(operation string, handler interface{})
 	return b
 }
 
-func (b *actionformdrawerBuilder) ForSubmit(operation string, handler interface{}) *actionformdrawerBuilder {
-	b.schema.XComponentProps["forSubmit"] = operation
-	b.schema.HandlerNames = append(b.schema.HandlerNames, operation)
-	controller.Bind(operation, handler)
-	return b
-}
-
 func (b *actionformdrawerBuilder) ButtonStyle(style map[string]interface{}) *actionformdrawerBuilder {
 	b.schema.XComponentProps["style"] = style
 	return b
@@ -104,5 +98,15 @@ func (b *actionformdrawerBuilder) ButtonIconOnly() *actionformdrawerBuilder {
 
 func (b *actionformdrawerBuilder) ButtonLong() *actionformdrawerBuilder {
 	b.schema.XComponentProps["long"] = true
+	return b
+}
+
+func (b *actionformdrawerBuilder) Body(elements ...view.Node) *actionformdrawerBuilder {
+	b.Items(elements...)
+	return b
+}
+
+func (b *actionformdrawerBuilder) Footer(elements ...view.Node) *actionformdrawerBuilder {
+	b.Children(elements...)
 	return b
 }

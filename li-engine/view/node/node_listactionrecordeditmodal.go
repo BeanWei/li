@@ -3,6 +3,7 @@ package node
 import (
 	"github.com/BeanWei/li/li-engine/ac"
 	"github.com/BeanWei/li/li-engine/controller"
+	"github.com/BeanWei/li/li-engine/view"
 	"github.com/BeanWei/li/li-engine/view/ui"
 )
 
@@ -42,13 +43,6 @@ func (b *listactionrecordeditmodalBuilder) Description(description string) *list
 
 func (b *listactionrecordeditmodalBuilder) ForInit(operation string, handler interface{}) *listactionrecordeditmodalBuilder {
 	b.schema.XComponentProps["forInit"] = operation
-	b.schema.HandlerNames = append(b.schema.HandlerNames, operation)
-	controller.Bind(operation, handler)
-	return b
-}
-
-func (b *listactionrecordeditmodalBuilder) ForSubmit(operation string, handler interface{}) *listactionrecordeditmodalBuilder {
-	b.schema.XComponentProps["forSubmit"] = operation
 	b.schema.HandlerNames = append(b.schema.HandlerNames, operation)
 	controller.Bind(operation, handler)
 	return b
@@ -96,5 +90,15 @@ func (b *listactionrecordeditmodalBuilder) ButtonLong() *listactionrecordeditmod
 
 func (b *listactionrecordeditmodalBuilder) ButtonPosition(position string) *listactionrecordeditmodalBuilder {
 	b.schema.XComponentProps["position"] = position
+	return b
+}
+
+func (b *listactionrecordeditmodalBuilder) Body(elements ...view.Node) *listactionrecordeditmodalBuilder {
+	b.Items(elements...)
+	return b
+}
+
+func (b *listactionrecordeditmodalBuilder) Footer(elements ...view.Node) *listactionrecordeditmodalBuilder {
+	b.Children(elements...)
 	return b
 }

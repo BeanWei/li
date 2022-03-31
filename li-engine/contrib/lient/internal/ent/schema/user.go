@@ -75,6 +75,7 @@ func (User) ACL() map[string]ac.AC {
 	return map[string]ac.AC{
 		"@listUser":       nil,
 		"@addUser":        nil,
+		"@updateUser":     nil,
 		"@deleteManyUser": nil,
 		"@deleteUser":     nil,
 	}

@@ -75,7 +75,11 @@ const (
 
 const (
 	ComponentActionFormDrawer           = "Action.FormDrawer"
+	ComponentActionFormDrawerCancel     = "Action.FormDrawer.Cancel"
+	ComponentActionFormDrawerSubmit     = "Action.FormDrawer.Submit"
 	ComponentActionFormModal            = "Action.FormModal"
+	ComponentActionFormModalCancel      = "Action.FormModal.Cancel"
+	ComponentActionFormModalSubmit      = "Action.FormModal.Submit"
 	ComponentArrayItems                 = "ArrayItems"
 	ComponentArrayTable                 = "ArrayTable"
 	ComponentAvatar                     = "Avatar"

@@ -15,11 +15,10 @@ func List{{ $.Name }}View() view.Node {
 						node.ListActionRecordEditDrawer("add{{ $.Name }}").
 							Title("新建").
 							AC({{ $.Package }}ViewACL["@add{{ $.Name }}"]).
-							ForSubmit("@add{{ $.Name }}", Create{{ $.Name }}Controller).
 							ButtonType("primary").
 							ButtonIcon("IconPlus").
 							ButtonPosition("left").
-							Children(
+							Body(
 								node.FormGrid("grid").MaxColumns(2).Children(
 									{{- range $f := $.Fields }}
 										{{- if $annotation := $f.Annotations.LiEnt }}
@@ -29,6 +28,10 @@ func List{{ $.Name }}View() view.Node {
 										{{- end }}
 									{{- end }}
 								),
+							).
+							Footer(
+								node.ActionForModalCancel("cancel"),
+								node.ActionForModalSubmit("submit").ForSubmit("@add{{ $.Name }}", Create{{ $.Name }}Controller),
 							),
 						node.ListActionRowSelection("deleteMany{{ $.Name }}").
 							Title("删除").
@@ -66,11 +69,10 @@ func List{{ $.Name }}View() view.Node {
 						Width(150).
 						Render(
 							node.Space("actions").Children(
-								node.ListActionRecordEditDrawer("edit").
-									Title("编辑").
+								node.ListActionRecordEditDrawer("view").
+									Title("查看").
 									ForInit("@get{{ $.Name }}", Get{{ $.Name }}Controller).
-									ForSubmit("@update{{ $.Name }}", Update{{ $.Name }}Controller).
-									Children(
+									Body(
 										node.FormGrid("grid").MaxColumns(2).Children(
 											{{- range $f := $.Fields }}
 												{{- if $annotation := $f.Annotations.LiEnt }}
@@ -80,6 +82,12 @@ func List{{ $.Name }}View() view.Node {
 												{{- end }}
 											{{- end }}
 										),
+									).
+									Footer(
+										node.ActionForModalCancel("cancel"),
+										node.ActionForModalSubmit("submit").
+											AC({{ $.Package }}ViewACL["@update{{ $.Name }}"]).
+											ForSubmit("@update{{ $.Name }}", Update{{ $.Name }}Controller),
 									),
 								node.ListActionRecordDelete("delete").
 									Title("删除").
