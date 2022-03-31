@@ -4,7 +4,7 @@ import React from "react";
 import { useSchemaComponentContext } from "schema-components/src/hooks";
 import { useRequest } from "pro-utils";
 import { SchemaComponent } from "schema-components";
-import { unset } from "lodash";
+import { trimStart, unset } from "lodash";
 
 export interface RemoteSchemaComponentProps {
   scope?: any;
@@ -17,10 +17,14 @@ export interface RemoteSchemaComponentProps {
 
 const defaultTransform = (s: Schema) => s;
 
-const parseSchemaStr = (s: string, removes?: string[]): any => {
-  let o = JSON.parse(s);
+const parseSchemaStr = (
+  s: string,
+  removes?: string[],
+  pageKey?: string
+): any => {
+  const o = JSON.parse(s);
   removes?.forEach((path) => {
-    o = unset(o, path);
+    unset(o, pageKey ? trimStart(path, pageKey + ".") : path);
   });
   return o;
 };
@@ -75,7 +79,7 @@ const RequestSchemaComponent: React.FC<RemoteSchemaComponentProps> = (
       memoized
       scope={scope}
       schema={schemaTransform(
-        data ? parseSchemaStr(data.schema, data.removes) : {}
+        data ? parseSchemaStr(data.schema, data.removes, uid) : {}
       )}
     />
   );
