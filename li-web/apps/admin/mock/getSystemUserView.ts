@@ -65,21 +65,36 @@ export default {
                           title: "新建用户",
                           "x-component": "List.Action.RecordEditDrawer",
                           "x-component-props": {
-                            forSubmit: "updateUser",
                             type: "primary",
                           },
-                          properties: {
-                            nickname: {
-                              type: "string",
-                              title: "昵称",
-                              "x-decorator": "FormItem",
-                              "x-component": "Input",
+                          items: {
+                            type: "object",
+                            properties: {
+                              nickname: {
+                                type: "string",
+                                title: "昵称",
+                                "x-decorator": "FormItem",
+                                "x-component": "Input",
+                              },
+                              money: {
+                                type: "string",
+                                title: "收入",
+                                "x-decorator": "FormItem",
+                                "x-component": "Money",
+                              },
                             },
-                            money: {
-                              type: "string",
-                              title: "收入",
-                              "x-decorator": "FormItem",
-                              "x-component": "Money",
+                          },
+                          properties: {
+                            cancel: {
+                              type: "void",
+                              "x-component": "Action.FormDrawer.Cancel",
+                            },
+                            submit: {
+                              type: "void",
+                              "x-component": "Action.FormDrawer.Submit",
+                              "x-component-props": {
+                                forSubmit: "createUser",
+                              },
                             },
                           },
                         },
@@ -229,14 +244,30 @@ export default {
                                 "x-component": "List.Action.RecordEditDrawer",
                                 "x-component-props": {
                                   forInit: "getUser",
-                                  forSubmit: "updateUser",
+                                },
+                                items: {
+                                  type: "object",
+                                  properties: {
+                                    nickname: {
+                                      type: "string",
+                                      required: true,
+                                      title: "昵称",
+                                      "x-decorator": "FormItem",
+                                      "x-component": "Input",
+                                    },
+                                  },
                                 },
                                 properties: {
-                                  nickname: {
-                                    type: "string",
-                                    title: "昵称",
-                                    "x-decorator": "FormItem",
-                                    "x-component": "Input",
+                                  cancel: {
+                                    type: "void",
+                                    "x-component": "Action.FormDrawer.Cancel",
+                                  },
+                                  submit: {
+                                    type: "void",
+                                    "x-component": "Action.FormDrawer.Submit",
+                                    "x-component-props": {
+                                      forSubmit: "updateUser",
+                                    },
                                   },
                                 },
                               },

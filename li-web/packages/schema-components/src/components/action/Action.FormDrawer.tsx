@@ -16,7 +16,6 @@ export const ActionFormDrawer: React.FC<ActionFormDrawerProps> = observer(
       initialValues,
       forInit,
       forInitVariables,
-      forSubmit,
       forSubmitSuccess,
       isMenuItem,
       drawerProps,
@@ -33,30 +32,49 @@ export const ActionFormDrawer: React.FC<ActionFormDrawerProps> = observer(
         return (
           <FormLayout {...layoutProps}>
             <UiSchemaComponentProvider>
-              <SchemaComponent schema={schema} onlyRenderProperties />
+              <SchemaComponent
+                schema={schema.items as any}
+                onlyRenderProperties
+              />
             </UiSchemaComponentProvider>
-            <FormDrawer.Footer>
-              <FormButtonGroup align="right">
-                <Button
-                  {...drawerProps?.cancelButtonProps}
-                  onClick={() => {
-                    drawer.close();
-                  }}
-                >
-                  {drawerProps?.cancelText || locale?.Drawer.cancelText}
-                </Button>
-                <Submit
-                  {...drawerProps?.okButtonProps}
-                  forSubmit={forSubmit}
-                  forSubmitSuccess={(paylod) => {
-                    drawer.close();
-                    forSubmitSuccess?.(paylod);
-                  }}
-                >
-                  {drawerProps?.okText || locale?.Drawer.okText}
-                </Submit>
-              </FormButtonGroup>
-            </FormDrawer.Footer>
+            {schema.properties && (
+              <FormDrawer.Footer>
+                <FormButtonGroup align="right">
+                  {schema.reduceProperties((b: React.ReactNode[], s) => {
+                    if (s["x-component"] === "Action.FormDrawer.Cancel") {
+                      return b.concat([
+                        <Button
+                          {...drawerProps?.cancelButtonProps}
+                          {...s["x-component-props"]}
+                          key={s.name}
+                          onClick={() => {
+                            drawer.close();
+                          }}
+                        >
+                          {s.title || locale?.Drawer.cancelText}
+                        </Button>,
+                      ]);
+                    }
+                    if (s["x-component"] === "Action.FormDrawer.Submit") {
+                      return b.concat([
+                        <Submit
+                          {...drawerProps?.cancelButtonProps}
+                          {...s["x-component-props"]}
+                          key={s.name}
+                          forSubmitSuccess={(paylod) => {
+                            drawer.close();
+                            forSubmitSuccess?.(paylod);
+                          }}
+                        >
+                          {s.title || locale?.Drawer.okText}
+                        </Submit>,
+                      ]);
+                    }
+                    return b;
+                  }, [])}
+                </FormButtonGroup>
+              </FormDrawer.Footer>
+            )}
           </FormLayout>
         );
       }).forOpen((paylod, next) => {
@@ -67,11 +85,25 @@ export const ActionFormDrawer: React.FC<ActionFormDrawerProps> = observer(
                 ...initialValues,
                 ...data,
               },
+              editable:
+                schema.reduceProperties((b: boolean[], s) => {
+                  if (s["x-component"] === "Action.FormDrawer.Submit") {
+                    return b.concat([true]);
+                  }
+                  return b;
+                }, []).length > 0,
             });
           });
         } else {
           next({
             initialValues: initialValues,
+            editable:
+              schema.reduceProperties((b: boolean[], s) => {
+                if (s["x-component"] === "Action.FormDrawer.Submit") {
+                  return b.concat([true]);
+                }
+                return b;
+              }, []).length > 0,
           });
         }
       });

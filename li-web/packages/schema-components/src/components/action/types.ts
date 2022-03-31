@@ -13,7 +13,6 @@ export type ActionFormDrawerProps = ButtonProps & {
   initialValues?: Record<string, any>;
   forInit?: string;
   forInitVariables?: Record<string, any>;
-  forSubmit?: string;
   forSubmitSuccess?: (payload: any) => void;
   isMenuItem?: boolean;
   drawerProps?: IDrawerProps;
@@ -24,7 +23,6 @@ export type ActionFormModalProps = ButtonProps & {
   initialValues?: Record<string, any>;
   forInit?: string;
   forInitVariables?: Record<string, any>;
-  forSubmit?: string;
   forSubmitSuccess?: (payload: any) => void;
   isMenuItem?: boolean;
   modalProps?: IModalProps;

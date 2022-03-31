@@ -31,7 +31,10 @@ export default [
       if (operation == "@getAppView") {
         return {
           code: 0,
-          data: JSON.stringify(views[variables.key] || {}),
+          data: {
+            schema: JSON.stringify(views[variables.key] || {}),
+            removes: [],
+          },
         };
       }
       if (operation == "listUser") {
