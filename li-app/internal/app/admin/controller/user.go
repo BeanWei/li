@@ -27,7 +27,7 @@ func UserSignIn(ctx context.Context, req *dto.UserSignInReq) (res *dto.UserSignI
 		if ent.IsNotFound(err) {
 			return nil, gerror.NewCode(gcode.CodeNotFound, "账号不存在")
 		}
-		return nil, gerror.WrapCode(gcode.CodeDbOperationError, err)
+		return nil, gerror.Wrapf(err, "查询用户 %s 错误", req.Email)
 	}
 	res = &dto.UserSignInRes{
 		ID: usr.ID,

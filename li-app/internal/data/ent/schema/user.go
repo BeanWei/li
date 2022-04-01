@@ -72,7 +72,7 @@ func (User) Fields() []ent.Field {
 			Optional().
 			Annotations(
 				lient.Annotation{
-					ViewSchema: node.UploadAvatar("avatar").SetTitle("头像").Schema(),
+					ViewSchema: node.UploadAvatar("avatar").Title("头像").Schema(),
 					ColumnProps: &lient.ColumnProps{
 						Filterable: false,
 						Sortable:   false,
@@ -84,6 +84,21 @@ func (User) Fields() []ent.Field {
 			Annotations(
 				lient.Annotation{
 					ViewSchema: node.Checkbox("is_admin").Title("管理员").Schema(),
+					ColumnProps: &lient.ColumnProps{
+						Filterable: true,
+					},
+				},
+			),
+		field.Strings("roles").
+			Optional().
+			Annotations(
+				lient.Annotation{
+					ViewSchema: node.Select("roles").
+						Title("角色").
+						Multiple().
+						Option(
+							RoleSystemManager, "系统管理员",
+						).Schema(),
 					ColumnProps: &lient.ColumnProps{
 						Filterable: true,
 					},
