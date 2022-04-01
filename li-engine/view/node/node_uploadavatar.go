@@ -11,13 +11,13 @@ func UploadAvatar(name string) *uploadavatarBuilder {
 			Name:       name,
 			Type:       ui.SchemaTypeString,
 			XComponent: ui.ComponentUploadAvatar,
-			XDecorator: ui.DecoratorFormItem,
 			XComponentProps: map[string]interface{}{
 				"action": "/api/liql",
 				"data": map[string]string{
 					"operation": "@uploadFile",
 				},
 			},
+			XDecorator: ui.DecoratorFormItem,
 		},
 	}}
 }

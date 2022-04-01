@@ -8,10 +8,11 @@ import (
 func Tags(name string) *tagsBuilder {
 	return &tagsBuilder{&NodeBuilder{
 		schema: &ui.Schema{
-			Name:       name,
-			Type:       ui.SchemaTypeArray,
-			XComponent: ui.ComponentInputTag,
-			XDecorator: ui.DecoratorFormItem,
+			Name:            name,
+			Type:            ui.SchemaTypeArray,
+			XComponent:      ui.ComponentInputTag,
+			XComponentProps: make(map[string]interface{}),
+			XDecorator:      ui.DecoratorFormItem,
 		},
 	}}
 }

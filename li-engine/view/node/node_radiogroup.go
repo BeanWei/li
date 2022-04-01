@@ -8,11 +8,12 @@ import (
 func RadioGroup(name string) *radiogroupBuilder {
 	return &radiogroupBuilder{&NodeBuilder{
 		schema: &ui.Schema{
-			Name:       name,
-			Type:       ui.SchemaTypeAny,
-			XComponent: ui.ComponentRadioGroup,
-			XDecorator: ui.DecoratorFormItem,
-			Enum:       make([]map[string]interface{}, 0),
+			Name:            name,
+			Type:            ui.SchemaTypeAny,
+			XComponent:      ui.ComponentRadioGroup,
+			XComponentProps: make(map[string]interface{}),
+			XDecorator:      ui.DecoratorFormItem,
+			Enum:            make([]map[string]interface{}, 0),
 		},
 	}}
 }

@@ -9,10 +9,11 @@ import (
 func Space(name string) *spaceBuilder {
 	return &spaceBuilder{&NodeBuilder{
 		schema: &ui.Schema{
-			Name:       name,
-			Type:       ui.SchemaTypeVoid,
-			XComponent: ui.ComponentSpace,
-			Properties: gmap.NewListMap(),
+			Name:            name,
+			Type:            ui.SchemaTypeVoid,
+			XComponent:      ui.ComponentSpace,
+			XComponentProps: make(map[string]interface{}),
+			Properties:      gmap.NewListMap(),
 		},
 	}}
 }

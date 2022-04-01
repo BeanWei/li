@@ -11,13 +11,13 @@ func UploadAttachment(name string) *uploadattachmentBuilder {
 			Name:       name,
 			Type:       ui.SchemaTypeArray,
 			XComponent: ui.ComponentUploadAttachment,
-			XDecorator: ui.DecoratorFormItem,
 			XComponentProps: map[string]interface{}{
 				"action": "/api/liql",
 				"data": map[string]string{
 					"operation": "@uploadFile",
 				},
 			},
+			XDecorator: ui.DecoratorFormItem,
 		},
 	}}
 }

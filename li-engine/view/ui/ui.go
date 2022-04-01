@@ -125,6 +125,8 @@ const (
 	ComponentSpace                      = "Space"
 	ComponentSubmit                     = "Submit"
 	ComponentSwitch                     = "Switch"
+	ComponentTabs                       = "Tabs"
+	ComponentTabsTabPane                = "Tabs.TabPane"
 	ComponentTimePicker                 = "TimePicker"
 	ComponentTimePickerRangPicker       = "TimePicker.RangPicker"
 	ComponentUploadAvatar               = "Upload.Avatar"
