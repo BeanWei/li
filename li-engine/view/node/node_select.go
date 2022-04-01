@@ -72,16 +72,16 @@ func (b *selectBuilder) DragToSort() *selectBuilder {
 	return b
 }
 
-func (b *selectBuilder) Option(label string, value ...interface{}) *selectBuilder {
-	var val interface{}
-	if len(value) > 0 {
-		val = value[0]
+func (b *selectBuilder) Option(value interface{}, label ...string) *selectBuilder {
+	var label_ interface{}
+	if len(label) > 0 {
+		label_ = label[0]
 	} else {
-		val = label
+		label_ = value
 	}
 	b.schema.Enum = append(b.schema.Enum, map[string]interface{}{
-		"label": label,
-		"value": val,
+		"label": label_,
+		"value": value,
 	})
 	return b
 }

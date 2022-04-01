@@ -7,10 +7,7 @@ import (
 	"github.com/BeanWei/li/li-engine/pkg/errgroup"
 )
 
-type (
-	Role int
-	AC   func(ctx context.Context) (pass bool, err error)
-)
+type AC func(ctx context.Context) (pass bool, err error)
 
 var acl = make(map[string]AC)
 

@@ -42,16 +42,16 @@ func (b *checkboxgroupBuilder) Default(value interface{}) *checkboxgroupBuilder 
 	return b
 }
 
-func (b *checkboxgroupBuilder) Option(label string, value ...interface{}) *checkboxgroupBuilder {
-	var val interface{}
-	if len(value) > 0 {
-		val = value[0]
+func (b *checkboxgroupBuilder) Option(value interface{}, label ...string) *checkboxgroupBuilder {
+	var label_ interface{}
+	if len(label) > 0 {
+		label_ = label[0]
 	} else {
-		val = label
+		label_ = value
 	}
 	b.schema.Enum = append(b.schema.Enum, map[string]interface{}{
-		"label": label,
-		"value": val,
+		"label": label_,
+		"value": value,
 	})
 	return b
 }

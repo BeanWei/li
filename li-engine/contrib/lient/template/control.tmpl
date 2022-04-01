@@ -14,12 +14,16 @@ type (
 		{{- $annotation := $f.Annotations.LiEnt }}
 		{{- if and $annotation $annotation.ViewSchema $annotation.ColumnProps $annotation.ColumnProps.Filterable }}
 			{{- $component := index $annotation.ViewSchema "x-component"  }}
-			{{- if or (eq $component "DatePicker") (eq $component "TimePicker") }}
+			{{- if or (eq $component "DatePicker") (eq $component "TimePicker") (eq $component "Checkbox.Group") }}
 				{{ $f.StructField }} []{{ $f.Type }} `json:"{{ $f.Name }}"`
-			{{- else if or (eq $component "Checkbox.Group") (eq $component "Select") }}
-				{{ $f.StructField }} []{{ $f.Type }} `json:"{{ $f.Name }}"`
+			{{- else if eq $component "Select" }}
+				{{- if $f.Type.Nillable }}
+					{{ $f.StructField }} {{ $f.Type }} `json:"{{ $f.Name }}"`
+				{{- else }}
+					{{ $f.StructField }} []{{ $f.Type }} `json:"{{ $f.Name }}"`
+				{{- end }}
 			{{- else }}
-			{{ $f.StructField }} *{{ $f.Type }} `json:"{{ $f.Name }}"`
+				{{ $f.StructField }} *{{ $f.Type }} `json:"{{ $f.Name }}"`
 			{{- end }}
 		{{- end }}
         {{- end }}
@@ -50,7 +54,11 @@ type (
 				{{- $tag = printf `%s v:"required"` $tag }}
 			{{- end }}
 			{{- if $f.Optional }}
-				{{ $f.StructField }} *{{ $f.Type }} `{{ $tag }}`
+				{{- if $f.Type.Nillable }}
+					{{ $f.StructField }} {{ $f.Type }} `{{ $tag }}`
+				{{- else }}
+					{{ $f.StructField }} *{{ $f.Type }} `{{ $tag }}`
+				{{- end }}
 			{{- else }}
 				{{ $f.StructField }} {{ $f.Type }} `{{ $tag }}`
 			{{- end }}
@@ -73,7 +81,11 @@ type (
 				{{- $tag = printf `%s v:"required"` $tag }}
 			{{- end }}
 			{{- if $f.Optional }}
-				{{ $f.StructField }} *{{ $f.Type }} `{{ $tag }}`
+				{{- if $f.Type.Nillable }}
+					{{ $f.StructField }} {{ $f.Type }} `{{ $tag }}`
+				{{- else }}
+					{{ $f.StructField }} *{{ $f.Type }} `{{ $tag }}`
+				{{- end }}
 			{{- else }}
 				{{ $f.StructField }} {{ $f.Type }} `{{ $tag }}`
 			{{- end }}
@@ -101,10 +113,21 @@ func List{{ $.Name }}Controller(ctx context.Context, req *List{{ $.Name }}Req) (
 				if len(req.Filter.{{ $f.StructField }}) == 2 {
 					q.Where({{ $.Package }}.{{ $f.StructField }}GTE(req.Filter.{{ $f.StructField }}[0]), {{ $.Package }}.{{ $f.StructField }}LTE(req.Filter.{{ $f.StructField }}[1]))
 				}
-			{{- else if or (eq $component "Checkbox.Group") (eq $component "Select") }}
+			{{- else if eq $component "Checkbox.Group" }}
 				if len(req.Filter.{{ $f.StructField }}) > 0 {
-					q.Where({{ $.Package }}.{{ $f.StructField }}In(req.Filter.{{ $f.StructField }})...))
+					q.Where({{ $.Package }}.{{ $f.StructField }}In(req.Filter.{{ $f.StructField }}...))
 				}
+			{{- else if eq $component "Select" }}
+				{{- if $f.Type.Nillable }}
+					if len(req.Filter.{{ $f.StructField }}) > 0 {
+						// TODO: Support filter string array
+						// q.Where({{ $.Package }}.{{ $f.StructField }}XXX(req.Filter.{{ $f.StructField }}...))
+					}
+				{{- else }}
+					if len(req.Filter.{{ $f.StructField }}) > 0 {
+						q.Where({{ $.Package }}.{{ $f.StructField }}In(req.Filter.{{ $f.StructField }}...))
+					}
+				{{- end }}
 			{{- else if eq $f.Type.String "string" }}
 				if req.Filter.{{ $f.StructField }} != nil {
 					q.Where({{ $.Package }}.{{ $f.StructField }}ContainsFold(*req.Filter.{{ $f.StructField }}))
@@ -151,12 +174,16 @@ func Create{{ $.Name }}Controller(ctx context.Context, req *Create{{ $.Name }}Re
 	{{- $annotation := $f.Annotations.LiEnt }}
 	{{- if or (not $annotation) (not $annotation.DisableCreate) }}
 		{{- if $f.Optional }}
-            if req.{{ $f.StructField }} != nil {
-                b.Set{{ $f.StructField }}(*req.{{ $f.StructField }})
+			if req.{{ $f.StructField }} != nil {
+				{{- if $f.Type.Nillable }}
+					b.Set{{ $f.StructField }}(req.{{ $f.StructField }})
+				{{- else }}
+					b.Set{{ $f.StructField }}(*req.{{ $f.StructField }})
+				{{- end }}
             }
-        {{- else }}
-            b.Set{{ $f.StructField }}(req.{{ $f.StructField }})
-        {{- end }}
+		{{- else }}
+			b.Set{{ $f.StructField }}(req.{{ $f.StructField }})
+		{{- end }}
 	{{- end }}
 	{{- end }}
 	res, err = b.Save(ctx)
@@ -187,12 +214,16 @@ func Update{{ $.Name }}Controller(ctx context.Context, req *Update{{ $.Name }}Re
 	{{- $annotation := $f.Annotations.LiEnt }}
 	{{- if or (not $annotation) (not $annotation.DisableUpdate) }}
 		{{- if $f.Optional }}
-            if req.{{ $f.StructField }} != nil {
-                b.Set{{ $f.StructField }}(*req.{{ $f.StructField }})
+			if req.{{ $f.StructField }} != nil {
+				{{- if $f.Type.Nillable }}
+					b.Set{{ $f.StructField }}(req.{{ $f.StructField }})
+				{{- else }}
+					b.Set{{ $f.StructField }}(*req.{{ $f.StructField }})
+				{{- end }}
             }
-        {{- else }}
-            b.Set{{ $f.StructField }}(req.{{ $f.StructField }})
-        {{- end }}
+		{{- else }}
+			b.Set{{ $f.StructField }}(req.{{ $f.StructField }})
+		{{- end }}
 	{{- end }}
 	{{- end }}
 	{{- end }}

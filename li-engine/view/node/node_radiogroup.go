@@ -42,16 +42,16 @@ func (b *radiogroupBuilder) Default(value interface{}) *radiogroupBuilder {
 	return b
 }
 
-func (b *radiogroupBuilder) Option(label string, value ...interface{}) *radiogroupBuilder {
-	var val interface{}
-	if len(value) > 0 {
-		val = value[0]
+func (b *radiogroupBuilder) Option(value interface{}, label ...string) *radiogroupBuilder {
+	var label_ interface{}
+	if len(label) > 0 {
+		label_ = label[0]
 	} else {
-		val = label
+		label_ = value
 	}
 	b.schema.Enum = append(b.schema.Enum, map[string]interface{}{
-		"label": label,
-		"value": val,
+		"label": label_,
+		"value": value,
 	})
 	return b
 }
