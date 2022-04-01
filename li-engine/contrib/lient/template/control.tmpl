@@ -120,8 +120,9 @@ func List{{ $.Name }}Controller(ctx context.Context, req *List{{ $.Name }}Req) (
 			{{- else if eq $component "Select" }}
 				{{- if $f.Type.Nillable }}
 					if len(req.Filter.{{ $f.StructField }}) > 0 {
-						// TODO: Support filter string array
-						// q.Where({{ $.Package }}.{{ $f.StructField }}XXX(req.Filter.{{ $f.StructField }}...))
+						q.Where(func(s *sql.Selector) {
+							s.Where(sqljson.ValueContains(user.Field{{ $f.StructField }}, req.Filter.{{ $f.StructField }}))
+						})
 					}
 				{{- else }}
 					if len(req.Filter.{{ $f.StructField }}) > 0 {
