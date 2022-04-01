@@ -3,6 +3,7 @@ package middleware
 import (
 	"github.com/BeanWei/li/li-app/internal/data"
 	"github.com/BeanWei/li/li-app/internal/shared"
+	"github.com/gogf/gf/v2/container/garray"
 	"github.com/gogf/gf/v2/errors/gerror"
 	"github.com/gogf/gf/v2/net/ghttp"
 )
@@ -26,6 +27,7 @@ func Ctx(r *ghttp.Request) {
 				customCtx.User = &shared.CtxUser{
 					ID:      usr.ID,
 					IsAdmin: usr.IsAdmin,
+					Roles:   garray.NewStrArrayFrom(usr.Roles),
 				}
 			}
 			r.Middleware.Next()

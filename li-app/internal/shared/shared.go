@@ -1,7 +1,10 @@
 package shared
 
+import "github.com/gogf/gf/v2/container/garray"
+
 // CtxUser 上下文用户信息
 type CtxUser struct {
-	ID      string `json:"id,omitempty"`
-	IsAdmin bool   `json:"is_admin,omitempty"`
+	ID      string
+	IsAdmin bool
+	Roles   *garray.StrArray
 }
