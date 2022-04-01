@@ -30,7 +30,7 @@ func NewStorageLocalClient(opt *LocalClientOption) (*storageLocalClient, error) 
 
 func (s *storageLocalClient) PutObject(ctx context.Context, input *PutObjectInput) (*PutObjectOutput, error) {
 	if input.BucketName == "" {
-		return nil, gerror.NewCode(gcode.CodeInvalidParameter, `parameter "input.BucketName" is required`)
+		return nil, gerror.NewCode(gcode.CodeMissingParameter, `bucket name cannot be empty`)
 	}
 	dir := gfile.Join(s.Dir, input.BucketName)
 	if !gfile.Exists(dir) {

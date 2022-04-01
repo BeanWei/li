@@ -5,7 +5,6 @@ import (
 
 	"entgo.io/ent/dialect"
 	"entgo.io/ent/dialect/sql"
-	"github.com/gogf/gf/v2/errors/gcode"
 	"github.com/gogf/gf/v2/errors/gerror"
 	"github.com/gogf/gf/v2/frame/g"
 )
@@ -21,7 +20,7 @@ func getDriver(master bool, name ...string) (drv *sql.Driver, err error) {
 		return nil, err
 	}
 	if sqlDB == nil {
-		return nil, gerror.NewCode(gcode.CodeInternalError, "failed to connect master/slave db")
+		return nil, gerror.New("failed to connect master/slave db")
 	}
 
 	driver := g.DB(name...).GetConfig().Type

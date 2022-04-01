@@ -170,7 +170,7 @@ func NewApp(cfg *App) {
 	controller.Bind(OperationGetAppView, func(ctx context.Context, req *GetAppViewReq) (res *GetAppViewRes, err error) {
 		page, exists := pages[req.Key]
 		if !exists {
-			err = gerror.NewCode(gcode.CodeInvalidParameter, "无效的key")
+			err = gerror.NewCodef(gcode.CodeInvalidParameter, `invalid page kay "%s"`, req.Key)
 			return
 		}
 		res = &GetAppViewRes{

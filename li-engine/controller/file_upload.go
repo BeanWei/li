@@ -25,7 +25,10 @@ func FileUpload(ctx context.Context) (res *FileUploadRes, err error) {
 
 	f := ghttp.RequestFromCtx(ctx).GetUploadFile("file")
 	if f == nil {
-		err = gerror.NewCode(gcode.CodeMissingParameter, "请选择文件")
+		err = gerror.NewCode(
+			gcode.CodeMissingParameter,
+			"file is empty, maybe you retrieve it from invalid field name or form enctype",
+		)
 		return
 	}
 

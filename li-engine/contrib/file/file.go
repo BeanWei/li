@@ -6,8 +6,6 @@ import (
 	"strconv"
 	"strings"
 
-	"github.com/gogf/gf/v2/errors/gcode"
-	"github.com/gogf/gf/v2/errors/gerror"
 	"github.com/gogf/gf/v2/net/ghttp"
 	"github.com/gogf/gf/v2/os/gfile"
 	"github.com/gogf/gf/v2/os/gtime"
@@ -46,10 +44,3 @@ type (
 func (i *PutObjectInput) filename() string {
 	return strings.ToLower(strconv.FormatInt(gtime.TimestampNano(), 36)+grand.S(6)) + gfile.Ext(i.File.Filename)
 }
-
-var (
-	ErrorDisabled = gerror.NewOption(gerror.Option{
-		Text: "this feature is disabled in this storage",
-		Code: gcode.CodeNotSupported,
-	})
-)

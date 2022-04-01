@@ -39,7 +39,7 @@ func Liql(r *ghttp.Request) {
 			}
 			acpass, err = ac.CheckForController(ctx, acl...)
 			if err == nil && !acpass {
-				err = gerror.NewCode(gcode.CodeOperationFailed, "权限不足")
+				err = gerror.NewCode(gcode.CodeNotAuthorized)
 			}
 			if err == nil {
 				var inputValues = []reflect.Value{
@@ -96,8 +96,10 @@ func Liql(r *ghttp.Request) {
 	if err != nil {
 		if code == gcode.CodeNil {
 			code = gcode.CodeInternalError
+			msg = code.Message()
+		} else {
+			msg = err.Error()
 		}
-		msg = err.Error()
 	} else {
 		code = gcode.CodeOK
 	}

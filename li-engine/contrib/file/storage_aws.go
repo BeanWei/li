@@ -47,7 +47,7 @@ func NewStorageAwsClient(opt *AwsClientOption) (*storageAwsClient, error) {
 
 func (s *storageAwsClient) PutObject(ctx context.Context, input *PutObjectInput) (*PutObjectOutput, error) {
 	if input.BucketName == "" {
-		return nil, gerror.NewCode(gcode.CodeInvalidParameter, `parameter "input.BucketName" is required`)
+		return nil, gerror.NewCode(gcode.CodeMissingParameter, `bucket name cannot be empty`)
 	}
 	file, err := input.File.Open()
 	if err != nil {
