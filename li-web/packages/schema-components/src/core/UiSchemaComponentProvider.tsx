@@ -29,6 +29,7 @@ import {
   Space,
   Submit,
   Switch,
+  Tabs,
   TimePicker,
   Upload,
 } from "../components";
@@ -69,6 +70,7 @@ export const UiSchemaComponentProvider = (props: any) => {
         Space,
         Submit,
         Switch,
+        Tabs,
         TimePicker,
         Upload,
       }}
