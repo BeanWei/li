@@ -3,6 +3,7 @@ package middleware
 import (
 	"github.com/BeanWei/li/li-app/internal/app/admin/controller"
 	"github.com/BeanWei/li/li-app/internal/shared"
+	engine "github.com/BeanWei/li/li-engine"
 	"github.com/gogf/gf/v2/errors/gcode"
 	"github.com/gogf/gf/v2/net/ghttp"
 )
@@ -11,8 +12,11 @@ import (
 func Authentication(r *ghttp.Request) {
 	if r.URL.Path == "/api/liql" {
 		operation := r.GetForm("operation").String()
-		// TODO: getAppConfig 移入登录后
-		if operation != controller.OperationUserSignIn && operation != "@getAppConfig" {
+		if operation == controller.OperationUserSignIn ||
+			operation == engine.OperationGetAppConfig ||
+			operation == engine.OperationGetSignView {
+			r.Middleware.Next()
+		} else {
 			ctxUser := shared.Ctx.Get(r.Context()).User
 			if ctxUser == nil {
 				r.Response.WriteJson(ghttp.DefaultHandlerResponse{
@@ -22,8 +26,6 @@ func Authentication(r *ghttp.Request) {
 			} else {
 				r.Middleware.Next()
 			}
-		} else {
-			r.Middleware.Next()
 		}
 	} else {
 		r.Middleware.Next()

@@ -1,4 +1,4 @@
-import { Link, Spin } from "@arco-design/web-react";
+import { Link } from "@arco-design/web-react";
 import { I18nextProvider } from "react-i18next";
 import { BrowserRouter, NavLink } from "react-router-dom";
 import {
@@ -54,12 +54,6 @@ const App = compose(...providers)(() => {
             path: entry + "/sign",
             component: "SignPage",
             title: "Sign",
-            config: {
-              title: data?.title,
-              logo: data?.logo,
-              body: data?.binding.signform,
-              footer: data?.copyright,
-            },
           },
           {
             type: "route",

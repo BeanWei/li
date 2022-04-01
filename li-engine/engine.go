@@ -17,13 +17,14 @@ import (
 
 type (
 	App struct {
-		Title     string
-		Logo      string
-		Copyright string
-		Entry     string
-		Menus     []*AppMenu
-		NavItems  []view.Node
-		Binding   *AppBinding
+		Logo        string
+		Title       string
+		Description string
+		Copyright   string
+		Entry       string
+		Menus       []*AppMenu
+		NavItems    []view.Node
+		Binding     *AppBinding
 	}
 
 	AppMenu struct {
@@ -43,14 +44,14 @@ type (
 	}
 
 	app struct {
-		Title     string       `json:"title"`
-		Logo      string       `json:"logo"`
-		Copyright string       `json:"copyright"`
-		Entry     string       `json:"entry"`
-		NavItems  []*ui.Schema `json:"navitems"`
-		Menus     []*appmenu   `json:"menus"`
-		Home      string       `json:"home"`
-		Binding   *appbinding  `json:"binding"`
+		Logo        string       `json:"logo"`
+		Title       string       `json:"title"`
+		Description string       `json:"description"`
+		Copyright   string       `json:"copyright"`
+		Entry       string       `json:"entry"`
+		NavItems    []*ui.Schema `json:"navitems"`
+		Menus       []*appmenu   `json:"menus"`
+		Home        string       `json:"home"`
 	}
 
 	appmenu struct {
@@ -61,10 +62,6 @@ type (
 		Children []*appmenu `json:"children"`
 	}
 
-	appbinding struct {
-		SignForm *ui.Schema `json:"signform"`
-	}
-
 	GetAppViewReq struct {
 		Key string `p:"key" v:"required"`
 	}
@@ -72,11 +69,19 @@ type (
 		Schema  string   `json:"schema"`
 		Removes []string `json:"removes"`
 	}
+	GetSignViewRes struct {
+		Logo        string     `json:"logo"`
+		Title       string     `json:"title"`
+		Description string     `json:"description"`
+		Body        *ui.Schema `json:"body"`
+		Copyright   string     `json:"copyright"`
+	}
 )
 
 const (
 	OperationGetAppConfig   = "@getAppConfig"
 	OperationGetAppView     = "@getAppView"
+	OperationGetSignView    = "@getSignView"
 	OperationGetCurrentUser = "@getCurrentUser"
 	OperationUploadFile     = "@uploadFile"
 )
@@ -84,15 +89,17 @@ const (
 func NewApp(cfg *App) {
 	var (
 		appcfg = app{
-			Title:     cfg.Title,
-			Logo:      cfg.Logo,
-			Copyright: cfg.Copyright,
-			Menus:     make([]*appmenu, len(cfg.Menus)),
-			NavItems:  make([]*ui.Schema, len(cfg.NavItems)),
-			Entry:     cfg.Entry,
+			Logo:        cfg.Logo,
+			Title:       cfg.Title,
+			Description: cfg.Description,
+			Copyright:   cfg.Copyright,
+			Menus:       make([]*appmenu, len(cfg.Menus)),
+			NavItems:    make([]*ui.Schema, len(cfg.NavItems)),
+			Entry:       cfg.Entry,
 		}
 		pages         = make(map[string]string)
 		pageacl       = make(map[string][]string)
+		signform      = &ui.Schema{}
 		recursionmenu func(menus []*AppMenu) []*appmenu
 	)
 
@@ -138,12 +145,10 @@ func NewApp(cfg *App) {
 	}
 
 	if cfg.Binding != nil {
-		appcfg.Binding = &appbinding{
-			SignForm: cfg.Binding.SignForm.Schema(),
-		}
+		signform = cfg.Binding.SignForm.Schema()
 		controller.Bind(OperationGetCurrentUser, cfg.Binding.GetCurrentUserController)
 	}
-
+	// 获取应用配置
 	controller.Bind(OperationGetAppConfig, func(ctx context.Context) (res *app, err error) {
 		pageKeys := make([]string, len(pages))
 		i := 0
@@ -161,6 +166,7 @@ func NewApp(cfg *App) {
 		}
 		return &selfAppCfg, nil
 	})
+	// 获取指定key的页面视图schema
 	controller.Bind(OperationGetAppView, func(ctx context.Context, req *GetAppViewReq) (res *GetAppViewRes, err error) {
 		page, exists := pages[req.Key]
 		if !exists {
@@ -173,6 +179,18 @@ func NewApp(cfg *App) {
 		res.Removes, err = ac.CheckForView(ctx, pageacl[req.Key]...)
 		return
 	})
+	// 获取登录视图schema
+	controller.Bind(OperationGetSignView, func(ctx context.Context) (res *GetSignViewRes, err error) {
+		res = &GetSignViewRes{
+			Logo:        cfg.Logo,
+			Title:       cfg.Title,
+			Description: cfg.Description,
+			Body:        signform,
+			Copyright:   cfg.Copyright,
+		}
+		return
+	})
+	// 文件上传
 	controller.Bind(OperationUploadFile, controller.FileUpload)
 
 	s := g.Server()

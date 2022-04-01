@@ -1,18 +1,24 @@
 import Logo from "@/assets/logo.svg";
 import { Layout } from "@arco-design/web-react";
+import { useRequest } from "pro-utils";
 import { SchemaComponent } from "schema-components";
-import { useRoute } from "../route-switch/hooks";
+import { Loading } from "../components";
 import styles from "./index.module.less";
 
 export const SignPage: React.FC = (props) => {
-  const route = useRoute();
+  const { data = {}, loading } = useRequest("@getSignView");
+
+  if (loading) {
+    return <Loading />;
+  }
+
   const {
     title = "Li Admin",
-    subTitle,
-    footer = "Li Admin",
+    description,
+    copyright = "Li Admin",
     logo,
     body = {},
-  } = route.config;
+  } = data;
 
   return (
     <div className={styles.container}>
@@ -23,12 +29,12 @@ export const SignPage: React.FC = (props) => {
           </span>
           <span className={styles.title}>{title}</span>
         </div>
-        {subTitle ? <div className={styles.desc}>{subTitle}</div> : null}
+        {description ? <div className={styles.desc}>{description}</div> : null}
       </div>
       <div className={styles.content}>
         <SchemaComponent schema={body} />
       </div>
-      <Layout.Footer className={styles.footer}>{footer}</Layout.Footer>
+      <Layout.Footer className={styles.footer}>{copyright}</Layout.Footer>
     </div>
   );
 };
