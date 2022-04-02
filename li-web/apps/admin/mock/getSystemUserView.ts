@@ -237,13 +237,51 @@ export default {
                           recordactions: {
                             type: "void",
                             "x-component": "Space",
+                            "x-component-props": {
+                              split: "divider",
+                              size: 0,
+                            },
                             properties: {
-                              edit: {
+                              read: {
                                 type: "void",
-                                title: "编辑",
-                                "x-component": "List.Action.RecordEditDrawer",
+                                "x-component": "List.Action.RecordFormDrawer",
                                 "x-component-props": {
                                   forInit: "getUser",
+                                  icon: "IconEye",
+                                  type: "text",
+                                  drawerProps: {
+                                    title: "查看",
+                                  },
+                                },
+                                items: {
+                                  type: "object",
+                                  properties: {
+                                    nickname: {
+                                      type: "string",
+                                      required: true,
+                                      title: "昵称",
+                                      "x-decorator": "FormItem",
+                                      "x-component": "Input",
+                                    },
+                                  },
+                                },
+                                properties: {
+                                  cancel: {
+                                    type: "void",
+                                    "x-component": "Action.FormDrawer.Cancel",
+                                  },
+                                },
+                              },
+                              update: {
+                                type: "void",
+                                "x-component": "List.Action.RecordFormDrawer",
+                                "x-component-props": {
+                                  forInit: "getUser",
+                                  icon: "IconEdit",
+                                  type: "text",
+                                  drawerProps: {
+                                    title: "编辑",
+                                  },
                                 },
                                 items: {
                                   type: "object",
@@ -273,10 +311,11 @@ export default {
                               },
                               delete: {
                                 type: "void",
-                                title: "删除",
                                 "x-component": "List.Action.RecordDelete",
                                 "x-component-props": {
                                   status: "danger",
+                                  icon: "IconDelete",
+                                  type: "text",
                                   forSubmit: "deleteUser",
                                 },
                               },

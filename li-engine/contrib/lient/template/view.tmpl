@@ -3,7 +3,7 @@
 {{ define "model/additional/lient-view" }}
 func List{{ $.Name }}View() view.Node {
 	return node.List("{{ $.Package }}List").
-		AC({{ $.Package }}ViewACL["@list{{ $.Name }}"]).
+		AC({{ $.Package }}ViewACL["list:{{ $.Name }}"]).
 		ForInit("@list{{ $.Name }}", List{{ $.Name }}Controller).
 		DecoratorCard().
 		Children(
@@ -12,9 +12,9 @@ func List{{ $.Name }}View() view.Node {
 				RowSelectionType("checkbox").
 				ActionBar(
 					node.ListAction("{{ $.Package }}ListActions").Children(
-						node.ListActionRecordEditDrawer("add{{ $.Name }}").
+						node.ListActionRecordFormDrawer("add{{ $.Name }}").
 							Title("新建").
-							AC({{ $.Package }}ViewACL["@add{{ $.Name }}"]).
+							AC({{ $.Package }}ViewACL["create:{{ $.Name }}"]).
 							ButtonType("primary").
 							ButtonIcon("IconPlus").
 							ButtonPosition("left").
@@ -23,7 +23,7 @@ func List{{ $.Name }}View() view.Node {
 									{{- range $f := $.Fields }}
 										{{- if $annotation := $f.Annotations.LiEnt }}
 											{{- if and $annotation.ViewSchema (not $annotation.DisableCreate) }}
-												{{ $.Package }}.Node{{ $f.StructField }}().SetAC({{ $.Package }}ViewACL["{{ $f.Name }}"]){{- if contains $annotation.ValidateRule "required" }}.SetRequired(true){{- end }},
+												{{ $.Package }}.Node{{ $f.StructField }}().SetAC({{ $.Package }}ViewACL["create:{{ $f.Name }}"]){{- if contains $annotation.ValidateRule "required" }}.SetRequired(true){{- end }},
 											{{- end }}
 										{{- end }}
 									{{- end }}
@@ -35,7 +35,7 @@ func List{{ $.Name }}View() view.Node {
 							),
 						node.ListActionRowSelection("deleteMany{{ $.Name }}").
 							Title("删除").
-							AC({{ $.Package }}ViewACL["@deleteMany{{ $.Name }}"]).
+							AC({{ $.Package }}ViewACL["deleteMany:{{ $.Name }}"]).
 							ForSubmit("@deleteMany{{ $.Name }}", DeleteMany{{ $.Name }}Controller).
 							AfterReload().
 							ConfirmTitle("确认删除").
@@ -50,8 +50,8 @@ func List{{ $.Name }}View() view.Node {
                         {{- if $annotation := $f.Annotations.LiEnt }}
                             {{- if and $annotation.ViewSchema (not $annotation.DisableRead) (not (isNil $annotation.ColumnProps)) }}
 								node.ListTableColumn("column{{ $i }}").
-									AC({{ $.Package }}ViewACL["{{ $f.Name }}"]).
 									Title({{ $.Package }}.Node{{ $f.StructField }}Title).
+									AC({{ $.Package }}ViewACL["read:{{ $f.Name }}"]).
 									DataIndex("{{ $f.Name }}").
 									{{- if $annotation.ColumnProps.Align }}Align("{{ $annotation.ColumnProps.Align }}").{{- end }}
 									{{- if $annotation.ColumnProps.Ellipsis }}Ellipsis().{{- end }}
@@ -68,16 +68,39 @@ func List{{ $.Name }}View() view.Node {
 						DataIndex("__action").
 						Width(150).
 						Render(
-							node.Space("actions").Children(
-								node.ListActionRecordEditDrawer("view").
-									Title("查看").
+							node.Space("actions").Size(0).SplitByDivider().Children(
+								node.ListActionRecordFormDrawer("view").
+									AC({{ $.Package }}ViewACL["get:{{ $.Name }}"]).
 									ForInit("@get{{ $.Name }}", Get{{ $.Name }}Controller).
+									DrawerTitle("查看").
+									ButtonType("text").
+									ButtonIcon("IconEye").
+									Body(
+										node.FormGrid("grid").MaxColumns(2).Children(
+											{{- range $f := $.Fields }}
+												{{- if $annotation := $f.Annotations.LiEnt }}
+													{{- if and $annotation.ViewSchema (not $annotation.DisableRead) }}
+														{{ $.Package }}.Node{{ $f.StructField }}().SetAC({{ $.Package }}ViewACL["read:{{ $f.Name }}"]){{- if contains $annotation.ValidateRule "required" }}.SetRequired(true){{- end }},
+													{{- end }}
+												{{- end }}
+											{{- end }}
+										),
+									).
+									Footer(
+										node.ActionFormDrawerCancel("cancel"),
+									),
+								node.ListActionRecordFormDrawer("edit").
+									AC({{ $.Package }}ViewACL["update:{{ $.Name }}"]).
+									ForInit("@get{{ $.Name }}", Get{{ $.Name }}Controller).
+									DrawerTitle("编辑").
+									ButtonType("text").
+									ButtonIcon("IconEdit").
 									Body(
 										node.FormGrid("grid").MaxColumns(2).Children(
 											{{- range $f := $.Fields }}
 												{{- if $annotation := $f.Annotations.LiEnt }}
 													{{- if and $annotation.ViewSchema (not $annotation.DisableUpdate) }}
-														{{ $.Package }}.Node{{ $f.StructField }}(){{- if contains $annotation.ValidateRule "required" }}.SetRequired(true){{- end }},
+														{{ $.Package }}.Node{{ $f.StructField }}().SetAC({{ $.Package }}ViewACL["update:{{ $f.Name }}"]){{- if contains $annotation.ValidateRule "required" }}.SetRequired(true){{- end }},
 													{{- end }}
 												{{- end }}
 											{{- end }}
@@ -86,13 +109,13 @@ func List{{ $.Name }}View() view.Node {
 									Footer(
 										node.ActionFormDrawerCancel("cancel"),
 										node.ActionFormDrawerSubmit("submit").
-											AC({{ $.Package }}ViewACL["@update{{ $.Name }}"]).
 											ForSubmit("@update{{ $.Name }}", Update{{ $.Name }}Controller),
 									),
 								node.ListActionRecordDelete("delete").
-									Title("删除").
-									AC({{ $.Package }}ViewACL["@delete{{ $.Name }}"]).
-									ForSubmit("@delete{{ $.Name }}", Delete{{ $.Name }}Controller),
+									AC({{ $.Package }}ViewACL["delete:{{ $.Name }}"]).
+									ForSubmit("@delete{{ $.Name }}", Delete{{ $.Name }}Controller).
+									ButtonType("text").
+									ButtonIcon("IconDelete"),
 							),
 						),
 				),

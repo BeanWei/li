@@ -46,6 +46,12 @@ export default [
           },
         };
       }
+      if (operation == "getUser") {
+        return {
+          code: 0,
+          data: listUser[0],
+        };
+      }
       return {
         code: 0,
         data: {},

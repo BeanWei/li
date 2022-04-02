@@ -1,9 +1,7 @@
 import React from "react";
 import {
   ButtonProps,
-  CardProps,
   PopconfirmProps,
-  SelectProps,
   TableProps,
 } from "@arco-design/web-react";
 import { ColumnProps } from "@arco-design/web-react/es/Table";
@@ -37,8 +35,8 @@ export type ComposedListAction = React.FC & {
       data?: ReloadData;
     }
   >;
-  RecordEditDrawer?: React.FC<ActionFormDrawerProps>;
-  RecordEditModal?: React.FC<ActionFormModalProps>;
+  RecordFormDrawer?: React.FC<ActionFormDrawerProps>;
+  RecordFormModal?: React.FC<ActionFormModalProps>;
   RecordDelete?: React.FC<
     ButtonProps & {
       confirmProps?: PopconfirmProps;

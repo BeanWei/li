@@ -118,7 +118,7 @@ ListAction.Reload = observer((props) => {
   );
 });
 
-ListAction.RecordEditDrawer = observer((props) => {
+ListAction.RecordFormDrawer = observer((props) => {
   const ctx = useContext(ListContext);
   const forInitVariables = useRecord();
   return (
@@ -132,7 +132,7 @@ ListAction.RecordEditDrawer = observer((props) => {
   );
 });
 
-ListAction.RecordEditModal = observer((props) => {
+ListAction.RecordFormModal = observer((props) => {
   const ctx = useContext(ListContext);
   const forInitVariables = useRecord();
   return (

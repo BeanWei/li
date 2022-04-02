@@ -73,10 +73,14 @@ func (User) Fields() []ent.Field {
 
 func (User) ACL() map[string]ac.AC {
 	return map[string]ac.AC{
-		"@listUser":       nil,
-		"@addUser":        nil,
-		"@updateUser":     nil,
-		"@deleteManyUser": nil,
-		"@deleteUser":     nil,
+		"list:User":       nil,
+		"create:User":     nil,
+		"get:User":        nil,
+		"update:User":     nil,
+		"delete:User":     nil,
+		"deleteMany:User": nil,
+		"create:email":    nil,
+		"read:email":      nil,
+		"update:email":    nil,
 	}
 }
