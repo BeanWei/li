@@ -19,7 +19,7 @@ export const Checkbox: ComposedCheckbox = connect(
   }),
   mapReadPretty((props) => {
     if (!isValid(props.value)) {
-      return <div></div>;
+      return <div>-</div>;
     }
     return props.value ? (
       <IconCheck style={{ color: "#52c41a" }} />
@@ -38,7 +38,7 @@ Checkbox.Group = connect(
   }),
   mapReadPretty((props) => {
     if (!isValid(props.value)) {
-      return <div></div>;
+      return <div>-</div>;
     }
 
     const field = useField<any>();

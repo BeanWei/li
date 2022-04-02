@@ -60,7 +60,7 @@ export const Password = connect(
   },
   mapReadPretty((props) => {
     if (!props.value) {
-      return <div></div>;
+      return <div>-</div>;
     }
     return <div>********</div>;
   })

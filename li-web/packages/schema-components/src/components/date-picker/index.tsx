@@ -12,7 +12,7 @@ type ComposedDatePicker = React.FC<DatePickerProps> & {
 
 const ReadPretty: React.FC = (props: any) => {
   if (!props.value) {
-    return <div></div>;
+    return <div>-</div>;
   }
   const prefixCls = usePrefixCls("description-date-picker", props);
   const getLabels = () => {

@@ -9,7 +9,7 @@ export const InputNumber = connect(
   mapReadPretty((props) => {
     const { step, value, addonBefore, addonAfter } = props;
     if (!isValid(props.value)) {
-      return <div></div>;
+      return <div>-</div>;
     }
     const precision = Math.max(
       getNumberPrecision(String(value)),

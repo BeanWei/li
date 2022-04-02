@@ -70,13 +70,12 @@ const ObjectSelect = (props: SelectProps) => {
 };
 
 const ReadPretty = observer((props: any) => {
-  const fieldNames = { ...props.fieldNames };
   const field = useField<any>();
   if (!isValid(props.value)) {
-    return <div />;
+    return <div>-</div>;
   }
   if (isArrayField(field) && field?.value?.length === 0) {
-    return <div />;
+    return <div>-</div>;
   }
   const dataSource = field.dataSource || props.options || [];
   const options = getCurrentOptions(field.value, dataSource);

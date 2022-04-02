@@ -26,7 +26,7 @@ Radio.Group = connect(
   mapReadPretty((props) => {
     const { value } = props;
     if (!isValid(value)) {
-      return <div></div>;
+      return <div>-</div>;
     }
     const field = useField<any>();
     const dataSource = field.dataSource || [];

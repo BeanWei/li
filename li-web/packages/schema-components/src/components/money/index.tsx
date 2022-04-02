@@ -46,7 +46,7 @@ export const Money = connect(
   mapReadPretty((props) => {
     const { value, currency } = props;
     if (!isValid(props.value)) {
-      return <div></div>;
+      return <div>-</div>;
     }
     const formatter = getFormatter(currency);
     return <div>{formatter.format(value)}</div>;

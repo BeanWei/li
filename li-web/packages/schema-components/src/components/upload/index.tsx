@@ -47,7 +47,7 @@ const UploadAttachment: React.FC<UploadAttachmentProps> = connect(
   mapReadPretty((props) => {
     const { value } = props;
     if (!isValid(value)) {
-      return <div></div>;
+      return <div>-</div>;
     }
     return (
       <Space direction="vertical">
@@ -128,7 +128,7 @@ const UploadAvatar: React.FC<UploadAvatarProps> = connect(
   mapReadPretty((props) => {
     const { value } = props;
     if (!isValid(value)) {
-      return <div></div>;
+      return <div>-</div>;
     }
     return (
       <Avatar>
