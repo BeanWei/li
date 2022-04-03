@@ -32,7 +32,7 @@ Golang, GoFrame, Ent ...
 **前端：**
  React, TypeScript, Formily, Arco-Design ...
 
- ## 🏗️ 本地开发
+ ## 🏗️ 本地开发 (示例仓库：https://github.com/BeanWei/li-example)
  * 1: cd li-web & pnpm
  * 2: cd li-web/apps/admin & pnpm dev
  * 3: cd li-app, 配置 config.yaml, make generate & make migrate
