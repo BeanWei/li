@@ -3,8 +3,13 @@ import { Locale } from "./types";
 
 export const enUS: Locale = {
   ...ArcoEnUS,
+  Popconfirm: {
+    okText: "OK",
+    cancelText: "Cancel",
+  },
   List: {
     search: "Search",
     reset: "Reset",
+    confirmDelete: "Are you sure you want to delete?",
   },
 };

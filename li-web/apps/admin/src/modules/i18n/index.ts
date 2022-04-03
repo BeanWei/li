@@ -13,7 +13,7 @@ const getLocalStorage = (): string | undefined => {
 export const i18n = i18next.createInstance();
 
 i18n
-  .use(HttpApi)
+  // .use(HttpApi)
   .use(initReactI18next)
   .init({
     debug: false,

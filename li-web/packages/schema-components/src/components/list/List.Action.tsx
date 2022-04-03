@@ -10,7 +10,7 @@ import { useContext } from "react";
 import { useRecord } from "../../core";
 import ActionFormDrawer from "../action/Action.FormDrawer";
 import ActionFormModal from "../action/Action.FormModal";
-import { Icon } from "../__builtins__";
+import { getLocale, Icon } from "../__builtins__";
 import { ListContext } from "./context";
 import { ComposedListAction } from "./types";
 
@@ -149,6 +149,7 @@ ListAction.RecordFormModal = observer((props) => {
 ListAction.RecordDelete = observer((props) => {
   const { confirmProps, forSubmit, ...rest } = props;
   const field = useField();
+  const local = getLocale();
   const ctx = useContext(ListContext);
   const variables = useRecord();
   const handleOk = () => {
@@ -160,7 +161,7 @@ ListAction.RecordDelete = observer((props) => {
   };
   return (
     <Popconfirm
-      title="Are you sure you want to delete?"
+      title={local.List.confirmDelete}
       {...props.confirmProps}
       onOk={handleOk}
     >

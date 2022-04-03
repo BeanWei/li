@@ -16,12 +16,10 @@ func (SystemUser) Nodes() []view.Node {
 			Gutter(16).
 			Children(
 				node.GridCol("col1").
-					Span(16).
+					Span(24).
 					Children(
 						ent.ListUserView(),
 					),
-				node.GridCol("col2").
-					Span(8),
 			),
 	}
 }

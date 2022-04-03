@@ -4,5 +4,6 @@ export type Locale = ArcoLocale & {
   List: {
     search: string;
     reset: string;
+    confirmDelete: string;
   };
 };

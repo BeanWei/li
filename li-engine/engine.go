@@ -60,6 +60,7 @@ type (
 		Icon     string     `json:"icon"`
 		Target   string     `json:"target"`
 		Children []*appmenu `json:"children"`
+		Path     string     `json:"path"` // 方便计算默认展开的菜单
 	}
 
 	GetAppViewReq struct {
@@ -100,10 +101,10 @@ func NewApp(cfg *App) {
 		pages         = make(map[string]string)
 		pageacl       = make(map[string][]string)
 		signform      = &ui.Schema{}
-		recursionmenu func(menus []*AppMenu) []*appmenu
+		recursionmenu func(menus []*AppMenu, parentPath string) []*appmenu
 	)
 
-	recursionmenu = func(menus []*AppMenu) []*appmenu {
+	recursionmenu = func(menus []*AppMenu, parentPath string) []*appmenu {
 		amenus := make([]*appmenu, len(menus))
 		for i, menu := range menus {
 			key, page := view.ToPage(menu.Page)
@@ -133,12 +134,17 @@ func NewApp(cfg *App) {
 			if menu.IsHome {
 				appcfg.Home = key
 			}
-			amenu.Children = recursionmenu(menu.Children)
+			if parentPath != "" {
+				amenu.Path = parentPath + "." + key
+			} else {
+				amenu.Path = key
+			}
+			amenu.Children = recursionmenu(menu.Children, amenu.Path)
 			amenus[i] = amenu
 		}
 		return amenus
 	}
-	appcfg.Menus = recursionmenu(cfg.Menus)
+	appcfg.Menus = recursionmenu(cfg.Menus, "")
 
 	for i, ni := range cfg.NavItems {
 		appcfg.NavItems[i] = ni.Schema()

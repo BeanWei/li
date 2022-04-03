@@ -11,6 +11,22 @@ import { RemoteSchemaComponent } from "../route-switch/RemoteSchemaComponent";
 import styles from "./index.module.less";
 import { Loading } from "../components";
 
+const getOpenKeysFromMenuData = (curKey: string, menuData?: any[]) => {
+  return (menuData || []).reduce((pre, item) => {
+    if (curKey == item.key) {
+      const paths = item.path.split(".");
+      return pre.concat(paths.slice(0, paths.length - 1));
+    }
+    if (item.children) {
+      const newArray: string[] = pre.concat(
+        getOpenKeysFromMenuData(curKey, item.children) || []
+      );
+      return newArray;
+    }
+    return pre;
+  }, [] as string[]);
+};
+
 export const LayoutContext = createContext<{
   app?: Record<string, any>;
   lang?: string;
@@ -142,6 +158,10 @@ export const Layout = () => {
                         "x-component": "Menu",
                         "x-component-props": {
                           defaultSelectedKeys: [curKey],
+                          defaultOpenKeys: getOpenKeysFromMenuData(
+                            curKey,
+                            menus
+                          ),
                           onClickMenuItem: "{{ onClickMenuItem }}",
                           menuData: menus,
                         },
