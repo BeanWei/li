@@ -44,6 +44,7 @@
     "react-i18next": "^11.15.5",
     "react-sortable-hoc": "^1.11.0",
     "react-sticky-box": "^0.9.3",
+    "react-router-dom": "^5.2.0",
     "pro-utils": "workspace:*"
   },
   "publishConfig": {

@@ -10,6 +10,11 @@ export default {
       changeOrigin: true,
       rewrite: (path) => path.replace(/^\/upload/, ""),
     },
+    "/locales": {
+      target: "http://localhost:8299/locales/",
+      changeOrigin: true,
+      rewrite: (path) => path.replace(/^\/locales/, ""),
+    },
   },
   test: {
     "/api/": {

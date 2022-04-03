@@ -7,7 +7,6 @@ import {
   Input,
   Select,
   SelectProps,
-  Space,
   Table,
   TimePicker,
 } from "@arco-design/web-react";
@@ -30,6 +29,7 @@ import {
 } from "@formily/react";
 import { observer } from "@formily/reactive-react";
 import { isObject, pickBy } from "lodash";
+import { isValid } from "@formily/shared";
 import { RecordIndexProvider, RecordProvider } from "../../core";
 import { useAttach } from "../../hooks";
 import {
@@ -39,9 +39,8 @@ import {
 } from "../array-table";
 import { ComposedListTable } from "./types";
 import { ListContext, ListContextProps } from "./context";
-import { useCollapseGrid } from "../__builtins__";
+import { getLocale, useCollapseGrid } from "../__builtins__";
 import FormGrid from "../form-grid";
-import { isValid } from "@formily/shared";
 import FormButtonGroup from "../form-button-group";
 
 type FilterConfig = Pick<
@@ -192,6 +191,7 @@ const FilterForm: React.FC<{
   source: ObservableColumnSource[];
   onSearch?: (values: Record<string, any>) => void;
 }> = observer(({ source, onSearch }) => {
+  const locale = getLocale();
   const { grid, toggle, expanded, type } = useCollapseGrid(2);
   const [form] = Form.useForm();
   const fieldSchemas: Schema[] = [];
@@ -221,7 +221,8 @@ const FilterForm: React.FC<{
       <FormButtonGroup
         align="right"
         style={{
-          marginTop: 30,
+          // TODO: 完善布局
+          // marginTop: 30,
           marginBottom: 16,
           width: "100%",
           justifyContent: "end",
@@ -233,10 +234,10 @@ const FilterForm: React.FC<{
           icon={<IconSearch />}
           onClick={handleSubmit}
         >
-          搜索
+          {locale.List.search}
         </Button>
         <Button key="reset" icon={<IconRefresh />} onClick={handleReset}>
-          重置
+          {locale.List.reset}
         </Button>
       </FormButtonGroup>
     );

@@ -3,10 +3,8 @@ import { useRequest } from "pro-utils";
 import { Redirect } from "react-router";
 import { useLocalStorageState } from "ahooks";
 import { ConfigProvider, Layout as ArcoLayout } from "@arco-design/web-react";
-import zhCN from "@arco-design/web-react/es/locale/zh-CN";
-import enUS from "@arco-design/web-react/es/locale/en-US";
 import { useHistory, useRouteMatch } from "react-router-dom";
-import { SchemaComponent } from "schema-components";
+import { SchemaComponent, zhCN, enUS } from "schema-components";
 import Logo from "@/assets/logo.svg";
 import { useRoute } from "../route-switch/hooks";
 import { RemoteSchemaComponent } from "../route-switch/RemoteSchemaComponent";
@@ -42,10 +40,12 @@ export const Layout = () => {
   } = route.config;
 
   const [theme, setTheme] = useLocalStorageState("li-theme", {
-    defaultValue: "light",
+    defaultValue: window.matchMedia?.("(prefers-color-scheme: dark)").matches
+      ? "dark"
+      : "light",
   });
   const [lang, setLang] = useLocalStorageState("li-lang", {
-    defaultValue: "zh-CN",
+    defaultValue: navigator.language,
   });
 
   useEffect(() => {

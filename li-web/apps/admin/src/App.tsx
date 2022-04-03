@@ -8,7 +8,6 @@ import {
 import { useRequest } from "pro-utils";
 import {
   compose,
-  ConfigProvider,
   DocumentTitleProvider,
   i18n,
   LangSwitch,
@@ -22,7 +21,6 @@ import { Loading } from "./modules/components";
 
 const providers = [
   [I18nextProvider, { i18n }],
-  [ConfigProvider, { remoteLocale: true }],
   [
     SchemaComponentProvider,
     { components: { Link, NavLink, LangSwitch, ThemeSwitch } },

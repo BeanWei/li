@@ -1,3 +1,4 @@
+export * from "./getLocale";
 export * from "./getPrefixCls";
 export * from "./useClickAway";
 export * from "./useCollapseGrid";
