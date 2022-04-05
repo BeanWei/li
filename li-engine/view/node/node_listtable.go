@@ -10,13 +10,11 @@ import (
 func ListTable(name string) *listtableBuilder {
 	return &listtableBuilder{&NodeBuilder{
 		schema: &ui.Schema{
-			Name:       name,
-			Type:       ui.SchemaTypeArray,
-			XComponent: ui.ComponentListTable,
-			XComponentProps: map[string]interface{}{
-				"rowSelection": make(map[string]interface{}),
-			},
-			Properties: gmap.NewListMap(),
+			Name:            name,
+			Type:            ui.SchemaTypeArray,
+			XComponent:      ui.ComponentListTable,
+			XComponentProps: make(map[string]interface{}),
+			Properties:      gmap.NewListMap(),
 		},
 	}}
 }
