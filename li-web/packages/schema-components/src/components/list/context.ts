@@ -15,8 +15,7 @@ export type ListContextProps = {
   tableProps?: TableProps & {
     onSearch?: (values: Record<string, any>) => void;
   };
-  selectedRowKeys?: (string | number)[];
-  setSelectedRowKeys?: (keys: (string | number)[]) => void;
+  selectedKeys?: (string | number)[];
 };
 
 export const ListContext = createContext<ListContextProps>({});

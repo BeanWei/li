@@ -100,37 +100,45 @@ export default {
       key: "Welcome",
       title: "欢迎",
       icon: "IconHome",
+      path: "Welcome",
     },
     {
       key: "System",
+      path: "System",
       title: "系统管理",
       icon: "IconSettings",
       children: [
         {
           key: "SystemUser",
           title: "用户管理",
+          path: "System.SystemUser",
         },
       ],
     },
     {
       title: "列表页",
-      key: "ListPage",
+      key: "Listpage",
+      path: "Listpage",
       icon: "IconList",
       children: [
         {
           key: "AdminPageSub1Sub",
+          path: "Listpage.AdminPageSub1Sub",
           title: "一级列表页面",
           children: [
             {
               key: "AdminPageSub1Sub1",
+              path: "Listpage.AdminPageSub1Sub.AdminPageSub1Sub1",
               title: "一一级列表页面",
             },
             {
               key: "AdminPageSub1Sub2",
+              path: "Listpage.AdminPageSub1Sub.AdminPageSub1Sub2",
               title: "一二级列表页面",
             },
             {
               key: "sAdminPageSub1Sub3",
+              path: "Listpage.AdminPageSub1Sub.sAdminPageSub1Sub3",
               title: "一三级列表页面",
             },
           ],
@@ -138,15 +146,19 @@ export default {
         {
           key: "AdminPageSub2",
           title: "二级列表页面",
+          path: "Listpage.AdminPageSub2",
         },
         {
           key: "AdminPageSub3",
           title: "三级列表页面",
+          path: "Listpage.AdminPageSub3",
         },
       ],
     },
     {
       target: "https://github.com/BeanWei",
+      key: "qqq",
+      path: "qqq",
       title: "Github",
       icon: "IconGithub",
     },

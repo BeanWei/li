@@ -405,19 +405,7 @@ export const ListTable: ComposedListTable = observer(
     return (
       <FormContext.Provider value={form}>
         <FieldContext.Provider value={f}>
-          <BaseTable
-            {...props}
-            {...ctx.tableProps}
-            rowSelection={
-              props.rowSelection
-                ? {
-                    ...props.rowSelection,
-                    onChange: ctx.setSelectedRowKeys,
-                  }
-                : undefined
-            }
-            reload={ctx.reload}
-          />
+          <BaseTable {...props} {...ctx.tableProps} reload={ctx.reload} />
         </FieldContext.Provider>
       </FormContext.Provider>
     );

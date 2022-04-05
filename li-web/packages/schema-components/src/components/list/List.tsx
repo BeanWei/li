@@ -7,7 +7,11 @@ import { ListAction } from "./List.Action";
 import ListTable from "./List.Table";
 import { ComposedList } from "./types";
 
-export const List: ComposedList = observer((props) => {
+export const List: ComposedList = observer((props_) => {
+  const useProps = props_.useProps?.() || {};
+  const props = { ...props_, ...useProps };
+  console.log("useProps =>", useProps);
+
   const result = useRequest(props.forInit, {
     ...props.forInitVariables,
     page: 1,
@@ -67,8 +71,8 @@ export const List: ComposedList = observer((props) => {
     });
   };
 
-  const [selectedRowKeys, setSelectedRowKeys] = useState<(string | number)[]>(
-    []
+  const [selectedKeys, setSelectedKeys] = useState<(string | number)[]>(
+    props.selection?.defaultSelectedKeys || []
   );
 
   return (
@@ -89,9 +93,20 @@ export const List: ComposedList = observer((props) => {
                 onPageSizeChange: changePageSize,
               }
             : false,
+          rowSelection: props.selection
+            ? {
+                checkAll: props.selection.enableCheckAll,
+                type: props.selection.multiple ? "checkbox" : "radio",
+                selectedRowKeys: props.selection.defaultSelectedKeys,
+                preserveSelectedRowKeys: props.selection.preserveSelectedKeys,
+                onChange: (keys, records) => {
+                  props.selection?.onChange?.(keys, records);
+                  setSelectedKeys(keys);
+                },
+              }
+            : undefined,
         },
-        selectedRowKeys,
-        setSelectedRowKeys: useCallback(setSelectedRowKeys, []),
+        selectedKeys,
       }}
     >
       {props.children}

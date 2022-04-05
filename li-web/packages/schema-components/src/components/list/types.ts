@@ -9,10 +9,20 @@ import { FormProps } from "../form";
 import { ActionFormDrawerProps, ActionFormModalProps } from "../action/types";
 import { ReloadData } from "./context";
 
-export type ComposedList = React.FC<{
+export type ListProps = {
   forInit: string;
   forInitVariables?: Record<string, any>;
-}> & {
+  selection?: {
+    enableCheckAll?: boolean;
+    multiple?: boolean;
+    defaultSelectedKeys?: (string | number)[];
+    preserveSelectedKeys?: boolean;
+    onChange?: (selectedKeys: (string | number)[], selected: any[]) => void;
+  };
+  useProps?: () => Pick<ListProps, "selection">;
+};
+
+export type ComposedList = React.FC<ListProps> & {
   Filter?: React.FC<FormProps>;
   Action?: ComposedListAction;
   Table?: ComposedListTable;

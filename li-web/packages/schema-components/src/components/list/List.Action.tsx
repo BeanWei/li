@@ -52,8 +52,7 @@ ListAction.RowSelection = observer((props) => {
   const ctx = useContext(ListContext);
   const handleOk = () => {
     if (forSubmit) {
-      request(forSubmit, { ids: ctx.selectedRowKeys }).then(() => {
-        ctx.setSelectedRowKeys?.([]);
+      request(forSubmit, { ids: ctx.selectedKeys }).then(() => {
         afterReload && ctx.result?.run();
       });
     }
@@ -63,7 +62,7 @@ ListAction.RowSelection = observer((props) => {
       <Popconfirm {...props.confirmProps} onOk={handleOk}>
         <Button
           {...rest}
-          disabled={!!!ctx.selectedRowKeys?.length}
+          disabled={!!!ctx.selectedKeys?.length}
           icon={
             props.icon && typeof props.icon === "string" ? (
               <Icon type={props.icon} />
@@ -80,7 +79,7 @@ ListAction.RowSelection = observer((props) => {
   return (
     <Button
       {...rest}
-      disabled={!!!ctx.selectedRowKeys?.length}
+      disabled={!!!ctx.selectedKeys?.length}
       onClick={handleOk}
       icon={
         props.icon && typeof props.icon === "string" ? (

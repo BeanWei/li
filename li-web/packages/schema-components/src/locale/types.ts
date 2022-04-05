@@ -6,4 +6,7 @@ export type Locale = ArcoLocale & {
     reset: string;
     confirmDelete: string;
   };
+  RecordPicker: {
+    drawerTitle: string;
+  };
 };

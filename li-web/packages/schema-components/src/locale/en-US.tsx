@@ -12,4 +12,7 @@ export const enUS: Locale = {
     reset: "Reset",
     confirmDelete: "Are you sure you want to delete?",
   },
+  RecordPicker: {
+    drawerTitle: "Please select",
+  },
 };

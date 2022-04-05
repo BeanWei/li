@@ -12,4 +12,7 @@ export const zhCN: Locale = {
     reset: "重置",
     confirmDelete: "你确定要删除吗？",
   },
+  RecordPicker: {
+    drawerTitle: "请选择",
+  },
 };
