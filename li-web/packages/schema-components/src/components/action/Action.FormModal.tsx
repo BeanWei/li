@@ -21,6 +21,7 @@ export const ActionFormModal: React.FC<ActionFormModalProps> = observer(
       forInitVariables,
       forSubmitSuccess,
       isMenuItem,
+      actionText,
       modalProps,
       layoutProps,
       ...buttonProps
@@ -31,7 +32,7 @@ export const ActionFormModal: React.FC<ActionFormModalProps> = observer(
     const { locale } = useContext(ConfigProvider.ConfigContext);
 
     const handleClick = () => {
-      const modal = FormModal(modalProps || field.title, () => {
+      const modal = FormModal(modalProps || actionText || field.title, () => {
         return (
           <FormLayout {...layoutProps}>
             <UiSchemaComponentProvider>
@@ -113,7 +114,7 @@ export const ActionFormModal: React.FC<ActionFormModalProps> = observer(
     return (
       <FormModal.Portal>
         {isMenuItem ? (
-          <div onClick={handleClick}>{field.title}</div>
+          <div onClick={handleClick}>{actionText || field.title}</div>
         ) : (
           <Button
             {...buttonProps}
@@ -126,7 +127,7 @@ export const ActionFormModal: React.FC<ActionFormModalProps> = observer(
               )
             }
           >
-            {field.title}
+            {actionText || field.title}
           </Button>
         )}
       </FormModal.Portal>

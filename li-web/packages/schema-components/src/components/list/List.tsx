@@ -1,5 +1,6 @@
 import { TableProps } from "@arco-design/web-react";
 import { observer } from "@formily/reactive-react";
+import { isValid } from "@formily/shared";
 import { useRequest } from "pro-utils";
 import { useCallback, useState } from "react";
 import { ListContext, ReloadData } from "./context";
@@ -10,7 +11,6 @@ import { ComposedList } from "./types";
 export const List: ComposedList = observer((props_) => {
   const useProps = props_.useProps?.() || {};
   const props = { ...props_, ...useProps };
-  console.log("useProps =>", useProps);
 
   const result = useRequest(props.forInit, {
     ...props.forInitVariables,
@@ -95,9 +95,11 @@ export const List: ComposedList = observer((props_) => {
             : false,
           rowSelection: props.selection
             ? {
-                checkAll: props.selection.enableCheckAll,
+                checkAll: isValid(props.selection.enableCheckAll)
+                  ? props.selection.enableCheckAll
+                  : true,
                 type: props.selection.multiple ? "checkbox" : "radio",
-                selectedRowKeys: props.selection.defaultSelectedKeys,
+                selectedRowKeys: selectedKeys,
                 preserveSelectedRowKeys: props.selection.preserveSelectedKeys,
                 onChange: (keys, records) => {
                   props.selection?.onChange?.(keys, records);
@@ -105,6 +107,7 @@ export const List: ComposedList = observer((props_) => {
                 },
               }
             : undefined,
+          filter: props.filter,
         },
         selectedKeys,
       }}

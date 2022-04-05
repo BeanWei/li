@@ -10,7 +10,6 @@ import {
 import { toArr } from "@formily/shared";
 import { Field } from "@formily/core";
 import { Drawer, Select, SelectProps, Space } from "@arco-design/web-react";
-import { IconLink } from "@arco-design/web-react/icon";
 import { RecordProvider, SchemaComponentOptions, useRecord } from "../../core";
 import { ActionFormDrawerProps, ActionFormModalProps } from "../action/types";
 import ActionFormDrawer from "../action/Action.FormDrawer";
@@ -28,8 +27,12 @@ type RecordPickerProps = Omit<SelectProps, "onChange" | "mode" | "value"> & {
 };
 
 type ComposedRecordPicker = React.FC<RecordPickerProps> & {
-  RecordFormDrawer?: React.FC<ActionFormDrawerProps>;
-  RecordFormModal?: React.FC<ActionFormModalProps>;
+  RecordFormDrawer?: React.FC<
+    ActionFormDrawerProps & { fieldNames: RecordPickerProps["fieldNames"] }
+  >;
+  RecordFormModal?: React.FC<
+    ActionFormModalProps & { fieldNames: RecordPickerProps["fieldNames"] }
+  >;
 };
 
 export const RecordPicker: ComposedRecordPicker = connect(
@@ -42,8 +45,8 @@ export const RecordPicker: ComposedRecordPicker = connect(
       ...reset
     } = props;
     const fieldNames = { label: "id", value: "id", ...fieldNames_ };
+    const values = toArr(value);
     const [visible, setVisible] = useState(false);
-    const [selected, setSelected] = useState(toArr(value));
     const locale = getLocale();
     const fieldSchema = useFieldSchema();
     fieldSchema.reduceProperties((b, s) => {
@@ -61,14 +64,13 @@ export const RecordPicker: ComposedRecordPicker = connect(
       <>
         <Select
           {...reset}
-          arrowIcon={<IconLink />}
           mode={multiple ? "multiple" : undefined}
           allowClear
           popupVisible={false}
           onVisibleChange={(open) => {
             setVisible(open);
           }}
-          options={selected.map((item: any) => {
+          options={values.map((item: any) => {
             return {
               label: item[fieldNames.label],
               value: item[fieldNames.value],
@@ -76,19 +78,17 @@ export const RecordPicker: ComposedRecordPicker = connect(
           })}
           value={
             multiple
-              ? selected.map((item: any) => item[fieldNames.value])
-              : selected?.[0]?.[fieldNames.value]
+              ? values.map((item: any) => item[fieldNames.value])
+              : values?.[0]?.[fieldNames.value]
           }
           onChange={(changed) => {
             if (!changed || !changed.length) {
               onChange?.([]);
-              setSelected([]);
             } else if (Array.isArray(changed)) {
               const values = value?.filter((v: any) =>
                 changed.includes(v[fieldNames.value])
               );
               onChange?.(values);
-              setSelected(values);
             }
           }}
         />
@@ -109,12 +109,12 @@ export const RecordPicker: ComposedRecordPicker = connect(
                   selection: {
                     enableCheckAll: true,
                     multiple,
-                    defaultSelectedKeys: selected?.map(
+                    defaultSelectedKeys: values?.map(
                       (item: any) => item[fieldNames.value]
                     ),
                     preserveSelectedKeys: true,
                     onChange: (_: any, selected: any[]) => {
-                      setSelected(selected);
+                      onChange?.(selected);
                     },
                   },
                 };
@@ -132,31 +132,27 @@ export const RecordPicker: ComposedRecordPicker = connect(
     const field = useField<Field>();
     const fieldSchema = useFieldSchema();
     fieldSchema.reduceProperties((b, s) => {
-      if (s["x-component"] !== "List") {
-        s.title = field.value[fieldNames.label];
+      if (s["x-component"] === "List") {
+        s["x-hidden"] = true;
+      } else if (
+        s["x-component"] === "RecordPicker.RecordFormDrawer" ||
+        s["x-component"] === "RecordPicker.RecordFormModal"
+      ) {
         s["x-component-props"] = {
           ...s["x-component-props"],
-          drawerProps: {
-            ...s["x-component-props"]?.["drawerProps"],
-            title: s.title,
-          },
-          modalProps: {
-            ...s["x-component-props"]?.["modalProps"],
-            title: s.title,
-          },
-          type: "text",
-          icon: null,
+          fieldNames,
         };
-      } else {
-        s["x-hidden"] = true;
       }
     });
 
     return (
-      <Space>
+      <Space
+        size={0}
+        split={<span style={{ marginRight: 4, color: "#aaa" }}>, </span>}
+      >
         {toArr(field.value).map((record) => {
           return (
-            <RecordProvider record={record}>
+            <RecordProvider record={record} key={record[fieldNames.value]}>
               <RecursionField schema={fieldSchema} onlyRenderProperties />
             </RecordProvider>
           );
@@ -167,13 +163,43 @@ export const RecordPicker: ComposedRecordPicker = connect(
 );
 
 RecordPicker.RecordFormDrawer = observer((props) => {
+  const { fieldNames: fieldNames_, ...rest } = props;
+  const fieldNames = { label: "id", value: "id", ...fieldNames_ };
   const forInitVariables = useRecord();
-  return <ActionFormDrawer {...props} forInitVariables={forInitVariables} />;
+  return (
+    <ActionFormDrawer
+      {...rest}
+      isMenuItem
+      actionText={
+        <a style={{ cursor: "pointer", color: "rgb(var(--primary-6))" }}>
+          {forInitVariables[fieldNames.label]}
+        </a>
+      }
+      drawerProps={{
+        ...rest.drawerProps,
+        title: forInitVariables[fieldNames.label],
+      }}
+      forInitVariables={forInitVariables}
+    />
+  );
 });
 
 RecordPicker.RecordFormModal = observer((props) => {
+  const { fieldNames: fieldNames_, ...rest } = props;
+  const fieldNames = { label: "id", value: "id", ...fieldNames_ };
   const forInitVariables = useRecord();
-  return <ActionFormModal {...props} forInitVariables={forInitVariables} />;
+  return (
+    <ActionFormModal
+      {...rest}
+      isMenuItem
+      actionText={
+        <a style={{ cursor: "pointer", color: "rgb(var(--primary-6))" }}>
+          {forInitVariables[fieldNames.label]}
+        </a>
+      }
+      forInitVariables={forInitVariables}
+    />
+  );
 });
 
 export default RecordPicker;

@@ -15,6 +15,7 @@ export type ActionFormDrawerProps = ButtonProps & {
   forInitVariables?: Record<string, any>;
   forSubmitSuccess?: (payload: any) => void;
   isMenuItem?: boolean;
+  actionText?: string | React.ReactNode;
   drawerProps?: IDrawerProps;
   layoutProps?: IFormLayoutProps;
 };
@@ -25,6 +26,7 @@ export type ActionFormModalProps = ButtonProps & {
   forInitVariables?: Record<string, any>;
   forSubmitSuccess?: (payload: any) => void;
   isMenuItem?: boolean;
+  actionText?: string | React.ReactNode;
   modalProps?: IModalProps;
   layoutProps?: IFormLayoutProps;
 };

@@ -49,7 +49,7 @@ export default [
       if (operation == "getUser") {
         return {
           code: 0,
-          data: listUser[0],
+          data: listUser[parseInt(variables["id"]) - 1],
         };
       }
       return {

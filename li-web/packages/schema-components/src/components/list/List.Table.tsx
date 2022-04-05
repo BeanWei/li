@@ -37,7 +37,7 @@ import {
   ObservableColumnSource,
   useArrayTableSources,
 } from "../array-table";
-import { ComposedListTable } from "./types";
+import { ComposedListTable, ListProps } from "./types";
 import { ListContext, ListContextProps } from "./context";
 import { getLocale, useCollapseGrid } from "../__builtins__";
 import FormGrid from "../form-grid";
@@ -355,7 +355,7 @@ const FilterForm: React.FC<{
 
 const BaseTable: React.FC<
   TableProps & {
-    filter?: true | "light";
+    filter?: ListProps["filter"];
     reload?: ListContextProps["reload"];
   }
 > = observer((props) => {

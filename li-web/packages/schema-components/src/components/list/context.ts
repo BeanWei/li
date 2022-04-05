@@ -1,6 +1,7 @@
 import { TableProps } from "@arco-design/web-react";
 import { Result } from "pro-utils";
 import { createContext } from "react";
+import { ListProps } from "./types";
 
 export type ReloadData = {
   page?: number;
@@ -14,6 +15,7 @@ export type ListContextProps = {
   reload?: (values?: ReloadData) => void;
   tableProps?: TableProps & {
     onSearch?: (values: Record<string, any>) => void;
+    filter?: ListProps["filter"];
   };
   selectedKeys?: (string | number)[];
 };

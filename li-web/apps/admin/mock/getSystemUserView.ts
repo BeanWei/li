@@ -19,6 +19,7 @@ const friends = {
         selection: {
           multiple: true,
         },
+        filter: "light",
       },
       properties: {
         userlisttable: {
@@ -26,7 +27,6 @@ const friends = {
           "x-component": "List.Table",
           "x-component-props": {
             rowKey: "id",
-            filter: "light",
           },
           items: {
             type: "object",
@@ -204,6 +204,7 @@ export default {
                 selection: {
                   multiple: true,
                 },
+                filter: true,
               },
               properties: {
                 userlisttable: {
@@ -211,10 +212,6 @@ export default {
                   "x-component": "List.Table",
                   "x-component-props": {
                     rowKey: "id",
-                    rowSelection: {
-                      type: "checkbox",
-                    },
-                    filter: true,
                   },
                   properties: {
                     actions: {
@@ -408,17 +405,17 @@ export default {
                           },
                         },
                       },
-                      // column7: {
-                      //   type: "void",
-                      //   "x-component": "List.Table.Column",
-                      //   "x-component-props": {
-                      //     title: "朋友",
-                      //     dataIndex: "friends",
-                      //   },
-                      //   properties: {
-                      //     friends,
-                      //   },
-                      // },
+                      column7: {
+                        type: "void",
+                        "x-component": "List.Table.Column",
+                        "x-component-props": {
+                          title: "朋友",
+                          dataIndex: "friends",
+                        },
+                        properties: {
+                          friends,
+                        },
+                      },
                       column8: {
                         type: "void",
                         "x-component": "List.Table.Column",
@@ -487,7 +484,7 @@ export default {
                                       "x-decorator": "FormItem",
                                       "x-component": "Input",
                                     },
-                                    // friends,
+                                    friends,
                                   },
                                 },
                                 properties: {

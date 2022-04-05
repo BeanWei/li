@@ -12,6 +12,7 @@ import { ReloadData } from "./context";
 export type ListProps = {
   forInit: string;
   forInitVariables?: Record<string, any>;
+  filter?: true | "light";
   selection?: {
     enableCheckAll?: boolean;
     multiple?: boolean;
