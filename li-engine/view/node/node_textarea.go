@@ -46,8 +46,8 @@ func (b *textareaBuilder) Style(style map[string]interface{}) *textareaBuilder {
 	return b
 }
 
-func (b *textareaBuilder) AllowClear() *textareaBuilder {
-	b.schema.XComponentProps["allowClear"] = true
+func (b *textareaBuilder) AllowClear(allowClear bool) *textareaBuilder {
+	b.schema.XComponentProps["allowClear"] = allowClear
 	return b
 }
 
@@ -61,12 +61,12 @@ func (b *textareaBuilder) Size(size string) *textareaBuilder {
 	return b
 }
 
-func (b *textareaBuilder) ShowWordLimit() *textareaBuilder {
-	b.schema.XComponentProps["showWordLimit"] = true
+func (b *textareaBuilder) ShowWordLimit(showWordLimit bool) *textareaBuilder {
+	b.schema.XComponentProps["showWordLimit"] = showWordLimit
 	return b
 }
 
-func (b *textareaBuilder) AutoSize() *textareaBuilder {
-	b.schema.XComponentProps["autoSize"] = true
+func (b *textareaBuilder) AutoSize(autoSize bool) *textareaBuilder {
+	b.schema.XComponentProps["autoSize"] = autoSize
 	return b
 }

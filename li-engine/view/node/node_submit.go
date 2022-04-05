@@ -80,12 +80,12 @@ func (b *submitBuilder) ButtonIcon(icon string) *submitBuilder {
 	return b
 }
 
-func (b *submitBuilder) ButtonIconOnly() *submitBuilder {
-	b.schema.XComponentProps["iconOnly"] = true
+func (b *submitBuilder) ButtonIconOnly(iconOnly bool) *submitBuilder {
+	b.schema.XComponentProps["iconOnly"] = iconOnly
 	return b
 }
 
-func (b *submitBuilder) ButtonLong() *submitBuilder {
-	b.schema.XComponentProps["long"] = true
+func (b *submitBuilder) ButtonLong(long bool) *submitBuilder {
+	b.schema.XComponentProps["long"] = long
 	return b
 }

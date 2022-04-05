@@ -52,8 +52,8 @@ func (b *daterangeBuilder) Format(format string) *daterangeBuilder {
 	return b
 }
 
-func (b *daterangeBuilder) AllowClear() *daterangeBuilder {
-	b.schema.XComponentProps["allowClear"] = true
+func (b *daterangeBuilder) AllowClear(allowClear bool) *daterangeBuilder {
+	b.schema.XComponentProps["allowClear"] = allowClear
 	return b
 }
 
@@ -67,8 +67,8 @@ func (b *daterangeBuilder) Position(position string) *daterangeBuilder {
 	return b
 }
 
-func (b *daterangeBuilder) ShortcutsPlacementLeft() *daterangeBuilder {
-	b.schema.XComponentProps["shortcutsPlacementLeft"] = true
+func (b *daterangeBuilder) ShortcutsPlacementLeft(shortcutsPlacementLeft bool) *daterangeBuilder {
+	b.schema.XComponentProps["shortcutsPlacementLeft"] = shortcutsPlacementLeft
 	return b
 }
 
@@ -77,8 +77,8 @@ func (b *daterangeBuilder) Size(size string) *daterangeBuilder {
 	return b
 }
 
-func (b *daterangeBuilder) HideNotInViewDates() *daterangeBuilder {
-	b.schema.XComponentProps["hideNotInViewDates"] = true
+func (b *daterangeBuilder) HideNotInViewDates(hideNotInViewDates bool) *daterangeBuilder {
+	b.schema.XComponentProps["hideNotInViewDates"] = hideNotInViewDates
 	return b
 }
 

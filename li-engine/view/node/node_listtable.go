@@ -30,18 +30,18 @@ func (b *listtableBuilder) AC(f ac.AC) *listtableBuilder {
 	return b
 }
 
-func (b *listtableBuilder) LayoutFixed() *listtableBuilder {
-	b.schema.XComponentProps["tableLayoutFixed"] = true
+func (b *listtableBuilder) LayoutFixed(tableLayoutFixed bool) *listtableBuilder {
+	b.schema.XComponentProps["tableLayoutFixed"] = tableLayoutFixed
 	return b
 }
 
-func (b *listtableBuilder) Border() *listtableBuilder {
-	b.schema.XComponentProps["border"] = true
+func (b *listtableBuilder) Border(border bool) *listtableBuilder {
+	b.schema.XComponentProps["border"] = border
 	return b
 }
 
-func (b *listtableBuilder) Hover() *listtableBuilder {
-	b.schema.XComponentProps["hover"] = true
+func (b *listtableBuilder) Hover(hover bool) *listtableBuilder {
+	b.schema.XComponentProps["hover"] = hover
 	return b
 }
 
@@ -55,42 +55,6 @@ func (b *listtableBuilder) Size(size string) *listtableBuilder {
 	return b
 }
 
-func (b *listtableBuilder) RowSelectionType(typ string) *listtableBuilder {
-	rowsel, ok := b.schema.XComponentProps["rowSelection"].(map[string]interface{})
-	if ok {
-		rowsel["type"] = typ
-		b.schema.XComponentProps["rowSelection"] = rowsel
-	}
-	return b
-}
-
-func (b *listtableBuilder) RowSelectionColumnTitle(title string) *listtableBuilder {
-	rowsel, ok := b.schema.XComponentProps["rowSelection"].(map[string]interface{})
-	if ok {
-		rowsel["columnTitle"] = title
-		b.schema.XComponentProps["rowSelection"] = rowsel
-	}
-	return b
-}
-
-func (b *listtableBuilder) RowSelectionColumnWidth(width int) *listtableBuilder {
-	rowsel, ok := b.schema.XComponentProps["rowSelection"].(map[string]interface{})
-	if ok {
-		rowsel["columnWidth"] = width
-		b.schema.XComponentProps["rowSelection"] = rowsel
-	}
-	return b
-}
-
-func (b *listtableBuilder) RowSelectionFixed(fixed string) *listtableBuilder {
-	rowsel, ok := b.schema.XComponentProps["rowSelection"].(map[string]interface{})
-	if ok {
-		rowsel["fixed"] = fixed
-		b.schema.XComponentProps["rowSelection"] = rowsel
-	}
-	return b
-}
-
 func (b *listtableBuilder) ActionBar(element view.Node) *listtableBuilder {
 	b.schema.Properties.Set(element.Schema().Name, element.Schema())
 	return b
@@ -98,15 +62,5 @@ func (b *listtableBuilder) ActionBar(element view.Node) *listtableBuilder {
 
 func (b *listtableBuilder) Columns(elements ...view.Node) *listtableBuilder {
 	b.Items(elements...)
-	return b
-}
-
-func (b *listtableBuilder) EnableFilter() *listtableBuilder {
-	b.schema.XComponentProps["filter"] = true
-	return b
-}
-
-func (b *listtableBuilder) EnableLightFilter() *listtableBuilder {
-	b.schema.XComponentProps["filter"] = "light"
 	return b
 }

@@ -41,8 +41,8 @@ func (b *textBuilder) Default(value interface{}) *textBuilder {
 	return b
 }
 
-func (b *textBuilder) AllowClear() *textBuilder {
-	b.schema.XComponentProps["allowClear"] = true
+func (b *textBuilder) AllowClear(allowClear bool) *textBuilder {
+	b.schema.XComponentProps["allowClear"] = allowClear
 	return b
 }
 
@@ -86,7 +86,7 @@ func (b *textBuilder) Size(size string) *textBuilder {
 	return b
 }
 
-func (b *textBuilder) ShowWordLimit() *textBuilder {
-	b.schema.XComponentProps["showWordLimit"] = true
+func (b *textBuilder) ShowWordLimit(showWordLimit bool) *textBuilder {
+	b.schema.XComponentProps["showWordLimit"] = showWordLimit
 	return b
 }

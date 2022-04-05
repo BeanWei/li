@@ -47,8 +47,8 @@ func (b *listtablecolumnBuilder) Align(align string) *listtablecolumnBuilder {
 }
 
 // Ellipsis 单元格内容超出长度后，是否自动省略
-func (b *listtablecolumnBuilder) Ellipsis() *listtablecolumnBuilder {
-	b.schema.XComponentProps["ellipsis"] = true
+func (b *listtablecolumnBuilder) Ellipsis(ellipsis bool) *listtablecolumnBuilder {
+	b.schema.XComponentProps["ellipsis"] = ellipsis
 	return b
 }
 
@@ -63,12 +63,12 @@ func (b *listtablecolumnBuilder) Render(element view.Node) *listtablecolumnBuild
 	return b
 }
 
-func (b *listtablecolumnBuilder) Filterable() *listtablecolumnBuilder {
-	b.schema.XComponentProps["filterable"] = true
+func (b *listtablecolumnBuilder) Filterable(filterable bool) *listtablecolumnBuilder {
+	b.schema.XComponentProps["filterable"] = filterable
 	return b
 }
 
-func (b *listtablecolumnBuilder) Sortable() *listtablecolumnBuilder {
-	b.schema.XComponentProps["sortable"] = true
+func (b *listtablecolumnBuilder) Sortable(sortable bool) *listtablecolumnBuilder {
+	b.schema.XComponentProps["sortable"] = sortable
 	return b
 }

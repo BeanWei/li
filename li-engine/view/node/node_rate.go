@@ -46,12 +46,12 @@ func (b *rateBuilder) Count(count int) *rateBuilder {
 	return b
 }
 
-func (b *rateBuilder) AllowHalf() *rateBuilder {
-	b.schema.XComponentProps["allowHalf"] = true
+func (b *rateBuilder) AllowHalf(allowHalf bool) *rateBuilder {
+	b.schema.XComponentProps["allowHalf"] = allowHalf
 	return b
 }
 
-func (b *rateBuilder) Grading() *rateBuilder {
-	b.schema.XComponentProps["grading"] = true
+func (b *rateBuilder) Grading(grading bool) *rateBuilder {
+	b.schema.XComponentProps["grading"] = grading
 	return b
 }

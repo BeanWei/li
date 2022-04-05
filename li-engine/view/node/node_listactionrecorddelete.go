@@ -86,13 +86,13 @@ func (b *listactionrecorddeleteBuilder) ButtonIcon(icon string) *listactionrecor
 	return b
 }
 
-func (b *listactionrecorddeleteBuilder) ButtonIconOnly() *listactionrecorddeleteBuilder {
-	b.schema.XComponentProps["iconOnly"] = true
+func (b *listactionrecorddeleteBuilder) ButtonIconOnly(iconOnly bool) *listactionrecorddeleteBuilder {
+	b.schema.XComponentProps["iconOnly"] = iconOnly
 	return b
 }
 
-func (b *listactionrecorddeleteBuilder) ButtonLong() *listactionrecorddeleteBuilder {
-	b.schema.XComponentProps["long"] = true
+func (b *listactionrecorddeleteBuilder) ButtonLong(long bool) *listactionrecorddeleteBuilder {
+	b.schema.XComponentProps["long"] = long
 	return b
 }
 

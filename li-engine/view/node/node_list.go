@@ -10,12 +10,14 @@ import (
 func List(name string) *listBuilder {
 	return &listBuilder{&NodeBuilder{
 		schema: &ui.Schema{
-			Name:            name,
-			Type:            ui.SchemaTypeVoid,
-			XComponent:      ui.ComponentList,
-			XComponentProps: make(map[string]interface{}),
-			Properties:      gmap.NewListMap(),
-			HandlerNames:    make([]string, 0),
+			Name:       name,
+			Type:       ui.SchemaTypeVoid,
+			XComponent: ui.ComponentList,
+			XComponentProps: map[string]interface{}{
+				"selection": make(map[string]interface{}),
+			},
+			Properties:   gmap.NewListMap(),
+			HandlerNames: make([]string, 0),
 		},
 	}}
 }
@@ -48,5 +50,51 @@ func (b *listBuilder) ForInit(operation string, handler interface{}) *listBuilde
 	b.schema.XComponentProps["forInit"] = operation
 	b.schema.HandlerNames = append(b.schema.HandlerNames, operation)
 	controller.Bind(operation, handler)
+	return b
+}
+
+func (b *listBuilder) EnableFilter() *listBuilder {
+	b.schema.XComponentProps["filter"] = true
+	return b
+}
+
+func (b *listBuilder) EnableLightFilter() *listBuilder {
+	b.schema.XComponentProps["filter"] = "light"
+	return b
+}
+
+func (b *listBuilder) SelectionMultiple(multiple bool) *listBuilder {
+	sel, ok := b.schema.XComponentProps["selection"].(map[string]interface{})
+	if ok {
+		sel["multiple"] = multiple
+		b.schema.XComponentProps["selection"] = sel
+	}
+	return b
+}
+
+func (b *listBuilder) SelectionColumnTitle(title string) *listBuilder {
+	sel, ok := b.schema.XComponentProps["selection"].(map[string]interface{})
+	if ok {
+		sel["columnTitle"] = title
+		b.schema.XComponentProps["selection"] = sel
+	}
+	return b
+}
+
+func (b *listBuilder) SelectionColumnWidth(width int) *listBuilder {
+	sel, ok := b.schema.XComponentProps["selection"].(map[string]interface{})
+	if ok {
+		sel["columnWidth"] = width
+		b.schema.XComponentProps["selection"] = sel
+	}
+	return b
+}
+
+func (b *listBuilder) SelectionFixed(fixed string) *listBuilder {
+	sel, ok := b.schema.XComponentProps["selection"].(map[string]interface{})
+	if ok {
+		sel["fixed"] = fixed
+		b.schema.XComponentProps["selection"] = sel
+	}
 	return b
 }

@@ -35,8 +35,8 @@ func (b *tabsBuilder) DefaultActiveTab(defaultActiveTab string) *tabsBuilder {
 	return b
 }
 
-func (b *tabsBuilder) Animation() *tabsBuilder {
-	b.schema.XComponentProps["animation"] = true
+func (b *tabsBuilder) Animation(animation bool) *tabsBuilder {
+	b.schema.XComponentProps["animation"] = animation
 	return b
 }
 
@@ -60,8 +60,8 @@ func (b *tabsBuilder) Overflow(overflow string) *tabsBuilder {
 	return b
 }
 
-func (b *tabsBuilder) DestroyOnHide() *tabsBuilder {
-	b.schema.XComponentProps["destroyOnHide"] = true
+func (b *tabsBuilder) DestroyOnHide(destroyOnHide bool) *tabsBuilder {
+	b.schema.XComponentProps["destroyOnHide"] = destroyOnHide
 	return b
 }
 

@@ -6,10 +6,10 @@ func List{{ $.Name }}View() view.Node {
 		AC({{ $.Package }}ViewACL["list:{{ $.Name }}"]).
 		ForInit("@list{{ $.Name }}", List{{ $.Name }}Controller).
 		DecoratorCard().
+		EnableFilter().
+		SelectionMultiple(true).
 		Children(
 			node.ListTable("{{ $.Package }}ListTable").
-				EnableFilter().
-				RowSelectionType("checkbox").
 				ActionBar(
 					node.ListAction("{{ $.Package }}ListActions").Children(
 						node.ListActionRecordFormDrawer("add{{ $.Name }}").
@@ -37,7 +37,7 @@ func List{{ $.Name }}View() view.Node {
 							Title("删除").
 							AC({{ $.Package }}ViewACL["deleteMany:{{ $.Name }}"]).
 							ForSubmit("@deleteMany{{ $.Name }}", DeleteMany{{ $.Name }}Controller).
-							AfterReload().
+							AfterReload(true).
 							ConfirmTitle("确认删除").
 							ButtonStatus("danger").
 							ButtonIcon("IconDelete").
@@ -54,10 +54,10 @@ func List{{ $.Name }}View() view.Node {
 									AC({{ $.Package }}ViewACL["read:{{ $f.Name }}"]).
 									DataIndex("{{ $f.Name }}").
 									{{- if $annotation.ColumnProps.Align }}Align("{{ $annotation.ColumnProps.Align }}").{{- end }}
-									{{- if $annotation.ColumnProps.Ellipsis }}Ellipsis().{{- end }}
+									{{- if $annotation.ColumnProps.Ellipsis }}Ellipsis(true).{{- end }}
 									{{- if $annotation.ColumnProps.Width }}Width({{ $annotation.ColumnProps.Width }}){{- end }}
-									{{- if $annotation.ColumnProps.Filterable }}Filterable().{{- end }}
-									{{- if $annotation.ColumnProps.Sortable }}Sortable().{{- end }}
+									{{- if $annotation.ColumnProps.Filterable }}Filterable(true).{{- end }}
+									{{- if $annotation.ColumnProps.Sortable }}Sortable(true).{{- end }}
 									Render({{ $.Package }}.Node{{ $f.StructField }}()),
                             {{- end }}
                         {{- end }}

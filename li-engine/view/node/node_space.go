@@ -52,8 +52,8 @@ func (b *spaceBuilder) Size(size int) *spaceBuilder {
 	return b
 }
 
-func (b *spaceBuilder) Wrap() *spaceBuilder {
-	b.schema.XComponentProps["wrap"] = true
+func (b *spaceBuilder) Wrap(wrap bool) *spaceBuilder {
+	b.schema.XComponentProps["wrap"] = wrap
 	return b
 }
 

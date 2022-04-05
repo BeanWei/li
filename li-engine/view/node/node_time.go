@@ -46,13 +46,13 @@ func (b *timeBuilder) Format(format string) *timeBuilder {
 	return b
 }
 
-func (b *timeBuilder) AllowClear() *timeBuilder {
-	b.schema.XComponentProps["allowClear"] = true
+func (b *timeBuilder) AllowClear(allowClear bool) *timeBuilder {
+	b.schema.XComponentProps["allowClear"] = allowClear
 	return b
 }
 
-func (b *timeBuilder) DisableConfirm() *timeBuilder {
-	b.schema.XComponentProps["disableConfirm"] = true
+func (b *timeBuilder) DisableConfirm(disableConfirm bool) *timeBuilder {
+	b.schema.XComponentProps["disableConfirm"] = disableConfirm
 	return b
 }
 
@@ -66,13 +66,13 @@ func (b *timeBuilder) Placeholder(placeholder string) *timeBuilder {
 	return b
 }
 
-func (b *timeBuilder) Use12Hours() *timeBuilder {
-	b.schema.XComponentProps["use12Hours"] = true
+func (b *timeBuilder) Use12Hours(use12Hours bool) *timeBuilder {
+	b.schema.XComponentProps["use12Hours"] = use12Hours
 	return b
 }
 
-func (b *timeBuilder) DideDisabledOptions() *timeBuilder {
-	b.schema.XComponentProps["hideDisabledOptions"] = true
+func (b *timeBuilder) DideDisabledOptions(hideDisabledOptions bool) *timeBuilder {
+	b.schema.XComponentProps["hideDisabledOptions"] = hideDisabledOptions
 	return b
 }
 
@@ -96,7 +96,7 @@ func (b *timeBuilder) Timezone(timezone string) *timeBuilder {
 	return b
 }
 
-func (b *timeBuilder) ShowNowBtn() *timeBuilder {
-	b.schema.XComponentProps["showNowBtn"] = true
+func (b *timeBuilder) ShowNowBtn(showNowBtn bool) *timeBuilder {
+	b.schema.XComponentProps["showNowBtn"] = showNowBtn
 	return b
 }

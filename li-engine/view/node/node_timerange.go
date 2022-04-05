@@ -46,13 +46,13 @@ func (b *timerangeBuilder) Format(format string) *timerangeBuilder {
 	return b
 }
 
-func (b *timerangeBuilder) AllowClear() *timerangeBuilder {
-	b.schema.XComponentProps["allowClear"] = true
+func (b *timerangeBuilder) AllowClear(allowClear bool) *timerangeBuilder {
+	b.schema.XComponentProps["allowClear"] = allowClear
 	return b
 }
 
-func (b *timerangeBuilder) DisableConfirm() *timerangeBuilder {
-	b.schema.XComponentProps["disableConfirm"] = true
+func (b *timerangeBuilder) DisableConfirm(disableConfirm bool) *timerangeBuilder {
+	b.schema.XComponentProps["disableConfirm"] = disableConfirm
 	return b
 }
 
@@ -66,13 +66,13 @@ func (b *timerangeBuilder) Placeholder(placeholder ...string) *timerangeBuilder 
 	return b
 }
 
-func (b *timerangeBuilder) Use12Hours() *timerangeBuilder {
-	b.schema.XComponentProps["use12Hours"] = true
+func (b *timerangeBuilder) Use12Hours(use12Hours bool) *timerangeBuilder {
+	b.schema.XComponentProps["use12Hours"] = use12Hours
 	return b
 }
 
-func (b *timerangeBuilder) DideDisabledOptions() *timerangeBuilder {
-	b.schema.XComponentProps["hideDisabledOptions"] = true
+func (b *timerangeBuilder) DideDisabledOptions(hideDisabledOptions bool) *timerangeBuilder {
+	b.schema.XComponentProps["hideDisabledOptions"] = hideDisabledOptions
 	return b
 }
 
@@ -96,7 +96,7 @@ func (b *timerangeBuilder) Timezone(timezone string) *timerangeBuilder {
 	return b
 }
 
-func (b *timerangeBuilder) Order() *timerangeBuilder {
-	b.schema.XComponentProps["order"] = true
+func (b *timerangeBuilder) Order(order bool) *timerangeBuilder {
+	b.schema.XComponentProps["order"] = order
 	return b
 }

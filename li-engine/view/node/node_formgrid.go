@@ -65,12 +65,12 @@ func (b *formgridBuilder) RowGap(rowGap int) *formgridBuilder {
 	return b
 }
 
-func (b *formgridBuilder) ColWrap() *formgridBuilder {
-	b.schema.XComponentProps["colWrap"] = true
+func (b *formgridBuilder) ColWrap(colWrap bool) *formgridBuilder {
+	b.schema.XComponentProps["colWrap"] = colWrap
 	return b
 }
 
-func (b *formgridBuilder) StrictAutoFit() *formgridBuilder {
-	b.schema.XComponentProps["strictAutoFit"] = true
+func (b *formgridBuilder) StrictAutoFit(strictAutoFit bool) *formgridBuilder {
+	b.schema.XComponentProps["strictAutoFit"] = strictAutoFit
 	return b
 }

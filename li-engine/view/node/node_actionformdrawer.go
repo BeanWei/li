@@ -43,8 +43,8 @@ func (b *actionformdrawerBuilder) Description(description string) *actionformdra
 	return b
 }
 
-func (b *actionformdrawerBuilder) IsMenuItem() *actionformdrawerBuilder {
-	b.schema.XComponentProps["isMenuItem"] = true
+func (b *actionformdrawerBuilder) IsMenuItem(isMenuItem bool) *actionformdrawerBuilder {
+	b.schema.XComponentProps["isMenuItem"] = isMenuItem
 	return b
 }
 
@@ -91,13 +91,13 @@ func (b *actionformdrawerBuilder) ButtonIcon(icon string) *actionformdrawerBuild
 	return b
 }
 
-func (b *actionformdrawerBuilder) ButtonIconOnly() *actionformdrawerBuilder {
-	b.schema.XComponentProps["iconOnly"] = true
+func (b *actionformdrawerBuilder) ButtonIconOnly(iconOnly bool) *actionformdrawerBuilder {
+	b.schema.XComponentProps["iconOnly"] = iconOnly
 	return b
 }
 
-func (b *actionformdrawerBuilder) ButtonLong() *actionformdrawerBuilder {
-	b.schema.XComponentProps["long"] = true
+func (b *actionformdrawerBuilder) ButtonLong(long bool) *actionformdrawerBuilder {
+	b.schema.XComponentProps["long"] = long
 	return b
 }
 

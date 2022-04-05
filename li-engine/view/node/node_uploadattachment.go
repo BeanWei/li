@@ -46,8 +46,8 @@ func (b *uploadattachmentBuilder) Default(value interface{}) *uploadattachmentBu
 	return b
 }
 
-func (b *uploadattachmentBuilder) Directory() *uploadattachmentBuilder {
-	b.schema.XComponentProps["directory"] = true
+func (b *uploadattachmentBuilder) Directory(directory bool) *uploadattachmentBuilder {
+	b.schema.XComponentProps["directory"] = directory
 	return b
 }
 
@@ -61,8 +61,8 @@ func (b *uploadattachmentBuilder) ListType(listType string) *uploadattachmentBui
 	return b
 }
 
-func (b *uploadattachmentBuilder) AutoUpload() *uploadattachmentBuilder {
-	b.schema.XComponentProps["autoUpload"] = true
+func (b *uploadattachmentBuilder) AutoUpload(autoUpload bool) *uploadattachmentBuilder {
+	b.schema.XComponentProps["autoUpload"] = autoUpload
 	return b
 }
 
@@ -71,13 +71,13 @@ func (b *uploadattachmentBuilder) Limit(limit int) *uploadattachmentBuilder {
 	return b
 }
 
-func (b *uploadattachmentBuilder) Drag() *uploadattachmentBuilder {
-	b.schema.XComponentProps["drag"] = true
+func (b *uploadattachmentBuilder) Drag(drag bool) *uploadattachmentBuilder {
+	b.schema.XComponentProps["drag"] = drag
 	return b
 }
 
-func (b *uploadattachmentBuilder) Multiple() *uploadattachmentBuilder {
-	b.schema.XComponentProps["multiple"] = true
+func (b *uploadattachmentBuilder) Multiple(multiple bool) *uploadattachmentBuilder {
+	b.schema.XComponentProps["multiple"] = multiple
 	return b
 }
 

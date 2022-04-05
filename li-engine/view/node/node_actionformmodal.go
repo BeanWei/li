@@ -84,13 +84,13 @@ func (b *actionformmodalBuilder) ButtonIcon(icon string) *actionformmodalBuilder
 	return b
 }
 
-func (b *actionformmodalBuilder) ButtonIconOnly() *actionformmodalBuilder {
-	b.schema.XComponentProps["iconOnly"] = true
+func (b *actionformmodalBuilder) ButtonIconOnly(iconOnly bool) *actionformmodalBuilder {
+	b.schema.XComponentProps["iconOnly"] = iconOnly
 	return b
 }
 
-func (b *actionformmodalBuilder) ButtonLong() *actionformmodalBuilder {
-	b.schema.XComponentProps["long"] = true
+func (b *actionformmodalBuilder) ButtonLong(long bool) *actionformmodalBuilder {
+	b.schema.XComponentProps["long"] = long
 	return b
 }
 

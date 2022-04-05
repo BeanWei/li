@@ -52,8 +52,8 @@ func (b *dateBuilder) Format(format string) *dateBuilder {
 	return b
 }
 
-func (b *dateBuilder) AllowClear() *dateBuilder {
-	b.schema.XComponentProps["allowClear"] = true
+func (b *dateBuilder) AllowClear(allowClear bool) *dateBuilder {
+	b.schema.XComponentProps["allowClear"] = allowClear
 	return b
 }
 
@@ -67,8 +67,8 @@ func (b *dateBuilder) Position(position string) *dateBuilder {
 	return b
 }
 
-func (b *dateBuilder) ShortcutsPlacementLeft() *dateBuilder {
-	b.schema.XComponentProps["shortcutsPlacementLeft"] = true
+func (b *dateBuilder) ShortcutsPlacementLeft(shortcutsPlacementLeft bool) *dateBuilder {
+	b.schema.XComponentProps["shortcutsPlacementLeft"] = shortcutsPlacementLeft
 	return b
 }
 
@@ -77,8 +77,8 @@ func (b *dateBuilder) Size(size string) *dateBuilder {
 	return b
 }
 
-func (b *dateBuilder) HideNotInViewDates() *dateBuilder {
-	b.schema.XComponentProps["hideNotInViewDates"] = true
+func (b *dateBuilder) HideNotInViewDates(hideNotInViewDates bool) *dateBuilder {
+	b.schema.XComponentProps["hideNotInViewDates"] = hideNotInViewDates
 	return b
 }
 

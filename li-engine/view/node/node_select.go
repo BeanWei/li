@@ -52,8 +52,8 @@ func (b *selectBuilder) Size(size string) *selectBuilder {
 	return b
 }
 
-func (b *selectBuilder) AllowCreate() *selectBuilder {
-	b.schema.XComponentProps["allowCreate"] = true
+func (b *selectBuilder) AllowCreate(allowCreate bool) *selectBuilder {
+	b.schema.XComponentProps["allowCreate"] = allowCreate
 	return b
 }
 
@@ -67,8 +67,8 @@ func (b *selectBuilder) Prefix(prefix string) *selectBuilder {
 	return b
 }
 
-func (b *selectBuilder) DragToSort() *selectBuilder {
-	b.schema.XComponentProps["dragToSort"] = true
+func (b *selectBuilder) DragToSort(dragToSort bool) *selectBuilder {
+	b.schema.XComponentProps["dragToSort"] = dragToSort
 	return b
 }
 

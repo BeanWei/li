@@ -39,8 +39,8 @@ func (b *listactionrowselectionBuilder) Description(description string) *listact
 	return b
 }
 
-func (b *listactionrowselectionBuilder) AfterReload() *listactionrowselectionBuilder {
-	b.schema.XComponentProps["afterReload"] = true
+func (b *listactionrowselectionBuilder) AfterReload(afterReload bool) *listactionrowselectionBuilder {
+	b.schema.XComponentProps["afterReload"] = afterReload
 	return b
 }
 
@@ -90,13 +90,13 @@ func (b *listactionrowselectionBuilder) ButtonIcon(icon string) *listactionrowse
 	return b
 }
 
-func (b *listactionrowselectionBuilder) ButtonIconOnly() *listactionrowselectionBuilder {
-	b.schema.XComponentProps["iconOnly"] = true
+func (b *listactionrowselectionBuilder) ButtonIconOnly(iconOnly bool) *listactionrowselectionBuilder {
+	b.schema.XComponentProps["iconOnly"] = iconOnly
 	return b
 }
 
-func (b *listactionrowselectionBuilder) ButtonLong() *listactionrowselectionBuilder {
-	b.schema.XComponentProps["long"] = true
+func (b *listactionrowselectionBuilder) ButtonLong(long bool) *listactionrowselectionBuilder {
+	b.schema.XComponentProps["long"] = long
 	return b
 }
 

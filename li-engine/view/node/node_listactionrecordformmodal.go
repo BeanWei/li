@@ -78,13 +78,13 @@ func (b *listactionrecordformmodalBuilder) ButtonIcon(icon string) *listactionre
 	return b
 }
 
-func (b *listactionrecordformmodalBuilder) ButtonIconOnly() *listactionrecordformmodalBuilder {
-	b.schema.XComponentProps["iconOnly"] = true
+func (b *listactionrecordformmodalBuilder) ButtonIconOnly(iconOnly bool) *listactionrecordformmodalBuilder {
+	b.schema.XComponentProps["iconOnly"] = iconOnly
 	return b
 }
 
-func (b *listactionrecordformmodalBuilder) ButtonLong() *listactionrecordformmodalBuilder {
-	b.schema.XComponentProps["long"] = true
+func (b *listactionrecordformmodalBuilder) ButtonLong(long bool) *listactionrecordformmodalBuilder {
+	b.schema.XComponentProps["long"] = long
 	return b
 }
 

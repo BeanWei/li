@@ -69,13 +69,13 @@ func (b *listactionreloadBuilder) ButtonIcon(icon string) *listactionreloadBuild
 	return b
 }
 
-func (b *listactionreloadBuilder) ButtonIconOnly() *listactionreloadBuilder {
-	b.schema.XComponentProps["iconOnly"] = true
+func (b *listactionreloadBuilder) ButtonIconOnly(iconOnly bool) *listactionreloadBuilder {
+	b.schema.XComponentProps["iconOnly"] = iconOnly
 	return b
 }
 
-func (b *listactionreloadBuilder) ButtonLong() *listactionreloadBuilder {
-	b.schema.XComponentProps["long"] = true
+func (b *listactionreloadBuilder) ButtonLong(long bool) *listactionreloadBuilder {
+	b.schema.XComponentProps["long"] = long
 	return b
 }
 

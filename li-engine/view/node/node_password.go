@@ -41,12 +41,12 @@ func (b *passwordBuilder) Default(value interface{}) *passwordBuilder {
 	return b
 }
 
-func (b *passwordBuilder) VisibilityToggle() *passwordBuilder {
-	b.schema.XComponentProps["visibilityToggle"] = true
+func (b *passwordBuilder) VisibilityToggle(visibilityToggle bool) *passwordBuilder {
+	b.schema.XComponentProps["visibilityToggle"] = visibilityToggle
 	return b
 }
 
-func (b *passwordBuilder) DefaultVisibility() *passwordBuilder {
-	b.schema.XComponentProps["defaultVisibility"] = true
+func (b *passwordBuilder) DefaultVisibility(defaultVisibility bool) *passwordBuilder {
+	b.schema.XComponentProps["defaultVisibility"] = defaultVisibility
 	return b
 }

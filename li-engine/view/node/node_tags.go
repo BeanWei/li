@@ -51,17 +51,17 @@ func (b *tagsBuilder) Placeholder(placeholder string) *tagsBuilder {
 	return b
 }
 
-func (b *tagsBuilder) AllowClear() *tagsBuilder {
-	b.schema.XComponentProps["allowClear"] = true
+func (b *tagsBuilder) AllowClear(allowClear bool) *tagsBuilder {
+	b.schema.XComponentProps["allowClear"] = allowClear
 	return b
 }
 
-func (b *tagsBuilder) SaveOnBlur() *tagsBuilder {
-	b.schema.XComponentProps["saveOnBlur"] = true
+func (b *tagsBuilder) SaveOnBlur(saveOnBlur bool) *tagsBuilder {
+	b.schema.XComponentProps["saveOnBlur"] = saveOnBlur
 	return b
 }
 
-func (b *tagsBuilder) DragToSort() *tagsBuilder {
+func (b *tagsBuilder) DragToSort(dragToSort bool) *tagsBuilder {
 	b.schema.XComponentProps["dragToSort"] = true
 	return b
 }

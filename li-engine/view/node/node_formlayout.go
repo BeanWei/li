@@ -25,8 +25,8 @@ func (b *formlayoutBuilder) AC(f ac.AC) *formlayoutBuilder {
 	return b
 }
 
-func (b *formlayoutBuilder) Colon() *formlayoutBuilder {
-	b.schema.XComponentProps["colon"] = true
+func (b *formlayoutBuilder) Colon(colon bool) *formlayoutBuilder {
+	b.schema.XComponentProps["colon"] = colon
 	return b
 }
 
@@ -40,8 +40,8 @@ func (b *formlayoutBuilder) WrapperAlign(wrapperAlign string) *formlayoutBuilder
 	return b
 }
 
-func (b *formlayoutBuilder) LabelWrap() *formlayoutBuilder {
-	b.schema.XComponentProps["labelWrap"] = true
+func (b *formlayoutBuilder) LabelWrap(labelWrap bool) *formlayoutBuilder {
+	b.schema.XComponentProps["labelWrap"] = labelWrap
 	return b
 }
 
@@ -50,8 +50,8 @@ func (b *formlayoutBuilder) LabelWidth(labelWidth int) *formlayoutBuilder {
 	return b
 }
 
-func (b *formlayoutBuilder) WrapperWrap() *formlayoutBuilder {
-	b.schema.XComponentProps["wrapperWrap"] = true
+func (b *formlayoutBuilder) WrapperWrap(wrapperWrap bool) *formlayoutBuilder {
+	b.schema.XComponentProps["wrapperWrap"] = wrapperWrap
 	return b
 }
 
@@ -70,8 +70,8 @@ func (b *formlayoutBuilder) WrapperCol(wrapperCol int) *formlayoutBuilder {
 	return b
 }
 
-func (b *formlayoutBuilder) Fullness() *formlayoutBuilder {
-	b.schema.XComponentProps["fullness"] = true
+func (b *formlayoutBuilder) Fullness(fullness bool) *formlayoutBuilder {
+	b.schema.XComponentProps["fullness"] = fullness
 	return b
 }
 
@@ -90,13 +90,13 @@ func (b *formlayoutBuilder) Direction(direction string) *formlayoutBuilder {
 	return b
 }
 
-func (b *formlayoutBuilder) Inset() *formlayoutBuilder {
-	b.schema.XComponentProps["inset"] = true
+func (b *formlayoutBuilder) Inset(inset bool) *formlayoutBuilder {
+	b.schema.XComponentProps["inset"] = inset
 	return b
 }
 
-func (b *formlayoutBuilder) Shallow() *formlayoutBuilder {
-	b.schema.XComponentProps["shallow"] = true
+func (b *formlayoutBuilder) Shallow(shallow bool) *formlayoutBuilder {
+	b.schema.XComponentProps["shallow"] = shallow
 	return b
 }
 
@@ -115,8 +115,8 @@ func (b *formlayoutBuilder) FeedbackLayout(feedbackLayout string) *formlayoutBui
 	return b
 }
 
-func (b *formlayoutBuilder) Bordered() *formlayoutBuilder {
-	b.schema.XComponentProps["bordered"] = true
+func (b *formlayoutBuilder) Bordered(bordered bool) *formlayoutBuilder {
+	b.schema.XComponentProps["bordered"] = bordered
 	return b
 }
 
