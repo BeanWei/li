@@ -7,7 +7,7 @@ import {
   useField,
   useFieldSchema,
 } from "@formily/react";
-import { toArr } from "@formily/shared";
+import { isValid, toArr } from "@formily/shared";
 import { Field } from "@formily/core";
 import { Drawer, Select, SelectProps, Space } from "@arco-design/web-react";
 import { RecordProvider, SchemaComponentOptions, useRecord } from "../../core";
@@ -45,7 +45,7 @@ export const RecordPicker: ComposedRecordPicker = connect(
       ...reset
     } = props;
     const fieldNames = { label: "id", value: "id", ...fieldNames_ };
-    const values = toArr(value);
+    const values = toArr(value).filter((item: any) => !!item[fieldNames.value]);
     const [visible, setVisible] = useState(false);
     const locale = getLocale();
     const fieldSchema = useFieldSchema();
@@ -70,14 +70,12 @@ export const RecordPicker: ComposedRecordPicker = connect(
           onVisibleChange={(open) => {
             setVisible(open);
           }}
-          options={values
-            .filter((item: any) => !!item[fieldNames.value])
-            .map((item: any) => {
-              return {
-                label: item[fieldNames.label],
-                value: item[fieldNames.value],
-              };
-            })}
+          options={values.map((item: any) => {
+            return {
+              label: item[fieldNames.label],
+              value: item[fieldNames.value],
+            };
+          })}
           value={
             multiple
               ? values.map((item: any) => item[fieldNames.value])
@@ -115,7 +113,7 @@ export const RecordPicker: ComposedRecordPicker = connect(
                     ),
                     preserveSelectedKeys: true,
                     onChange: (_: any, selected: any) => {
-                      const res = toArr(selected);
+                      const res = isValid(selected) ? toArr(selected) : [];
                       onChange?.(multiple ? res : res[0]);
                     },
                   },
