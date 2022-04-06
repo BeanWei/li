@@ -2,6 +2,7 @@ package schema
 
 import (
 	"entgo.io/ent"
+	"entgo.io/ent/schema/edge"
 	"entgo.io/ent/schema/field"
 	"github.com/BeanWei/li/li-engine/ac"
 	"github.com/BeanWei/li/li-engine/contrib/lient"
@@ -27,7 +28,7 @@ func (User) Fields() []ent.Field {
 			NotEmpty().
 			Annotations(
 				lient.Annotation{
-					ViewSchema: node.Text("nickname").SetTitle("昵称").Schema(),
+					ViewSchema: node.Text("nickname").Title("昵称").Schema(),
 					ColumnProps: &lient.ColumnProps{
 						Filterable: true,
 					},
@@ -38,7 +39,7 @@ func (User) Fields() []ent.Field {
 			Unique().
 			Annotations(
 				lient.Annotation{
-					ViewSchema: node.Email("email").SetTitle("邮箱").Schema(),
+					ViewSchema: node.Email("email").Title("邮箱").Schema(),
 					ColumnProps: &lient.ColumnProps{
 						Filterable: true,
 					},
@@ -51,7 +52,7 @@ func (User) Fields() []ent.Field {
 			Optional().
 			Annotations(
 				lient.Annotation{
-					ViewSchema:    node.Password("password").SetTitle("密码").Schema(),
+					ViewSchema:    node.Password("password").Title("密码").Schema(),
 					ValidateRule:  "required|password",
 					DisableRead:   true,
 					DisableUpdate: true,
@@ -61,13 +62,20 @@ func (User) Fields() []ent.Field {
 			Optional().
 			Annotations(
 				lient.Annotation{
-					ViewSchema: node.UploadAvatar("avatar").SetTitle("头像").Schema(),
+					ViewSchema: node.UploadAvatar("avatar").Title("头像").Schema(),
 					ColumnProps: &lient.ColumnProps{
 						Filterable: false,
 						Sortable:   false,
 					},
 				},
 			),
+	}
+}
+
+func (User) Edges() []ent.Edge {
+	return []ent.Edge{
+		edge.To("posts", Post.Type),
+		edge.To("comments", Comment.Type),
 	}
 }
 

@@ -2,6 +2,16 @@
 
 {{ define "model/additional/lient-control" }}
 type (
+	I{{ $.Name }} struct {
+		ID {{ $.ID.Type }} {{ with $.Annotations.Fields.StructTag.id }}`{{ . }}`{{ else }}`{{ $.ID.StructTag }}`{{ end }}
+		{{- range $f := $.Fields }}
+			{{- $tag := $f.StructTag }}{{ with $tags := $.Annotations.Fields.StructTag }}{{ with index $tags $f.Name }}{{ $tag = . }}{{ end }}{{ end }}
+			{{ $f.StructField }} {{ if $f.NillableValue }}*{{ end }}{{ $f.Type }} {{ if not $f.Sensitive }}`{{ $tag }}`{{ else }}`json:"-"`{{ end }}
+		{{- end }}
+		{{- range $e := $.Edges }}
+			{{ $e.StructField }} {{ if not $e.Unique }}[]{{ end }}*I{{ $e.Type.Name }} {{ with $e.StructTag }}`{{ . }}`{{ end }}
+		{{- end }}
+	}
 	List{{ $.Name }}Req struct {
 		Page int `json:"page" d:"1" v:"min:1"`
 		Limit int `json:"limit" d:"20" v:"min:1|max:500"`
@@ -28,6 +38,12 @@ type (
 		{{- end }}
         {{- end }}
         {{- end }}
+		{{- range $e := $.Edges }}
+		{{- $annotation := $e.Annotations.LiEnt }}
+		{{- if and $annotation $annotation.ViewSchema $annotation.ColumnProps $annotation.ColumnProps.Filterable }}
+			{{ $e.StructField }} []*struct { ID {{ $e.Type.ID.Type }} } {{ with $e.StructTag }}`{{ . }}`{{ end }}
+		{{- end }}
+		{{- end }}
 	}
 	List{{ $.Name }}Sorter struct {
 		{{- range $f := $.Fields }}
@@ -40,13 +56,13 @@ type (
         {{- end }}
 	}
 	List{{ $.Name }}Res struct {
-		List []*{{ $.Name }} `json:"list"`
+		List []*I{{ $.Name }} `json:"list"`
 		Total int `json:"total"`
 	}
 	Create{{ $.Name }}Req struct {
 		{{- range $f := $.Fields }}
 		{{- $annotation := $f.Annotations.LiEnt }}
-		{{- if or (not $annotation) (not $annotation.DisableCreate) }}
+		{{- if and $annotation $annotation.ViewSchema (not $annotation.DisableCreate) }}
 			{{- $tag := printf `json:"%s"` $f.Name }}{{ with $tags := $.Annotations.Fields.StructTag }}{{ with index $tags $f.Name }}{{ $tag = . }}{{ end }}{{ end }}
             {{- if and $annotation $annotation.ValidateRule }}
 				{{- $tag = printf `%s v:"%s"` $tag $annotation.ValidateRule }}
@@ -64,6 +80,12 @@ type (
 			{{- end }}
 		{{- end }}
         {{- end }}
+		{{- range $e := $.Edges }}
+		{{- $annotation := $e.Annotations.LiEnt }}
+		{{- if and $annotation $annotation.ViewSchema (not $annotation.DisableCreate) }}
+			{{ $e.StructField }} {{ if not $e.Unique }}[]{{ end }}*struct { ID {{ $e.Type.ID.Type }} } `json:"{{ $e.Name }}"{{if not $e.Optional }} v:"required"{{ end }}`
+		{{- end }}
+		{{- end }}
 	}
 	Get{{ $.Name }}Req struct {
 		ID {{ $.ID.Type }} `json:"id" v:"required"`
@@ -73,7 +95,7 @@ type (
 		{{- range $f := $.Fields }}
 		{{- if not $f.Sensitive }}
 		{{- $annotation := $f.Annotations.LiEnt }}
-		{{- if or (not $annotation) (not $annotation.DisableUpdate) }}
+		{{- if and $annotation $annotation.ViewSchema (not $annotation.DisableUpdate) }}
 			{{- $tag := printf `json:"%s"` $f.Name }}
             {{- if and $annotation $annotation.ValidateRule }}
 				{{- $tag = printf `%s v:"%s"` $tag $annotation.ValidateRule }}
@@ -92,6 +114,12 @@ type (
 		{{- end }}
         {{- end }}
 		{{- end }}
+		{{- range $e := $.Edges }}
+		{{- $annotation := $e.Annotations.LiEnt }}
+		{{- if and $annotation $annotation.ViewSchema (not $annotation.DisableUpdate) }}
+			{{ $e.StructField }} {{ if not $e.Unique }}[]{{ end }}*struct { ID {{ $e.Type.ID.Type }} } `json:"{{ $e.Name }}"{{if not $e.Optional }} v:"required"{{ end }}`
+		{{- end }}
+		{{- end }}
 	}
 	Delete{{ $.Name }}Req struct {
 		ID {{ $.ID.Type }} `json:"id" v:"required"`
@@ -100,6 +128,32 @@ type (
 		IDs []{{ $.ID.Type }} `json:"ids" v:"required"`
 	}
 )
+
+func NewI{{ $.Name }}(e *{{ $.Name }}) *I{{ $.Name }} {
+	if e == nil {
+		return nil
+	}
+	return &I{{ $.Name }}{
+		ID: e.ID,
+		{{- range $f := $.Fields }}
+			{{ $f.StructField }}: e.{{ $f.StructField }},
+		{{- end }}
+		{{- range $e := $.Edges }}
+			{{ $e.StructField }}: NewI{{ $e.Type.Name }}{{ if not $e.Unique }}Array{{ end }}(e.Edges.{{ $e.StructField }}),
+		{{- end }}
+	}
+}
+
+func NewI{{ $.Name }}Array(es []*{{ $.Name }}) []*I{{ $.Name }} {
+	if len(es) == 0 {
+		return nil
+	}
+	r := make([]*I{{ $.Name }}, len(es))
+	for i, e := range es {
+		r[i] = NewI{{ $.Name }}(e)
+	}
+	return r
+}
 
 func List{{ $.Name }}Controller(ctx context.Context, req *List{{ $.Name }}Req) (res *List{{ $.Name }}Res, err error) {
 	q := LiClient().{{ $.Name }}.Query()
@@ -141,6 +195,22 @@ func List{{ $.Name }}Controller(ctx context.Context, req *List{{ $.Name }}Req) (
 		{{- end }}
         {{- end }}
         {{- end }}
+		{{- range $e := $.Edges }}
+		{{- $annotation := $e.Annotations.LiEnt }}
+		{{- if and $annotation $annotation.ViewSchema $annotation.ColumnProps $annotation.ColumnProps.Filterable }}
+			if len(req.Filter.{{ $e.StructField }}) > 0 {
+			{{- if $e.Field }}
+				q.Where({{ $.Package }}.{{ pascal $e.Field.Name }}In(func() []{{ $.ID.Type }} {
+					ids := make([]{{ $.ID.Type }}, len(req.Filter.{{ $e.StructField }}))
+					for i, v := range req.Filter.{{ $e.StructField }} {
+						ids[i] = v.ID
+					}
+					return ids
+				}()...))
+			{{- end }}
+			}
+		{{- end }}
+		{{- end }}
 	}
 	if req.Sorter != nil {
 		{{- range $f := $.Fields }}
@@ -162,18 +232,19 @@ func List{{ $.Name }}Controller(ctx context.Context, req *List{{ $.Name }}Req) (
 	if err != nil {
 		return nil, gerror.WrapCode(gcode.CodeDbOperationError, err)
 	}
-	res.List, err = q.Limit(req.Limit).Offset((req.Page - 1) * req.Limit).All(ctx)
+	ret, err := q.Limit(req.Limit).Offset((req.Page - 1) * req.Limit).All(ctx)
 	if err != nil {
 		return nil, gerror.WrapCode(gcode.CodeDbOperationError, err)
 	}
-	return
+	res.List = NewI{{ $.Name }}Array(ret)
+	return res, nil
 }
 
-func Create{{ $.Name }}Controller(ctx context.Context, req *Create{{ $.Name }}Req) (res *{{ $.Name }}, err error) {
+func Create{{ $.Name }}Controller(ctx context.Context, req *Create{{ $.Name }}Req) (res *I{{ $.Name }}, err error) {
 	b := LiClient().{{ $.Name }}.Create()
 	{{- range $f := $.Fields }}
 	{{- $annotation := $f.Annotations.LiEnt }}
-	{{- if or (not $annotation) (not $annotation.DisableCreate) }}
+	{{- if and $annotation $annotation.ViewSchema (not $annotation.DisableCreate) }}
 		{{- if $f.Optional }}
 			if req.{{ $f.StructField }} != nil {
 				{{- if $f.Type.Nillable }}
@@ -187,33 +258,58 @@ func Create{{ $.Name }}Controller(ctx context.Context, req *Create{{ $.Name }}Re
 		{{- end }}
 	{{- end }}
 	{{- end }}
-	res, err = b.Save(ctx)
+	{{- range $e := $.Edges }}
+	{{- $annotation := $e.Annotations.LiEnt }}
+	{{- if and $annotation $annotation.ViewSchema (not $annotation.DisableCreate) }}
+		{{- if $e.Unique }}
+			if req.{{ $e.StructField }} != nil {
+			{{- if $e.Field }}
+				b.Set{{ pascal $e.Field.Name }}(req.{{ $e.StructField }}.ID)
+			{{- end }}
+			}
+		{{- else if not $e.Field }}
+			if len(req.{{ $e.StructField }}) > 0 {
+				b.Add{{ $e.Type.Name }}IDs(func() []{{ $.ID.Type }} {
+					ids := make([]{{ $.ID.Type }}, len(req.{{ $e.StructField }}))
+					for i, v := range req.{{ $e.StructField }} {
+						ids[i] = v.ID
+					}
+					return ids
+				}()...)
+			}
+		{{- end }}
+	{{- end }}
+	{{- end }}
+	ret, err := b.Save(ctx)
 	if err != nil {
 		if IsConstraintError(err) {
 			return nil, gerror.WrapCode(gcode.CodeOperationFailed, err)
 		}
 		return nil, gerror.WrapCode(gcode.CodeDbOperationError, err)
 	}
-	return
+	return NewI{{ $.Name }}(ret), nil
 }
 
-func Get{{ $.Name }}Controller(ctx context.Context, req *Get{{ $.Name }}Req) (res *{{ $.Name }}, err error) {
-	res, err = LiClient().{{ $.Name }}.Get(ctx, req.ID)
+func Get{{ $.Name }}Controller(ctx context.Context, req *Get{{ $.Name }}Req) (res *I{{ $.Name }}, err error) {
+	ret, err := LiClient().{{ $.Name }}.
+		Query().
+		Where({{ $.Package }}.IDEQ(req.ID)).
+		Only(ctx)
 	if err != nil {
 		if IsNotFound(err) {
 			return nil, gerror.WrapCode(gcode.CodeNotFound, err)
 		}
 		return nil, gerror.WrapCode(gcode.CodeDbOperationError, err)
 	}
-	return
+	return NewI{{ $.Name }}(ret), nil
 }
 
-func Update{{ $.Name }}Controller(ctx context.Context, req *Update{{ $.Name }}Req) (res *{{ $.Name }}, err error) {
+func Update{{ $.Name }}Controller(ctx context.Context, req *Update{{ $.Name }}Req) (res *I{{ $.Name }}, err error) {
 	b := LiClient().{{ $.Name }}.UpdateOneID(req.ID)
 	{{- range $f := $.Fields }}
 	{{- if not $f.Sensitive }}
 	{{- $annotation := $f.Annotations.LiEnt }}
-	{{- if or (not $annotation) (not $annotation.DisableUpdate) }}
+	{{- if and $annotation $annotation.ViewSchema (not $annotation.DisableUpdate) }}
 		{{- if $f.Optional }}
 			if req.{{ $f.StructField }} != nil {
 				{{- if $f.Type.Nillable }}
@@ -228,7 +324,29 @@ func Update{{ $.Name }}Controller(ctx context.Context, req *Update{{ $.Name }}Re
 	{{- end }}
 	{{- end }}
 	{{- end }}
-	res, err = b.Save(ctx)
+	{{- range $e := $.Edges }}
+	{{- $annotation := $e.Annotations.LiEnt }}
+	{{- if and $annotation $annotation.ViewSchema (not $annotation.DisableUpdate) }}
+		{{- if $e.Unique }}
+			if req.{{ $e.StructField }} != nil {
+			{{- if $e.Field }}
+				b.Set{{ pascal $e.Field.Name }}(req.{{ $e.StructField }}.ID)
+			{{- end }}
+			}
+		{{- else if not $e.Field }}
+			if req.{{ $e.StructField }} != nil {
+				b.Clear{{ $e.StructField }}().Add{{ $e.Type.Name }}IDs(func() []{{ $.ID.Type }} {
+					ids := make([]{{ $.ID.Type }}, len(req.{{ $e.StructField }}))
+					for i, v := range req.{{ $e.StructField }} {
+						ids[i] = v.ID
+					}
+					return ids
+				}()...)
+			}
+		{{- end }}
+	{{- end }}
+	{{- end }}
+	ret, err := b.Save(ctx)
 	if err != nil {
 		if IsNotFound(err) {
 			return nil, gerror.WrapCode(gcode.CodeNotFound, err)
@@ -237,7 +355,7 @@ func Update{{ $.Name }}Controller(ctx context.Context, req *Update{{ $.Name }}Re
 		}
 		return nil, gerror.WrapCode(gcode.CodeDbOperationError, err)
 	}
-	return
+	return NewI{{ $.Name }}(ret), nil
 }
 
 func Delete{{ $.Name }}Controller(ctx context.Context, req *Delete{{ $.Name }}Req) (err error) {

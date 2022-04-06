@@ -55,7 +55,7 @@ func List{{ $.Name }}View() view.Node {
 									DataIndex("{{ $f.Name }}").
 									{{- if $annotation.ColumnProps.Align }}Align("{{ $annotation.ColumnProps.Align }}").{{- end }}
 									{{- if $annotation.ColumnProps.Ellipsis }}Ellipsis(true).{{- end }}
-									{{- if $annotation.ColumnProps.Width }}Width({{ $annotation.ColumnProps.Width }}){{- end }}
+									{{- if $annotation.ColumnProps.Width }}Width({{ $annotation.ColumnProps.Width }}).{{- end }}
 									{{- if $annotation.ColumnProps.Filterable }}Filterable(true).{{- end }}
 									{{- if $annotation.ColumnProps.Sortable }}Sortable(true).{{- end }}
 									Render({{ $.Package }}.Node{{ $f.StructField }}()),
