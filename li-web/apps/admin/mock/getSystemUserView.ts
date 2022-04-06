@@ -411,6 +411,7 @@ export default {
                         "x-component-props": {
                           title: "朋友",
                           dataIndex: "friends",
+                          filterable: true,
                         },
                         properties: {
                           friends,

@@ -30,7 +30,11 @@ import {
 import { observer } from "@formily/reactive-react";
 import { isObject, pickBy } from "lodash";
 import { isValid } from "@formily/shared";
-import { RecordIndexProvider, RecordProvider } from "../../core";
+import {
+  RecordIndexProvider,
+  RecordProvider,
+  SchemaFormField,
+} from "../../core";
 import { useAttach } from "../../hooks";
 import {
   isColumnComponent,
@@ -94,6 +98,22 @@ const getLightFilterConfig = (schema: Schema): FilterConfig => {
           filterNode = (
             <TimePicker.RangePicker
               size="small"
+              value={filterKeys}
+              onChange={(values) => setFilterKeys?.(values)}
+            />
+          );
+          break;
+        case "RecordPicker":
+          // toJson 复制一份出来，防止污染原 schema
+          const schema_ = schema.toJSON(true);
+          schema_["x-component-props"] = {
+            ...schema_["x-component-props"],
+            multiple: true,
+          };
+          filterNode = (
+            <SchemaFormField
+              name={schema.name as string}
+              schema={schema_}
               value={filterKeys}
               onChange={(values) => setFilterKeys?.(values)}
             />
@@ -306,6 +326,20 @@ const FilterForm: React.FC<{
               case "TimePicker.RangePicker":
                 filterNode = <TimePicker.RangePicker allowClear />;
                 span = 2;
+                break;
+              case "RecordPicker":
+                // toJson 复制一份出来，防止污染原 schema
+                const schema_ = schema.toJSON(true);
+                schema_["x-component-props"] = {
+                  ...schema_["x-component-props"],
+                  multiple: true,
+                };
+                filterNode = (
+                  <SchemaFormField
+                    name={schema.name as string}
+                    schema={schema_}
+                  />
+                );
                 break;
               case "InputNumber":
               case "Money":
