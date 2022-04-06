@@ -12,7 +12,10 @@ func RecordPicker(name string) *recordpickerBuilder {
 			Type:       ui.SchemaTypeAny,
 			XComponent: ui.ComponentRecordPicker,
 			XComponentProps: map[string]interface{}{
-				"fieldNames": make(map[string]string),
+				"fieldNames": map[string]string{
+					"value": "id",
+					"label": "id",
+				},
 			},
 			XDecorator: ui.DecoratorFormItem,
 		},

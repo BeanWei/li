@@ -15,12 +15,39 @@
                     panic(err)
                 }
                 if schema.Name == "" {
-                    schema.Name = "{{ if $annotation.ViewSchema.name }}{{ $annotation.ViewSchema.name }}{{ else }}{{ $f.StorageKey }}{{ end }}"
+                    schema.Name = "{{ if $annotation.ViewSchema.name }}{{ $annotation.ViewSchema.name }}{{ else }}{{ $f.Name }}{{ end }}"
                 }
                 if schema.Title == "" {
                     schema.Title = Node{{ $f.StructField }}Title
                 }
                 {{- if not $f.Optional }}
+                schema.Required = true
+                {{- end }}
+                return node.Node(schema.Name).SetSchema(schema)
+            }
+        {{- end }}
+    {{- end }}
+{{- end }}
+{{- range $e := $.Edges }}
+    {{- if $annotation := $e.Annotations.LiEnt }}
+        {{- if $annotation.ViewSchema }}
+            {{- if $annotation.ViewSchema.title }}
+            const Node{{ $e.StructField }}Title = "{{ $annotation.ViewSchema.title }}"
+            {{- else }}
+            const Node{{ $e.StructField }}Title = "{{ title $e.StructField }}"
+            {{- end }}
+            func Node{{ $e.StructField }}() *node.NodeBuilder {
+                var schema *ui.Schema
+                if err := gconv.Struct({{ valast $annotation.ViewSchema }}, &schema); err != nil {
+                    panic(err)
+                }
+                if schema.Name == "" {
+                    schema.Name = "{{ if $annotation.ViewSchema.name }}{{ $annotation.ViewSchema.name }}{{ else }}{{ $e.Name }}{{ end }}"
+                }
+                if schema.Title == "" {
+                    schema.Title = Node{{ $e.StructField }}Title
+                }
+                {{- if not $e.Optional }}
                 schema.Required = true
                 {{- end }}
                 return node.Node(schema.Name).SetSchema(schema)

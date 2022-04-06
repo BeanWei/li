@@ -1,6 +1,151 @@
 {{/* gotype: entgo.io/ent/entc/gen.Type */}}
 
 {{ define "model/additional/lient-view" }}
+func Create{{ $.Name }}FormView() view.Node {
+	return node.FormGrid("grid").MaxColumns(2).Children(
+		{{- range $f := $.Fields }}
+			{{- if $annotation := $f.Annotations.LiEnt }}
+				{{- if and $annotation.ViewSchema (not $annotation.DisableCreate) }}
+					{{ $.Package }}.Node{{ $f.StructField }}().SetAC({{ $.Package }}ViewACL["create:{{ $f.Name }}"]){{- if contains $annotation.ValidateRule "required" }}.SetRequired(true){{- end }},
+				{{- end }}
+			{{- end }}
+		{{- end }}
+		{{- range $e := $.Edges }}
+			{{- if $annotation := $e.Annotations.LiEnt }}
+				{{- if and $annotation.ViewSchema (not $annotation.DisableCreate) }}
+					{{ $.Package }}.Node{{ $e.StructField }}().
+						SetAC({{ $.Package }}ViewACL["create:{{ $e.Name }}"]).
+						{{ if not $e.Optional }}
+						SetRequired(true).
+						{{ end }}
+						Children(
+							node.List("options").
+								ForInit("@list{{ $e.Type.Name }}", List{{ $e.Type.Name }}Controller).
+								EnableLightFilter().
+								SelectionMultiple({{ if $e.Unique }}false{{ else }}true{{ end }}).
+								Children(
+									node.ListTable("{{ $.Package }}ListTable").Columns(List{{ $e.Type.Name }}TableColumns()...),
+								),
+						),
+				{{- end }}
+			{{- end }}
+		{{- end }}
+	)
+}
+
+func Read{{ $.Name }}FormView() view.Node {
+	return node.FormGrid("grid").MaxColumns(2).Children(
+		{{- range $f := $.Fields }}
+			{{- if $annotation := $f.Annotations.LiEnt }}
+				{{- if and $annotation.ViewSchema (not $annotation.DisableRead) }}
+					{{ $.Package }}.Node{{ $f.StructField }}().SetAC({{ $.Package }}ViewACL["read:{{ $f.Name }}"]),
+				{{- end }}
+			{{- end }}
+		{{- end }}
+		{{- range $e := $.Edges }}
+			{{- if $annotation := $e.Annotations.LiEnt }}
+				{{- if and $annotation.ViewSchema (not $annotation.DisableRead) }}
+					{{ $.Package }}.Node{{ $e.StructField }}().
+						SetAC({{ $.Package }}ViewACL["read:{{ $e.Name }}"]).
+						Children(
+							node.RecordPickerRecordFormDrawer("item").
+								ForInit("@get{{ $e.Type.Name }}", Get{{ $e.Type.Name }}Controller).
+								Body(Read{{ $e.Type.Name }}FormView()).
+								Footer(node.ActionFormDrawerCancel("cancel")),
+						),
+				{{- end }}
+			{{- end }}
+		{{- end }}
+	)
+}
+
+func Update{{ $.Name }}FormView() view.Node {
+	return node.FormGrid("grid").MaxColumns(2).Children(
+		{{- range $f := $.Fields }}
+			{{- if $annotation := $f.Annotations.LiEnt }}
+				{{- if and $annotation.ViewSchema (not $annotation.DisableUpdate) }}
+					{{ $.Package }}.Node{{ $f.StructField }}().SetAC({{ $.Package }}ViewACL["update:{{ $f.Name }}"]){{- if contains $annotation.ValidateRule "required" }}.SetRequired(true){{- end }},
+				{{- end }}
+			{{- end }}
+		{{- end }}
+		{{- range $e := $.Edges }}
+			{{- if $annotation := $e.Annotations.LiEnt }}
+				{{- if and $annotation.ViewSchema (not $annotation.DisableUpdate) }}
+					{{ $.Package }}.Node{{ $e.StructField }}().
+						SetAC({{ $.Package }}ViewACL["update:{{ $e.Name }}"]).
+						{{ if not $e.Optional }}
+						SetRequired(true).
+						{{ end }}
+						Children(
+							node.List("options").
+								ForInit("@list{{ $e.Type.Name }}", List{{ $e.Type.Name }}Controller).
+								EnableLightFilter().
+								SelectionMultiple({{ if $e.Unique }}false{{ else }}true{{ end }}).
+								Children(
+									node.ListTable("{{ $.Package }}ListTable").Columns(List{{ $e.Type.Name }}TableColumns()...),
+								),
+						),
+				{{- end }}
+			{{- end }}
+		{{- end }}
+	)
+}
+
+func List{{ $.Name }}TableColumns() []view.Node {
+	return []view.Node{
+		{{- range $i, $f := $.Fields }}
+			{{- if not $f.Sensitive }}
+			{{- if $annotation := $f.Annotations.LiEnt }}
+				{{- if and $annotation.ViewSchema (not $annotation.DisableRead) (not (isNil $annotation.ColumnProps)) }}
+					node.ListTableColumn("column{{ $i }}").
+						Title({{ $.Package }}.Node{{ $f.StructField }}Title).
+						AC({{ $.Package }}ViewACL["read:{{ $f.Name }}"]).
+						DataIndex("{{ $f.Name }}").
+						{{- if $annotation.ColumnProps.Align }}Align("{{ $annotation.ColumnProps.Align }}").{{- end }}
+						{{- if $annotation.ColumnProps.Ellipsis }}Ellipsis(true).{{- end }}
+						{{- if $annotation.ColumnProps.Width }}Width({{ $annotation.ColumnProps.Width }}).{{- end }}
+						{{- if $annotation.ColumnProps.Filterable }}Filterable(true).{{- end }}
+						{{- if $annotation.ColumnProps.Sortable }}Sortable(true).{{- end }}
+						Render({{ $.Package }}.Node{{ $f.StructField }}()),
+				{{- end }}
+			{{- end }}
+			{{- end }}
+		{{- end }}
+		{{- range $i, $e := $.Edges }}
+			{{- if $annotation := $e.Annotations.LiEnt }}
+				{{- if and $annotation.ViewSchema (not $annotation.DisableRead) (not (isNil $annotation.ColumnProps)) }}
+					node.ListTableColumn("columnEdge{{ $i }}").
+						Title({{ $.Package }}.Node{{ $e.StructField }}Title).
+						AC({{ $.Package }}ViewACL["read:{{ $e.Name }}"]).
+						DataIndex("{{ $e.Name }}").
+						{{- if $annotation.ColumnProps.Align }}Align("{{ $annotation.ColumnProps.Align }}").{{- end }}
+						{{- if $annotation.ColumnProps.Ellipsis }}Ellipsis(true).{{- end }}
+						{{- if $annotation.ColumnProps.Width }}Width({{ $annotation.ColumnProps.Width }}).{{- end }}
+						{{- if $annotation.ColumnProps.Filterable }}Filterable(true).{{- end }}
+						{{- if $annotation.ColumnProps.Sortable }}Sortable(true).{{- end }}
+						Render(
+							{{ $.Package }}.Node{{ $e.StructField }}().
+								SetAC({{ $.Package }}ViewACL["read:{{ $e.Name }}"]).
+								Children(
+									node.List("options").
+										ForInit("@list{{ $e.Type.Name }}", List{{ $e.Type.Name }}Controller).
+										EnableLightFilter().
+										SelectionMultiple({{ if $e.Unique }}false{{ else }}true{{ end }}).
+										Children(
+											node.ListTable("{{ $.Package }}ListTable").Columns(List{{ $e.Type.Name }}TableColumns()...),
+										),
+									node.RecordPickerRecordFormDrawer("item").
+										ForInit("@get{{ $e.Type.Name }}", Get{{ $e.Type.Name }}Controller).
+										Body(Read{{ $e.Type.Name }}FormView()).
+										Footer(node.ActionFormDrawerCancel("cancel")),
+								),
+						),
+				{{- end }}
+			{{- end }}
+		{{- end }}
+	}
+}
+
 func List{{ $.Name }}View() view.Node {
 	return node.List("{{ $.Package }}List").
 		AC({{ $.Package }}ViewACL["list:{{ $.Name }}"]).
@@ -18,17 +163,7 @@ func List{{ $.Name }}View() view.Node {
 							ButtonType("primary").
 							ButtonIcon("IconPlus").
 							ButtonPosition("left").
-							Body(
-								node.FormGrid("grid").MaxColumns(2).Children(
-									{{- range $f := $.Fields }}
-										{{- if $annotation := $f.Annotations.LiEnt }}
-											{{- if and $annotation.ViewSchema (not $annotation.DisableCreate) }}
-												{{ $.Package }}.Node{{ $f.StructField }}().SetAC({{ $.Package }}ViewACL["create:{{ $f.Name }}"]){{- if contains $annotation.ValidateRule "required" }}.SetRequired(true){{- end }},
-											{{- end }}
-										{{- end }}
-									{{- end }}
-								),
-							).
+							Body(Create{{ $.Name }}FormView()).
 							Footer(
 								node.ActionFormDrawerCancel("cancel"),
 								node.ActionFormDrawerSubmit("submit").ForSubmit("@add{{ $.Name }}", Create{{ $.Name }}Controller),
@@ -45,79 +180,44 @@ func List{{ $.Name }}View() view.Node {
 					),
 				).
 				Columns(
-                    {{- range $i, $f := $.Fields }}
-						{{- if not $f.Sensitive }}
-                        {{- if $annotation := $f.Annotations.LiEnt }}
-                            {{- if and $annotation.ViewSchema (not $annotation.DisableRead) (not (isNil $annotation.ColumnProps)) }}
-								node.ListTableColumn("column{{ $i }}").
-									Title({{ $.Package }}.Node{{ $f.StructField }}Title).
-									AC({{ $.Package }}ViewACL["read:{{ $f.Name }}"]).
-									DataIndex("{{ $f.Name }}").
-									{{- if $annotation.ColumnProps.Align }}Align("{{ $annotation.ColumnProps.Align }}").{{- end }}
-									{{- if $annotation.ColumnProps.Ellipsis }}Ellipsis(true).{{- end }}
-									{{- if $annotation.ColumnProps.Width }}Width({{ $annotation.ColumnProps.Width }}).{{- end }}
-									{{- if $annotation.ColumnProps.Filterable }}Filterable(true).{{- end }}
-									{{- if $annotation.ColumnProps.Sortable }}Sortable(true).{{- end }}
-									Render({{ $.Package }}.Node{{ $f.StructField }}()),
-                            {{- end }}
-                        {{- end }}
-						{{- end }}
-                    {{- end }}
-					node.ListTableColumn("column{{ len $.Fields }}").
-						Title("操作").
-						DataIndex("__action").
-						Width(150).
-						Render(
-							node.Space("actions").Size(0).SplitByDivider().Children(
-								node.ListActionRecordFormDrawer("view").
-									AC({{ $.Package }}ViewACL["get:{{ $.Name }}"]).
-									ForInit("@get{{ $.Name }}", Get{{ $.Name }}Controller).
-									DrawerTitle("查看").
-									ButtonType("text").
-									ButtonIcon("IconEye").
-									Body(
-										node.FormGrid("grid").MaxColumns(2).Children(
-											{{- range $f := $.Fields }}
-												{{- if $annotation := $f.Annotations.LiEnt }}
-													{{- if and $annotation.ViewSchema (not $annotation.DisableRead) }}
-														{{ $.Package }}.Node{{ $f.StructField }}().SetAC({{ $.Package }}ViewACL["read:{{ $f.Name }}"]){{- if contains $annotation.ValidateRule "required" }}.SetRequired(true){{- end }},
-													{{- end }}
-												{{- end }}
-											{{- end }}
+					append(
+						ListUserTableColumns(),
+						node.ListTableColumn("columnAction").
+							Title("操作").
+							DataIndex("__action").
+							Width(150).
+							Render(
+								node.Space("actions").Size(0).SplitByDivider().Children(
+									node.ListActionRecordFormDrawer("view").
+										AC({{ $.Package }}ViewACL["get:{{ $.Name }}"]).
+										ForInit("@get{{ $.Name }}", Get{{ $.Name }}Controller).
+										DrawerTitle("查看").
+										ButtonType("text").
+										ButtonIcon("IconEye").
+										Body(Read{{ $.Name }}FormView()).
+										Footer(
+											node.ActionFormDrawerCancel("cancel"),
 										),
-									).
-									Footer(
-										node.ActionFormDrawerCancel("cancel"),
-									),
-								node.ListActionRecordFormDrawer("edit").
-									AC({{ $.Package }}ViewACL["update:{{ $.Name }}"]).
-									ForInit("@get{{ $.Name }}", Get{{ $.Name }}Controller).
-									DrawerTitle("编辑").
-									ButtonType("text").
-									ButtonIcon("IconEdit").
-									Body(
-										node.FormGrid("grid").MaxColumns(2).Children(
-											{{- range $f := $.Fields }}
-												{{- if $annotation := $f.Annotations.LiEnt }}
-													{{- if and $annotation.ViewSchema (not $annotation.DisableUpdate) }}
-														{{ $.Package }}.Node{{ $f.StructField }}().SetAC({{ $.Package }}ViewACL["update:{{ $f.Name }}"]){{- if contains $annotation.ValidateRule "required" }}.SetRequired(true){{- end }},
-													{{- end }}
-												{{- end }}
-											{{- end }}
+									node.ListActionRecordFormDrawer("edit").
+										AC({{ $.Package }}ViewACL["update:{{ $.Name }}"]).
+										ForInit("@get{{ $.Name }}", Get{{ $.Name }}Controller).
+										DrawerTitle("编辑").
+										ButtonType("text").
+										ButtonIcon("IconEdit").
+										Body(Update{{ $.Name }}FormView()).
+										Footer(
+											node.ActionFormDrawerCancel("cancel"),
+											node.ActionFormDrawerSubmit("submit").
+												ForSubmit("@update{{ $.Name }}", Update{{ $.Name }}Controller),
 										),
-									).
-									Footer(
-										node.ActionFormDrawerCancel("cancel"),
-										node.ActionFormDrawerSubmit("submit").
-											ForSubmit("@update{{ $.Name }}", Update{{ $.Name }}Controller),
-									),
-								node.ListActionRecordDelete("delete").
-									AC({{ $.Package }}ViewACL["delete:{{ $.Name }}"]).
-									ForSubmit("@delete{{ $.Name }}", Delete{{ $.Name }}Controller).
-									ButtonType("text").
-									ButtonIcon("IconDelete"),
+									node.ListActionRecordDelete("delete").
+										AC({{ $.Package }}ViewACL["delete:{{ $.Name }}"]).
+										ForSubmit("@delete{{ $.Name }}", Delete{{ $.Name }}Controller).
+										ButtonType("text").
+										ButtonIcon("IconDelete"),
+								),
 							),
-						),
+					)...,
 				),
 		)
 }

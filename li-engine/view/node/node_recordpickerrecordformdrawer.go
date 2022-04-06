@@ -3,6 +3,7 @@ package node
 import (
 	"github.com/BeanWei/li/li-engine/ac"
 	"github.com/BeanWei/li/li-engine/controller"
+	"github.com/BeanWei/li/li-engine/view"
 	"github.com/BeanWei/li/li-engine/view/ui"
 )
 
@@ -33,5 +34,15 @@ func (b *recordpickerrecordformdrawerBuilder) ForInit(operation string, handler 
 	b.schema.XComponentProps["forInit"] = operation
 	b.schema.HandlerNames = append(b.schema.HandlerNames, operation)
 	controller.Bind(operation, handler)
+	return b
+}
+
+func (b *recordpickerrecordformdrawerBuilder) Body(elements ...view.Node) *recordpickerrecordformdrawerBuilder {
+	b.Items(elements...)
+	return b
+}
+
+func (b *recordpickerrecordformdrawerBuilder) Footer(elements ...view.Node) *recordpickerrecordformdrawerBuilder {
+	b.Children(elements...)
 	return b
 }
