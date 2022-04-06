@@ -1,6 +1,6 @@
 {{/* gotype: entgo.io/ent/entc/gen.Type */}}
 
-{{ define "model/additional/lient-control" }}
+{{ define "model/additional/lient-controller" }}
 type (
 	I{{ $.Name }} struct {
 		ID {{ $.ID.Type }} {{ with $.Annotations.Fields.StructTag.id }}`{{ . }}`{{ else }}`{{ $.ID.StructTag }}`{{ end }}
@@ -200,13 +200,21 @@ func List{{ $.Name }}Controller(ctx context.Context, req *List{{ $.Name }}Req) (
 		{{- if and $annotation $annotation.ViewSchema $annotation.ColumnProps $annotation.ColumnProps.Filterable }}
 			if len(req.Filter.{{ $e.StructField }}) > 0 {
 			{{- if $e.Field }}
-				q.Where({{ $.Package }}.{{ pascal $e.Field.Name }}In(func() []{{ $.ID.Type }} {
-					ids := make([]{{ $.ID.Type }}, len(req.Filter.{{ $e.StructField }}))
+				q.Where({{ $.Package }}.{{ pascal $e.Field.Name }}In(func() []{{ $e.Field.Type }} {
+					ids := make([]{{ $e.Field.Type }}, len(req.Filter.{{ $e.StructField }}))
 					for i, v := range req.Filter.{{ $e.StructField }} {
 						ids[i] = v.ID
 					}
 					return ids
 				}()...))
+			{{- else }}
+				q.Where({{ $.Package }}.Has{{ $e.StructField }}With({{ $e.Type.Package }}.IDIn(func() []{{ $e.Type.ID.Type }} {
+					ids := make([]{{ $e.Type.ID.Type }}, len(req.Filter.{{ $e.StructField }}))
+					for i, v := range req.Filter.{{ $e.StructField }} {
+						ids[i] = v.ID
+					}
+					return ids
+				}()...)))
 			{{- end }}
 			}
 		{{- end }}
@@ -269,8 +277,8 @@ func Create{{ $.Name }}Controller(ctx context.Context, req *Create{{ $.Name }}Re
 			}
 		{{- else if not $e.Field }}
 			if len(req.{{ $e.StructField }}) > 0 {
-				b.Add{{ $e.Type.Name }}IDs(func() []{{ $.ID.Type }} {
-					ids := make([]{{ $.ID.Type }}, len(req.{{ $e.StructField }}))
+				b.Add{{ $e.Type.Name }}IDs(func() []{{ $e.Type.ID.Type }} {
+					ids := make([]{{ $e.Type.ID.Type }}, len(req.{{ $e.StructField }}))
 					for i, v := range req.{{ $e.StructField }} {
 						ids[i] = v.ID
 					}
@@ -335,8 +343,8 @@ func Update{{ $.Name }}Controller(ctx context.Context, req *Update{{ $.Name }}Re
 			}
 		{{- else if not $e.Field }}
 			if req.{{ $e.StructField }} != nil {
-				b.Clear{{ $e.StructField }}().Add{{ $e.Type.Name }}IDs(func() []{{ $.ID.Type }} {
-					ids := make([]{{ $.ID.Type }}, len(req.{{ $e.StructField }}))
+				b.Clear{{ $e.StructField }}().Add{{ $e.Type.Name }}IDs(func() []{{ $e.Type.ID.Type }} {
+					ids := make([]{{ $e.Type.ID.Type }}, len(req.{{ $e.StructField }}))
 					for i, v := range req.{{ $e.StructField }} {
 						ids[i] = v.ID
 					}
