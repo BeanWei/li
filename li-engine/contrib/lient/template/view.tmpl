@@ -181,7 +181,7 @@ func List{{ $.Name }}View() view.Node {
 				).
 				Columns(
 					append(
-						ListUserTableColumns(),
+						List{{ $.Name }}TableColumns(),
 						node.ListTableColumn("columnAction").
 							Title("操作").
 							DataIndex("__action").

@@ -17,7 +17,7 @@ func SignFormNode() view.Node {
 				Placeholder("密码").
 				SetRequired(true),
 			node.Submit("submit").
-				ButtonLong().
+				ButtonLong(true).
 				ButtonType("primary").
 				ButtonStyle(map[string]interface{}{
 					"width": "100%",

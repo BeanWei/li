@@ -4,6 +4,7 @@ import (
 	"context"
 
 	"entgo.io/ent"
+	"entgo.io/ent/schema/edge"
 	"entgo.io/ent/schema/field"
 	"github.com/BeanWei/li/li-engine/ac"
 	"github.com/BeanWei/li/li-engine/contrib/lient"
@@ -104,6 +105,13 @@ func (User) Fields() []ent.Field {
 					},
 				},
 			),
+	}
+}
+
+func (User) Edges() []ent.Edge {
+	return []ent.Edge{
+		edge.To("posts", Post.Type),
+		edge.To("comments", Comment.Type),
 	}
 }
 

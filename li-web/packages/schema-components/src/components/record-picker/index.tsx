@@ -70,12 +70,14 @@ export const RecordPicker: ComposedRecordPicker = connect(
           onVisibleChange={(open) => {
             setVisible(open);
           }}
-          options={values.map((item: any) => {
-            return {
-              label: item[fieldNames.label],
-              value: item[fieldNames.value],
-            };
-          })}
+          options={values
+            .filter((item: any) => !!item[fieldNames.value])
+            .map((item: any) => {
+              return {
+                label: item[fieldNames.label],
+                value: item[fieldNames.value],
+              };
+            })}
           value={
             multiple
               ? values.map((item: any) => item[fieldNames.value])
@@ -93,7 +95,6 @@ export const RecordPicker: ComposedRecordPicker = connect(
           }}
         />
         <Drawer
-          // FIXME: locale.RecordPicker is undefined
           title={locale.RecordPicker?.drawerTitle || "Please select"}
           width="80%"
           mountOnEnter

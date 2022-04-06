@@ -34,6 +34,24 @@ func Init() {
 					},
 				},
 			},
+			{
+				Title: "博客应用",
+				Icon:  "IconEdit",
+				Children: []*engine.AppMenu{
+					{
+						Title: "文章管理",
+						Page:  new(view.BlogPost),
+					},
+					{
+						Title: "标签管理",
+						Page:  new(view.BlogTag),
+					},
+					{
+						Title: "评论管理",
+						Page:  new(view.BlogComment),
+					},
+				},
+			},
 		},
 		NavItems: view.NavItems(),
 		Binding: &engine.AppBinding{

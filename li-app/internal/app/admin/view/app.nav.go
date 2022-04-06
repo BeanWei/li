@@ -20,7 +20,7 @@ func NavItems() []view.Node {
 					Children(
 						node.ActionFormDrawer("action").
 							Title("用户设置").
-							IsMenuItem().
+							IsMenuItem(true).
 							InitialValues(map[string]interface{}{
 								"nickname": `{{global.currentUser.nickname}}`,
 							}).
