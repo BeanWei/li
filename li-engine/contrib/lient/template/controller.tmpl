@@ -41,7 +41,7 @@ type (
 		{{- range $e := $.Edges }}
 		{{- $annotation := $e.Annotations.LiEnt }}
 		{{- if and $annotation $annotation.ViewSchema $annotation.ColumnProps $annotation.ColumnProps.Filterable }}
-			{{ $e.StructField }} []*struct { ID {{ $e.Type.ID.Type }} } {{ with $e.StructTag }}`{{ . }}`{{ end }}
+			{{ $e.StructField }} []*struct { ID {{ $e.Type.ID.Type }} `json:"id" v:"required"` } {{ with $e.StructTag }}`{{ . }}`{{ end }}
 		{{- end }}
 		{{- end }}
 	}
@@ -83,7 +83,7 @@ type (
 		{{- range $e := $.Edges }}
 		{{- $annotation := $e.Annotations.LiEnt }}
 		{{- if and $annotation $annotation.ViewSchema (not $annotation.DisableCreate) }}
-			{{ $e.StructField }} {{ if not $e.Unique }}[]{{ end }}*struct { ID {{ $e.Type.ID.Type }} } `json:"{{ $e.Name }}"{{if not $e.Optional }} v:"required"{{ end }}`
+			{{ $e.StructField }} {{ if not $e.Unique }}[]{{ end }}*struct { ID {{ $e.Type.ID.Type }} `json:"id" v:"required"` } `json:"{{ $e.Name }}"{{if not $e.Optional }} v:"required"{{ end }}`
 		{{- end }}
 		{{- end }}
 	}
@@ -117,7 +117,7 @@ type (
 		{{- range $e := $.Edges }}
 		{{- $annotation := $e.Annotations.LiEnt }}
 		{{- if and $annotation $annotation.ViewSchema (not $annotation.DisableUpdate) }}
-			{{ $e.StructField }} {{ if not $e.Unique }}[]{{ end }}*struct { ID {{ $e.Type.ID.Type }} } `json:"{{ $e.Name }}"{{if not $e.Optional }} v:"required"{{ end }}`
+			{{ $e.StructField }} {{ if not $e.Unique }}[]{{ end }}*struct { ID {{ $e.Type.ID.Type }} `json:"id" v:"required"` } `json:"{{ $e.Name }}"{{if not $e.Optional }} v:"required"{{ end }}`
 		{{- end }}
 		{{- end }}
 	}
@@ -240,7 +240,7 @@ func List{{ $.Name }}Controller(ctx context.Context, req *List{{ $.Name }}Req) (
 	if err != nil {
 		return nil, gerror.WrapCode(gcode.CodeDbOperationError, err)
 	}
-	ret, err := q.Limit(req.Limit).Offset((req.Page - 1) * req.Limit).All(ctx)
+	ret, err := q.{{ range $e := $.Edges }}{{ $annotation := $e.Annotations.LiEnt }}{{ if and $annotation $annotation.ViewSchema $annotation.ColumnProps }}With{{ $e.StructField }}().{{ end }}{{ end }}Limit(req.Limit).Offset((req.Page - 1) * req.Limit).All(ctx)
 	if err != nil {
 		return nil, gerror.WrapCode(gcode.CodeDbOperationError, err)
 	}
@@ -301,6 +301,12 @@ func Create{{ $.Name }}Controller(ctx context.Context, req *Create{{ $.Name }}Re
 func Get{{ $.Name }}Controller(ctx context.Context, req *Get{{ $.Name }}Req) (res *I{{ $.Name }}, err error) {
 	ret, err := LiClient().{{ $.Name }}.
 		Query().
+		{{- range $e := $.Edges }}
+			{{- $annotation := $e.Annotations.LiEnt }}
+			{{- if and $annotation $annotation.ViewSchema }}
+				With{{ $e.StructField }}().
+			{{- end }}
+		{{- end }}
 		Where({{ $.Package }}.IDEQ(req.ID)).
 		Only(ctx)
 	if err != nil {

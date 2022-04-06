@@ -114,8 +114,9 @@ export const RecordPicker: ComposedRecordPicker = connect(
                       (item: any) => item[fieldNames.value]
                     ),
                     preserveSelectedKeys: true,
-                    onChange: (_: any, selected: any[]) => {
-                      onChange?.(selected);
+                    onChange: (_: any, selected: any) => {
+                      const res = toArr(selected);
+                      onChange?.(multiple ? res : res[0]);
                     },
                   },
                 };
