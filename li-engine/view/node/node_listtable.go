@@ -53,6 +53,11 @@ func (b *listtableBuilder) Size(size string) *listtableBuilder {
 	return b
 }
 
+func (b *listtableBuilder) Scroll(scroll map[string]interface{}) *listtableBuilder {
+	b.schema.XComponentProps["scroll"] = scroll
+	return b
+}
+
 func (b *listtableBuilder) ActionBar(element view.Node) *listtableBuilder {
 	b.schema.Properties.Set(element.Schema().Name, element.Schema())
 	return b
