@@ -47,6 +47,11 @@ func (Post) Fields() []ent.Field {
 					},
 				},
 			),
+		field.Strings("reviewer_ids").
+			Optional().
+			Annotations(
+				lient.XEdge("reviewers", User.Type),
+			),
 	}
 }
 

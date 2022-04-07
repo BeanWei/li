@@ -1,0 +1,100 @@
+{{/* gotype: entgo.io/ent/entc/gen.Type */}}
+
+{{ define "model/edges/fields/additional/lient-edge" }}
+{{- range $f := $.Fields }}
+    {{- $annotation := $f.Annotations.LiEnt }}
+    {{- if and $annotation $annotation.EdgeType $annotation.EdgeName }}
+        {{ $annotation.EdgeStructField }} {{ if ne $f.Type.String $.ID.Type.String }}[]{{ end }}*{{ $annotation.EdgeType }} `json:"{{ $annotation.EdgeName }},omitempty"`
+    {{- end }}
+{{- end }}
+{{ end }}
+
+{{ define "dialect/sql/query/fields/additional/lient-edge" }}
+{{- range $f := $.Fields }}
+    {{- $annotation := $f.Annotations.LiEnt }}
+    {{- if and $annotation $annotation.EdgeType $annotation.EdgeName }}
+        with{{ $annotation.EdgeStructField }} *{{ $annotation.EdgeType }}Query
+    {{- end }}
+{{- end -}}
+{{ end }}
+
+{{ define "dialect/sql/query/additional/lient-edge" }}
+{{ $receiver := receiver $.QueryName }}
+{{- range $f := $.Fields }}
+    {{- $annotation := $f.Annotations.LiEnt }}
+    {{- if and $annotation $annotation.EdgeType $annotation.EdgeName }}
+        func ({{ $receiver }} *{{ $.QueryName }}) With{{ $annotation.EdgeStructField }}(opts ...func(*{{ $annotation.EdgeType }}Query)) *{{ $.Name }}Query {
+            query := &{{ $annotation.EdgeType }}Query{config: {{ $receiver }}.config}
+            for _, opt := range opts {
+                opt(query)
+            }
+            {{ $receiver }}.with{{ $annotation.EdgeStructField }} = query
+            return {{ $receiver }}
+        }
+    {{- end }}
+{{- end }}
+{{ end }}
+
+{{ define "dialect/sql/query/all/nodes/lient-edge" }}
+{{ $receiver := receiver $.QueryName }}
+{{- range $f := $.Fields }}
+{{- $annotation := $f.Annotations.LiEnt }}
+{{- if and $annotation $annotation.EdgeType $annotation.EdgeName }}
+    if query := {{ $receiver }}.with{{ $annotation.EdgeStructField }}; query != nil {
+        {{- if eq $f.Type.String $.ID.Type.String }}
+        edgeids := make([]{{ $.ID.Type }}, 0)
+        edgeidtmp := make(map[{{ $.ID.Type }}]bool)
+        edgebyid := make(map[{{ $.ID.Type }}]*{{ $annotation.EdgeType }})
+        for i := range nodes {
+			id := nodes[i].{{ pascal $f.Name }}
+			if _, ok := edgeidtmp[id]; !ok {
+				edgeids = append(edgeids, id)
+			}
+		}
+        query.Where({{ $annotation.EdgePackage }}.IDIn(edgeids...))
+		neighbors, err := query.All(ctx)
+		if err != nil {
+			return nil, err
+		}
+        for _, n := range neighbors {
+            edgebyid[n.ID] = n
+		}
+        for i := range nodes {
+            id := nodes[i].{{ pascal $f.Name }}
+            if _, ok := edgebyid[id]; ok {
+                nodes[i].Edges.{{ $annotation.EdgeStructField }} = edgebyid[id]
+            }
+        }
+        {{- else }}
+        edgeids := make([]{{ $.ID.Type }}, 0)
+        edgeidtmp := make(map[{{ $.ID.Type }}]bool)
+        edgebyid := make(map[{{ $.ID.Type }}]*{{ $annotation.EdgeType }})
+        for i := range nodes {
+            for j := range nodes[i].{{ pascal $f.Name }} {
+                id := nodes[i].{{ pascal $f.Name }}[j]
+                if _, ok := edgeidtmp[id]; !ok {
+                    edgeids = append(edgeids, id)
+                }
+            }
+		}
+        query.Where({{ $annotation.EdgePackage }}.IDIn(edgeids...))
+		neighbors, err := query.All(ctx)
+		if err != nil {
+			return nil, err
+		}
+        for _, n := range neighbors {
+            edgebyid[n.ID] = n
+		}
+        for i := range nodes {
+            for j := range nodes[i].{{ pascal $f.Name }} {
+                id := nodes[i].{{ pascal $f.Name }}[j]
+                if _, ok := edgebyid[id]; ok {
+                    nodes[i].Edges.{{ $annotation.EdgeStructField }} = append(nodes[i].Edges.{{ $annotation.EdgeStructField }}, edgebyid[id])
+                }
+            }
+        }
+        {{- end }}
+    }
+{{- end }}
+{{- end }}
+{{ end }}
