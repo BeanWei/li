@@ -47,6 +47,23 @@ func (Post) Fields() []ent.Field {
 					},
 				},
 			),
+		field.Strings("reviewer_ids").
+			Optional().
+			Annotations(
+				lient.Annotation{
+					ViewSchema: node.RecordSelect("reviewers").
+						Title("审核人").
+						Multiple(true).
+						FieldNamesTitle("nickname").
+						FieldNamesAvatar("avatar").
+						FieldNamesDescription("email").
+						Schema(),
+					ColumnProps: &lient.ColumnProps{
+						Filterable: true,
+					},
+					Edge: lient.XEdge("reviewers", User.Type),
+				},
+			),
 	}
 }
 
@@ -59,9 +76,11 @@ func (Post) Edges() []ent.Edge {
 			Required().
 			Annotations(
 				lient.Annotation{
-					ViewSchema: node.RecordPicker("author").
+					ViewSchema: node.RecordSelect("author").
 						Title("作者").
-						FieldNamesLabel("nickname").
+						FieldNamesTitle("nickname").
+						FieldNamesAvatar("avatar").
+						FieldNamesDescription("email").
 						Schema(),
 					ColumnProps: &lient.ColumnProps{
 						Filterable: true,
@@ -71,10 +90,10 @@ func (Post) Edges() []ent.Edge {
 		edge.To("tags", Tag.Type).
 			Annotations(
 				lient.Annotation{
-					ViewSchema: node.RecordPicker("tags").
+					ViewSchema: node.RecordSelect("tags").
 						Title("标签").
-						SelectionMultiple(true).
-						FieldNamesLabel("label").
+						Multiple(true).
+						FieldNamesTitle("label").
 						Schema(),
 					ColumnProps: &lient.ColumnProps{
 						Filterable: true,
