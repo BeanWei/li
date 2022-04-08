@@ -17,20 +17,7 @@ func Create{{ $.Name }}FormView() view.Node {
 		{{- range $e := $.Edges }}
 			{{- if $annotation := $e.Annotations.LiEnt }}
 				{{- if and $annotation.ViewSchema (not $annotation.DisableCreate) }}
-					{{ $.Package }}.Node{{ $e.StructField }}().
-						SetAC({{ $.Package }}ViewACL["create:{{ $e.Name }}"]).
-						{{ if not $e.Optional }}
-						SetRequired(true).
-						{{ end }}
-						Children(
-							node.List("options").
-								ForInit("@list{{ $e.Type.Name }}", List{{ $e.Type.Name }}Controller).
-								EnableLightFilter().
-								SelectionMultiple({{ if $e.Unique }}false{{ else }}true{{ end }}).
-								Children(
-									node.ListTable("{{ $.Package }}ListTable").Columns(List{{ $e.Type.Name }}TableColumns()...),
-								),
-						),
+					{{ $.Package }}.Node{{ $e.StructField }}().SetAC({{ $.Package }}ViewACL["create:{{ $e.Name }}"]){{ if not $e.Optional }}.SetRequired(true){{ end }},
 				{{- end }}
 			{{- end }}
 		{{- end }}
@@ -53,8 +40,7 @@ func Read{{ $.Name }}FormView() view.Node {
 		{{- range $e := $.Edges }}
 			{{- if $annotation := $e.Annotations.LiEnt }}
 				{{- if and $annotation.ViewSchema (not $annotation.DisableRead) }}
-					{{ $.Package }}.Node{{ $e.StructField }}().
-						SetAC({{ $.Package }}ViewACL["read:{{ $e.Name }}"]),
+					{{ $.Package }}.Node{{ $e.StructField }}().SetAC({{ $.Package }}ViewACL["read:{{ $e.Name }}"]),
 				{{- end }}
 			{{- end }}
 		{{- end }}
@@ -77,11 +63,7 @@ func Update{{ $.Name }}FormView() view.Node {
 		{{- range $e := $.Edges }}
 			{{- if $annotation := $e.Annotations.LiEnt }}
 				{{- if and $annotation.ViewSchema (not $annotation.DisableUpdate) }}
-					{{ $.Package }}.Node{{ $e.StructField }}().
-						{{ if not $e.Optional }}
-						SetRequired(true).
-						{{ end }}
-						SetAC({{ $.Package }}ViewACL["update:{{ $e.Name }}"]),
+					{{ $.Package }}.Node{{ $e.StructField }}().SetAC({{ $.Package }}ViewACL["update:{{ $e.Name }}"]){{ if not $e.Optional }}.SetRequired(true){{ end }},
 				{{- end }}
 			{{- end }}
 		{{- end }}
