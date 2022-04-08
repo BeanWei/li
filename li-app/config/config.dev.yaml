@@ -24,7 +24,12 @@ database:
 redis:
   cache:
     address: 127.0.0.1:6379
-    db: 1
+    db: 0
+    pass: 123456
+    idleTimeout: 600
+  default:
+    address: 127.0.0.1:6379
+    db: 0
     pass: 123456
     idleTimeout: 600
 

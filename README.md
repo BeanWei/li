@@ -36,7 +36,7 @@ Golang, GoFrame, Ent ...
  * 1: cd li-web & pnpm
  * 2: cd li-web/apps/admin & pnpm dev
  * 3: cd li-app, 配置 config.yaml, make generate & make migrate
- * 4: 创建管理员账号：go run li.go user-create -u=你的邮箱 -p=你的密码
+ * 4: 创建管理员账号：go run li.go user-create -u=你的邮箱 -p=你的密码 -n=Admin -a=true
  * 5: 浏览器打开 localhost:3000
  * 6: Just for fun~~~
 
