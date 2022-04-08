@@ -50,7 +50,17 @@ func (Post) Fields() []ent.Field {
 		field.Strings("reviewer_ids").
 			Optional().
 			Annotations(
-				lient.XEdge("reviewers", User.Type),
+				lient.Annotation{
+					ViewSchema: node.RecordPicker("reviewers").
+						Title("审核人").
+						SelectionMultiple(true).
+						FieldNamesLabel("nickname").
+						Schema(),
+					ColumnProps: &lient.ColumnProps{
+						Filterable: true,
+					},
+					Edge: lient.XEdge("reviewers", User.Type),
+				},
 			),
 	}
 }

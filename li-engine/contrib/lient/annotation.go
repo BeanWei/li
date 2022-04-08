@@ -16,12 +16,7 @@ type (
 		DisableCreate bool         `json:"DisableCreate,omitempty"`
 		DisableRead   bool         `json:"DisableRead,omitempty"`
 		DisableUpdate bool         `json:"DisableUpdate,omitempty"`
-
-		// 解耦的 Edge 关联查询
-		EdgeType        string `json:"EdgeType,omitempty"`
-		EdgePackage     string `json:"EdgePackage,omitempty"`
-		EdgeName        string `json:"EdgeName,omitempty"`
-		EdgeStructField string `json:"EdgeStructField,omitempty"`
+		Edge          *Edge        `json:"Edge,omitempty"` // 解耦的 Edge 关联查询
 	}
 	ColumnProps struct {
 		Width      int    `json:"Width,omitempty"`
@@ -30,17 +25,23 @@ type (
 		Filterable bool   `json:"Filterable,omitempty"`
 		Sortable   bool   `json:"Sortable,omitempty"`
 	}
+	Edge struct {
+		Type        string `json:"Type,omitempty"`
+		Package     string `json:"Package,omitempty"`
+		Name        string `json:"Name,omitempty"`
+		StructField string `json:"StructField,omitempty"`
+	}
 )
 
 func (Annotation) Name() string { return "LiEnt" }
 
-func XEdge(name string, t interface{}) Annotation {
+func XEdge(name string, t interface{}) *Edge {
 	tn := typ(t)
-	return Annotation{
-		EdgeType:        tn,
-		EdgePackage:     gstr.ToLower(tn),
-		EdgeName:        name,
-		EdgeStructField: gstr.CaseCamel(name),
+	return &Edge{
+		Type:        tn,
+		Package:     gstr.ToLower(tn),
+		Name:        name,
+		StructField: gstr.CaseCamel(name),
 	}
 }
 

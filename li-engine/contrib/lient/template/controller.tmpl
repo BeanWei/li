@@ -7,6 +7,10 @@ type (
 		{{- range $f := $.Fields }}
 			{{- $tag := $f.StructTag }}{{ with $tags := $.Annotations.Fields.StructTag }}{{ with index $tags $f.Name }}{{ $tag = . }}{{ end }}{{ end }}
 			{{ $f.StructField }} {{ if $f.NillableValue }}*{{ end }}{{ $f.Type }} {{ if not $f.Sensitive }}`{{ $tag }}`{{ else }}`json:"-"`{{ end }}
+			{{- $annotation := $f.Annotations.LiEnt }}
+			{{- if and $annotation $annotation.Edge }}
+				{{ $annotation.Edge.StructField }} {{ if ne $f.Type.String $.ID.Type.String }}[]{{ end }}*I{{ $annotation.Edge.Type }} `json:"{{ $annotation.Edge.Name }},omitempty"`
+			{{- end }}
 		{{- end }}
 		{{- range $e := $.Edges }}
 			{{ $e.StructField }} {{ if not $e.Unique }}[]{{ end }}*I{{ $e.Type.Name }} {{ with $e.StructTag }}`{{ . }}`{{ end }}
@@ -23,17 +27,21 @@ type (
         {{- if not $f.Sensitive }}
 		{{- $annotation := $f.Annotations.LiEnt }}
 		{{- if and $annotation $annotation.ViewSchema $annotation.ColumnProps $annotation.ColumnProps.Filterable }}
-			{{- $component := index $annotation.ViewSchema "x-component"  }}
-			{{- if or (eq $component "DatePicker") (eq $component "TimePicker") (eq $component "Checkbox.Group") }}
-				{{ $f.StructField }} []{{ $f.Type }} `json:"{{ $f.Name }}"`
-			{{- else if eq $component "Select" }}
-				{{- if $f.Type.Nillable }}
-					{{ $f.StructField }} {{ $f.Type }} `json:"{{ $f.Name }}"`
-				{{- else }}
-					{{ $f.StructField }} []{{ $f.Type }} `json:"{{ $f.Name }}"`
-				{{- end }}
+			{{- if and $annotation $annotation.Edge }}
+				{{ $annotation.Edge.StructField }} []*struct { ID {{ $.ID.Type }} `json:"id" v:"required"` } `json:"{{ $annotation.Edge.Name }}"`
 			{{- else }}
-				{{ $f.StructField }} *{{ $f.Type }} `json:"{{ $f.Name }}"`
+				{{- $component := index $annotation.ViewSchema "x-component"  }}
+				{{- if or (eq $component "DatePicker") (eq $component "TimePicker") (eq $component "Checkbox.Group") }}
+					{{ $f.StructField }} []{{ $f.Type }} `json:"{{ $f.Name }}"`
+				{{- else if eq $component "Select" }}
+					{{- if $f.Type.Nillable }}
+						{{ $f.StructField }} {{ $f.Type }} `json:"{{ $f.Name }}"`
+					{{- else }}
+						{{ $f.StructField }} []{{ $f.Type }} `json:"{{ $f.Name }}"`
+					{{- end }}
+				{{- else }}
+					{{ $f.StructField }} *{{ $f.Type }} `json:"{{ $f.Name }}"`
+				{{- end }}
 			{{- end }}
 		{{- end }}
         {{- end }}
@@ -63,20 +71,24 @@ type (
 		{{- range $f := $.Fields }}
 		{{- $annotation := $f.Annotations.LiEnt }}
 		{{- if and $annotation $annotation.ViewSchema (not $annotation.DisableCreate) }}
-			{{- $tag := printf `json:"%s"` $f.Name }}{{ with $tags := $.Annotations.Fields.StructTag }}{{ with index $tags $f.Name }}{{ $tag = . }}{{ end }}{{ end }}
-            {{- if and $annotation $annotation.ValidateRule }}
-				{{- $tag = printf `%s v:"%s"` $tag $annotation.ValidateRule }}
-			{{- else if not $f.Optional }}
-				{{- $tag = printf `%s v:"required"` $tag }}
-			{{- end }}
-			{{- if $f.Optional }}
-				{{- if $f.Type.Nillable }}
-					{{ $f.StructField }} {{ $f.Type }} `{{ $tag }}`
-				{{- else }}
-					{{ $f.StructField }} *{{ $f.Type }} `{{ $tag }}`
-				{{- end }}
+			{{- if $annotation.Edge }}
+				{{ $annotation.Edge.StructField }} {{ if ne $f.Type.String $.ID.Type.String }}[]{{ end }}*struct { ID {{ $.ID.Type }} `json:"id" v:"required"` }`json:"{{ $annotation.Edge.Name }}"{{if not $f.Optional }} v:"required"{{ end }}`
 			{{- else }}
-				{{ $f.StructField }} {{ $f.Type }} `{{ $tag }}`
+				{{- $tag := printf `json:"%s"` $f.Name }}{{ with $tags := $.Annotations.Fields.StructTag }}{{ with index $tags $f.Name }}{{ $tag = . }}{{ end }}{{ end }}
+				{{- if $annotation.ValidateRule }}
+					{{- $tag = printf `%s v:"%s"` $tag $annotation.ValidateRule }}
+				{{- else if not $f.Optional }}
+					{{- $tag = printf `%s v:"required"` $tag }}
+				{{- end }}
+				{{- if $f.Optional }}
+					{{- if $f.Type.Nillable }}
+						{{ $f.StructField }} {{ $f.Type }} `{{ $tag }}`
+					{{- else }}
+						{{ $f.StructField }} *{{ $f.Type }} `{{ $tag }}`
+					{{- end }}
+				{{- else }}
+					{{ $f.StructField }} {{ $f.Type }} `{{ $tag }}`
+				{{- end }}
 			{{- end }}
 		{{- end }}
         {{- end }}
@@ -96,20 +108,24 @@ type (
 		{{- if not $f.Sensitive }}
 		{{- $annotation := $f.Annotations.LiEnt }}
 		{{- if and $annotation $annotation.ViewSchema (not $annotation.DisableUpdate) }}
-			{{- $tag := printf `json:"%s"` $f.Name }}
-            {{- if and $annotation $annotation.ValidateRule }}
-				{{- $tag = printf `%s v:"%s"` $tag $annotation.ValidateRule }}
-			{{- else if not $f.Optional }}
-				{{- $tag = printf `%s v:"required"` $tag }}
-			{{- end }}
-			{{- if $f.Optional }}
-				{{- if $f.Type.Nillable }}
-					{{ $f.StructField }} {{ $f.Type }} `{{ $tag }}`
-				{{- else }}
-					{{ $f.StructField }} *{{ $f.Type }} `{{ $tag }}`
-				{{- end }}
+			{{- if $annotation.Edge }}
+				{{ $annotation.Edge.StructField }} {{ if ne $f.Type.String $.ID.Type.String }}[]{{ end }}*struct { ID {{ $.ID.Type }} `json:"id" v:"required"` }`json:"{{ $annotation.Edge.Name }}"{{if not $f.Optional }} v:"required"{{ end }}`
 			{{- else }}
-				{{ $f.StructField }} {{ $f.Type }} `{{ $tag }}`
+				{{- $tag := printf `json:"%s"` $f.Name }}
+				{{- if $annotation.ValidateRule }}
+					{{- $tag = printf `%s v:"%s"` $tag $annotation.ValidateRule }}
+				{{- else if not $f.Optional }}
+					{{- $tag = printf `%s v:"required"` $tag }}
+				{{- end }}
+				{{- if $f.Optional }}
+					{{- if $f.Type.Nillable }}
+						{{ $f.StructField }} {{ $f.Type }} `{{ $tag }}`
+					{{- else }}
+						{{ $f.StructField }} *{{ $f.Type }} `{{ $tag }}`
+					{{- end }}
+				{{- else }}
+					{{ $f.StructField }} {{ $f.Type }} `{{ $tag }}`
+				{{- end }}
 			{{- end }}
 		{{- end }}
         {{- end }}
@@ -137,6 +153,10 @@ func NewI{{ $.Name }}(e *{{ $.Name }}) *I{{ $.Name }} {
 		ID: e.ID,
 		{{- range $f := $.Fields }}
 			{{ $f.StructField }}: e.{{ $f.StructField }},
+			{{- $annotation := $f.Annotations.LiEnt }}
+			{{- if and $annotation $annotation.Edge }}
+				{{ $annotation.Edge.StructField }}: NewI{{ $annotation.Edge.Type }}{{ if ne $f.Type.String $.ID.Type.String }}Array{{ end }}(e.Edges.{{ $annotation.Edge.StructField }}),
+			{{- end }}
 		{{- end }}
 		{{- range $e := $.Edges }}
 			{{ $e.StructField }}: NewI{{ $e.Type.Name }}{{ if not $e.Unique }}Array{{ end }}(e.Edges.{{ $e.StructField }}),
@@ -162,35 +182,57 @@ func List{{ $.Name }}Controller(ctx context.Context, req *List{{ $.Name }}Req) (
         {{- if not $f.Sensitive }}
 		{{- $annotation := $f.Annotations.LiEnt }}
 		{{- if and $annotation $annotation.ViewSchema $annotation.ColumnProps $annotation.ColumnProps.Filterable }}
-			{{- $component := index $annotation.ViewSchema "x-component"  }}
-			{{- if or (eq $component "DatePicker") (eq $component "TimePicker") }}
-				if len(req.Filter.{{ $f.StructField }}) == 2 {
-					q.Where({{ $.Package }}.{{ $f.StructField }}GTE(req.Filter.{{ $f.StructField }}[0]), {{ $.Package }}.{{ $f.StructField }}LTE(req.Filter.{{ $f.StructField }}[1]))
+			{{- if $annotation.Edge }}
+				if len(req.Filter.{{ $annotation.Edge.StructField }}) > 0 {
+					{{- if eq $f.Type.String $.ID.Type.String }}
+					q.Where({{ $.Package }}.{{ $f.StructField }}In(func() []{{ $.ID.Type }} {
+						ids := make([]{{ $.ID.Type }}, len(req.Filter.{{ $annotation.Edge.StructField }}))
+						for i, v := range req.Filter.{{ $annotation.Edge.StructField }} {
+							ids[i] = v.ID
+						}
+						return ids
+					}()...))
+					{{- else }}
+					q.Where(func(s *sql.Selector) {
+						ids := make([]{{ $.ID.Type }}, len(req.Filter.{{ $annotation.Edge.StructField }}))
+						for i, v := range req.Filter.{{ $annotation.Edge.StructField }} {
+							ids[i] = v.ID
+						}
+						s.Where(sqljson.ValueContains({{ $.Package }}.Field{{ $f.StructField }}, ids))
+					})
+					{{- end }}
 				}
-			{{- else if eq $component "Checkbox.Group" }}
-				if len(req.Filter.{{ $f.StructField }}) > 0 {
-					q.Where({{ $.Package }}.{{ $f.StructField }}In(req.Filter.{{ $f.StructField }}...))
-				}
-			{{- else if eq $component "Select" }}
-				{{- if $f.Type.Nillable }}
-					if len(req.Filter.{{ $f.StructField }}) > 0 {
-						q.Where(func(s *sql.Selector) {
-							s.Where(sqljson.ValueContains(user.Field{{ $f.StructField }}, req.Filter.{{ $f.StructField }}))
-						})
+			{{- else }}
+				{{- $component := index $annotation.ViewSchema "x-component"  }}
+				{{- if or (eq $component "DatePicker") (eq $component "TimePicker") }}
+					if len(req.Filter.{{ $f.StructField }}) == 2 {
+						q.Where({{ $.Package }}.{{ $f.StructField }}GTE(req.Filter.{{ $f.StructField }}[0]), {{ $.Package }}.{{ $f.StructField }}LTE(req.Filter.{{ $f.StructField }}[1]))
 					}
-				{{- else }}
+				{{- else if eq $component "Checkbox.Group" }}
 					if len(req.Filter.{{ $f.StructField }}) > 0 {
 						q.Where({{ $.Package }}.{{ $f.StructField }}In(req.Filter.{{ $f.StructField }}...))
 					}
+				{{- else if eq $component "Select" }}
+					{{- if $f.Type.Nillable }}
+						if len(req.Filter.{{ $f.StructField }}) > 0 {
+							q.Where(func(s *sql.Selector) {
+								s.Where(sqljson.ValueContains({{ $.Package }}.Field{{ $f.StructField }}, req.Filter.{{ $f.StructField }}))
+							})
+						}
+					{{- else }}
+						if len(req.Filter.{{ $f.StructField }}) > 0 {
+							q.Where({{ $.Package }}.{{ $f.StructField }}In(req.Filter.{{ $f.StructField }}...))
+						}
+					{{- end }}
+				{{- else if eq $f.Type.String "string" }}
+					if req.Filter.{{ $f.StructField }} != nil {
+						q.Where({{ $.Package }}.{{ $f.StructField }}ContainsFold(*req.Filter.{{ $f.StructField }}))
+					}
+				{{- else }}
+					if req.Filter.{{ $f.StructField }} != nil {
+						q.Where({{ $.Package }}.{{ $f.StructField }}EQ(*req.Filter.{{ $f.StructField }}))
+					}
 				{{- end }}
-			{{- else if eq $f.Type.String "string" }}
-				if req.Filter.{{ $f.StructField }} != nil {
-					q.Where({{ $.Package }}.{{ $f.StructField }}ContainsFold(*req.Filter.{{ $f.StructField }}))
-				}
-			{{- else }}
-				if req.Filter.{{ $f.StructField }} != nil {
-					q.Where({{ $.Package }}.{{ $f.StructField }}EQ(*req.Filter.{{ $f.StructField }}))
-				}
 			{{- end }}
 		{{- end }}
         {{- end }}
@@ -253,16 +295,32 @@ func Create{{ $.Name }}Controller(ctx context.Context, req *Create{{ $.Name }}Re
 	{{- range $f := $.Fields }}
 	{{- $annotation := $f.Annotations.LiEnt }}
 	{{- if and $annotation $annotation.ViewSchema (not $annotation.DisableCreate) }}
-		{{- if $f.Optional }}
-			if req.{{ $f.StructField }} != nil {
-				{{- if $f.Type.Nillable }}
-					b.Set{{ $f.StructField }}(req.{{ $f.StructField }})
+		{{- if $annotation.Edge }}
+			if req.{{ $annotation.Edge.StructField }} != nil {
+				{{- if eq $f.Type.String $.ID.Type.String }}
+					b.Set{{ $f.StructField }}(req.{{ $annotation.Edge.StructField }}.ID)
 				{{- else }}
-					b.Set{{ $f.StructField }}(*req.{{ $f.StructField }})
+					b.Set{{ $f.StructField }}(func() []{{ $.ID.Type }} {
+						ids := make([]{{ $.ID.Type }}, len(req.{{ $annotation.Edge.StructField }}))
+						for i, v := range req.{{ $annotation.Edge.StructField }} {
+							ids[i] = v.ID
+						}
+						return ids
+					}())
 				{{- end }}
-            }
+			}
 		{{- else }}
-			b.Set{{ $f.StructField }}(req.{{ $f.StructField }})
+			{{- if $f.Optional }}
+				if req.{{ $f.StructField }} != nil {
+					{{- if $f.Type.Nillable }}
+						b.Set{{ $f.StructField }}(req.{{ $f.StructField }})
+					{{- else }}
+						b.Set{{ $f.StructField }}(*req.{{ $f.StructField }})
+					{{- end }}
+				}
+			{{- else }}
+				b.Set{{ $f.StructField }}(req.{{ $f.StructField }})
+			{{- end }}
 		{{- end }}
 	{{- end }}
 	{{- end }}
@@ -301,6 +359,12 @@ func Create{{ $.Name }}Controller(ctx context.Context, req *Create{{ $.Name }}Re
 func Get{{ $.Name }}Controller(ctx context.Context, req *Get{{ $.Name }}Req) (res *I{{ $.Name }}, err error) {
 	ret, err := LiClient().{{ $.Name }}.
 		Query().
+		{{- range $f := $.Fields }}
+			{{- $annotation := $f.Annotations.LiEnt }}
+			{{- if and $annotation $annotation.Edge $annotation.ViewSchema }}
+				With{{ $annotation.Edge.StructField }}().
+			{{- end }}
+		{{- end }}
 		{{- range $e := $.Edges }}
 			{{- $annotation := $e.Annotations.LiEnt }}
 			{{- if and $annotation $annotation.ViewSchema }}
@@ -324,16 +388,32 @@ func Update{{ $.Name }}Controller(ctx context.Context, req *Update{{ $.Name }}Re
 	{{- if not $f.Sensitive }}
 	{{- $annotation := $f.Annotations.LiEnt }}
 	{{- if and $annotation $annotation.ViewSchema (not $annotation.DisableUpdate) }}
-		{{- if $f.Optional }}
-			if req.{{ $f.StructField }} != nil {
-				{{- if $f.Type.Nillable }}
-					b.Set{{ $f.StructField }}(req.{{ $f.StructField }})
+		{{- if $annotation.Edge }}
+			if req.{{ $annotation.Edge.StructField }} != nil {
+				{{- if eq $f.Type.String $.ID.Type.String }}
+					b.Set{{ $f.StructField }}(req.{{ $annotation.Edge.StructField }}.ID)
 				{{- else }}
-					b.Set{{ $f.StructField }}(*req.{{ $f.StructField }})
+					b.Set{{ $f.StructField }}(func() []{{ $.ID.Type }} {
+						ids := make([]{{ $.ID.Type }}, len(req.{{ $annotation.Edge.StructField }}))
+						for i, v := range req.{{ $annotation.Edge.StructField }} {
+							ids[i] = v.ID
+						}
+						return ids
+					}())
 				{{- end }}
-            }
+			}
 		{{- else }}
-			b.Set{{ $f.StructField }}(req.{{ $f.StructField }})
+			{{- if $f.Optional }}
+				if req.{{ $f.StructField }} != nil {
+					{{- if $f.Type.Nillable }}
+						b.Set{{ $f.StructField }}(req.{{ $f.StructField }})
+					{{- else }}
+						b.Set{{ $f.StructField }}(*req.{{ $f.StructField }})
+					{{- end }}
+				}
+			{{- else }}
+				b.Set{{ $f.StructField }}(req.{{ $f.StructField }})
+			{{- end }}
 		{{- end }}
 	{{- end }}
 	{{- end }}
