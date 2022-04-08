@@ -12,7 +12,6 @@ import { isValid, toArr } from "@formily/shared";
 import { connect, mapReadPretty, useField } from "@formily/react";
 import { debounce, unionBy } from "lodash";
 import { useRequest } from "pro-utils";
-import { isUrl } from "../__builtins__";
 
 type RecordSelectProps = Omit<SelectProps, "onChange" | "mode" | "value"> & {
   value?: Record<string, any> | Record<string, any>[];
@@ -51,7 +50,9 @@ export const BaseRecordSelect: React.FC<RecordSelectProps> = (props) => {
   });
   const debouncedSearch = useCallback(
     debounce((inputValue: string) => {
+      if (!inputValue.trim()) return;
       run({
+        limit: 20,
         ...searchConfig.variables,
         query: inputValue,
       });
@@ -63,6 +64,7 @@ export const BaseRecordSelect: React.FC<RecordSelectProps> = (props) => {
   return (
     <Select
       {...rest}
+      showSearch
       mode={multiple ? "multiple" : undefined}
       allowClear
       filterOption={false}
@@ -79,6 +81,12 @@ export const BaseRecordSelect: React.FC<RecordSelectProps> = (props) => {
           </div>
         ) : null
       }
+      onClick={() => {
+        if (options.length) return;
+        run({
+          limit: 20,
+        });
+      }}
       onSearch={debouncedSearch}
       renderFormat={(option) => {
         return options.find((v) => v[fieldNames.value] === option?.value)?.[
@@ -88,19 +96,15 @@ export const BaseRecordSelect: React.FC<RecordSelectProps> = (props) => {
       options={options.map((item: any) => {
         return {
           label: (
-            <List.Item key={item[fieldNames.value]}>
+            <List.Item key={item[fieldNames.value]} style={{ lineHeight: 1.2 }}>
               <List.Item.Meta
                 avatar={
                   fieldNames.avatar && item[fieldNames.avatar] ? (
                     <Avatar shape="square">
-                      {isUrl(item[fieldNames.avatar]) ? (
-                        <img
-                          src={item[fieldNames.avatar]}
-                          alt={item[fieldNames.title]}
-                        />
-                      ) : (
-                        item[fieldNames.avatar]
-                      )}
+                      <img
+                        src={item[fieldNames.avatar]}
+                        alt={item[fieldNames.title]}
+                      />
                     </Avatar>
                   ) : null
                 }
@@ -132,6 +136,8 @@ export const BaseRecordSelect: React.FC<RecordSelectProps> = (props) => {
             changed.includes(v[fieldNames.value])
           );
           onChange?.(values);
+        } else {
+          onChange?.(options.find((v: any) => v[fieldNames.value] === changed));
         }
       }}
     />
