@@ -1,5 +1,5 @@
-ariga.io/atlas v0.3.8-0.20220324144249-d5d77d7dadfa h1:v+ZNqhCtR0uylXshIfghFGHTvpJrxB+9iNjWQV2UXak=
-ariga.io/atlas v0.3.8-0.20220324144249-d5d77d7dadfa/go.mod h1:2aAhlHuY8tr7rPNz2MgOBTJB/cVjK0sv1VvTIqeYSws=
+ariga.io/atlas v0.3.8-0.20220408073907-ec24677b8189 h1:R8iwOEzgGDZtX9V96jtHId1fZL8sOyDtF3pdKt5uAQg=
+ariga.io/atlas v0.3.8-0.20220408073907-ec24677b8189/go.mod h1:2aAhlHuY8tr7rPNz2MgOBTJB/cVjK0sv1VvTIqeYSws=
 cloud.google.com/go v0.26.0/go.mod h1:aQUYkXzVsufM+DwF1aE+0xfcU+56JwCaLick0ClmMTw=
 cloud.google.com/go v0.34.0/go.mod h1:aQUYkXzVsufM+DwF1aE+0xfcU+56JwCaLick0ClmMTw=
 cloud.google.com/go v0.38.0/go.mod h1:990N+gfupTy94rShfmMCWGDn0LpTmnzTp2qbd1dvSRU=
@@ -48,8 +48,8 @@ cloud.google.com/go/storage v1.6.0/go.mod h1:N7U0C8pVQ/+NIKOBQyamJIeKQKkZ+mxpohl
 cloud.google.com/go/storage v1.8.0/go.mod h1:Wv1Oy7z6Yz3DshWRJFhqM/UCfaWIRTdp0RXyy7KQOVs=
 cloud.google.com/go/storage v1.10.0/go.mod h1:FLPqc6j+Ki4BU591ie1oL6qBQGu2Bl/tZ9ullr3+Kg0=
 dmitri.shuralyov.com/gpu/mtl v0.0.0-20190408044501-666a987793e9/go.mod h1:H6x//7gZCb22OMCxBHrMx7a5I7Hp++hsVxbQ4BYO7hU=
-entgo.io/ent v0.10.2-0.20220406111033-d92984f7440e h1:MQkLNoyELfpgnZsZO+iMPcKZ+VmdzMgNYmYzwVoXYCU=
-entgo.io/ent v0.10.2-0.20220406111033-d92984f7440e/go.mod h1:N5rSx938yoabKH4MHfkLQ7HQIqUJnqJaUUFXERXWE70=
+entgo.io/ent v0.10.2-0.20220408082730-6e4e4da89674 h1:YMUBe+itzJQhVTkrV3sRzoX7EwUVwQc5ZQ+oXxIsQIg=
+entgo.io/ent v0.10.2-0.20220408082730-6e4e4da89674/go.mod h1:sfR7TPLPIcanEN4JnRVKv8hK1mNVOoJYIQDkz7cEgt4=
 github.com/BurntSushi/toml v0.3.1/go.mod h1:xHWCNGjB5oqiDr8zfno3MHue2Ht5sIBksp03qcyfWMU=
 github.com/BurntSushi/toml v0.4.1 h1:GaI7EiDXDRfa8VshkTj7Fym7ha+y8/XxIgD2okUIjLw=
 github.com/BurntSushi/toml v0.4.1/go.mod h1:CxXYINrC8qIiEnFrOxCa7Jy5BFHlXnUU2pbicEuybxQ=

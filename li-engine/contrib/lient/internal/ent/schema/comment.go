@@ -48,9 +48,11 @@ func (Comment) Edges() []ent.Edge {
 			Unique().
 			Annotations(
 				lient.Annotation{
-					ViewSchema: node.RecordPicker("owner").
+					ViewSchema: node.RecordSelect("owner").
 						Title("评论者").
-						FieldNamesLabel("nickname").
+						FieldNamesTitle("nickname").
+						FieldNamesAvatar("avatar").
+						FieldNamesDescription("email").
 						Schema(),
 					ColumnProps: &lient.ColumnProps{
 						Filterable: true,
@@ -64,9 +66,9 @@ func (Comment) Edges() []ent.Edge {
 			Unique().
 			Annotations(
 				lient.Annotation{
-					ViewSchema: node.RecordPicker("post").
+					ViewSchema: node.RecordSelect("post").
 						Title("评论文章").
-						FieldNamesLabel("title").
+						FieldNamesTitle("title").
 						Schema(),
 					ColumnProps: &lient.ColumnProps{
 						Filterable: true,

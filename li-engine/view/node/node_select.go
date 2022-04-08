@@ -44,6 +44,7 @@ func (b *selectBuilder) Default(value interface{}) *selectBuilder {
 
 func (b *selectBuilder) Multiple() *selectBuilder {
 	b.schema.XComponentProps["mode"] = "multiple"
+	b.schema.Type = ui.SchemaTypeArray
 	return b
 }
 

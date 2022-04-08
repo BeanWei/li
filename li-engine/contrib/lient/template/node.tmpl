@@ -4,27 +4,51 @@
 {{- range $f := $.Fields }}
     {{- if $annotation := $f.Annotations.LiEnt }}
         {{- if $annotation.ViewSchema }}
-            {{- if $annotation.ViewSchema.title }}
-            const Node{{ $f.StructField }}Title = "{{ $annotation.ViewSchema.title }}"
-            {{- else }}
-            const Node{{ $f.StructField }}Title = "{{ title $f.StructField }}"
-            {{- end }}
-            func Node{{ $f.StructField }}() *node.NodeBuilder {
-                var schema *ui.Schema
-                if err := gconv.Struct({{ valast $annotation.ViewSchema }}, &schema); err != nil {
-                    panic(err)
-                }
-                if schema.Name == "" {
-                    schema.Name = "{{ if $annotation.ViewSchema.name }}{{ $annotation.ViewSchema.name }}{{ else }}{{ $f.Name }}{{ end }}"
-                }
-                if schema.Title == "" {
-                    schema.Title = Node{{ $f.StructField }}Title
-                }
-                {{- if not $f.Optional }}
-                schema.Required = true
+            {{- if $annotation.Edge }}
+                {{- if $annotation.ViewSchema.title }}
+                const Node{{ $annotation.Edge.StructField }}Title = "{{ $annotation.ViewSchema.title }}"
+                {{- else }}
+                const Node{{ $annotation.Edge.StructField }}Title = "{{ title $annotation.Edge.StructField }}"
                 {{- end }}
-                return node.Node(schema.Name).SetSchema(schema)
-            }
+                func Node{{ $annotation.Edge.StructField }}() *node.NodeBuilder {
+                    var schema *ui.Schema
+                    if err := gconv.Struct({{ replace (valast $annotation.ViewSchema) `"operation": ""` (printf `"operation": "@list%s"` $annotation.Edge.Type) }}, &schema); err != nil {
+                        panic(err)
+                    }
+                    if schema.Name == "" {
+                        schema.Name = "{{ if $annotation.ViewSchema.name }}{{ $annotation.ViewSchema.name }}{{ else }}{{ $annotation.Edge.Name }}{{ end }}"
+                    }
+                    if schema.Title == "" {
+                        schema.Title = Node{{ $annotation.Edge.StructField }}Title
+                    }
+                    {{- if not $f.Optional }}
+                    schema.Required = true
+                    {{- end }}
+                    return node.Node(schema.Name).SetSchema(schema)
+                }
+            {{- else }}
+                {{- if $annotation.ViewSchema.title }}
+                const Node{{ $f.StructField }}Title = "{{ $annotation.ViewSchema.title }}"
+                {{- else }}
+                const Node{{ $f.StructField }}Title = "{{ title $f.StructField }}"
+                {{- end }}
+                func Node{{ $f.StructField }}() *node.NodeBuilder {
+                    var schema *ui.Schema
+                    if err := gconv.Struct({{ valast $annotation.ViewSchema }}, &schema); err != nil {
+                        panic(err)
+                    }
+                    if schema.Name == "" {
+                        schema.Name = "{{ if $annotation.ViewSchema.name }}{{ $annotation.ViewSchema.name }}{{ else }}{{ $f.Name }}{{ end }}"
+                    }
+                    if schema.Title == "" {
+                        schema.Title = Node{{ $f.StructField }}Title
+                    }
+                    {{- if not $f.Optional }}
+                    schema.Required = true
+                    {{- end }}
+                    return node.Node(schema.Name).SetSchema(schema)
+                }
+            {{- end }}
         {{- end }}
     {{- end }}
 {{- end }}
@@ -38,7 +62,7 @@
             {{- end }}
             func Node{{ $e.StructField }}() *node.NodeBuilder {
                 var schema *ui.Schema
-                if err := gconv.Struct({{ valast $annotation.ViewSchema }}, &schema); err != nil {
+                if err := gconv.Struct({{ replace (valast $annotation.ViewSchema) `"operation": ""` (printf `"operation": "@list%s"` $e.Type.Name) }}, &schema); err != nil {
                     panic(err)
                 }
                 if schema.Name == "" {

@@ -1,6 +1,8 @@
 {{/* gotype: entgo.io/ent/entc/gen.Type */}}
 
 {{ define "model/additional/lient-controller" }}
+{{ $strFields := list }}
+{{ $sortFields := list }}
 type (
 	I{{ $.Name }} struct {
 		ID {{ $.ID.Type }} {{ with $.Annotations.Fields.StructTag.id }}`{{ . }}`{{ else }}`{{ $.ID.StructTag }}`{{ end }}
@@ -19,12 +21,16 @@ type (
 	List{{ $.Name }}Req struct {
 		Page int `json:"page" d:"1" v:"min:1"`
 		Limit int `json:"limit" d:"20" v:"min:1|max:500"`
+		Query string `json:"query"`
 		Filter *List{{ $.Name }}Filter `json:"filter"`
 		Sorter *List{{ $.Name }}Sorter `json:"sorter"`
 	}
 	List{{ $.Name }}Filter struct {
 		{{- range $f := $.Fields }}
         {{- if not $f.Sensitive }}
+		{{- if eq $f.Type.String "string" }}
+			{{- $strFields = append $strFields $f.StructField }}
+		{{- end }}
 		{{- $annotation := $f.Annotations.LiEnt }}
 		{{- if and $annotation $annotation.ViewSchema $annotation.ColumnProps $annotation.ColumnProps.Filterable }}
 			{{- if and $annotation $annotation.Edge }}
@@ -59,6 +65,7 @@ type (
 		{{- $annotation := $f.Annotations.LiEnt }}
 		{{- if and $annotation $annotation.ViewSchema $annotation.ColumnProps $annotation.ColumnProps.Sortable }}
 			{{ $f.StructField }} int `json:"{{ $f.Name }}"`
+			{{- $sortFields = append $sortFields $f.StructField }}
 		{{- end }}
         {{- end }}
         {{- end }}
@@ -177,6 +184,15 @@ func NewI{{ $.Name }}Array(es []*{{ $.Name }}) []*I{{ $.Name }} {
 
 func List{{ $.Name }}Controller(ctx context.Context, req *List{{ $.Name }}Req) (res *List{{ $.Name }}Res, err error) {
 	q := LiClient().{{ $.Name }}.Query()
+	{{- if ne (len $strFields) 0 }}
+	if req.Query != "" {
+		q.Where({{ $.Package }}.Or(
+		{{- range $sf := $strFields }}
+			{{ $.Package }}.{{ $sf }}ContainsFold(req.Query),
+		{{- end }}
+		))
+	}
+	{{- end }}
 	if req.Filter != nil {
 		{{- range $f := $.Fields }}
         {{- if not $f.Sensitive }}
@@ -262,6 +278,7 @@ func List{{ $.Name }}Controller(ctx context.Context, req *List{{ $.Name }}Req) (
 		{{- end }}
 		{{- end }}
 	}
+	{{- if ne (len $sortFields) 0 }}
 	if req.Sorter != nil {
 		{{- range $f := $.Fields }}
         {{- if not $f.Sensitive }}
@@ -277,6 +294,7 @@ func List{{ $.Name }}Controller(ctx context.Context, req *List{{ $.Name }}Req) (
         {{- end }}
         {{- end }}
 	}
+	{{- end }}
 	res = &List{{ $.Name }}Res{}
 	res.Total, err = q.Count(ctx)
 	if err != nil {
@@ -290,7 +308,7 @@ func List{{ $.Name }}Controller(ctx context.Context, req *List{{ $.Name }}Req) (
 	return res, nil
 }
 
-func Create{{ $.Name }}Controller(ctx context.Context, req *Create{{ $.Name }}Req) (res *I{{ $.Name }}, err error) {
+func Create{{ $.Name }}Controller(ctx context.Context, req *Create{{ $.Name }}Req) (err error) {
 	b := LiClient().{{ $.Name }}.Create()
 	{{- range $f := $.Fields }}
 	{{- $annotation := $f.Annotations.LiEnt }}
@@ -346,14 +364,14 @@ func Create{{ $.Name }}Controller(ctx context.Context, req *Create{{ $.Name }}Re
 		{{- end }}
 	{{- end }}
 	{{- end }}
-	ret, err := b.Save(ctx)
+	err = b.Exec(ctx)
 	if err != nil {
 		if IsConstraintError(err) {
-			return nil, gerror.WrapCode(gcode.CodeOperationFailed, err)
+			return gerror.WrapCode(gcode.CodeOperationFailed, err)
 		}
-		return nil, gerror.WrapCode(gcode.CodeDbOperationError, err)
+		return gerror.WrapCode(gcode.CodeDbOperationError, err)
 	}
-	return NewI{{ $.Name }}(ret), nil
+	return
 }
 
 func Get{{ $.Name }}Controller(ctx context.Context, req *Get{{ $.Name }}Req) (res *I{{ $.Name }}, err error) {
@@ -382,7 +400,7 @@ func Get{{ $.Name }}Controller(ctx context.Context, req *Get{{ $.Name }}Req) (re
 	return NewI{{ $.Name }}(ret), nil
 }
 
-func Update{{ $.Name }}Controller(ctx context.Context, req *Update{{ $.Name }}Req) (res *I{{ $.Name }}, err error) {
+func Update{{ $.Name }}Controller(ctx context.Context, req *Update{{ $.Name }}Req) (err error) {
 	b := LiClient().{{ $.Name }}.UpdateOneID(req.ID)
 	{{- range $f := $.Fields }}
 	{{- if not $f.Sensitive }}
@@ -440,16 +458,16 @@ func Update{{ $.Name }}Controller(ctx context.Context, req *Update{{ $.Name }}Re
 		{{- end }}
 	{{- end }}
 	{{- end }}
-	ret, err := b.Save(ctx)
+	err = b.Exec(ctx)
 	if err != nil {
 		if IsNotFound(err) {
-			return nil, gerror.WrapCode(gcode.CodeNotFound, err)
+			return gerror.WrapCode(gcode.CodeNotFound, err)
 		} else if IsConstraintError(err) {
-			return nil, gerror.WrapCode(gcode.CodeOperationFailed, err)
+			return gerror.WrapCode(gcode.CodeOperationFailed, err)
 		}
-		return nil, gerror.WrapCode(gcode.CodeDbOperationError, err)
+		return gerror.WrapCode(gcode.CodeDbOperationError, err)
 	}
-	return NewI{{ $.Name }}(ret), nil
+	return
 }
 
 func Delete{{ $.Name }}Controller(ctx context.Context, req *Delete{{ $.Name }}Req) (err error) {

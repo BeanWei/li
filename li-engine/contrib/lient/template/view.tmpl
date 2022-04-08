@@ -6,7 +6,11 @@ func Create{{ $.Name }}FormView() view.Node {
 		{{- range $f := $.Fields }}
 			{{- if $annotation := $f.Annotations.LiEnt }}
 				{{- if and $annotation.ViewSchema (not $annotation.DisableCreate) }}
+					{{- if $annotation.Edge }}
+					{{ $.Package }}.Node{{ $annotation.Edge.StructField }}().SetAC({{ $.Package }}ViewACL["create:{{ $annotation.Edge.Name }}"]){{- if contains $annotation.ValidateRule "required" }}.SetRequired(true){{- end }},
+					{{- else }}
 					{{ $.Package }}.Node{{ $f.StructField }}().SetAC({{ $.Package }}ViewACL["create:{{ $f.Name }}"]){{- if contains $annotation.ValidateRule "required" }}.SetRequired(true){{- end }},
+					{{- end }}
 				{{- end }}
 			{{- end }}
 		{{- end }}
@@ -38,7 +42,11 @@ func Read{{ $.Name }}FormView() view.Node {
 		{{- range $f := $.Fields }}
 			{{- if $annotation := $f.Annotations.LiEnt }}
 				{{- if and $annotation.ViewSchema (not $annotation.DisableRead) }}
+					{{- if $annotation.Edge }}
+					{{ $.Package }}.Node{{ $annotation.Edge.StructField }}().SetAC({{ $.Package }}ViewACL["read:{{ $annotation.Edge.Name }}"]),
+					{{- else }}
 					{{ $.Package }}.Node{{ $f.StructField }}().SetAC({{ $.Package }}ViewACL["read:{{ $f.Name }}"]),
+					{{- end }}
 				{{- end }}
 			{{- end }}
 		{{- end }}
@@ -46,13 +54,7 @@ func Read{{ $.Name }}FormView() view.Node {
 			{{- if $annotation := $e.Annotations.LiEnt }}
 				{{- if and $annotation.ViewSchema (not $annotation.DisableRead) }}
 					{{ $.Package }}.Node{{ $e.StructField }}().
-						SetAC({{ $.Package }}ViewACL["read:{{ $e.Name }}"]).
-						Children(
-							node.RecordPickerRecordFormDrawer("item").
-								ForInit("@get{{ $e.Type.Name }}", Get{{ $e.Type.Name }}Controller).
-								Body(Read{{ $e.Type.Name }}FormView()).
-								Footer(node.ActionFormDrawerCancel("cancel")),
-						),
+						SetAC({{ $.Package }}ViewACL["read:{{ $e.Name }}"]),
 				{{- end }}
 			{{- end }}
 		{{- end }}
@@ -64,7 +66,11 @@ func Update{{ $.Name }}FormView() view.Node {
 		{{- range $f := $.Fields }}
 			{{- if $annotation := $f.Annotations.LiEnt }}
 				{{- if and $annotation.ViewSchema (not $annotation.DisableUpdate) }}
+					{{- if $annotation.Edge }}
+					{{ $.Package }}.Node{{ $annotation.Edge.StructField }}().SetAC({{ $.Package }}ViewACL["update:{{ $annotation.Edge.Name }}"]){{- if contains $annotation.ValidateRule "required" }}.SetRequired(true){{- end }},
+					{{- else }}
 					{{ $.Package }}.Node{{ $f.StructField }}().SetAC({{ $.Package }}ViewACL["update:{{ $f.Name }}"]){{- if contains $annotation.ValidateRule "required" }}.SetRequired(true){{- end }},
+					{{- end }}
 				{{- end }}
 			{{- end }}
 		{{- end }}
@@ -72,19 +78,10 @@ func Update{{ $.Name }}FormView() view.Node {
 			{{- if $annotation := $e.Annotations.LiEnt }}
 				{{- if and $annotation.ViewSchema (not $annotation.DisableUpdate) }}
 					{{ $.Package }}.Node{{ $e.StructField }}().
-						SetAC({{ $.Package }}ViewACL["update:{{ $e.Name }}"]).
 						{{ if not $e.Optional }}
 						SetRequired(true).
 						{{ end }}
-						Children(
-							node.List("options").
-								ForInit("@list{{ $e.Type.Name }}", List{{ $e.Type.Name }}Controller).
-								EnableLightFilter().
-								SelectionMultiple({{ if $e.Unique }}false{{ else }}true{{ end }}).
-								Children(
-									node.ListTable("{{ $.Package }}ListTable").Columns(List{{ $e.Type.Name }}TableColumns()...),
-								),
-						),
+						SetAC({{ $.Package }}ViewACL["update:{{ $e.Name }}"]),
 				{{- end }}
 			{{- end }}
 		{{- end }}
@@ -97,6 +94,18 @@ func List{{ $.Name }}TableColumns() []view.Node {
 			{{- if not $f.Sensitive }}
 			{{- if $annotation := $f.Annotations.LiEnt }}
 				{{- if and $annotation.ViewSchema (not $annotation.DisableRead) (not (isNil $annotation.ColumnProps)) }}
+					{{- if $annotation.Edge }}
+					node.ListTableColumn("column{{ $i }}").
+						Title({{ $.Package }}.Node{{ $annotation.Edge.StructField }}Title).
+						AC({{ $.Package }}ViewACL["read:{{ $annotation.Edge.Name }}"]).
+						DataIndex("{{ $annotation.Edge.Name }}").
+						{{- if $annotation.ColumnProps.Align }}Align("{{ $annotation.ColumnProps.Align }}").{{- end }}
+						{{- if $annotation.ColumnProps.Ellipsis }}Ellipsis(true).{{- end }}
+						{{- if $annotation.ColumnProps.Width }}Width({{ $annotation.ColumnProps.Width }}).{{- end }}
+						{{- if $annotation.ColumnProps.Filterable }}Filterable(true).{{- end }}
+						{{- if $annotation.ColumnProps.Sortable }}Sortable(true).{{- end }}
+						Render({{ $.Package }}.Node{{ $annotation.Edge.StructField }}()),
+					{{- else }}
 					node.ListTableColumn("column{{ $i }}").
 						Title({{ $.Package }}.Node{{ $f.StructField }}Title).
 						AC({{ $.Package }}ViewACL["read:{{ $f.Name }}"]).
@@ -107,6 +116,7 @@ func List{{ $.Name }}TableColumns() []view.Node {
 						{{- if $annotation.ColumnProps.Filterable }}Filterable(true).{{- end }}
 						{{- if $annotation.ColumnProps.Sortable }}Sortable(true).{{- end }}
 						Render({{ $.Package }}.Node{{ $f.StructField }}()),
+					{{- end }}
 				{{- end }}
 			{{- end }}
 			{{- end }}
@@ -124,21 +134,7 @@ func List{{ $.Name }}TableColumns() []view.Node {
 						{{- if $annotation.ColumnProps.Filterable }}Filterable(true).{{- end }}
 						{{- if $annotation.ColumnProps.Sortable }}Sortable(true).{{- end }}
 						Render(
-							{{ $.Package }}.Node{{ $e.StructField }}().
-								SetAC({{ $.Package }}ViewACL["read:{{ $e.Name }}"]).
-								Children(
-									node.List("options").
-										ForInit("@list{{ $e.Type.Name }}", List{{ $e.Type.Name }}Controller).
-										EnableLightFilter().
-										SelectionMultiple({{ if $e.Unique }}false{{ else }}true{{ end }}).
-										Children(
-											node.ListTable("{{ $.Package }}ListTable").Columns(List{{ $e.Type.Name }}TableColumns()...),
-										),
-									node.RecordPickerRecordFormDrawer("item").
-										ForInit("@get{{ $e.Type.Name }}", Get{{ $e.Type.Name }}Controller).
-										Body(Read{{ $e.Type.Name }}FormView()).
-										Footer(node.ActionFormDrawerCancel("cancel")),
-								),
+							{{ $.Package }}.Node{{ $e.StructField }}().SetAC({{ $.Package }}ViewACL["read:{{ $e.Name }}"]),
 						),
 				{{- end }}
 			{{- end }}
