@@ -9,6 +9,7 @@ import {
 import {
   Select as ArcoSelect,
   SelectProps as ArcoSelectProps,
+  Space,
   Tag,
 } from "@arco-design/web-react";
 import { IconLoading } from "@arco-design/web-react/icon";
@@ -80,13 +81,13 @@ const ReadPretty = observer((props: any) => {
   const dataSource = field.dataSource || props.options || [];
   const options = getCurrentOptions(field.value, dataSource);
   return (
-    <div>
+    <Space wrap>
       {options.map((option: any, key: any) => (
         <Tag key={key} color={option.color}>
           {option.label}
         </Tag>
       ))}
-    </div>
+    </Space>
   );
 });
 

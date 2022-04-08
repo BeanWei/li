@@ -46,6 +46,7 @@ import { ListContext, ListContextProps } from "./context";
 import { getLocale, useCollapseGrid } from "../__builtins__";
 import FormGrid from "../form-grid";
 import FormButtonGroup from "../form-button-group";
+import { BaseRecordSelect } from "../record-select";
 
 type FilterConfig = Pick<
   ColumnProps,
@@ -103,18 +104,15 @@ const getLightFilterConfig = (schema: Schema): FilterConfig => {
             />
           );
           break;
-        case "RecordPicker":
+        case "RecordSelect":
           // toJson 复制一份出来，防止污染原 schema
           const schema_ = schema.toJSON(true);
-          schema_["x-component-props"] = {
-            ...schema_["x-component-props"],
-            multiple: true,
-          };
           filterNode = (
-            <SchemaFormField
-              name={schema.name as string}
-              schema={schema_}
+            <BaseRecordSelect
+              {...schema_["x-component-props"]}
+              multiple
               value={filterKeys}
+              // @ts-ignore
               onChange={(values) => setFilterKeys?.(values)}
             />
           );
@@ -327,17 +325,13 @@ const FilterForm: React.FC<{
                 filterNode = <TimePicker.RangePicker allowClear />;
                 span = 2;
                 break;
-              case "RecordPicker":
+              case "RecordSelect":
                 // toJson 复制一份出来，防止污染原 schema
                 const schema_ = schema.toJSON(true);
-                schema_["x-component-props"] = {
-                  ...schema_["x-component-props"],
-                  multiple: true,
-                };
                 filterNode = (
-                  <SchemaFormField
-                    name={schema.name as string}
-                    schema={schema_}
+                  <BaseRecordSelect
+                    {...schema_["x-component-props"]}
+                    multiple
                   />
                 );
                 break;

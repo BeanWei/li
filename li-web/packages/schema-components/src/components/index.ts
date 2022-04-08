@@ -25,7 +25,7 @@ export * from "./menu";
 export * from "./money";
 export * from "./password";
 export * from "./radio";
-export * from "./record-picker";
+export * from "./record-select";
 export * from "./reset";
 export * from "./select";
 export * from "./space";
