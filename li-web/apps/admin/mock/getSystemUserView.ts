@@ -30,7 +30,7 @@ export default {
           type: "void",
           "x-component": "Grid.Col",
           "x-component-props": {
-            span: 16,
+            span: 24,
           },
           properties: {
             userlist: {
@@ -366,7 +366,7 @@ export default {
           type: "void",
           "x-component": "Grid.Col",
           "x-component-props": {
-            span: 8,
+            span: 12,
           },
           properties: {
             card1: {
@@ -385,6 +385,41 @@ export default {
                       },
                     },
                     "x-component": "Chart.Line",
+                    "x-component-props": {
+                      meta: [
+                        { id: "ds", name: "日期", isDim: true },
+                        { id: "uv", name: "访客数" },
+                      ],
+                    },
+                  },
+                },
+              },
+            },
+          },
+        },
+        col3: {
+          type: "void",
+          "x-component": "Grid.Col",
+          "x-component-props": {
+            span: 12,
+          },
+          properties: {
+            card1: {
+              type: "void",
+              "x-component": "Chart",
+              items: {
+                type: "void",
+                properties: {
+                  chart1: {
+                    type: "void",
+                    title: "UV & PV",
+                    "x-decorator": "ChartItem",
+                    "x-decorator-props": {
+                      request: {
+                        operation: "getUv",
+                      },
+                    },
+                    "x-component": "Chart.Column",
                     "x-component-props": {
                       meta: [
                         { id: "ds", name: "日期", isDim: true },
