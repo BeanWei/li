@@ -5,6 +5,7 @@ export * from "./array-table";
 export * from "./avatar";
 export * from "./card-item";
 export * from "./cascader";
+export * from "./chart";
 export * from "./checkbox";
 export * from "./color-select";
 export * from "./date-picker";

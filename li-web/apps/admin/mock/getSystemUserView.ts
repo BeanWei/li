@@ -371,11 +371,29 @@ export default {
           properties: {
             card1: {
               type: "void",
-              "x-component": "CardItem",
-              "x-component-props": {
-                title: "Li Card 2",
+              "x-component": "Chart",
+              items: {
+                type: "void",
+                properties: {
+                  chart1: {
+                    type: "void",
+                    title: "UV",
+                    "x-decorator": "ChartItem",
+                    "x-decorator-props": {
+                      request: {
+                        operation: "getUv",
+                      },
+                    },
+                    "x-component": "Chart.Line",
+                    "x-component-props": {
+                      meta: [
+                        { id: "ds", name: "日期", isDim: true },
+                        { id: "uv", name: "访客数" },
+                      ],
+                    },
+                  },
+                },
               },
-              "x-content": "Li Card Content 2",
             },
           },
         },

@@ -2,6 +2,7 @@ import { MockMethod } from "vite-plugin-mock";
 import getAppConfig from "./getAppConfig";
 import getCurrentUser from "./getCurrentUser";
 import getSystemUserView from "./getSystemUserView";
+import getUv from "./getUv";
 import getWelcomeView from "./getWelcomeView";
 import listUser from "./listUser";
 
@@ -50,6 +51,12 @@ export default [
         return {
           code: 0,
           data: listUser[parseInt(variables["id"]) - 1],
+        };
+      }
+      if (operation == "getUv") {
+        return {
+          code: 0,
+          data: getUv,
         };
       }
       return {

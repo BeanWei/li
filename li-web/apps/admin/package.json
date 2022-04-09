@@ -13,7 +13,6 @@
     "@arco-design/web-react": "^2.30.0",
     "@arco-plugins/vite-react": "^1.0.5",
     "@arco-themes/react-arco-pro": "^0.0.7",
-    "@emotion/css": "^11.7.1",
     "@formily/core": "2.0.13",
     "@formily/json-schema": "2.0.13",
     "@formily/react": "2.0.13",
