@@ -14,11 +14,12 @@ import { ChartItemContext } from "./context";
 import { IRequest } from "./types";
 
 export type ChartItemProps = CardProps & {
+  subTitle?: string;
   request?: IRequest;
 };
 
 export const ChartItem = connect((props: ChartItemProps) => {
-  const { request, title, ...rest } = props;
+  const { request, title, subTitle, ...rest } = props;
   const fieldSchema = useFieldSchema();
   const ref = useRef();
 
@@ -47,9 +48,27 @@ export const ChartItem = connect((props: ChartItemProps) => {
           style={{ marginBottom: 16 }}
         >
           <Grid.Col flex="auto">
-            <Typography.Title heading={6} style={{ marginBottom: 0 }}>
+            <Typography.Paragraph
+              style={{
+                marginBottom: 0,
+                fontSize: 16,
+                fontWeight: 500,
+              }}
+            >
               {title || fieldSchema.title}
-            </Typography.Title>
+              {subTitle && (
+                <span
+                  style={{
+                    fontSize: 12,
+                    fontWeight: 400,
+                    marginLeft: 4,
+                    color: "var(--color-text-3)",
+                  }}
+                >
+                  {subTitle}
+                </span>
+              )}
+            </Typography.Paragraph>
           </Grid.Col>
           <Grid.Col flex="60px">
             <Space size={8}>

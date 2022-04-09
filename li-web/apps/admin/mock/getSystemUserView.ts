@@ -412,9 +412,10 @@ export default {
                 properties: {
                   chart1: {
                     type: "void",
-                    title: "UV & PV",
                     "x-decorator": "ChartItem",
                     "x-decorator-props": {
+                      title: "UV & PV",
+                      subTitle: "(最近1周数据)",
                       request: {
                         operation: "getUv",
                       },
