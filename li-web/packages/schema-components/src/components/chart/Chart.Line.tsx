@@ -169,7 +169,6 @@ export const Line: React.FC<LineProps | AreaProps | DualAxesProps> = ({
     return (
       <Area
         {...(config as AreaConfig)}
-        renderer="svg"
         {...(props as Omit<
           AreaConfig,
           keyof ICommonProps | "yField" | "xField" | "seriesField"
@@ -183,7 +182,6 @@ export const Line: React.FC<LineProps | AreaProps | DualAxesProps> = ({
     return (
       <DualAxes
         {...(config as DualAxesConfig)}
-        renderer="svg"
         {...(props as Omit<
           DualAxesConfig,
           keyof ICommonProps | "yField" | "xField" | "seriesField"
@@ -196,7 +194,6 @@ export const Line: React.FC<LineProps | AreaProps | DualAxesProps> = ({
   return (
     <ACLine
       {...(config as LineConfig)}
-      renderer="svg"
       {...(props as Omit<
         LineConfig,
         keyof ICommonProps | "yField" | "xField" | "seriesField"
@@ -211,6 +208,7 @@ export const ChartLine = connect(
     return (
       <Line
         {...props}
+        chartRef={(plot) => ctx.setChartRef?.(plot)}
         loading={ctx.loading}
         data={ctx.data.length ? ctx.data : props.data}
       />
