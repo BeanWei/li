@@ -1,20 +1,20 @@
 import React from "react";
-import { RecursionField, useFieldSchema } from "@formily/react";
+import { Card, CardProps } from "@arco-design/web-react";
 import ChartLine from "./Chart.Line";
 import ChartColumn from "./Chart.Column";
 import ChartPie from "./Chart.Pie";
 
-export type ComposedChart = React.FC & {
+export type ComposedChart = React.FC<CardProps> & {
   Line?: React.FC<any>;
   Column?: React.FC<any>;
   Pie?: React.FC<any>;
 };
 
 export const Chart: ComposedChart = (props) => {
-  const fieldSchema = useFieldSchema();
-
   return (
-    <RecursionField schema={fieldSchema["items"] as any} onlyRenderProperties />
+    <Card {...props} bodyStyle={{ ...props.bodyStyle, padding: 0 }}>
+      {props.children}
+    </Card>
   );
 };
 
