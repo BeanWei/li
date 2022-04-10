@@ -3,7 +3,7 @@ import { Bar, Column as ACColumn, ColumnConfig } from "@ant-design/plots";
 import { connect } from "@formily/react";
 import { ChartItemContext } from "./context";
 import { ICommonProps, IDataItem, IMetaItem } from "./types";
-import { splitMeta, strip } from "./utils";
+import { splitMeta } from "./utils";
 
 export type ColumnProps = Omit<
   ColumnConfig,
@@ -109,7 +109,6 @@ const Column: React.FC<ColumnProps> = ({
 }) => {
   if (inverted) {
     const { xField, yField, ...otherConfig } = generateConfig(meta, data);
-
     // 条形图 x、y 互换
     return <Bar xField={yField} yField={xField} {...otherConfig} {...props} />;
   } else {

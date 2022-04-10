@@ -2,10 +2,12 @@ import React from "react";
 import { RecursionField, useFieldSchema } from "@formily/react";
 import ChartLine from "./Chart.Line";
 import ChartColumn from "./Chart.Column";
+import ChartPie from "./Chart.Pie";
 
 export type ComposedChart = React.FC & {
   Line?: React.FC<any>;
   Column?: React.FC<any>;
+  Pie?: React.FC<any>;
 };
 
 export const Chart: ComposedChart = (props) => {
@@ -18,5 +20,6 @@ export const Chart: ComposedChart = (props) => {
 
 Chart.Column = ChartColumn;
 Chart.Line = ChartLine;
+Chart.Pie = ChartPie;
 
 export default Chart;

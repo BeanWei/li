@@ -239,8 +239,6 @@ const FilterForm: React.FC<{
       <FormButtonGroup
         align="right"
         style={{
-          // TODO: 完善布局
-          // marginTop: 30,
           marginBottom: 16,
           width: "100%",
           justifyContent: "end",
@@ -371,7 +369,11 @@ const FilterForm: React.FC<{
           })}
           <FormGrid.GridColumn
             gridSpan={-1}
-            style={{ display: "flex", justifyContent: "space-end" }}
+            style={{
+              display: "flex",
+              justifyContent: "space-end",
+              alignItems: "flex-end",
+            }}
           >
             {renderButtonGroup()}
           </FormGrid.GridColumn>
