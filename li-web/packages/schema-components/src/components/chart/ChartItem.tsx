@@ -16,10 +16,18 @@ export type ChartItemProps = CardProps & {
   subTitle?: string;
   forInit?: string;
   forInitVariables?: Record<string, any>;
+  gridSpan?: number;
 };
 
 export const ChartItem = connect((props: ChartItemProps) => {
-  const { forInit = "", forInitVariables, title, subTitle, ...rest } = props;
+  const {
+    forInit = "",
+    forInitVariables,
+    title,
+    subTitle,
+    gridSpan,
+    ...rest
+  } = props;
   const fieldSchema = useFieldSchema();
   const ref = useRef();
 
@@ -41,7 +49,7 @@ export const ChartItem = connect((props: ChartItemProps) => {
         },
       }}
     >
-      <Card {...rest}>
+      <Card {...rest} data-grid-span={gridSpan}>
         <Grid.Row
           justify="space-between"
           align="center"

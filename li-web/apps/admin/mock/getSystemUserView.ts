@@ -372,6 +372,9 @@ export default {
             chart: {
               type: "void",
               "x-component": "Chart",
+              "x-component-props": {
+                maxColumns: 2,
+              },
               properties: {
                 chart1: {
                   type: "void",
@@ -411,6 +414,7 @@ export default {
                     title: "UV & PV",
                     subTitle: "(最近1周数据)",
                     forInit: "getUv",
+                    gridSpan: 2,
                   },
                   "x-component": "Chart.Pie",
                   "x-component-props": {
