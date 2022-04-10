@@ -11,15 +11,15 @@ import {
 import { IconDownload, IconRefresh } from "@arco-design/web-react/icon";
 import { useRequest } from "pro-utils";
 import { ChartItemContext } from "./context";
-import { IRequest } from "./types";
 
 export type ChartItemProps = CardProps & {
   subTitle?: string;
-  request?: IRequest;
+  forInit?: string;
+  forInitVariables?: Record<string, any>;
 };
 
 export const ChartItem = connect((props: ChartItemProps) => {
-  const { request, title, subTitle, ...rest } = props;
+  const { forInit = "", forInitVariables, title, subTitle, ...rest } = props;
   const fieldSchema = useFieldSchema();
   const ref = useRef();
 
@@ -27,8 +27,8 @@ export const ChartItem = connect((props: ChartItemProps) => {
     data = [],
     loading,
     run,
-  } = useRequest(request?.operation || "", request?.variables, {
-    refreshDeps: [request],
+  } = useRequest(forInit, forInitVariables, {
+    refreshDeps: [forInitVariables],
   });
 
   return (

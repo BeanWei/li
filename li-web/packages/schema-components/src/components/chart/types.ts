@@ -26,11 +26,6 @@ export interface IDataItem {
   [k: string]: number | string;
 }
 
-export interface IRequest {
-  operation: string;
-  variables?: Record<string, any>;
-}
-
 export interface ICommonProps {
   /**
    * 最外层的 style

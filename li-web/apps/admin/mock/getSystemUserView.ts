@@ -380,9 +380,7 @@ export default {
                     title: "UV",
                     "x-decorator": "ChartItem",
                     "x-decorator-props": {
-                      request: {
-                        operation: "getUv",
-                      },
+                      forInit: "getUv",
                     },
                     "x-component": "Chart.Line",
                     "x-component-props": {
@@ -416,9 +414,7 @@ export default {
                     "x-decorator-props": {
                       title: "UV & PV",
                       subTitle: "(最近1周数据)",
-                      request: {
-                        operation: "getUv",
-                      },
+                      forInit: "getUv",
                     },
                     "x-component": "Chart.Column",
                     "x-component-props": {
@@ -452,9 +448,7 @@ export default {
                     "x-decorator-props": {
                       title: "UV & PV",
                       subTitle: "(最近1周数据)",
-                      request: {
-                        operation: "getUv",
-                      },
+                      forInit: "getUv",
                     },
                     "x-component": "Chart.Pie",
                     "x-component-props": {
