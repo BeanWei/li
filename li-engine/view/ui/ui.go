@@ -69,8 +69,9 @@ const (
 )
 
 const (
-	DecoratorFormItem = "FormItem"
-	DecoratorCardItem = "CardItem"
+	DecoratorFormItem  = "FormItem"
+	DecoratorCardItem  = "CardItem"
+	DecoratorChartItem = "ChartItem"
 )
 
 const (
@@ -98,6 +99,10 @@ const (
 	ComponentArrayTableIndex            = "ArrayTable.Index"
 	ComponentAvatar                     = "Avatar"
 	ComponentCascader                   = "Cascader"
+	ComponentChart                      = "Chart"
+	ComponentChartColumn                = "Chart.Column"
+	ComponentChartLine                  = "Chart.Line"
+	ComponentChartPie                   = "Chart.Pie"
 	ComponentCheckbox                   = "Checkbox"
 	ComponentCheckboxGroup              = "Checkbox.Group"
 	ComponentColorSelect                = "ColorSelect"
