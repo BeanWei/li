@@ -19,11 +19,13 @@ type (
 		Edge          *Edge        `json:"Edge,omitempty"` // 解耦的 Edge 关联查询
 	}
 	ColumnProps struct {
-		Width      int    `json:"Width,omitempty"`
-		Align      string `json:"Align,omitempty"`
-		Ellipsis   bool   `json:"Ellipsis,omitempty"`
-		Filterable bool   `json:"Filterable,omitempty"`
-		Sortable   bool   `json:"Sortable,omitempty"`
+		Width       int    `json:"Width,omitempty"`
+		Align       string `json:"Align,omitempty"`
+		Ellipsis    bool   `json:"Ellipsis,omitempty"`
+		Filterable  bool   `json:"Filterable,omitempty"`
+		Sortable    bool   `json:"Sortable,omitempty"`
+		HideInTable bool   `json:"HideInTable,omitempty"`
+		Order       int    `json:"Order,omitempty"`
 	}
 	Edge struct {
 		Type        string `json:"Type,omitempty"`
