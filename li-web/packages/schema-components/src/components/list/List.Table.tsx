@@ -28,7 +28,7 @@ import {
   useFieldSchema,
 } from "@formily/react";
 import { observer } from "@formily/reactive-react";
-import { isObject, pickBy } from "lodash";
+import { isObject, pickBy, sortBy } from "lodash";
 import { isValid } from "@formily/shared";
 import {
   RecordIndexProvider,
@@ -410,7 +410,11 @@ const BaseTable: React.FC<
       <Table
         rowKey="id"
         {...rest}
-        columns={columns}
+        // @ts-ignore
+        columns={sortBy(
+          columns?.filter((col) => !!!col.hideInTable),
+          "order"
+        )}
         data={field.value?.slice()}
       />
     </>

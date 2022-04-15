@@ -40,6 +40,11 @@ func (b *listtablecolumnBuilder) DataIndex(dataIndex string) *listtablecolumnBui
 	return b
 }
 
+func (b *listtablecolumnBuilder) Order(order int) *listtablecolumnBuilder {
+	b.schema.XComponentProps["order"] = order
+	return b
+}
+
 // Align 设置列的对齐方式 'left' | 'center' | 'right'
 func (b *listtablecolumnBuilder) Align(align string) *listtablecolumnBuilder {
 	b.schema.XComponentProps["align"] = align
@@ -70,5 +75,10 @@ func (b *listtablecolumnBuilder) Filterable(filterable bool) *listtablecolumnBui
 
 func (b *listtablecolumnBuilder) Sortable(sortable bool) *listtablecolumnBuilder {
 	b.schema.XComponentProps["sortable"] = sortable
+	return b
+}
+
+func (b *listtablecolumnBuilder) HideInTable(hideInTable bool) *listtablecolumnBuilder {
+	b.schema.XComponentProps["hideInTable"] = hideInTable
 	return b
 }
