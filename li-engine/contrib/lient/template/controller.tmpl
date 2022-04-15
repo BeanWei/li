@@ -183,7 +183,7 @@ func NewI{{ $.Name }}Array(es []*{{ $.Name }}) []*I{{ $.Name }} {
 }
 
 func List{{ $.Name }}Controller(ctx context.Context, req *List{{ $.Name }}Req) (res *List{{ $.Name }}Res, err error) {
-	q := LiClient().{{ $.Name }}.Query()
+	q := DB().{{ $.Name }}.Query()
 	{{- if ne (len $strFields) 0 }}
 	if req.Query != "" {
 		q.Where({{ $.Package }}.Or(
@@ -308,7 +308,7 @@ func List{{ $.Name }}Controller(ctx context.Context, req *List{{ $.Name }}Req) (
 }
 
 func Create{{ $.Name }}Controller(ctx context.Context, req *Create{{ $.Name }}Req) (err error) {
-	b := LiClient().{{ $.Name }}.Create()
+	b := DB().{{ $.Name }}.Create()
 	{{- range $f := $.Fields }}
 	{{- $annotation := $f.Annotations.LiEnt }}
 	{{- if and $annotation $annotation.ViewSchema (not $annotation.DisableCreate) }}
@@ -374,7 +374,7 @@ func Create{{ $.Name }}Controller(ctx context.Context, req *Create{{ $.Name }}Re
 }
 
 func Get{{ $.Name }}Controller(ctx context.Context, req *Get{{ $.Name }}Req) (res *I{{ $.Name }}, err error) {
-	ret, err := LiClient().{{ $.Name }}.
+	ret, err := DB().{{ $.Name }}.
 		Query().
 		{{- range $f := $.Fields }}
 			{{- $annotation := $f.Annotations.LiEnt }}
@@ -400,7 +400,7 @@ func Get{{ $.Name }}Controller(ctx context.Context, req *Get{{ $.Name }}Req) (re
 }
 
 func Update{{ $.Name }}Controller(ctx context.Context, req *Update{{ $.Name }}Req) (err error) {
-	b := LiClient().{{ $.Name }}.UpdateOneID(req.ID)
+	b := DB().{{ $.Name }}.UpdateOneID(req.ID)
 	{{- range $f := $.Fields }}
 	{{- if not $f.Sensitive }}
 	{{- $annotation := $f.Annotations.LiEnt }}
@@ -470,7 +470,7 @@ func Update{{ $.Name }}Controller(ctx context.Context, req *Update{{ $.Name }}Re
 }
 
 func Delete{{ $.Name }}Controller(ctx context.Context, req *Delete{{ $.Name }}Req) (err error) {
-	err = LiClient().{{ $.Name }}.DeleteOneID(req.ID).Exec(ctx)
+	err = DB().{{ $.Name }}.DeleteOneID(req.ID).Exec(ctx)
 	if err != nil {
 		if IsNotFound(err) {
 			return gerror.WrapCode(gcode.CodeNotFound, err)
@@ -483,7 +483,7 @@ func Delete{{ $.Name }}Controller(ctx context.Context, req *Delete{{ $.Name }}Re
 }
 
 func DeleteMany{{ $.Name }}Controller(ctx context.Context, req *DeleteMany{{ $.Name }}Req) (err error) {
-	_, err = LiClient().{{ $.Name }}.Delete().Where({{ $.Package }}.IDIn(req.IDs...)).Exec(ctx)
+	_, err = DB().{{ $.Name }}.Delete().Where({{ $.Package }}.IDIn(req.IDs...)).Exec(ctx)
 	if err != nil {
 		return gerror.WrapCode(gcode.CodeDbOperationError, err)
 	}

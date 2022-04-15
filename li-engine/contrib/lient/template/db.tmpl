@@ -1,6 +1,6 @@
 {{/* gotype: entgo.io/ent/entc/gen.Type */}}
 
-{{ define "lient_client" }}
+{{ define "lient_db" }}
 {{ template "header" $ }}
 import (
 	"context"
@@ -13,24 +13,24 @@ import (
 )
 
 var (
-	liclient     *Client
-	liclientOnce sync.Once
+	dbclient     *Client
+	dbclientOnce sync.Once
 )
 
-func LiClient() *Client {
-	liclientOnce.Do(func() {
+func DB() *Client {
+	dbclientOnce.Do(func() {
 		drv, err := driver.NewDriver()
 		if err != nil {
 			g.Log().Fatalf(gctx.New(), "[LiEnt Client] - failed init: %+v", err)
 		}
 
 		if gmode.IsDevelop() {
-			liclient = NewClient(Driver(drv)).Debug()
+			dbclient = NewClient(Driver(drv)).Debug()
 		} else {
-			liclient = NewClient(Driver(drv))
+			dbclient = NewClient(Driver(drv))
 		}
 
-		liclient.Use(func(next Mutator) Mutator {
+		dbclient.Use(func(next Mutator) Mutator {
 			return MutateFunc(func(ctx context.Context, m Mutation) (Value, error) {
 				v, err := next.Mutate(ctx, m)
 				if err != nil {
@@ -41,6 +41,6 @@ func LiClient() *Client {
 			})
 		})
 	})
-	return liclient
+	return dbclient
 }
 {{ end }}
