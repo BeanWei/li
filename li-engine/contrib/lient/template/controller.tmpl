@@ -1,42 +1,5 @@
 {{/* gotype: entgo.io/ent/entc/gen.Type */}}
 
-{{- define "model/fields/additional" }}
-{{- if eq (len $.Edges) 0 }}
-	{{- $hasXEdge := false }}
-	{{- range $f := $.Fields }}
-		{{- $annotation := $f.Annotations.FitsEnt }}
-		{{- if and $annotation $annotation.Edge }}
-			{{- $hasXEdge = true  }}
-		{{- end }}
-	{{- end }}
-	{{- if $hasXEdge }}	
-		Edges {{ $.Name }}Edges `json:"edges"`
-	{{- end }}
-{{- end }}
-{{- end }}
-
-{{ define "model/additional/fitsent-edge" }}
-{{- if eq (len $.Edges) 0 }}
-{{- $hasXEdge := false }}
-{{- range $f := $.Fields }}
-	{{- $annotation := $f.Annotations.FitsEnt }}
-	{{- if and $annotation $annotation.Edge }}
-		{{- $hasXEdge = true  }}
-	{{- end }}
-{{- end }}
-{{- if $hasXEdge }}
-	type {{ $.Name }}Edges struct {
-		{{- range $f := $.Fields }}
-			{{- $annotation := $f.Annotations.FitsEnt }}
-			{{- if and $annotation $annotation.Edge }}
-				{{ $annotation.Edge.StructField }} {{ if ne $f.Type.String $.ID.Type.String }}[]{{ end }}*{{ $annotation.Edge.Type }} `json:"{{ $annotation.Edge.Name }},omitempty"`
-			{{- end }}
-		{{- end }}
-	}
-{{- end }}
-{{- end }}
-{{ end }}
-
 {{ define "model/additional/lient-controller" }}
 {{ $strFields := list }}
 {{ $sortFields := list }}

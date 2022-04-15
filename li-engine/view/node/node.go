@@ -5,6 +5,7 @@ import (
 	"github.com/BeanWei/li/li-engine/view"
 	"github.com/BeanWei/li/li-engine/view/ui"
 	"github.com/gogf/gf/v2/container/gmap"
+	"github.com/gogf/gf/v2/encoding/gjson"
 )
 
 func Node(name string) *NodeBuilder {
@@ -235,6 +236,74 @@ func (b *NodeBuilder) SetXData(xData map[string]interface{}) *NodeBuilder {
 
 func (b *NodeBuilder) SetProperties(properties *gmap.ListMap) *NodeBuilder {
 	b.schema.Properties = properties
+	return b
+}
+
+func (b *NodeBuilder) SetXReactionsByPath(pattern string, reaction interface{}) *NodeBuilder {
+	if b.schema.XReactions == nil {
+		b.schema.XReactions = map[string]interface{}{}
+	}
+	react, err := gjson.LoadContent(b.schema.XReactions)
+	if err != nil {
+		panic(err)
+	}
+	react.Set(pattern, reaction)
+	b.schema.XReactions = react.Map()
+	return b
+}
+
+func (b *NodeBuilder) SetXReactionsDependencies(dependencies ...string) *NodeBuilder {
+	b.SetXReactionsByPath("dependencies", dependencies)
+	return b
+}
+
+func (b *NodeBuilder) SetXReactionsWhen(when string) *NodeBuilder {
+	b.SetXReactionsByPath("when", when)
+	return b
+}
+
+func (b *NodeBuilder) SetXReactionsTarget(target string) *NodeBuilder {
+	b.SetXReactionsByPath("target", target)
+	return b
+}
+
+func (b *NodeBuilder) SetXReactionsFullFill(fulfill map[string]interface{}) *NodeBuilder {
+	b.SetXReactionsByPath("fulfill", fulfill)
+	return b
+}
+
+func (b *NodeBuilder) SetXReactionsFullFillState(state map[string]interface{}) *NodeBuilder {
+	b.SetXReactionsByPath("fulfill.state", state)
+	return b
+}
+
+func (b *NodeBuilder) SetXReactionsFullFillSchema(schema map[string]interface{}) *NodeBuilder {
+	b.SetXReactionsByPath("fulfill.schema", schema)
+	return b
+}
+
+func (b *NodeBuilder) SetXReactionsFullFillRun(run string) *NodeBuilder {
+	b.SetXReactionsByPath("fulfill.run", run)
+	return b
+}
+
+func (b *NodeBuilder) SetXReactionsOtherwise(otherwise map[string]interface{}) *NodeBuilder {
+	b.SetXReactionsByPath("otherwise", otherwise)
+	return b
+}
+
+func (b *NodeBuilder) SetXReactionsOtherwiseState(state map[string]interface{}) *NodeBuilder {
+	b.SetXReactionsByPath("otherwise.state", state)
+	return b
+}
+
+func (b *NodeBuilder) SetXReactionsOtherwiseSchema(schema map[string]interface{}) *NodeBuilder {
+	b.SetXReactionsByPath("otherwise.schema", schema)
+	return b
+}
+
+func (b *NodeBuilder) SetXReactionsOtherwiseRun(run string) *NodeBuilder {
+	b.SetXReactionsByPath("otherwise.run", run)
 	return b
 }
 
