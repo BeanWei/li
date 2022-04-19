@@ -1,9 +1,10 @@
 import { createContext, useContext, useEffect } from "react";
 import { useRequest } from "pro-utils";
-import { Redirect } from "react-router";
+import { Navigate } from "react-router";
 import { useLocalStorageState } from "ahooks";
 import { ConfigProvider, Layout as ArcoLayout } from "@arco-design/web-react";
-import { useHistory, useRouteMatch } from "react-router-dom";
+import { useParams } from "react-router";
+import { useNavigate } from "react-router-dom";
 import { SchemaComponent, zhCN, enUS } from "schema-components";
 import Logo from "@/assets/logo.svg";
 import { useRoute } from "../route-switch/hooks";
@@ -43,8 +44,8 @@ export const useLayoutContext = () => {
 
 export const Layout = () => {
   const route = useRoute();
-  const history = useHistory();
-  const match = useRouteMatch<any>();
+  const navigate = useNavigate();
+  const params = useParams();
 
   const {
     title = "Li Admin",
@@ -77,12 +78,12 @@ export const Layout = () => {
     return <Loading />;
   }
   if (result.error) {
-    return <Redirect to={entry + "/sign"} />;
+    return <Navigate to={entry + "/sign"} />;
   }
 
-  const curKey = match.params.name || home || menus[0]?.key;
+  const curKey = params?.["*"] || home || menus[0]?.key;
   const onClickMenuItem = (key: string) => {
-    history.push(entry + `/${key}`);
+    navigate(entry + `/${key}`);
   };
 
   const global = {

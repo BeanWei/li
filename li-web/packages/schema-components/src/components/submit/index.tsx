@@ -2,7 +2,7 @@ import React from "react";
 import { Button, ButtonProps } from "@arco-design/web-react";
 import { IFormFeedback } from "@formily/core";
 import { useParentForm, observer } from "@formily/react";
-import { useHistory } from "react-router-dom";
+import { useNavigate } from "react-router-dom";
 import { request } from "pro-utils";
 
 export interface ISubmitProps extends ButtonProps {
@@ -22,7 +22,7 @@ export const Submit: React.FC<ISubmitProps> = observer(
     ...props
   }: ISubmitProps) => {
     const form = useParentForm();
-    const history = useHistory();
+    const navigate = useNavigate();
 
     return (
       <Button
@@ -43,7 +43,7 @@ export const Submit: React.FC<ISubmitProps> = observer(
             .then(
               forSubmitSuccessTo
                 ? () => {
-                    history.push(forSubmitSuccessTo);
+                    navigate(forSubmitSuccessTo);
                   }
                 : forSubmitSuccess
             )

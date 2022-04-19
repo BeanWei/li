@@ -1,4 +1,4 @@
-import { Redirect, Route, Switch } from "react-router-dom";
+import { Navigate, Route, Routes } from "react-router-dom";
 import { RouteContext } from "./context";
 import { useRouteComponent } from "./hooks";
 import { RouteSwitchProps } from "./types";
@@ -9,42 +9,26 @@ export function RouteSwitch(props: RouteSwitchProps) {
     return null;
   }
   return (
-    <Switch>
+    <Routes>
       {routes.map((route, index) => {
-        if (route.type == "redirect") {
-          return (
-            <Redirect
-              key={index}
-              to={route.to}
-              push={route.push}
-              from={route.from}
-              path={route.path}
-              exact={route.exact}
-              strict={route.strict}
-            />
-          );
-        }
-        if (!route.path && Array.isArray(route.routes)) {
-          route.path = route.routes.map((r) => r.path) as any;
-        }
         return (
           <Route
             key={index}
             path={route.path}
-            exact={route.exact}
-            strict={route.strict}
-            sensitive={route.sensitive}
-            render={(props) => {
-              return (
-                <RouteContext.Provider value={{ ...route, type: "route" }}>
-                  <ComponentRenderer {...props} route={route} />
+            index={route.index}
+            element={
+              route.redirect ? (
+                <Navigate to={route.redirect} />
+              ) : (
+                <RouteContext.Provider value={route}>
+                  <ComponentRenderer {...route} route={route} />
                 </RouteContext.Provider>
-              );
-            }}
+              )
+            }
           />
         );
       })}
-    </Switch>
+    </Routes>
   );
 }
 

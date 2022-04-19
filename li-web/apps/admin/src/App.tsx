@@ -42,20 +42,16 @@ const App = compose(...providers)(() => {
       <RouteSwitch
         routes={[
           {
-            type: "redirect",
-            from: "/",
-            to: entry,
-            exact: true,
+            path: "/",
+            redirect: entry,
           },
           {
-            type: "route",
             path: entry + "/sign",
             component: "SignPage",
             title: "Sign",
           },
           {
-            type: "route",
-            path: entry + "/:name(.+)?",
+            path: entry + "/*",
             component: "Layout",
             title: data?.title || "Li Admin",
             config: {

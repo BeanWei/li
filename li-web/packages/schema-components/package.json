@@ -16,11 +16,11 @@
     "lint": "eslint *.tsx"
   },
   "devDependencies": {
-    "@types/lodash": "^4.14.179",
+    "@types/lodash": "^4.14.182",
     "config": "workspace:*",
-    "dumi": "^1.1.39",
+    "dumi": "^1.1.40",
     "tsconfig": "workspace:*",
-    "typescript": "^4.5.2"
+    "typescript": "^4.6.3"
   },
   "peerDependencies": {
     "@arco-design/web-react": "^2.30.0",
@@ -39,11 +39,11 @@
     "@formily/reactive": "2.0.13",
     "@formily/reactive-react": "2.0.13",
     "@formily/shared": "2.0.13",
-    "classnames": "^2.2.6",
+    "classnames": "^2.3.1",
     "lodash": "^4.17.21",
     "pro-utils": "workspace:*",
-    "react-i18next": "^11.15.5",
-    "react-router-dom": "^5.2.0",
+    "react-i18next": "^11.16.7",
+    "react-router-dom": "^6.3.0",
     "react-sortable-hoc": "^1.11.0",
     "react-sticky-box": "^0.9.3"
   },

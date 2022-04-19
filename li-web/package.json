@@ -13,8 +13,8 @@
     "format": "prettier --write \"**/*.{ts,tsx,md}\""
   },
   "devDependencies": {
-    "@arco-design/web-react": "^2.30.0",
-    "prettier": "^2.5.1",
+    "@arco-design/web-react": "^2.32.0",
+    "prettier": "^2.6.2",
     "turbo": "latest"
   },
   "engines": {
