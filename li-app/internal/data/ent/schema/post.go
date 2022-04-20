@@ -33,6 +33,7 @@ func (Post) Fields() []ent.Field {
 						Filterable: true,
 						Ellipsis:   true,
 					},
+					Queryable: true,
 				},
 			),
 		field.String("content").
@@ -45,6 +46,7 @@ func (Post) Fields() []ent.Field {
 						Width:      300,
 						Ellipsis:   true,
 					},
+					Queryable: true,
 				},
 			),
 		field.Strings("reviewer_ids").

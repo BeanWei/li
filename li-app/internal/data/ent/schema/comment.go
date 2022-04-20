@@ -34,6 +34,7 @@ func (Comment) Fields() []ent.Field {
 					ColumnProps: &lient.ColumnProps{
 						Filterable: true,
 					},
+					Queryable: true,
 				},
 			),
 	}
