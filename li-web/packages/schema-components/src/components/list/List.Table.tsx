@@ -30,10 +30,7 @@ import {
 import { observer } from "@formily/reactive-react";
 import { isObject, pickBy, sortBy } from "lodash";
 import { isValid } from "@formily/shared";
-import {
-  RecordIndexProvider,
-  RecordProvider,
-} from "../../core";
+import { RecordIndexProvider, RecordProvider } from "../../core";
 import { useAttach } from "../../hooks";
 import {
   isColumnComponent,

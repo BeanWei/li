@@ -8,6 +8,7 @@ import { useMemo } from "react";
 import { SchemaComponentOptions } from "./SchemaComponentOptions";
 
 function toSchema(schema?: any) {
+  if (!schema) return new Schema({});
   if (Schema.isSchemaInstance(schema)) {
     return schema;
   }
