@@ -1,6 +1,7 @@
 {{/* gotype: entgo.io/ent/entc/gen.Type */}}
 
 {{ define "model/additional/lient-view" }}
+{{- $searchable := false }}
 func Create{{ $.Name }}FormView() view.Node {
 	return node.FormGrid("grid").MaxColumns(2).Children(
 		{{- range $f := $.Fields }}
@@ -11,6 +12,9 @@ func Create{{ $.Name }}FormView() view.Node {
 					{{- else }}
 					{{ $.Package }}.Node{{ $f.StructField }}().SetAC({{ $.Package }}ViewACL["create:{{ $f.Name }}"]){{- if contains $annotation.ValidateRule "required" }}.SetRequired(true){{- end }},
 					{{- end }}
+				{{- end }}
+				{{- if and (not $searchable) $annotation $annotation.Queryable }}
+					{{- $searchable = true }}
 				{{- end }}
 			{{- end }}
 		{{- end }}
@@ -161,6 +165,9 @@ func List{{ $.Name }}View() view.Node {
 							ButtonStatus("danger").
 							ButtonIcon("IconDelete").
 							ButtonPosition("left"),
+						{{- if $searchable }}
+							node.ListActionSearch("search{{ $.Name }}"),
+						{{- end }}
 					),
 				).
 				Columns(

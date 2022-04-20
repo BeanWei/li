@@ -132,6 +132,7 @@ const (
 	ComponentListActionRecordFormDrawer = "List.Action.RecordFormDrawer"
 	ComponentListActionRecordFormModal  = "List.Action.RecordFormModal"
 	ComponentListActionRecordDelete     = "List.Action.RecordDelete"
+	ComponentListActionSearch           = "List.Action.Search"
 	ComponentListTable                  = "List.Table"
 	ComponentListTableColumn            = "List.Table.Column"
 	ComponentListCard                   = "List.Card"
