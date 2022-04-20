@@ -42,18 +42,34 @@ export default {
                   },
                   forSubmit: "updateProfile",
                 },
-                properties: {
-                  nickname: {
-                    type: "string",
-                    title: "昵称",
-                    "x-decorator": "FormItem",
-                    "x-component": "Input",
+                items: {
+                  type: "object",
+                  properties: {
+                    nickname: {
+                      type: "string",
+                      title: "昵称",
+                      "x-decorator": "FormItem",
+                      "x-component": "Input",
+                    },
+                    avatar: {
+                      type: "string",
+                      title: "头像",
+                      "x-decorator": "FormItem",
+                      "x-component": "Upload.Avatar",
+                    },
                   },
-                  avatar: {
-                    type: "string",
-                    title: "头像",
-                    "x-decorator": "FormItem",
-                    "x-component": "Upload.Avatar",
+                },
+                properties: {
+                  cancel: {
+                    type: "void",
+                    "x-component": "Action.FormDrawer.Cancel",
+                  },
+                  submit: {
+                    type: "void",
+                    "x-component": "Action.FormDrawer.Submit",
+                    "x-component-props": {
+                      forSubmit: "updateUser",
+                    },
                   },
                 },
               },

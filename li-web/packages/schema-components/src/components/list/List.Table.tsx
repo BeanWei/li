@@ -33,7 +33,6 @@ import { isValid } from "@formily/shared";
 import {
   RecordIndexProvider,
   RecordProvider,
-  SchemaFormField,
 } from "../../core";
 import { useAttach } from "../../hooks";
 import {
