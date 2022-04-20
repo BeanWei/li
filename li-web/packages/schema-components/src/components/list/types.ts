@@ -4,6 +4,7 @@ import {
   PopconfirmProps,
   TableProps,
 } from "@arco-design/web-react";
+import { InputSearchProps } from "@arco-design/web-react/es/Input";
 import { ColumnProps } from "@arco-design/web-react/es/Table";
 import { FormProps } from "../form";
 import { ActionFormDrawerProps, ActionFormModalProps } from "../action/types";
@@ -54,4 +55,5 @@ export type ComposedListAction = React.FC & {
       forSubmit?: string;
     }
   >;
+  Search?: React.FC<InputSearchProps>;
 };

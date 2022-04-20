@@ -8,8 +8,9 @@ export const zhCN: Locale = {
     cancelText: "取消",
   },
   List: {
-    search: "查询",
+    query: "查询",
     reset: "重置",
+    search: "搜索",
     confirmDelete: "你确定要删除吗？",
   },
   RecordPicker: {

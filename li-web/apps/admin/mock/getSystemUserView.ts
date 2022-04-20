@@ -78,6 +78,10 @@ export default {
                             position: "left",
                           },
                         },
+                        search: {
+                          type: "void",
+                          "x-component": "List.Action.Search",
+                        },
                         add: {
                           type: "void",
                           title: "新建用户",

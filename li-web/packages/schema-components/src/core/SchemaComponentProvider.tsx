@@ -7,10 +7,6 @@ import { SchemaComponentContext } from "../context";
 import { ISchemaComponentProvider } from "../types";
 import { SchemaComponentOptions } from "./SchemaComponentOptions";
 
-const randomString = (prefix: string = "") => {
-  return `${prefix}${uid()}`;
-};
-
 Schema.silent(true);
 
 const Registry = {
@@ -37,12 +33,10 @@ Schema.registerCompiler(Registry.compile);
 export const SchemaComponentProvider: React.FC<ISchemaComponentProvider> = (
   props
 ) => {
-  const { components, children } = props;
+  const { scope, components, children } = props;
   const [, setUid] = useState(uid());
   const [formId, setFormId] = useState(uid());
   const form = props.form || useMemo(() => createForm(), [formId]);
-  const { t } = useTranslation();
-  const scope = { ...props.scope, t, randomString };
 
   return (
     <SchemaComponentContext.Provider

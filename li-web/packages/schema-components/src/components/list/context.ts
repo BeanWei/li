@@ -6,6 +6,7 @@ import { ListProps } from "./types";
 export type ReloadData = {
   page?: number;
   limit?: number;
+  query?: string;
   sorter?: Record<string, number>;
   filter?: Record<string, any>;
 };

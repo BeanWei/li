@@ -1,4 +1,4 @@
-import { Button, Popconfirm, Space } from "@arco-design/web-react";
+import { Button, Input, Popconfirm, Space } from "@arco-design/web-react";
 import {
   observer,
   RecursionField,
@@ -179,3 +179,19 @@ ListAction.RecordDelete = observer((props) => {
     </Popconfirm>
   );
 });
+
+ListAction.Search = (props) => {
+  const ctx = useContext(ListContext);
+  const local = getLocale();
+  return (
+    <Input.Search
+      style={props.style}
+      placeholder={props.placeholder || local.List.search}
+      onSearch={(value) => {
+        ctx.reload?.({
+          query: value,
+        });
+      }}
+    />
+  );
+};

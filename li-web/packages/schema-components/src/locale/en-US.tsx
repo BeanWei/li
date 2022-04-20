@@ -8,8 +8,9 @@ export const enUS: Locale = {
     cancelText: "Cancel",
   },
   List: {
-    search: "Search",
+    query: "Query",
     reset: "Reset",
+    search: "Search",
     confirmDelete: "Are you sure you want to delete?",
   },
   RecordPicker: {
