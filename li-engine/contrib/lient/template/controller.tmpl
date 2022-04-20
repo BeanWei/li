@@ -1,7 +1,7 @@
 {{/* gotype: entgo.io/ent/entc/gen.Type */}}
 
 {{ define "model/additional/lient-controller" }}
-{{ $strFields := list }}
+{{ $queryFields := listfield }}
 {{ $sortFields := list }}
 type (
 	I{{ $.Name }} struct {
@@ -28,10 +28,10 @@ type (
 	List{{ $.Name }}Filter struct {
 		{{- range $f := $.Fields }}
         {{- if not $f.Sensitive }}
-		{{- if eq $f.Type.String "string" }}
-			{{- $strFields = append $strFields $f.StructField }}
-		{{- end }}
 		{{- $annotation := $f.Annotations.LiEnt }}
+		{{- if and $annotation $annotation.Queryable  }}
+			{{- $queryFields = append $queryFields $f }}
+		{{- end }}
 		{{- if and $annotation $annotation.ViewSchema $annotation.ColumnProps $annotation.ColumnProps.Filterable }}
 			{{- if and $annotation $annotation.Edge }}
 				{{ $annotation.Edge.StructField }} []*struct { ID {{ $.ID.Type }} `json:"id" v:"required"` } `json:"{{ $annotation.Edge.Name }}"`
@@ -184,11 +184,17 @@ func NewI{{ $.Name }}Array(es []*{{ $.Name }}) []*I{{ $.Name }} {
 
 func List{{ $.Name }}Controller(ctx context.Context, req *List{{ $.Name }}Req) (res *List{{ $.Name }}Res, err error) {
 	q := DB().{{ $.Name }}.Query()
-	{{- if ne (len $strFields) 0 }}
+	{{- if ne (len $queryFields) 0 }}
 	if req.Query != "" {
 		q.Where({{ $.Package }}.Or(
-		{{- range $sf := $strFields }}
-			{{ $.Package }}.{{ $sf }}ContainsFold(req.Query),
+		{{- range $i, $f := $queryFields }}
+			{{- if eq $f.Type.String "string" }}
+				{{ $.Package }}.{{ $f.StructField }}ContainsFold(req.Query),
+			{{- else }}
+				func(s *sql.Selector) {
+					s.Where(sqlx.ContainsFoldAny("{{ $f.StorageKey }}", req.Query))
+				},
+			{{- end }}
 		{{- end }}
 		))
 	}

@@ -32,6 +32,7 @@ func (User) Fields() []ent.Field {
 					ColumnProps: &lient.ColumnProps{
 						Filterable: true,
 					},
+					Queryable: true,
 				},
 			),
 		field.String("email").
@@ -45,6 +46,7 @@ func (User) Fields() []ent.Field {
 					},
 					ValidateRule:  "required|email",
 					DisableUpdate: true,
+					Queryable:     true,
 				},
 			),
 		field.String("password").

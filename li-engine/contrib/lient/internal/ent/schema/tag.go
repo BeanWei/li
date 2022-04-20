@@ -30,6 +30,7 @@ func (Tag) Fields() []ent.Field {
 					ColumnProps: &lient.ColumnProps{
 						Filterable: true,
 					},
+					Queryable: true,
 				},
 			),
 	}

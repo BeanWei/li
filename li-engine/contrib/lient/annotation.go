@@ -16,6 +16,7 @@ type (
 		DisableCreate bool         `json:"DisableCreate,omitempty"`
 		DisableRead   bool         `json:"DisableRead,omitempty"`
 		DisableUpdate bool         `json:"DisableUpdate,omitempty"`
+		Queryable     bool         `json:"Queryable,omitempty"`
 		Edge          *Edge        `json:"Edge,omitempty"` // 解耦的 Edge 关联查询
 	}
 	ColumnProps struct {

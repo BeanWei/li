@@ -33,6 +33,7 @@ func (Post) Fields() []ent.Field {
 						Filterable: true,
 						Ellipsis:   true,
 					},
+					Queryable: true,
 				},
 			),
 		field.String("content").
@@ -45,6 +46,7 @@ func (Post) Fields() []ent.Field {
 						Width:      300,
 						Ellipsis:   true,
 					},
+					Queryable: true,
 				},
 			),
 		field.Strings("reviewer_ids").
@@ -61,7 +63,8 @@ func (Post) Fields() []ent.Field {
 					ColumnProps: &lient.ColumnProps{
 						Filterable: true,
 					},
-					Edge: lient.XEdge("reviewers", User.Type),
+					Edge:      lient.XEdge("reviewers", User.Type),
+					Queryable: true,
 				},
 			),
 	}
