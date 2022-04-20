@@ -2,7 +2,7 @@ import React from "react";
 import { Button, ButtonProps } from "@arco-design/web-react";
 import { IFormFeedback } from "@formily/core";
 import { useParentForm, observer } from "@formily/react";
-import { useNavigate } from "react-router-dom";
+import { NavigateFunction, useNavigate } from "react-router-dom";
 import { request } from "pro-utils";
 
 export interface ISubmitProps extends ButtonProps {
@@ -22,7 +22,15 @@ export const Submit: React.FC<ISubmitProps> = observer(
     ...props
   }: ISubmitProps) => {
     const form = useParentForm();
-    const navigate = useNavigate();
+    let navigate: NavigateFunction | ((uri: string) => void);
+    try {
+      navigate = useNavigate();
+    } catch {
+      navigate = (uri: string) => {
+        // @ts-ignore
+        window.location = uri;
+      };
+    }
 
     return (
       <Button
