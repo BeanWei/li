@@ -24,8 +24,12 @@ func NavItems() []view.Node {
 							InitialValues(map[string]interface{}{
 								"nickname": `{{global.currentUser.nickname}}`,
 							}).
-							Children(
+							Body(
 								user.NodeNickname(),
+							).
+							Footer(
+								node.ActionFormDrawerCancel("cancel"),
+								node.ActionFormDrawerSubmit("submit"),
 							),
 					),
 				node.DropdownMenuItem("updatePassword").Title("修改密码"),
