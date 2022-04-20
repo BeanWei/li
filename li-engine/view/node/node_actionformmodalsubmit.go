@@ -6,7 +6,7 @@ import (
 	"github.com/BeanWei/li/li-engine/view/ui"
 )
 
-func ActionForModalSubmit(name string) *actionformmodalsubmitBuilder {
+func ActionFormModalSubmit(name string) *actionformmodalsubmitBuilder {
 	return &actionformmodalsubmitBuilder{&NodeBuilder{
 		schema: &ui.Schema{
 			Name:            name,

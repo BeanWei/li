@@ -7,7 +7,7 @@ import (
 	"github.com/BeanWei/li/li-engine/view/ui"
 )
 
-func ActionForModal(name string) *actionformmodalBuilder {
+func ActionFormModal(name string) *actionformmodalBuilder {
 	return &actionformmodalBuilder{&NodeBuilder{
 		schema: &ui.Schema{
 			Name:       name,

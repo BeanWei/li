@@ -5,7 +5,7 @@ import (
 	"github.com/BeanWei/li/li-engine/view/ui"
 )
 
-func ActionForModalCancel(name string) *actionformmodalcancelBuilder {
+func ActionFormModalCancel(name string) *actionformmodalcancelBuilder {
 	return &actionformmodalcancelBuilder{&NodeBuilder{
 		schema: &ui.Schema{
 			Name:       name,
