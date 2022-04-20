@@ -250,7 +250,7 @@ const FilterForm: React.FC<{
           icon={<IconSearch />}
           onClick={handleSubmit}
         >
-          {locale.List.search}
+          {locale.List.query}
         </Button>
         <Button key="reset" icon={<IconRefresh />} onClick={handleReset}>
           {locale.List.reset}
@@ -410,8 +410,8 @@ const BaseTable: React.FC<
       <Table
         rowKey="id"
         {...rest}
-        // @ts-ignore
         columns={sortBy(
+          // @ts-ignore
           columns?.filter((col) => !!!col.hideInTable),
           "order"
         )}
