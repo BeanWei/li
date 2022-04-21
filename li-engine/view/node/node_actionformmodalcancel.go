@@ -25,6 +25,6 @@ func (b *actionformmodalcancelBuilder) AC(f ac.AC) *actionformmodalcancelBuilder
 }
 
 func (b *actionformmodalcancelBuilder) Title(title string) *actionformmodalcancelBuilder {
-	b.schema.Title = title
+	b.SetTitle(title)
 	return b
 }

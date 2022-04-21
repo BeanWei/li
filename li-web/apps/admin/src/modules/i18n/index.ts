@@ -13,14 +13,14 @@ const getLocalStorage = (): string | undefined => {
 export const i18n = i18next.createInstance();
 
 i18n
-  // .use(HttpApi)
+  .use(HttpApi)
   .use(initReactI18next)
   .init({
     debug: false,
     lng: getLocalStorage() || navigator.language,
-    // fallbackLng: "en-US",
-    // preload: ['en-US', 'zh-CN'],
-    // backend: {
-    //   loadPath: '/locales/{{lng}}.json',
-    // },
+    fallbackLng: "en-US",
+    preload: ["en-US", "zh-CN"],
+    backend: {
+      loadPath: "/locales/{{lng}}.json",
+    },
   });

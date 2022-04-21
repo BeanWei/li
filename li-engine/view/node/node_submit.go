@@ -29,12 +29,12 @@ func (b *submitBuilder) AC(f ac.AC) *submitBuilder {
 }
 
 func (b *submitBuilder) Title(title string) *submitBuilder {
-	b.schema.Title = title
+	b.SetTitle(title)
 	return b
 }
 
 func (b *submitBuilder) Description(description string) *submitBuilder {
-	b.schema.Description = description
+	b.SetDescription(description)
 	return b
 }
 

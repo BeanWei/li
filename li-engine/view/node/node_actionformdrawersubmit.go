@@ -30,7 +30,7 @@ func (b *actionformdrawersubmitBuilder) AC(f ac.AC) *actionformdrawersubmitBuild
 }
 
 func (b *actionformdrawersubmitBuilder) Title(title string) *actionformdrawersubmitBuilder {
-	b.schema.Title = title
+	b.SetTitle(title)
 	return b
 }
 

@@ -28,12 +28,12 @@ func (b *spaceBuilder) AC(f ac.AC) *spaceBuilder {
 }
 
 func (b *spaceBuilder) Title(title string) *spaceBuilder {
-	b.schema.Title = title
+	b.SetTitle(title)
 	return b
 }
 
 func (b *spaceBuilder) Description(description string) *spaceBuilder {
-	b.schema.Description = description
+	b.SetDescription(description)
 	return b
 }
 

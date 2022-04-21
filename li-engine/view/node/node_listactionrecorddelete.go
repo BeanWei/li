@@ -1,6 +1,8 @@
 package node
 
 import (
+	"strings"
+
 	"github.com/BeanWei/li/li-engine/ac"
 	"github.com/BeanWei/li/li-engine/controller"
 	"github.com/BeanWei/li/li-engine/view/ui"
@@ -31,12 +33,12 @@ func (b *listactionrecorddeleteBuilder) AC(f ac.AC) *listactionrecorddeleteBuild
 }
 
 func (b *listactionrecorddeleteBuilder) Title(title string) *listactionrecorddeleteBuilder {
-	b.schema.Title = title
+	b.SetTitle(title)
 	return b
 }
 
 func (b *listactionrecorddeleteBuilder) Description(description string) *listactionrecorddeleteBuilder {
-	b.schema.Description = description
+	b.SetDescription(description)
 	return b
 }
 
@@ -50,6 +52,9 @@ func (b *listactionrecorddeleteBuilder) ForSubmit(operation string, handler inte
 func (b *listactionrecorddeleteBuilder) ConfirmTitle(title string) *listactionrecorddeleteBuilder {
 	confirmProps, ok := b.schema.XComponentProps["confirmProps"].(map[string]interface{})
 	if ok {
+		if !strings.HasPrefix(title, "{{t('") {
+			title = "{{t('" + title + "')}}"
+		}
 		confirmProps["title"] = title
 		b.schema.XComponentProps["confirmProps"] = confirmProps
 	}

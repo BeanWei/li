@@ -27,12 +27,12 @@ func (b *switchBuilder) AC(f ac.AC) *switchBuilder {
 }
 
 func (b *switchBuilder) Title(title string) *switchBuilder {
-	b.schema.Title = title
+	b.SetTitle(title)
 	return b
 }
 
 func (b *switchBuilder) Description(description string) *switchBuilder {
-	b.schema.Description = description
+	b.SetDescription(description)
 	return b
 }
 

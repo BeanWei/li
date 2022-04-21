@@ -28,12 +28,12 @@ func (b *radiogroupBuilder) AC(f ac.AC) *radiogroupBuilder {
 }
 
 func (b *radiogroupBuilder) Title(title string) *radiogroupBuilder {
-	b.schema.Title = title
+	b.SetTitle(title)
 	return b
 }
 
 func (b *radiogroupBuilder) Description(description string) *radiogroupBuilder {
-	b.schema.Description = description
+	b.SetDescription(description)
 	return b
 }
 

@@ -27,12 +27,12 @@ func (b *rateBuilder) AC(f ac.AC) *rateBuilder {
 }
 
 func (b *rateBuilder) Title(title string) *rateBuilder {
-	b.schema.Title = title
+	b.SetTitle(title)
 	return b
 }
 
 func (b *rateBuilder) Description(description string) *rateBuilder {
-	b.schema.Description = description
+	b.SetDescription(description)
 	return b
 }
 

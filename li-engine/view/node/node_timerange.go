@@ -27,12 +27,12 @@ func (b *timerangeBuilder) AC(f ac.AC) *timerangeBuilder {
 }
 
 func (b *timerangeBuilder) Title(title string) *timerangeBuilder {
-	b.schema.Title = title
+	b.SetTitle(title)
 	return b
 }
 
 func (b *timerangeBuilder) Description(description string) *timerangeBuilder {
-	b.schema.Description = description
+	b.SetDescription(description)
 	return b
 }
 

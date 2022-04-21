@@ -32,12 +32,12 @@ func (b *uploadattachmentBuilder) AC(f ac.AC) *uploadattachmentBuilder {
 }
 
 func (b *uploadattachmentBuilder) Title(title string) *uploadattachmentBuilder {
-	b.schema.Title = title
+	b.SetTitle(title)
 	return b
 }
 
 func (b *uploadattachmentBuilder) Description(description string) *uploadattachmentBuilder {
-	b.schema.Description = description
+	b.SetDescription(description)
 	return b
 }
 

@@ -27,11 +27,11 @@ func (b *listactionBuilder) AC(f ac.AC) *listactionBuilder {
 }
 
 func (b *listactionBuilder) Title(title string) *listactionBuilder {
-	b.schema.Title = title
+	b.SetTitle(title)
 	return b
 }
 
 func (b *listactionBuilder) Description(description string) *listactionBuilder {
-	b.schema.Description = description
+	b.SetDescription(description)
 	return b
 }

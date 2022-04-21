@@ -36,12 +36,12 @@ func (b *recordselectBuilder) AC(f ac.AC) *recordselectBuilder {
 }
 
 func (b *recordselectBuilder) Title(title string) *recordselectBuilder {
-	b.schema.Title = title
+	b.SetTitle(title)
 	return b
 }
 
 func (b *recordselectBuilder) Description(description string) *recordselectBuilder {
-	b.schema.Description = description
+	b.SetDescription(description)
 	return b
 }
 

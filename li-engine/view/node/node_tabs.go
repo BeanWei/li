@@ -26,7 +26,7 @@ func (b *tabsBuilder) AC(f ac.AC) *tabsBuilder {
 }
 
 func (b *tabsBuilder) Title(title string) *tabsBuilder {
-	b.schema.Title = title
+	b.SetTitle(title)
 	return b
 }
 

@@ -34,12 +34,12 @@ func (b *actionformdrawerBuilder) AC(f ac.AC) *actionformdrawerBuilder {
 }
 
 func (b *actionformdrawerBuilder) Title(title string) *actionformdrawerBuilder {
-	b.schema.Title = title
+	b.SetTitle(title)
 	return b
 }
 
 func (b *actionformdrawerBuilder) Description(description string) *actionformdrawerBuilder {
-	b.schema.Description = description
+	b.SetDescription(description)
 	return b
 }
 

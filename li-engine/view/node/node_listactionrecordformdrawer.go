@@ -32,12 +32,12 @@ func (b *listactionrecordformrawerBuilder) AC(f ac.AC) *listactionrecordformrawe
 }
 
 func (b *listactionrecordformrawerBuilder) Title(title string) *listactionrecordformrawerBuilder {
-	b.schema.Title = title
+	b.SetTitle(title)
 	return b
 }
 
 func (b *listactionrecordformrawerBuilder) Description(description string) *listactionrecordformrawerBuilder {
-	b.schema.Description = description
+	b.SetDescription(description)
 	return b
 }
 

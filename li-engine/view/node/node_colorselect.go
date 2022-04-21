@@ -26,12 +26,12 @@ func (b *colorselectBuilder) AC(f ac.AC) *colorselectBuilder {
 }
 
 func (b *colorselectBuilder) Title(title string) *colorselectBuilder {
-	b.schema.Title = title
+	b.SetTitle(title)
 	return b
 }
 
 func (b *colorselectBuilder) Description(description string) *colorselectBuilder {
-	b.schema.Description = description
+	b.SetDescription(description)
 	return b
 }
 

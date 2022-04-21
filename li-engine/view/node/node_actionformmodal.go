@@ -32,12 +32,12 @@ func (b *actionformmodalBuilder) AC(f ac.AC) *actionformmodalBuilder {
 }
 
 func (b *actionformmodalBuilder) Title(title string) *actionformmodalBuilder {
-	b.schema.Title = title
+	b.SetTitle(title)
 	return b
 }
 
 func (b *actionformmodalBuilder) Description(description string) *actionformmodalBuilder {
-	b.schema.Description = description
+	b.SetDescription(description)
 	return b
 }
 

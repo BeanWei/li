@@ -1,6 +1,8 @@
 package node
 
 import (
+	"strings"
+
 	"github.com/BeanWei/li/li-engine/ac"
 	"github.com/BeanWei/li/li-engine/view"
 	"github.com/BeanWei/li/li-engine/view/ui"
@@ -40,11 +42,17 @@ func (b *NodeBuilder) SetType(typ string) *NodeBuilder {
 }
 
 func (b *NodeBuilder) SetTitle(title string) *NodeBuilder {
+	if !strings.HasPrefix(title, "{{t('") {
+		title = "{{t('" + title + "')}}"
+	}
 	b.schema.Title = title
 	return b
 }
 
 func (b *NodeBuilder) SetDescription(description string) *NodeBuilder {
+	if !strings.HasPrefix(description, "{{t('") {
+		description = "{{t('" + description + "')}}"
+	}
 	b.schema.Description = description
 	return b
 }
@@ -195,6 +203,9 @@ func (b *NodeBuilder) SetXReactions(xReactions map[string]interface{}) *NodeBuil
 }
 
 func (b *NodeBuilder) SetXContent(xContent string) *NodeBuilder {
+	if !strings.HasPrefix(xContent, "{{t('") {
+		xContent = "{{t('" + xContent + "')}}"
+	}
 	b.schema.XContent = xContent
 	return b
 }

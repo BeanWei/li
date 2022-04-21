@@ -28,12 +28,12 @@ func (b *selectBuilder) AC(f ac.AC) *selectBuilder {
 }
 
 func (b *selectBuilder) Title(title string) *selectBuilder {
-	b.schema.Title = title
+	b.SetTitle(title)
 	return b
 }
 
 func (b *selectBuilder) Description(description string) *selectBuilder {
-	b.schema.Description = description
+	b.SetDescription(description)
 	return b
 }
 

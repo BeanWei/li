@@ -28,11 +28,11 @@ func (b *listcardBuilder) AC(f ac.AC) *listcardBuilder {
 }
 
 func (b *listcardBuilder) Title(title string) *listcardBuilder {
-	b.schema.Title = title
+	b.SetTitle(title)
 	return b
 }
 
 func (b *listcardBuilder) Description(description string) *listcardBuilder {
-	b.schema.Description = description
+	b.SetDescription(description)
 	return b
 }

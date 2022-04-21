@@ -27,12 +27,12 @@ func (b *moneyBuilder) AC(f ac.AC) *moneyBuilder {
 }
 
 func (b *moneyBuilder) Title(title string) *moneyBuilder {
-	b.schema.Title = title
+	b.SetTitle(title)
 	return b
 }
 
 func (b *moneyBuilder) Description(description string) *moneyBuilder {
-	b.schema.Description = description
+	b.SetDescription(description)
 	return b
 }
 

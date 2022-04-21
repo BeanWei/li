@@ -1,6 +1,8 @@
 package node
 
 import (
+	"strings"
+
 	"github.com/BeanWei/li/li-engine/ac"
 	"github.com/BeanWei/li/li-engine/controller"
 	"github.com/BeanWei/li/li-engine/view/ui"
@@ -31,17 +33,23 @@ func (b *chartlineBuilder) AC(f ac.AC) *chartlineBuilder {
 }
 
 func (b *chartlineBuilder) Title(title string) *chartlineBuilder {
+	if !strings.HasPrefix(title, "{{t('") {
+		title = "{{t('" + title + "')}}"
+	}
 	b.schema.XDecoratorProps["title"] = title
 	return b
 }
 
 func (b *chartlineBuilder) SubTitle(subTitle string) *chartlineBuilder {
+	if !strings.HasPrefix(subTitle, "{{t('") {
+		subTitle = "{{t('" + subTitle + "')}}"
+	}
 	b.schema.XDecoratorProps["subTitle"] = subTitle
 	return b
 }
 
 func (b *chartlineBuilder) Description(description string) *chartlineBuilder {
-	b.schema.Description = description
+	b.SetDescription(description)
 	return b
 }
 

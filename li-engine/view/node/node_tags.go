@@ -27,12 +27,12 @@ func (b *tagsBuilder) AC(f ac.AC) *tagsBuilder {
 }
 
 func (b *tagsBuilder) Title(title string) *tagsBuilder {
-	b.schema.Title = title
+	b.SetTitle(title)
 	return b
 }
 
 func (b *tagsBuilder) Description(description string) *tagsBuilder {
-	b.schema.Description = description
+	b.SetDescription(description)
 	return b
 }
 

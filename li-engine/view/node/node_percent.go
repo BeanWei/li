@@ -31,12 +31,12 @@ func (b *percentBuilder) AC(f ac.AC) *percentBuilder {
 }
 
 func (b *percentBuilder) Title(title string) *percentBuilder {
-	b.schema.Title = title
+	b.SetTitle(title)
 	return b
 }
 
 func (b *percentBuilder) Description(description string) *percentBuilder {
-	b.schema.Description = description
+	b.SetDescription(description)
 	return b
 }
 

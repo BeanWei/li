@@ -25,12 +25,12 @@ func (b *listactionreloadBuilder) AC(f ac.AC) *listactionreloadBuilder {
 }
 
 func (b *listactionreloadBuilder) Title(title string) *listactionreloadBuilder {
-	b.schema.Title = title
+	b.SetTitle(title)
 	return b
 }
 
 func (b *listactionreloadBuilder) Description(description string) *listactionreloadBuilder {
-	b.schema.Description = description
+	b.SetDescription(description)
 	return b
 }
 

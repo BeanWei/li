@@ -6,6 +6,7 @@ import { useNavigate } from "react-router-dom";
 import { isEmpty } from "@formily/shared";
 import { IconMenuFold, IconMenuUnfold } from "@arco-design/web-react/icon";
 import NProgress from "nprogress";
+import { useTranslation } from "react-i18next";
 import { SchemaComponent } from "schema-components";
 import { useRequest } from "pro-utils";
 import Logo from "@/assets/logo.svg";
@@ -35,7 +36,7 @@ export const Layout = () => {
   const params = useParams();
   const global = useContext(GlobalContext);
   const result = useRequest("@getCurrentUser");
-
+  const { t } = useTranslation();
   const [collapsed, setCollapsed] = useState(false);
 
   const curKey = params?.["*"] || global.app?.home || global.app?.menus[0]?.key;
@@ -74,7 +75,7 @@ export const Layout = () => {
             {global.app?.navitems.map((item: any, i: number) => {
               return (
                 <li key={i.toString()}>
-                  <SchemaComponent schema={item} scope={{ global }} />
+                  <SchemaComponent schema={item} scope={{ global, t }} />
                 </li>
               );
             })}
@@ -109,7 +110,7 @@ export const Layout = () => {
                   },
                 },
               }}
-              scope={{ global }}
+              scope={{ global, t }}
             />
           </div>
           <div

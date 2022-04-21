@@ -2,6 +2,7 @@ package engine
 
 import (
 	"context"
+	"strings"
 
 	"github.com/BeanWei/li/li-engine/ac"
 	"github.com/BeanWei/li/li-engine/controller"
@@ -123,6 +124,9 @@ func NewApp(cfg *App) {
 				}
 			} else {
 				key = grand.S(8)
+			}
+			if !strings.HasPrefix(menu.Title, "{{t('") {
+				menu.Title = "{{t('" + menu.Title + "')}}"
 			}
 			amenu := &appmenu{
 				Key:      key,

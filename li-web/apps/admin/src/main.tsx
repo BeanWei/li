@@ -48,8 +48,8 @@ const App = compose(...providers)(() => {
     defaultValue: navigator.language,
   });
   const [currentUser, setCurrentUser] = useState({});
-  const { t } = useTranslation();
-  const { data, loading } = useRequest("@getAppConfig");
+  const { t, i18n } = useTranslation();
+  const { data, run, loading } = useRequest("@getAppConfig");
   const entry = data?.entry || "/admin";
 
   useEffect(() => {
@@ -59,6 +59,11 @@ const App = compose(...providers)(() => {
       document.body.removeAttribute("arco-theme");
     }
   }, [theme]);
+
+  useEffect(() => {
+    i18n.changeLanguage(lang);
+    run();
+  }, [lang]);
 
   if (loading) {
     return <Loading />;

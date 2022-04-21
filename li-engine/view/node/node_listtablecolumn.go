@@ -1,6 +1,8 @@
 package node
 
 import (
+	"strings"
+
 	"github.com/BeanWei/li/li-engine/ac"
 	"github.com/BeanWei/li/li-engine/view"
 	"github.com/BeanWei/li/li-engine/view/ui"
@@ -30,6 +32,9 @@ func (b *listtablecolumnBuilder) AC(f ac.AC) *listtablecolumnBuilder {
 
 // Title 列标题
 func (b *listtablecolumnBuilder) Title(title string) *listtablecolumnBuilder {
+	if !strings.HasPrefix(title, "{{t('") {
+		title = "{{t('" + title + "')}}"
+	}
 	b.schema.XComponentProps["title"] = title
 	return b
 }

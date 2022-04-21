@@ -26,12 +26,12 @@ func (b *checkboxBuilder) AC(f ac.AC) *checkboxBuilder {
 }
 
 func (b *checkboxBuilder) Title(title string) *checkboxBuilder {
-	b.schema.Title = title
+	b.SetTitle(title)
 	return b
 }
 
 func (b *checkboxBuilder) Description(description string) *checkboxBuilder {
-	b.schema.Description = description
+	b.SetDescription(description)
 	return b
 }
 

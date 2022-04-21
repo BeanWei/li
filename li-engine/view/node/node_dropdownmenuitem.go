@@ -26,6 +26,6 @@ func (b *dropdownmenuitemBuilder) AC(f ac.AC) *dropdownmenuitemBuilder {
 }
 
 func (b *dropdownmenuitemBuilder) Title(title string) *dropdownmenuitemBuilder {
-	b.schema.Title = title
+	b.SetTitle(title)
 	return b
 }

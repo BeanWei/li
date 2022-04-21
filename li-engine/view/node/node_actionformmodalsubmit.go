@@ -28,7 +28,7 @@ func (b *actionformmodalsubmitBuilder) AC(f ac.AC) *actionformmodalsubmitBuilder
 }
 
 func (b *actionformmodalsubmitBuilder) Title(title string) *actionformmodalsubmitBuilder {
-	b.schema.Title = title
+	b.SetTitle(title)
 	return b
 }
 

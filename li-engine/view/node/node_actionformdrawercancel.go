@@ -25,6 +25,6 @@ func (b *actionformdrawercancelBuilder) AC(f ac.AC) *actionformdrawercancelBuild
 }
 
 func (b *actionformdrawercancelBuilder) Title(title string) *actionformdrawercancelBuilder {
-	b.schema.Title = title
+	b.SetTitle(title)
 	return b
 }

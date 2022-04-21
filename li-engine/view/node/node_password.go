@@ -27,12 +27,12 @@ func (b *passwordBuilder) AC(f ac.AC) *passwordBuilder {
 }
 
 func (b *passwordBuilder) Title(title string) *passwordBuilder {
-	b.schema.Title = title
+	b.SetTitle(title)
 	return b
 }
 
 func (b *passwordBuilder) Description(description string) *passwordBuilder {
-	b.schema.Description = description
+	b.SetDescription(description)
 	return b
 }
 

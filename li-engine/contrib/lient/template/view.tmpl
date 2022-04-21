@@ -146,7 +146,7 @@ func List{{ $.Name }}View() view.Node {
 				ActionBar(
 					node.ListAction("{{ $.Package }}ListActions").Children(
 						node.ListActionRecordFormDrawer("add{{ $.Name }}").
-							Title("新建").
+							Title("addNew").
 							AC({{ $.Package }}ViewACL["create:{{ $.Name }}"]).
 							ButtonType("primary").
 							ButtonIcon("IconPlus").
@@ -157,11 +157,11 @@ func List{{ $.Name }}View() view.Node {
 								node.ActionFormDrawerSubmit("submit").ForSubmit("@add{{ $.Name }}", Create{{ $.Name }}Controller),
 							),
 						node.ListActionRowSelection("deleteMany{{ $.Name }}").
-							Title("删除").
+							Title("bulkDelete").
 							AC({{ $.Package }}ViewACL["deleteMany:{{ $.Name }}"]).
 							ForSubmit("@deleteMany{{ $.Name }}", DeleteMany{{ $.Name }}Controller).
 							AfterReload(true).
-							ConfirmTitle("确认删除").
+							ConfirmTitle("confirmDelete").
 							ButtonStatus("danger").
 							ButtonIcon("IconDelete").
 							ButtonPosition("left"),
@@ -174,7 +174,7 @@ func List{{ $.Name }}View() view.Node {
 					append(
 						List{{ $.Name }}TableColumns(),
 						node.ListTableColumn("columnAction").
-							Title("操作").
+							Title("columnAction").
 							DataIndex("__action").
 							Width(150).
 							Render(
@@ -182,7 +182,7 @@ func List{{ $.Name }}View() view.Node {
 									node.ListActionRecordFormDrawer("view").
 										AC({{ $.Package }}ViewACL["get:{{ $.Name }}"]).
 										ForInit("@get{{ $.Name }}", Get{{ $.Name }}Controller).
-										DrawerTitle("查看").
+										DrawerTitle("viewDrawerTitle").
 										ButtonType("text").
 										ButtonIcon("IconEye").
 										Body(Read{{ $.Name }}FormView()).
@@ -192,7 +192,7 @@ func List{{ $.Name }}View() view.Node {
 									node.ListActionRecordFormDrawer("edit").
 										AC({{ $.Package }}ViewACL["update:{{ $.Name }}"]).
 										ForInit("@get{{ $.Name }}", Get{{ $.Name }}Controller).
-										DrawerTitle("编辑").
+										DrawerTitle("editDrawerTitle").
 										ButtonType("text").
 										ButtonIcon("IconEdit").
 										Body(Update{{ $.Name }}FormView()).

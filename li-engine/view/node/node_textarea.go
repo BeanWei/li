@@ -27,12 +27,12 @@ func (b *textareaBuilder) AC(f ac.AC) *textareaBuilder {
 }
 
 func (b *textareaBuilder) Title(title string) *textareaBuilder {
-	b.schema.Title = title
+	b.SetTitle(title)
 	return b
 }
 
 func (b *textareaBuilder) Description(description string) *textareaBuilder {
-	b.schema.Description = description
+	b.SetDescription(description)
 	return b
 }
 
