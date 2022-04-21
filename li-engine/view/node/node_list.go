@@ -1,8 +1,6 @@
 package node
 
 import (
-	"strings"
-
 	"github.com/BeanWei/li/li-engine/ac"
 	"github.com/BeanWei/li/li-engine/controller"
 	"github.com/BeanWei/li/li-engine/view/ui"
@@ -77,9 +75,6 @@ func (b *listBuilder) SelectionMultiple(multiple bool) *listBuilder {
 func (b *listBuilder) SelectionColumnTitle(title string) *listBuilder {
 	sel, ok := b.schema.XComponentProps["selection"].(map[string]interface{})
 	if ok {
-		if !strings.HasPrefix(title, "{{t('") {
-			title = "{{t('" + title + "')}}"
-		}
 		sel["columnTitle"] = title
 		b.schema.XComponentProps["selection"] = sel
 	}

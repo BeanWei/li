@@ -1,8 +1,6 @@
 package node
 
 import (
-	"strings"
-
 	"github.com/BeanWei/li/li-engine/ac"
 	"github.com/BeanWei/li/li-engine/controller"
 	"github.com/BeanWei/li/li-engine/view/ui"
@@ -33,17 +31,11 @@ func (b *chartpieBuilder) AC(f ac.AC) *chartpieBuilder {
 }
 
 func (b *chartpieBuilder) Title(title string) *chartpieBuilder {
-	if !strings.HasPrefix(title, "{{t('") {
-		title = "{{t('" + title + "')}}"
-	}
 	b.schema.XDecoratorProps["title"] = title
 	return b
 }
 
 func (b *chartpieBuilder) SubTitle(subTitle string) *chartpieBuilder {
-	if !strings.HasPrefix(subTitle, "{{t('") {
-		subTitle = "{{t('" + subTitle + "')}}"
-	}
 	b.schema.XDecoratorProps["subTitle"] = subTitle
 	return b
 }

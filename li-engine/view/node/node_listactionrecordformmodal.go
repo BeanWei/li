@@ -1,8 +1,6 @@
 package node
 
 import (
-	"strings"
-
 	"github.com/BeanWei/li/li-engine/ac"
 	"github.com/BeanWei/li/li-engine/controller"
 	"github.com/BeanWei/li/li-engine/view"
@@ -98,9 +96,6 @@ func (b *listactionrecordformmodalBuilder) ButtonPosition(position string) *list
 func (b *listactionrecordformmodalBuilder) ModalTitle(title string) *listactionrecordformmodalBuilder {
 	modalProps, ok := b.schema.XComponentProps["modalProps"].(map[string]interface{})
 	if ok {
-		if !strings.HasPrefix(title, "{{t('") {
-			title = "{{t('" + title + "')}}"
-		}
 		modalProps["title"] = title
 		b.schema.XComponentProps["modalProps"] = modalProps
 	}
