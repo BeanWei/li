@@ -27,6 +27,7 @@ importers:
       '@formily/shared': 2.0.13
       '@svgr/webpack': ^5.5.0
       '@types/lodash': ^4.14.182
+      '@types/nprogress': ^0.2.0
       '@types/react': ^17.0.44
       '@types/react-dom': ^17.0.15
       '@types/react-helmet': ^6.1.5
@@ -84,6 +85,7 @@ importers:
       '@arco-plugins/vite-plugin-svgr': 0.7.2_vite@2.9.5
       '@svgr/webpack': 5.5.0
       '@types/lodash': 4.14.182
+      '@types/nprogress': 0.2.0
       '@types/react': 17.0.44
       '@types/react-dom': 17.0.15
       '@types/react-helmet': 6.1.5
@@ -2232,6 +2234,10 @@ packages:
 
   /@types/node/17.0.25:
     resolution: {integrity: sha512-wANk6fBrUwdpY4isjWrKTufkrXdu1D2YHCot2fD/DfWxF5sMrVSA+KN7ydckvaTCh0HiqX9IVl0L5/ZoXg5M7w==}
+    dev: true
+
+  /@types/nprogress/0.2.0:
+    resolution: {integrity: sha512-1cYJrqq9GezNFPsWTZpFut/d4CjpZqA0vhqDUPFWYKF1oIyBz5qnoYMzR+0C/T96t3ebLAC1SSnwrVOm5/j74A==}
     dev: true
 
   /@types/parse-json/4.0.0:

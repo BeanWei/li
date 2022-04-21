@@ -5,6 +5,7 @@ import { useParams } from "react-router";
 import { useNavigate } from "react-router-dom";
 import { isEmpty } from "@formily/shared";
 import { IconMenuFold, IconMenuUnfold } from "@arco-design/web-react/icon";
+import NProgress from "nprogress";
 import { SchemaComponent } from "schema-components";
 import { useRequest } from "pro-utils";
 import Logo from "@/assets/logo.svg";
@@ -37,6 +38,15 @@ export const Layout = () => {
 
   const [collapsed, setCollapsed] = useState(false);
 
+  const curKey = params?.["*"] || global.app?.home || global.app?.menus[0]?.key;
+  const defaultSelectedKeys = [curKey];
+  const defaultOpenKeys = getOpenKeysFromMenuData(curKey, global.app?.menus);
+  const onClickMenuItem = (key: string) => {
+    NProgress.start();
+    navigate(global.app?.entry + `/${key}`);
+    NProgress.done();
+  };
+
   useEffect(() => {
     if (!isEmpty(result.data)) {
       global.setCurrentUser?.(result.data);
@@ -49,11 +59,6 @@ export const Layout = () => {
   if (result.error) {
     return <Navigate to={global.app?.entry + "/sign"} />;
   }
-
-  const curKey = params?.["*"] || global.app?.home || global.app?.menus[0]?.key;
-  const onClickMenuItem = (key: string) => {
-    navigate(global.app?.entry + `/${key}`);
-  };
 
   return (
     <ArcoLayout className={styles.layout}>
@@ -95,19 +100,16 @@ export const Layout = () => {
                   menu: {
                     "x-component": "Menu",
                     "x-component-props": {
-                      selectedKeys: [curKey],
-                      openKeys: getOpenKeysFromMenuData(
-                        curKey,
-                        global.app?.menus
-                      ),
-                      onClickMenuItem: "{{ onClickMenuItem }}",
+                      defaultSelectedKeys,
+                      defaultOpenKeys,
                       menuData: global.app?.menus,
                       collapse: collapsed,
+                      onClickMenuItem,
                     },
                   },
                 },
               }}
-              scope={{ onClickMenuItem, global }}
+              scope={{ global }}
             />
           </div>
           <div
