@@ -1,16 +1,17 @@
-import { createContext, useContext, useEffect } from "react";
-import { useRequest } from "pro-utils";
+import { useContext, useEffect, useState } from "react";
 import { Navigate } from "react-router";
-import { useLocalStorageState } from "ahooks";
-import { ConfigProvider, Layout as ArcoLayout } from "@arco-design/web-react";
+import { Layout as ArcoLayout } from "@arco-design/web-react";
 import { useParams } from "react-router";
 import { useNavigate } from "react-router-dom";
-import { SchemaComponent, zhCN, enUS } from "schema-components";
+import { isEmpty } from "@formily/shared";
+import { IconMenuFold, IconMenuUnfold } from "@arco-design/web-react/icon";
+import { SchemaComponent } from "schema-components";
+import { useRequest } from "pro-utils";
 import Logo from "@/assets/logo.svg";
-import { useRoute } from "../route-switch/hooks";
 import { RemoteSchemaComponent } from "../route-switch/RemoteSchemaComponent";
 import styles from "./index.module.less";
 import { Loading } from "../components";
+import { GlobalContext } from "../../context";
 
 const getOpenKeysFromMenuData = (curKey: string, menuData?: any[]) => {
   return (menuData || []).reduce((pre, item) => {
@@ -28,164 +29,108 @@ const getOpenKeysFromMenuData = (curKey: string, menuData?: any[]) => {
   }, [] as string[]);
 };
 
-export const LayoutContext = createContext<{
-  app?: Record<string, any>;
-  lang?: string;
-  setLang?: (value: string) => void;
-  theme?: string;
-  setTheme?: (value: string) => void;
-  currentUser?: Record<string, any>;
-  setCurrentUser?: (value: Record<string, any>) => void;
-}>({});
-
-export const useLayoutContext = () => {
-  return useContext(LayoutContext);
-};
-
 export const Layout = () => {
-  const route = useRoute();
   const navigate = useNavigate();
   const params = useParams();
+  const global = useContext(GlobalContext);
+  const result = useRequest("@getCurrentUser");
 
-  const {
-    title = "Li Admin",
-    logo,
-    navitems = [],
-    home,
-    menus = [],
-    entry,
-  } = route.config;
-
-  const [theme, setTheme] = useLocalStorageState("li-theme", {
-    defaultValue: window.matchMedia?.("(prefers-color-scheme: dark)").matches
-      ? "dark"
-      : "light",
-  });
-  const [lang, setLang] = useLocalStorageState("li-lang", {
-    defaultValue: navigator.language,
-  });
+  const [collapsed, setCollapsed] = useState(false);
 
   useEffect(() => {
-    if (theme === "dark") {
-      document.body.setAttribute("arco-theme", "dark");
-    } else {
-      document.body.removeAttribute("arco-theme");
+    if (!isEmpty(result.data)) {
+      global.setCurrentUser?.(result.data);
     }
-  }, [theme]);
+  }, [result.data]);
 
-  const result = useRequest("@getCurrentUser");
   if (result.loading) {
     return <Loading />;
   }
   if (result.error) {
-    return <Navigate to={entry + "/sign"} />;
+    return <Navigate to={global.app?.entry + "/sign"} />;
   }
 
-  const curKey = params?.["*"] || home || menus[0]?.key;
+  const curKey = params?.["*"] || global.app?.home || global.app?.menus[0]?.key;
   const onClickMenuItem = (key: string) => {
-    navigate(entry + `/${key}`);
-  };
-
-  const global = {
-    app: {
-      title,
-      logo,
-      home,
-      entry,
-    },
-    lang,
-    currentUser: result.data,
+    navigate(global.app?.entry + `/${key}`);
   };
 
   return (
-    <ConfigProvider
-      locale={lang === "en-US" ? enUS : zhCN}
-      componentConfig={{
-        Card: {
-          bordered: false,
-        },
-        List: {
-          bordered: false,
-        },
-        Table: {
-          border: false,
-        },
-      }}
-    >
-      <LayoutContext.Provider
-        value={{
-          ...global,
-          lang,
-          setLang,
-          theme,
-          setTheme,
-        }}
-      >
-        <ArcoLayout className={styles.layout}>
-          <div className={styles["layout-navbar"]}>
-            <div className={styles.navbar}>
-              <div className={styles.left}>
-                <div className={styles.logo}>
-                  {logo ? <img src={logo} /> : <Logo />}
-                  <div className={styles["logo-name"]}>{title}</div>
-                </div>
-              </div>
-              <ul className={styles.right}>
-                {navitems.map((item: any, i: number) => {
-                  return (
-                    <li key={i.toString()}>
-                      <SchemaComponent schema={item} scope={{ global }} />
-                    </li>
-                  );
-                })}
-              </ul>
+    <ArcoLayout className={styles.layout}>
+      <div className={styles["layout-navbar"]}>
+        <div className={styles.navbar}>
+          <div className={styles.left}>
+            <div className={styles.logo}>
+              {global.app?.logo ? <img src={global.app?.logo} /> : <Logo />}
+              <div className={styles["logo-name"]}>{global.app?.title}</div>
             </div>
           </div>
-          <ArcoLayout>
-            <ArcoLayout.Sider
-              className={styles["layout-sider"]}
-              trigger={null}
-              collapsible
-              breakpoint="xl"
-              width={220}
-              style={{ paddingTop: 60 }}
-            >
-              <div className={styles["menu-wrapper"]}>
-                <SchemaComponent
-                  schema={{
-                    type: "void",
-                    properties: {
-                      menu: {
-                        "x-component": "Menu",
-                        "x-component-props": {
-                          defaultSelectedKeys: [curKey],
-                          defaultOpenKeys: getOpenKeysFromMenuData(
-                            curKey,
-                            menus
-                          ),
-                          onClickMenuItem: "{{ onClickMenuItem }}",
-                          menuData: menus,
-                        },
-                      },
+          <ul className={styles.right}>
+            {global.app?.navitems.map((item: any, i: number) => {
+              return (
+                <li key={i.toString()}>
+                  <SchemaComponent schema={item} scope={{ global }} />
+                </li>
+              );
+            })}
+          </ul>
+        </div>
+      </div>
+      <ArcoLayout>
+        <ArcoLayout.Sider
+          className={styles["layout-sider"]}
+          collapsed={collapsed}
+          onCollapse={setCollapsed}
+          trigger={null}
+          collapsible
+          breakpoint="xl"
+          width={collapsed ? 48 : 220}
+          style={{ paddingTop: 60 }}
+        >
+          <div className={styles["menu-wrapper"]}>
+            <SchemaComponent
+              schema={{
+                type: "void",
+                properties: {
+                  menu: {
+                    "x-component": "Menu",
+                    "x-component-props": {
+                      selectedKeys: [curKey],
+                      openKeys: getOpenKeysFromMenuData(
+                        curKey,
+                        global.app?.menus
+                      ),
+                      onClickMenuItem: "{{ onClickMenuItem }}",
+                      menuData: global.app?.menus,
+                      collapse: collapsed,
                     },
-                  }}
-                  scope={{ onClickMenuItem, global }}
-                />
-              </div>
-            </ArcoLayout.Sider>
-            <ArcoLayout
-              className={styles["layout-content"]}
-              style={{ paddingLeft: 220, paddingTop: 60 }}
-            >
-              <div className={styles["layout-content-wrapper"]}>
-                <ArcoLayout.Content>
-                  <RemoteSchemaComponent uid={curKey} />
-                </ArcoLayout.Content>
-              </div>
-            </ArcoLayout>
-          </ArcoLayout>
+                  },
+                },
+              }}
+              scope={{ onClickMenuItem, global }}
+            />
+          </div>
+          <div
+            className={styles["collapse-btn"]}
+            onClick={() => setCollapsed((collapsed) => !collapsed)}
+          >
+            {collapsed ? <IconMenuUnfold /> : <IconMenuFold />}
+          </div>
+        </ArcoLayout.Sider>
+        <ArcoLayout
+          className={styles["layout-content"]}
+          style={{
+            paddingTop: 60,
+            paddingLeft: collapsed ? 48 : 220,
+          }}
+        >
+          <div className={styles["layout-content-wrapper"]}>
+            <ArcoLayout.Content>
+              <RemoteSchemaComponent uid={curKey} />
+            </ArcoLayout.Content>
+          </div>
         </ArcoLayout>
-      </LayoutContext.Provider>
-    </ConfigProvider>
+      </ArcoLayout>
+    </ArcoLayout>
   );
 };

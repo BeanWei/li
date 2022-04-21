@@ -10,7 +10,7 @@
     "build": "turbo run build",
     "dev": "turbo run dev --parallel",
     "lint": "turbo run lint",
-    "format": "prettier --write \"**/*.{ts,tsx,md}\""
+    "format": "prettier -c --write \"**/*.{ts,tsx,md}\" --end-of-line auto"
   },
   "devDependencies": {
     "@arco-design/web-react": "^2.32.0",

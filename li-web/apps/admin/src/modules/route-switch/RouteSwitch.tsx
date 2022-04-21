@@ -21,7 +21,7 @@ export function RouteSwitch(props: RouteSwitchProps) {
                 <Navigate to={route.redirect} />
               ) : (
                 <RouteContext.Provider value={route}>
-                  <ComponentRenderer {...route} route={route} />
+                  <ComponentRenderer component={route.component} />
                 </RouteContext.Provider>
               )
             }
@@ -32,11 +32,7 @@ export function RouteSwitch(props: RouteSwitchProps) {
   );
 }
 
-function ComponentRenderer(props: any) {
-  const Component = useRouteComponent(props?.route?.component);
-  return (
-    <Component {...props}>
-      <RouteSwitch routes={props.route.routes} />
-    </Component>
-  );
+function ComponentRenderer(props: { component: string }) {
+  const Component = useRouteComponent(props.component);
+  return <Component />;
 }

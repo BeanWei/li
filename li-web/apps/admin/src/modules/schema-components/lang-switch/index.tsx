@@ -2,10 +2,10 @@ import { useContext } from "react";
 import { observer } from "@formily/react";
 import { IconLanguage } from "@arco-design/web-react/icon";
 import { Button, Select } from "@arco-design/web-react";
-import { LayoutContext } from "../../layout";
+import { GlobalContext } from "../../../context";
 
 export const LangSwitch: React.FC = observer((props) => {
-  const { lang, setLang } = useContext(LayoutContext);
+  const { lang, setLang } = useContext(GlobalContext);
 
   return (
     <Select

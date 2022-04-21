@@ -5,4 +5,4 @@ export const RouteSwitchContext = createContext({
   components: {},
 });
 
-export const RouteContext = createContext<RouteProps>({});
+export const RouteContext = createContext<RouteProps>({ path: "/" });

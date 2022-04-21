@@ -4,7 +4,6 @@ import svgrPlugin from "@arco-plugins/vite-plugin-svgr";
 import vitePluginForArco from "@arco-plugins/vite-react";
 import { viteMockServe } from "vite-plugin-mock";
 import proxy from "./config/proxy";
-import setting from "./src/settings.json";
 
 const { REACT_APP_ENV = "" } = process.env;
 
@@ -27,7 +26,7 @@ export default defineConfig({
     vitePluginForArco({
       theme: "@arco-themes/react-arco-pro",
       modifyVars: {
-        "arcoblue-6": setting.themeColor,
+        "arcoblue-6": "#165DFF",
       },
     }),
     viteMockServe({

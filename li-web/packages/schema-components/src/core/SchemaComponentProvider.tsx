@@ -33,10 +33,12 @@ Schema.registerCompiler(Registry.compile);
 export const SchemaComponentProvider: React.FC<ISchemaComponentProvider> = (
   props
 ) => {
-  const { scope, components, children } = props;
+  const { components, children } = props;
   const [, setUid] = useState(uid());
   const [formId, setFormId] = useState(uid());
   const form = props.form || useMemo(() => createForm(), [formId]);
+  const { t } = useTranslation();
+  const scope = { ...props.scope, t };
 
   return (
     <SchemaComponentContext.Provider

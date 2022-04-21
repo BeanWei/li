@@ -2,10 +2,10 @@ import { useContext } from "react";
 import { Button, ButtonProps } from "@arco-design/web-react";
 import { IconMoonFill, IconSunFill } from "@arco-design/web-react/icon";
 import { observer } from "@formily/react";
-import { LayoutContext } from "../../layout";
+import { GlobalContext } from "../../../context";
 
 export const ThemeSwitch: React.FC<ButtonProps> = observer((props) => {
-  const { theme, setTheme } = useContext(LayoutContext);
+  const { theme, setTheme } = useContext(GlobalContext);
 
   return (
     <Button
