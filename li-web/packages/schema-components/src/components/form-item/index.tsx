@@ -230,7 +230,7 @@ export const BaseItem: React.FC<IFormItemProps> = ({ children, ...props }) => {
             </svg>
           </strong>
         )}
-        {label}
+        <Trans>{label}</Trans>
       </label>
     );
 
@@ -374,9 +374,9 @@ export const FormItem: ComposeFormItem = connect(
   mapProps((props, field) => {
     if (isVoidField(field))
       return {
-        label: <Trans>{field.title || props.label}</Trans>,
+        label: field.title || props.label,
         asterisk: props.asterisk,
-        extra: <Trans>{props.extra || field.description}</Trans>,
+        extra: props.extra || field.description,
       };
     if (!field) return props;
     const takeFeedbackStatus = () => {
@@ -408,11 +408,11 @@ export const FormItem: ComposeFormItem = connect(
       return false;
     };
     return {
-      label: <Trans>{props.label || field.title}</Trans>,
+      label: props.label || field.title,
       feedbackStatus: takeFeedbackStatus(),
       feedbackText: takeMessage(),
       asterisk: takeAsterisk(),
-      extra: <Trans>{props.extra || field.description}</Trans>,
+      extra: props.extra || field.description,
     };
   })
 );

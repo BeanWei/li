@@ -15,6 +15,7 @@ import {
 import { IconLoading } from "@arco-design/web-react/icon";
 import { isValid, toArr } from "@formily/shared";
 import { isArrayField } from "@formily/core";
+import { useTranslation } from "react-i18next";
 import { getCurrentOptions } from "./shared";
 
 type SelectProps = ArcoSelectProps & {
@@ -93,11 +94,23 @@ const ReadPretty = observer((props: any) => {
 
 export const Select: React.FC<SelectProps> = connect(
   (props: SelectProps) => {
-    const { objectValue, ...others } = props;
+    const { objectValue, ...rest } = props;
+    const { t } = useTranslation();
     if (objectValue) {
-      return <ObjectSelect {...others} />;
+      return (
+        <ObjectSelect
+          {...rest}
+          placeholder={rest.placeholder ? t(rest.placeholder) : undefined}
+        />
+      );
     }
-    return <ArcoSelect {...others} value={others.value || undefined} />;
+    return (
+      <ArcoSelect
+        {...rest}
+        placeholder={rest.placeholder ? t(rest.placeholder) : undefined}
+        value={rest.value || undefined}
+      />
+    );
   },
   mapProps(
     {

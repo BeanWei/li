@@ -1,6 +1,7 @@
+import { Fragment } from "react";
 import { TabsProps, Tabs as ArcoTabs } from "@arco-design/web-react";
 import { RecursionField, useFieldSchema } from "@formily/react";
-import { Fragment } from "react";
+import { useTranslation } from "react-i18next";
 import { Icon } from "../__builtins__";
 
 type ComposedTabs = React.FC<TabsProps> & {
@@ -9,6 +10,7 @@ type ComposedTabs = React.FC<TabsProps> & {
 
 export const Tabs: ComposedTabs = (props) => {
   const fieldSchema = useFieldSchema();
+  const { t } = useTranslation();
   return (
     <ArcoTabs {...props}>
       {fieldSchema.mapProperties((schema, key) => {
@@ -22,10 +24,10 @@ export const Tabs: ComposedTabs = (props) => {
                     type={schema["x-component-props"]?.icon}
                     style={{ marginRight: 6 }}
                   />
-                  {schema.title}
+                  {t(schema.title)}
                 </span>
               ) : (
-                schema.title
+                t(schema.title)
               )
             }
           >

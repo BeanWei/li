@@ -1,6 +1,7 @@
 import React from "react";
 import { connect, mapReadPretty } from "@formily/react";
 import { Input, InputProps } from "@arco-design/web-react";
+import { useTranslation } from "react-i18next";
 import { PasswordStrength } from "./PasswordStrength";
 
 export interface IPasswordProps extends InputProps {
@@ -10,7 +11,7 @@ export interface IPasswordProps extends InputProps {
 
 export const Password = connect(
   (props: IPasswordProps) => {
-    const { value, className, checkStrength, ...others } = props;
+    const { value, className, checkStrength, ...rest } = props;
     const blockStyle: React.CSSProperties = {
       position: "absolute",
       zIndex: 1,
@@ -20,9 +21,14 @@ export const Password = connect(
       width: 1,
       transform: "translate(-50%, 0)",
     };
+    const { t } = useTranslation();
     return (
       <span className={className || ""}>
-        <Input.Password {...others} value={value} />
+        <Input.Password
+          {...rest}
+          placeholder={rest.placeholder ? t(rest.placeholder) : undefined}
+          value={value}
+        />
         {checkStrength && (
           <PasswordStrength value={String(value)}>
             {(score) => {

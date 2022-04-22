@@ -1,6 +1,7 @@
 import { InputNumber, InputNumberProps } from "@arco-design/web-react";
 import { connect, mapReadPretty } from "@formily/react";
 import { isValid } from "@formily/shared";
+import { useTranslation } from "react-i18next";
 
 const getFormatter = (currency?: string): Intl.NumberFormat => {
   if (currency === "USD") {
@@ -23,9 +24,11 @@ const InputMoney: React.FC<InputNumberProps & { currency?: string }> = (
   props
 ) => {
   const { currency, ...rest } = props;
+  const { t } = useTranslation();
   return (
     <InputNumber
       {...rest}
+      placeholder={rest.placeholder ? t(rest.placeholder) : undefined}
       min={0}
       prefix={getPrefix(currency)}
       formatter={(value: any) => {

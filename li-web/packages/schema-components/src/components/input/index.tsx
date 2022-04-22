@@ -8,6 +8,7 @@ import {
 } from "@arco-design/web-react";
 import { IconLoading } from "@arco-design/web-react/icon";
 import cls from "classnames";
+import { useTranslation } from "react-i18next";
 import { usePrefixCls } from "../__builtins__";
 import { useCompile } from "../../hooks";
 import "./index.less";
@@ -17,7 +18,15 @@ type ComposedInput = React.FC<InputProps> & {
 };
 
 export const Input: ComposedInput = connect(
-  ArcoInput,
+  (props: InputProps) => {
+    const { t } = useTranslation();
+    return (
+      <ArcoInput
+        {...props}
+        placeholder={props.placeholder ? t(props.placeholder) : undefined}
+      />
+    );
+  },
   mapProps((props, field: any) => {
     return {
       ...props,
@@ -65,7 +74,15 @@ export const Input: ComposedInput = connect(
 );
 
 Input.TextArea = connect(
-  ArcoInput.TextArea,
+  (props: TextAreaProps) => {
+    const { t } = useTranslation();
+    return (
+      <ArcoInput.TextArea
+        {...props}
+        placeholder={props.placeholder ? t(props.placeholder) : undefined}
+      />
+    );
+  },
   mapReadPretty((props) => {
     const prefixCls = usePrefixCls("description-textarea", props);
     const domRef = React.useRef<HTMLInputElement>(null);

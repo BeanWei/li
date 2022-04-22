@@ -18,7 +18,7 @@ i18n
   .init({
     debug: false,
     lng: getLocalStorage() || navigator.language,
-    fallbackLng: "en-US",
+    supportedLngs: ["en-US", "zh-CN"],
     preload: ["en-US", "zh-CN"],
     backend: {
       loadPath: "/locales/{{lng}}.json",

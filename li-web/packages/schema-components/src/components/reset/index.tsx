@@ -1,7 +1,8 @@
 import React from "react";
 import { Button, ButtonProps } from "@arco-design/web-react";
 import { IFieldResetOptions, IFormFeedback } from "@formily/core";
-import { useParentForm } from "@formily/react";
+import { useFieldSchema, useParentForm } from "@formily/react";
+import { useTranslation } from "react-i18next";
 
 export interface IResetProps extends IFieldResetOptions, ButtonProps {
   onClick?: (e: Event) => any;
@@ -17,6 +18,8 @@ export const Reset: React.FC<IResetProps> = ({
   ...props
 }) => {
   const form = useParentForm();
+  const fieldSchema = useFieldSchema();
+  const { t } = useTranslation();
   return (
     <Button
       {...props}
@@ -33,7 +36,7 @@ export const Reset: React.FC<IResetProps> = ({
           .catch(onResetValidateFailed);
       }}
     >
-      {props.children}
+      {t(fieldSchema["x-content"] || fieldSchema.title)}
     </Button>
   );
 };
