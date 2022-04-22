@@ -3,6 +3,7 @@ import {
   MenuProps as ArcoMenuProps,
 } from "@arco-design/web-react";
 import { uid } from "@formily/shared";
+import { Trans } from "react-i18next";
 import { isUrl, Icon } from "../__builtins__";
 
 export type MenuDataItem = {
@@ -28,14 +29,14 @@ const renderMenuItem = (item: MenuDataItem): React.ReactNode => {
           style={{ fontSize: "18px", verticalAlign: "text-bottom" }}
           type={item.icon}
         />
-        {item.title}
+        <Trans>{item.title}</Trans>
       </>
     );
   }
   return (
     <>
       <div style={{ width: "12px", height: "18px", display: "inline-block" }} />
-      {item.title}
+      <Trans>{item.title}</Trans>
     </>
   );
 };
