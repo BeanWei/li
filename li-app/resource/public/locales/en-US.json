@@ -1,8 +1,5 @@
 {
-  "addNew": "Add New",
-  "bulkDelete": "Bulk Delete",
-  "confirmDelete": "Are you sure you want to delete it?",
-  "columnAction": "Actions",
-  "viewDrawerTitle": "View",
-  "editDrawerTitle": "Edit"
+  "登录": "Login",
+  "邮箱": "Email",
+  "密码": "Password"
 }
