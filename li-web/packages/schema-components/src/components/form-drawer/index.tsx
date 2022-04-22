@@ -17,6 +17,7 @@ import {
   IMiddleware,
 } from "@formily/shared";
 import { Drawer, DrawerProps } from "@arco-design/web-react";
+import { Trans } from "react-i18next";
 import {
   usePrefixCls,
   createPortalProvider,
@@ -91,6 +92,7 @@ export function FormDrawer(title: any, id: any, renderer?: any): IFormDrawer {
   const drawer: IDrawerProps = {
     width: "50%",
     ...props,
+    title: <Trans>{props.title}</Trans>,
     footer: null,
     onCancel: () => {
       if (props?.onCancel?.() !== false) {

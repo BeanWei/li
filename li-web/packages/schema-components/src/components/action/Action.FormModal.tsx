@@ -1,6 +1,7 @@
 import { useContext } from "react";
 import { Button, ConfigProvider } from "@arco-design/web-react";
 import { observer, useField, useFieldSchema } from "@formily/react";
+import { useTranslation } from "react-i18next";
 import { request } from "pro-utils";
 import FormLayout from "../form-layout";
 import FormModal from "../form-modal";
@@ -30,55 +31,62 @@ export const ActionFormModal: React.FC<ActionFormModalProps> = observer(
     const schema = useFieldSchema();
     const field = useField();
     const { locale } = useContext(ConfigProvider.ConfigContext);
+    const { t } = useTranslation();
 
     const handleClick = () => {
-      const modal = FormModal(modalProps || actionText || field.title, () => {
-        return (
-          <FormLayout {...layoutProps}>
-            <UiSchemaComponentProvider>
-              <SchemaComponent schema={schema} onlyRenderProperties />
-            </UiSchemaComponentProvider>
-            {schema.properties && (
-              <FormModal.Footer>
-                <FormButtonGroup align="right">
-                  {schema.reduceProperties((b: React.ReactNode[], s) => {
-                    if (s["x-component"] === "Action.FormModal.Cancel") {
-                      return b.concat([
-                        <Button
-                          {...modalProps?.cancelButtonProps}
-                          {...s["x-component-props"]}
-                          key={s.name}
-                          onClick={() => {
-                            modal.close();
-                          }}
-                        >
-                          {s.title || locale?.Modal.cancelText}
-                        </Button>,
-                      ]);
-                    }
-                    if (s["x-component"] === "Action.FormModal.Submit") {
-                      return b.concat([
-                        <Submit
-                          {...modalProps?.cancelButtonProps}
-                          {...s["x-component-props"]}
-                          key={s.name}
-                          forSubmitSuccess={(paylod) => {
-                            modal.close();
-                            forSubmitSuccess?.(paylod);
-                          }}
-                        >
-                          {s.title || locale?.Modal.okText}
-                        </Submit>,
-                      ]);
-                    }
-                    return b;
-                  }, [])}
-                </FormButtonGroup>
-              </FormModal.Footer>
-            )}
-          </FormLayout>
-        );
-      }).forOpen((paylod, next) => {
+      const modal = FormModal(
+        {
+          ...modalProps,
+          title: t(modalProps?.title || actionText || field.title),
+        },
+        () => {
+          return (
+            <FormLayout {...layoutProps}>
+              <UiSchemaComponentProvider>
+                <SchemaComponent schema={schema} onlyRenderProperties />
+              </UiSchemaComponentProvider>
+              {schema.properties && (
+                <FormModal.Footer>
+                  <FormButtonGroup align="right">
+                    {schema.reduceProperties((b: React.ReactNode[], s) => {
+                      if (s["x-component"] === "Action.FormModal.Cancel") {
+                        return b.concat([
+                          <Button
+                            {...modalProps?.cancelButtonProps}
+                            {...s["x-component-props"]}
+                            key={s.name}
+                            onClick={() => {
+                              modal.close();
+                            }}
+                          >
+                            {s.title ? t(s.title) : locale?.Modal.cancelText}
+                          </Button>,
+                        ]);
+                      }
+                      if (s["x-component"] === "Action.FormModal.Submit") {
+                        return b.concat([
+                          <Submit
+                            {...modalProps?.cancelButtonProps}
+                            {...s["x-component-props"]}
+                            key={s.name}
+                            forSubmitSuccess={(paylod) => {
+                              modal.close();
+                              forSubmitSuccess?.(paylod);
+                            }}
+                          >
+                            {s.title ? t(s.title) : locale?.Modal.okText}
+                          </Submit>,
+                        ]);
+                      }
+                      return b;
+                    }, [])}
+                  </FormButtonGroup>
+                </FormModal.Footer>
+              )}
+            </FormLayout>
+          );
+        }
+      ).forOpen((paylod, next) => {
         if (forInit) {
           request(forInit, forInitVariables).then((data) => {
             next({
@@ -114,7 +122,7 @@ export const ActionFormModal: React.FC<ActionFormModalProps> = observer(
     return (
       <FormModal.Portal>
         {isMenuItem ? (
-          <div onClick={handleClick}>{actionText || field.title}</div>
+          <div onClick={handleClick}>{t(actionText || field.title)}</div>
         ) : (
           <Button
             {...buttonProps}
@@ -127,7 +135,7 @@ export const ActionFormModal: React.FC<ActionFormModalProps> = observer(
               )
             }
           >
-            {actionText || field.title}
+            {t(actionText || field.title)}
           </Button>
         )}
       </FormModal.Portal>

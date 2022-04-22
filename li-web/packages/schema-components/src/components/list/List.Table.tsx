@@ -30,6 +30,7 @@ import {
 import { observer } from "@formily/reactive-react";
 import { isObject, pickBy, sortBy } from "lodash";
 import { isValid } from "@formily/shared";
+import { useTranslation } from "react-i18next";
 import { RecordIndexProvider, RecordProvider } from "../../core";
 import { useAttach } from "../../hooks";
 import {
@@ -49,7 +50,8 @@ type FilterConfig = Pick<
   "filters" | "filterIcon" | "filterMultiple" | "filterDropdown"
 >;
 const getLightFilterConfig = (schema: Schema): FilterConfig => {
-  const { prefixCls, locale } = useContext(ConfigProvider.ConfigContext);
+  const { prefixCls } = useContext(ConfigProvider.ConfigContext);
+  const locale = getLocale();
   const filterConfig: FilterConfig = {};
   if (Array.isArray(schema.enum) && schema.enum.length) {
     filterConfig.filters = schema.enum.map((opt) => {
@@ -70,8 +72,8 @@ const getLightFilterConfig = (schema: Schema): FilterConfig => {
     schema["x-component"] === "Checkbox"
   ) {
     filterConfig.filters = [
-      { text: "Yes", value: true },
-      { text: "No", value: false },
+      { text: locale.ListFilter.yes, value: true },
+      { text: locale.ListFilter.no, value: false },
     ];
     filterConfig.filterMultiple = false;
   } else {
@@ -206,6 +208,7 @@ const FilterForm: React.FC<{
   onSearch?: (values: Record<string, any>) => void;
 }> = observer(({ source, onSearch }) => {
   const locale = getLocale();
+  const { t } = useTranslation();
   const { grid, toggle, expanded, type } = useCollapseGrid(2);
   const [form] = Form.useForm();
   const fieldSchemas: Schema[] = [];
@@ -296,8 +299,8 @@ const FilterForm: React.FC<{
                   <Select
                     options={
                       [
-                        { label: "Yes", value: true },
-                        { label: "No", value: false },
+                        { label: locale.ListFilter.yes, value: true },
+                        { label: locale.ListFilter.no, value: false },
                       ] as any
                     }
                     allowClear
@@ -351,7 +354,7 @@ const FilterForm: React.FC<{
             return (
               <FormGrid.GridColumn gridSpan={span} key={schema.name}>
                 <Form.Item
-                  label={schema.title}
+                  label={t(schema.title)}
                   field={schema.name}
                   style={{
                     display: "block",

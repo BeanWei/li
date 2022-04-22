@@ -1,6 +1,7 @@
 import { useContext } from "react";
 import { Button, ConfigProvider } from "@arco-design/web-react";
 import { observer, useField, useFieldSchema } from "@formily/react";
+import { useTranslation } from "react-i18next";
 import { request } from "pro-utils";
 import FormLayout from "../form-layout";
 import FormDrawer from "../form-drawer";
@@ -27,10 +28,13 @@ export const ActionFormDrawer: React.FC<ActionFormDrawerProps> = observer(
     const schema = useFieldSchema();
     const field = useField();
     const { locale } = useContext(ConfigProvider.ConfigContext);
-
+    const { t } = useTranslation();
     const handleClick = () => {
       const drawer = FormDrawer(
-        drawerProps || actionText || field.title,
+        {
+          ...drawerProps,
+          title: t(drawerProps?.title || actionText || field.title),
+        },
         () => {
           return (
             <FormLayout {...layoutProps}>
@@ -54,7 +58,7 @@ export const ActionFormDrawer: React.FC<ActionFormDrawerProps> = observer(
                               drawer.close();
                             }}
                           >
-                            {s.title || locale?.Drawer.cancelText}
+                            {s.title ? t(s.title) : locale?.Drawer.cancelText}
                           </Button>,
                         ]);
                       }
@@ -69,7 +73,7 @@ export const ActionFormDrawer: React.FC<ActionFormDrawerProps> = observer(
                               forSubmitSuccess?.(paylod);
                             }}
                           >
-                            {s.title || locale?.Drawer.okText}
+                            {s.title ? t(s.title) : locale?.Drawer.okText}
                           </Submit>,
                         ]);
                       }
@@ -115,7 +119,7 @@ export const ActionFormDrawer: React.FC<ActionFormDrawerProps> = observer(
     };
 
     return isMenuItem ? (
-      <div onClick={handleClick}>{actionText || field.title}</div>
+      <div onClick={handleClick}>{t(actionText || field.title)}</div>
     ) : (
       <Button
         {...buttonProps}
@@ -128,7 +132,7 @@ export const ActionFormDrawer: React.FC<ActionFormDrawerProps> = observer(
           )
         }
       >
-        {actionText || field.title}
+        {t(actionText || field.title)}
       </Button>
     );
   }

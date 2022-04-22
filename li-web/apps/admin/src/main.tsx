@@ -49,7 +49,7 @@ const App = compose(...providers)(() => {
   });
   const [currentUser, setCurrentUser] = useState({});
   const { t, i18n } = useTranslation();
-  const { data, run, loading } = useRequest("@getAppConfig");
+  const { data, loading } = useRequest("@getAppConfig");
   const entry = data?.entry || "/admin";
 
   useEffect(() => {
@@ -62,7 +62,6 @@ const App = compose(...providers)(() => {
 
   useEffect(() => {
     i18n.changeLanguage(lang);
-    run();
   }, [lang]);
 
   if (loading) {

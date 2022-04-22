@@ -13,6 +13,7 @@ import { isVoidField } from "@formily/core";
 import { FormLayoutShallowContext, useFormLayout } from "../form-layout";
 import { getPrefixCls, pickDataProps } from "../__builtins__";
 import "./index.less";
+import { Trans } from "react-i18next";
 
 export interface IFormItemProps {
   className?: string;
@@ -373,9 +374,9 @@ export const FormItem: ComposeFormItem = connect(
   mapProps((props, field) => {
     if (isVoidField(field))
       return {
-        label: field.title || props.label,
+        label: <Trans>{field.title || props.label}</Trans>,
         asterisk: props.asterisk,
-        extra: props.extra || field.description,
+        extra: <Trans>{props.extra || field.description}</Trans>,
       };
     if (!field) return props;
     const takeFeedbackStatus = () => {
@@ -407,11 +408,11 @@ export const FormItem: ComposeFormItem = connect(
       return false;
     };
     return {
-      label: props.label || field.title,
+      label: <Trans>{props.label || field.title}</Trans>,
       feedbackStatus: takeFeedbackStatus(),
       feedbackText: takeMessage(),
       asterisk: takeAsterisk(),
-      extra: props.extra || field.description,
+      extra: <Trans>{props.extra || field.description}</Trans>,
     };
   })
 );

@@ -9,6 +9,7 @@ import {
   Typography,
 } from "@arco-design/web-react";
 import { IconDownload, IconRefresh } from "@arco-design/web-react/icon";
+import { useTranslation } from "react-i18next";
 import { useRequest } from "pro-utils";
 import { ChartItemContext } from "./context";
 
@@ -30,6 +31,7 @@ export const ChartItem = connect((props: ChartItemProps) => {
   } = props;
   const fieldSchema = useFieldSchema();
   const ref = useRef();
+  const { t } = useTranslation();
 
   const {
     data = [],
@@ -63,7 +65,7 @@ export const ChartItem = connect((props: ChartItemProps) => {
                 fontWeight: 500,
               }}
             >
-              {title || fieldSchema.title}
+              {t(title || fieldSchema.title)}
               {subTitle && (
                 <span
                   style={{
@@ -73,7 +75,7 @@ export const ChartItem = connect((props: ChartItemProps) => {
                     color: "var(--color-text-3)",
                   }}
                 >
-                  {subTitle}
+                  {t(subTitle)}
                 </span>
               )}
             </Typography.Paragraph>

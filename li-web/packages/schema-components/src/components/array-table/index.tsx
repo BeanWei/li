@@ -11,6 +11,7 @@ import {
 } from "@formily/react";
 import { isArr, isBool } from "@formily/shared";
 import { Schema } from "@formily/json-schema";
+import { useTranslation } from "react-i18next";
 import { usePrefixCls } from "../__builtins__";
 import { ArrayBase, ArrayBaseMixins } from "../array-base";
 import "./index.less";
@@ -53,6 +54,7 @@ const isAdditionComponent = (schema: Schema) => {
 export const useArrayTableSources = () => {
   const arrayField = useField();
   const schema = useFieldSchema();
+  const { t } = useTranslation();
   const parseSources = (schema: Schema): ObservableColumnSource[] => {
     if (
       isColumnComponent(schema) ||
@@ -73,7 +75,10 @@ export const useArrayTableSources = () => {
           display,
           field,
           schema,
-          columnProps,
+          columnProps: {
+            ...columnProps,
+            title: t(columnProps.title),
+          },
         },
       ];
     } else if (schema.properties) {

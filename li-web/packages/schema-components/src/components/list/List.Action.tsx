@@ -1,3 +1,4 @@
+import { useContext } from "react";
 import { Button, Input, Popconfirm, Space } from "@arco-design/web-react";
 import {
   observer,
@@ -5,8 +6,8 @@ import {
   useField,
   useFieldSchema,
 } from "@formily/react";
+import { Trans, useTranslation } from "react-i18next";
 import { request } from "pro-utils";
-import { useContext } from "react";
 import { useRecord } from "../../core";
 import ActionFormDrawer from "../action/Action.FormDrawer";
 import ActionFormModal from "../action/Action.FormModal";
@@ -50,6 +51,7 @@ ListAction.RowSelection = observer((props) => {
   const { confirmProps, forSubmit, afterReload, ...rest } = props;
   const field = useField();
   const ctx = useContext(ListContext);
+  const { t } = useTranslation();
   const handleOk = () => {
     if (forSubmit) {
       request(forSubmit, { ids: ctx.selectedKeys }).then(() => {
@@ -71,7 +73,7 @@ ListAction.RowSelection = observer((props) => {
             )
           }
         >
-          {field.title}
+          {t(field.title)}
         </Button>
       </Popconfirm>
     );
@@ -89,7 +91,7 @@ ListAction.RowSelection = observer((props) => {
         )
       }
     >
-      {field.title}
+      {t(field.title)}
     </Button>
   );
 });
@@ -98,6 +100,7 @@ ListAction.Reload = observer((props) => {
   const { data, ...rest } = props;
   const field = useField();
   const ctx = useContext(ListContext);
+  const { t } = useTranslation();
   return (
     <Button
       {...rest}
@@ -112,7 +115,7 @@ ListAction.Reload = observer((props) => {
         ctx.reload?.(data);
       }}
     >
-      {field.title}
+      {t(field.title)}
     </Button>
   );
 });
@@ -151,6 +154,7 @@ ListAction.RecordDelete = observer((props) => {
   const local = getLocale();
   const ctx = useContext(ListContext);
   const variables = useRecord();
+  const { t } = useTranslation();
   const handleOk = () => {
     if (forSubmit) {
       request(forSubmit, variables).then(() => {
@@ -160,8 +164,14 @@ ListAction.RecordDelete = observer((props) => {
   };
   return (
     <Popconfirm
-      title={local.List.confirmDelete}
       {...props.confirmProps}
+      title={
+        props.confirmProps?.title ? (
+          <Trans>{props.confirmProps?.title}</Trans>
+        ) : (
+          local.List.confirmDelete
+        )
+      }
       onOk={handleOk}
     >
       <Button
@@ -174,7 +184,7 @@ ListAction.RecordDelete = observer((props) => {
           )
         }
       >
-        {field.title}
+        {t(field.title)}
       </Button>
     </Popconfirm>
   );
@@ -183,10 +193,11 @@ ListAction.RecordDelete = observer((props) => {
 ListAction.Search = (props) => {
   const ctx = useContext(ListContext);
   const local = getLocale();
+  const { t } = useTranslation();
   return (
     <Input.Search
       style={props.style}
-      placeholder={props.placeholder || local.List.search}
+      placeholder={props.placeholder ? t(props.placeholder) : local.List.search}
       onSearch={(value) => {
         ctx.reload?.({
           query: value,

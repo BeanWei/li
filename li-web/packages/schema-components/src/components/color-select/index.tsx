@@ -2,26 +2,31 @@ import { connect, mapProps, mapReadPretty } from "@formily/react";
 import { Select, Tag } from "@arco-design/web-react";
 import { IconLoading } from "@arco-design/web-react/icon";
 import { useCompile } from "../../hooks/useCompile";
+import { getLocale } from "../__builtins__";
 
-const colors: Record<string, any> = {
-  red: '{{t("Red")}}',
-  orangered: '{{t("Orangered")}}',
-  orange: '{{t("Orange")}}',
-  gold: '{{t("Gold")}}',
-  lime: '{{t("Lime")}}',
-  green: '{{t("Green")}}',
-  cyan: '{{t("Cyan")}}',
-  blue: '{{t("Blue")}}',
-  arcobule: '{{t("Arco Blue")}}',
-  purple: '{{t("Purple")}}',
-  pinkpurple: '{{t("Pink Purple")}}',
-  magenta: '{{t("Magenta")}}',
-  gray: '{{t("Gray")}}',
+const useColorEnum = (): Record<string, string> => {
+  const locale = getLocale();
+  return {
+    red: locale.ColorSelect.red,
+    orangered: locale.ColorSelect.orangered,
+    orange: locale.ColorSelect.orange,
+    gold: locale.ColorSelect.gold,
+    lime: locale.ColorSelect.lime,
+    green: locale.ColorSelect.green,
+    cyan: locale.ColorSelect.cyan,
+    blue: locale.ColorSelect.blue,
+    arcobule: locale.ColorSelect.arcobule,
+    purple: locale.ColorSelect.purple,
+    pinkpurple: locale.ColorSelect.pinkpurple,
+    magenta: locale.ColorSelect.magenta,
+    gray: locale.ColorSelect.gray,
+  };
 };
 
 export const ColorSelect = connect(
   (props) => {
     const compile = useCompile();
+    const colors = useColorEnum();
     return (
       <Select {...props}>
         {Object.keys(colors).map((color) => (
@@ -47,8 +52,9 @@ export const ColorSelect = connect(
     };
   }),
   mapReadPretty((props) => {
-    const compile = useCompile();
     const { value } = props;
+    const compile = useCompile();
+    const colors = useColorEnum();
     if (!colors[value]) {
       return null;
     }

@@ -12,6 +12,7 @@ import {
   IMiddleware,
 } from "@formily/shared";
 import { Modal, ModalProps } from "@arco-design/web-react";
+import { Trans } from "react-i18next";
 import {
   usePrefixCls,
   loading,
@@ -111,6 +112,7 @@ export function FormModal(title: any, id: any, renderer?: any): IFormModal {
         {() => (
           <Modal
             {...modal}
+            title={modal.title && <Trans>{modal.title}</Trans>}
             visible={visible}
             confirmLoading={env.form?.submitting}
             onCancel={() => {

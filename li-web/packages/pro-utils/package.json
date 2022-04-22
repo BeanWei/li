@@ -13,19 +13,19 @@
   ],
   "devDependencies": {
     "@types/lodash": "^4.14.182",
+    "@types/react": ">=16.8.0 || >=17.0.0",
     "config": "workspace:*",
     "tsconfig": "workspace:*",
     "typescript": "^4.6.3"
   },
   "peerDependencies": {
     "@arco-design/web-react": "^2.30.0",
-    "@types/react": ">=16.8.0 || >=17.0.0",
     "@types/react-dom": ">=16.8.0 || >=17.0.0",
-    "react": ">=16.8.0 || >=17.0.0",
     "react-dom": ">=16.8.0",
     "react-is": ">=16.8.0 || >=17.0.0"
   },
   "dependencies": {
+    "react": ">=16.8.0 || >=17.0.0",
     "ahooks": "^3.3.8",
     "axios": "^0.26.1",
     "lodash": "^4.17.21"

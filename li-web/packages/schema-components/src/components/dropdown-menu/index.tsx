@@ -6,6 +6,7 @@ import {
   useFieldSchema,
 } from "@formily/react";
 import { observer } from "@formily/reactive-react";
+import { useTranslation } from "react-i18next";
 
 type ComposedDropdownMenu = React.FC<any> & {
   Item?: React.FC<any>;
@@ -51,8 +52,9 @@ DropdownMenu.Item = observer((props) => {
 DropdownMenu.SubMenu = observer((props) => {
   const schema = useFieldSchema();
   const field = useField();
+  const { t } = useTranslation();
   return (
-    <Menu.SubMenu {...props} key={schema.name as string} title={field.title}>
+    <Menu.SubMenu {...props} key={schema.name as string} title={t(field.title)}>
       <RecursionField schema={schema} onlyRenderProperties />
     </Menu.SubMenu>
   );
@@ -61,6 +63,7 @@ DropdownMenu.SubMenu = observer((props) => {
 DropdownMenu.URL = observer((props) => {
   const schema = useFieldSchema();
   const field = useField();
+  const { t } = useTranslation();
   return (
     <Menu.Item
       key={schema.name as string}
@@ -68,7 +71,7 @@ DropdownMenu.URL = observer((props) => {
         window.open(props.href, "_blank");
       }}
     >
-      {field.title}
+      {t(field.title)}
     </Menu.Item>
   );
 });

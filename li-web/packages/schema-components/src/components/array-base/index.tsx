@@ -19,6 +19,7 @@ import {
 import { isValid, clone, isBool } from "@formily/shared";
 import { SortableHandle } from "react-sortable-hoc";
 import cls from "classnames";
+import { useTranslation } from "react-i18next";
 import { usePrefixCls } from "../__builtins__";
 import "./index.less";
 
@@ -148,6 +149,7 @@ ArrayBase.Index = (props) => {
 ArrayBase.Addition = (props) => {
   const self = useField();
   const array = useArray();
+  const { t } = useTranslation();
   const prefixCls = usePrefixCls("formily-array-base");
   if (!array) return null;
   if (
@@ -178,7 +180,7 @@ ArrayBase.Addition = (props) => {
       }}
       icon={<IconPlus />}
     >
-      {props.title || self.title}
+      {t(props.title || self.title)}
     </Button>
   );
 };
