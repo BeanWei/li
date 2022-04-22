@@ -23,4 +23,27 @@ i18n
     backend: {
       loadPath: "/locales/{{lng}}.json",
     },
+    // lient 默认的文案
+    resources: {
+      "en-US": {
+        translation: {
+          addNew: "Add New",
+          bulkDelete: "Bulk Delete",
+          confirmDelete: "Are you sure you want to delete it?",
+          columnAction: "Actions",
+          viewDrawerTitle: "View",
+          editDrawerTitle: "Edit",
+        },
+      },
+      "zh-CN": {
+        translation: {
+          addNew: "新建",
+          bulkDelete: "删除",
+          confirmDelete: "你确定要删除吗？",
+          columnAction: "操作",
+          viewDrawerTitle: "查看",
+          editDrawerTitle: "编辑",
+        },
+      },
+    },
   });
