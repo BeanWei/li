@@ -3,6 +3,9 @@ import { Locale } from "./types";
 
 export const zhCN: Locale = {
   ...ArcoZhCN,
+  Chart: {
+    nodata: "暂无数据",
+  },
   Popconfirm: {
     okText: "确定",
     cancelText: "取消",

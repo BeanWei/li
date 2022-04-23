@@ -10,10 +10,10 @@ import {
 } from "@arco-design/web-react/icon";
 import { connect, mapProps } from "@formily/react";
 import { isVoidField } from "@formily/core";
+import { Trans } from "react-i18next";
 import { FormLayoutShallowContext, useFormLayout } from "../form-layout";
 import { getPrefixCls, pickDataProps } from "../__builtins__";
 import "./index.less";
-import { Trans } from "react-i18next";
 
 export interface IFormItemProps {
   className?: string;

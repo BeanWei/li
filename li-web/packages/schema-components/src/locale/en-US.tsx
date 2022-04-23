@@ -3,6 +3,9 @@ import { Locale } from "./types";
 
 export const enUS: Locale = {
   ...ArcoEnUS,
+  Chart: {
+    nodata: "No Data",
+  },
   Popconfirm: {
     okText: "OK",
     cancelText: "Cancel",

@@ -1,0 +1,54 @@
+@import '~@arco-design/web-react/lib/style/theme/default.less';
+
+@authchart-cls: ~'@{prefix}-autochart';
+
+.@{authchart-cls}-container {
+  position: relative;
+  min-height: 400px;
+
+  .@{authchart-cls}-canvas-layer {
+    height: 100%;
+    width: 100%;
+    position: absolute;
+    top: 0px;
+    left: 0px;
+    pointer-events: auto;
+    box-sizing: border-box;
+    display: flex;
+    flex-direction: column;
+    padding: 24px;
+
+    .canvas-content {
+      flex: 1 1 0%;
+      position: relative;
+    }
+
+    .feedback-layer {
+      height: 100%;
+      width: 100%;
+      position: absolute;
+      top: 0px;
+      left: 0px;
+      pointer-events: none;
+      box-sizing: border-box;
+    }
+  }
+
+  .@{authchart-cls}-nodata-layer {
+    height: 100%;
+    width: 100%;
+    position: absolute;
+    top: 0px;
+    left: 0px;
+    // pointer-events: none;
+    box-sizing: border-box;
+  }
+
+  .@{authchart-cls}-nodata-content {
+    color: #aaa;
+    text-align: center;
+    position: relative;
+    top: 50%;
+    transform: translateY(-50%);
+  }
+}

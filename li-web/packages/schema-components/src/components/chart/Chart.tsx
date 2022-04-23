@@ -1,14 +1,10 @@
 import React from "react";
 import { Card } from "@arco-design/web-react";
 import FormGrid, { IFormGridProps } from "../form-grid";
-import ChartLine from "./Chart.Line";
-import ChartColumn from "./Chart.Column";
-import ChartPie from "./Chart.Pie";
+import ChartAutoChart from "./Chart.AutoChart";
 
 export type ComposedChart = React.FC<IFormGridProps> & {
-  Line?: React.FC<any>;
-  Column?: React.FC<any>;
-  Pie?: React.FC<any>;
+  AutoChart?: React.FC<any>;
 };
 
 export const Chart: ComposedChart = (props) => {
@@ -19,8 +15,6 @@ export const Chart: ComposedChart = (props) => {
   );
 };
 
-Chart.Column = ChartColumn;
-Chart.Line = ChartLine;
-Chart.Pie = ChartPie;
+Chart.AutoChart = ChartAutoChart;
 
 export default Chart;

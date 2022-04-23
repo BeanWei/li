@@ -1,6 +1,9 @@
 import { Locale as ArcoLocale } from "@arco-design/web-react/es/locale/interface";
 
 export type Locale = ArcoLocale & {
+  Chart: {
+    nodata: string;
+  };
   ColorSelect: {
     red: string;
     orangered: string;

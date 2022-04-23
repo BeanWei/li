@@ -1,5 +1,5 @@
 {
-  "name": "schema-components",
+  "name": "pro-components",
   "version": "0.0.0",
   "main": "./src/index.ts",
   "license": "MIT",
@@ -16,7 +16,6 @@
     "lint": "eslint *.tsx"
   },
   "devDependencies": {
-    "@types/lodash": "^4.14.182",
     "config": "workspace:*",
     "dumi": "^1.1.40",
     "tsconfig": "workspace:*",
@@ -31,24 +30,7 @@
     "react-is": ">=16.8.0 || >=17.0.0"
   },
   "dependencies": {
-    "@antv/antv-spec": "^0.1.0-alpha.18",
-    "@antv/chart-advisor": "^2.0.0",
-    "@antv/g2plot": "^2.4.16",
-    "@antv/g6": "^4.6.4",
-    "@formily/core": "2.0.13",
-    "@formily/grid": "2.0.13",
-    "@formily/json-schema": "2.0.13",
-    "@formily/react": "2.0.13",
-    "@formily/reactive": "2.0.13",
-    "@formily/reactive-react": "2.0.13",
-    "@formily/shared": "2.0.13",
-    "classnames": "^2.3.1",
-    "lodash": "^4.17.21",
-    "pro-utils": "workspace:*",
-    "react-i18next": "^11.16.7",
-    "react-router-dom": "^6.3.0",
-    "react-sortable-hoc": "^1.11.0",
-    "react-sticky-box": "^0.9.3"
+    "pro-utils": "workspace:*"
   },
   "publishConfig": {
     "access": "public"
