@@ -78,25 +78,19 @@ const AutoChart: React.FC<AdviseParams> = (props) => {
   const myAdvisor = new Advisor();
   const [advices, setAdvices] = useState<Advice[]>([]);
   const [currentAdviceIndex, setCurrentAdviceIndex] = useState<number>(0);
-  const [currentData, setCurrentData] = useState<any>(props.data || []);
   const prefixCls = getPrefixCls();
 
   useEffect(() => {
-    setAdvices([]);
-    setCurrentData(props.data);
-  }, [JSON.stringify(props.data)]);
-
-  useEffect(() => {
-    if (currentData?.length > 0) {
+    if (props.data?.length > 0) {
       const myAdvices = myAdvisor.advise(props);
       setAdvices(myAdvices);
       setCurrentAdviceIndex(0);
     }
-  }, [currentData]);
+  }, [props.data]);
 
   return (
     <div className={`${prefixCls}-autochart-container`} ref={containerRef}>
-      {currentData?.length ? (
+      {props.data?.length ? (
         <ChartRender
           chartRef={chartRef}
           spec={advices[currentAdviceIndex]?.spec || null}
