@@ -1,26 +1,18 @@
-import { IMetaItem } from "./types";
-
 /**
- * 把元数据信息按照 isDim 字段拆分成维度元数据和指标元数据
- * @param meta 完整元数据信息
- * @todo 可以在这里面加字段的排序逻辑，如有必要
+ * 图表图片导出, 只支持 renderer = 'canvas'
+ * @param chart chart 实例
+ * @param name 图片名称，可选，默认名为 'download'
  */
-export function splitMeta(meta: IMetaItem[]) {
-  const metaDim: IMetaItem[] = [];
-  const metaInd: IMetaItem[] = [];
-  meta.forEach((item) => {
-    if (item.isDim) {
-      metaDim.push(item);
-    } else {
-      metaInd.push(item);
-    }
+export function downloadImage(chart: any, name: string = "download") {
+  if (!chart) return;
+  const canvas = chart.getCanvas();
+  canvas.get("timeline").stopAllAnimations();
+  const dataURL = canvas.get("el").toDataURL({
+    format: "png",
+    quality: 1,
   });
-  return { metaDim, metaInd };
-}
-
-/**
- * 解决浮点数丢失精度的问题，来源：https://github.com/camsong/blog/issues/9
- */
-export function strip(num: number, precision = 12) {
-  return +parseFloat(num?.toPrecision(precision));
+  let a: HTMLAnchorElement | null = document.createElement("a");
+  a.href = dataURL;
+  a.download = `${name}-${new Date().toLocaleDateString()}.png`;
+  a.click();
 }

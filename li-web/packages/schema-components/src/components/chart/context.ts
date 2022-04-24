@@ -1,10 +1,9 @@
 import { createContext } from "react";
-import { IDataItem } from "./types";
 
 export type ChartItemContextProps = {
-  data: IDataItem[];
+  data: Record<string, any>[];
   loading: boolean;
-  setChartRef?: (plot: any) => void;
+  chartRef?: React.MutableRefObject<any>;
 };
 
 export const ChartItemContext = createContext<ChartItemContextProps>({

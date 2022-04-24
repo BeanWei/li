@@ -12,6 +12,7 @@ import { IconDownload, IconRefresh } from "@arco-design/web-react/icon";
 import { useTranslation } from "react-i18next";
 import { useRequest } from "pro-utils";
 import { ChartItemContext } from "./context";
+import { downloadImage } from "./utils";
 
 export type ChartItemProps = CardProps & {
   subTitle?: string;
@@ -30,7 +31,7 @@ export const ChartItem = connect((props: ChartItemProps) => {
     ...rest
   } = props;
   const fieldSchema = useFieldSchema();
-  const ref = useRef();
+  const chartRef = useRef();
   const { t } = useTranslation();
 
   const {
@@ -46,9 +47,7 @@ export const ChartItem = connect((props: ChartItemProps) => {
       value={{
         data,
         loading,
-        setChartRef: (plot) => {
-          ref.current = plot;
-        },
+        chartRef,
       }}
     >
       <Card {...rest} data-grid-span={gridSpan}>
@@ -90,7 +89,10 @@ export const ChartItem = connect((props: ChartItemProps) => {
                 <IconDownload
                   onClick={() => {
                     // @ts-ignore
-                    ref.current?.downloadImage();
+                    downloadImage(
+                      chartRef.current?.plot.chart,
+                      t(title || fieldSchema.title)
+                    );
                   }}
                 />
               </Button>
