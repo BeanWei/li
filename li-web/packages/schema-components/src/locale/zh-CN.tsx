@@ -1,14 +1,10 @@
-import ArcoZhCN from "@arco-design/web-react/es/locale/en-US";
+import ArcoZhCN from "@arco-design/web-react/es/locale/zh-CN";
 import { Locale } from "./types";
 
 export const zhCN: Locale = {
   ...ArcoZhCN,
   Chart: {
     nodata: "暂无数据",
-  },
-  Popconfirm: {
-    okText: "确定",
-    cancelText: "取消",
   },
   ColorSelect: {
     red: "浪漫红",

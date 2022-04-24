@@ -6,10 +6,6 @@ export const enUS: Locale = {
   Chart: {
     nodata: "No Data",
   },
-  Popconfirm: {
-    okText: "OK",
-    cancelText: "Cancel",
-  },
   ColorSelect: {
     red: "Red",
     orangered: "Orangered",
