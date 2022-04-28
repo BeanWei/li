@@ -74,8 +74,12 @@ func StartProcess(ctx context.Context, input *StartProcessInput) (*StartProcessO
 		Status:  liflow.FlowNodeInstanceStatusActive,
 	}
 
-	spc.doExecute()
-	spc.postExecute()
+	if err := spc.doExecute(); err != nil {
+		return nil, err
+	}
+	if err := spc.postExecute(); err != nil {
+		return nil, err
+	}
 
 	return &StartProcessOutput{
 		ProcessStatus:      spc.ProcessStatus,
@@ -86,33 +90,42 @@ func StartProcess(ctx context.Context, input *StartProcessInput) (*StartProcessO
 	}, nil
 }
 
-func (spc *startProcessor) doExecute() {
+func (spc *startProcessor) doExecute() error {
 	executor := spc.getExecuteExecutor()
 	for executor != nil {
-		executor.Execute(spc.FlowCtx)
+		err := executor.Execute(spc.FlowCtx)
+		if err != nil {
+			return err
+		}
 		if spc.ProcessStatus == liflow.ProcessStatusSuccess || spc.ProcessStatus == liflow.ProcessStatusCommitSuspend {
-			return
+			return nil
 		}
 		executor = executor.GetExecuteExecutor(spc.FlowCtx)
 	}
+	return nil
 }
 
-func (spc *startProcessor) postExecute() {
+func (spc *startProcessor) postExecute() error {
 	if spc.ProcessStatus == liflow.ProcessStatusSuccess {
 		if spc.CurrentNodeInstance != nil {
 			spc.SuspendNodeInstance = spc.CurrentNodeInstance
 		}
 	}
-	// TODO: 保存全部执行节点实例到数据库
-
+	if err := spc.SaveNodeInstanceList(); err != nil {
+		return err
+	}
 	// 更新流程实例状态
 	if spc.isCompleted() {
-		ent.DB().FlowInstance.
+		spc.FlowInstanceStatus = liflow.FlowInstanceStatusCompleted
+		err := ent.DB().FlowInstance.
 			UpdateOneID(spc.FlowInstanceID).
 			SetStatus(liflow.FlowInstanceStatusCompleted).
-			ExecX(spc.Ctx)
-		spc.FlowInstanceStatus = liflow.FlowInstanceStatusCompleted
+			Exec(spc.Ctx)
+		if err != nil {
+			return err
+		}
 	}
+	return nil
 }
 
 func (spc *startProcessor) isCompleted() bool {

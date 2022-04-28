@@ -14,11 +14,28 @@ type FlowCtx struct {
 	CurrentNodeModel    *schema.FlowElement
 	FlowInstanceID      string
 	FlowInstanceStatus  int8
-	NodeInstanceList    []*ent.FlowNodeInstance
+	NodeInstanceList    []ent.FlowNodeInstance
 	CurrentNodeInstance *ent.FlowNodeInstance
 	SuspendNodeInstance *ent.FlowNodeInstance
 }
 
 func (ctx *FlowCtx) SaveNodeInstanceList() error {
 	return nil
+}
+
+func (ctx *FlowCtx) GetUniqueNextNode(currentFlowElement *schema.FlowElement) *schema.FlowElement {
+	if currentFlowElement == nil {
+		return nil
+	}
+	if len(currentFlowElement.Outgoing) == 0 {
+		return nil
+	}
+	nextFlowElement := ctx.FlowElementMap[currentFlowElement.Outgoing[0]]
+	if nextFlowElement == nil {
+		return nil
+	}
+	for nextFlowElement != nil && nextFlowElement.Type == FlowElementTypeSequenceFlow {
+		nextFlowElement = ctx.GetUniqueNextNode(nextFlowElement)
+	}
+	return nextFlowElement
 }

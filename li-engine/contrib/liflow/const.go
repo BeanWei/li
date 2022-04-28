@@ -23,6 +23,9 @@ const (
 )
 
 const (
-	FlowElementTypeStartEvent = "StartEvent"
-	FlowElementTypeEndEvent   = "EndEvent"
+	FlowElementTypeSequenceFlow     = "SequenceFlow"
+	FlowElementTypeStartEvent       = "StartEvent"
+	FlowElementTypeEndEvent         = "EndEvent"
+	FlowElementTypeUserTask         = "UserTask"
+	FlowElementTypeExclusiveGateway = "ExclusiveGateway"
 )

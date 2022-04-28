@@ -8,28 +8,28 @@ type (
 		Execute(ctx *FlowCtx) error
 		Commit(ctx *FlowCtx) error
 		Rollback(ctx *FlowCtx) error
-		IsCompleted(ctx *FlowCtx) (bool, error)
+		IsCompleted(ctx *FlowCtx) bool
 		GetExecuteExecutor(ctx *FlowCtx) Executor
 	}
 )
 
 type (
-	RegisterElementInput struct {
-		ElementName     string
+	RegisterExecutorInput struct {
+		ElementType     string
 		ElementExecutor Executor
 	}
 )
 
 var (
-	eleMap = make(map[string]Executor)
+	executorMap = make(map[string]Executor)
 )
 
-func RegisterElement(eles ...*RegisterElementInput) {
+func RegisterExecutor(eles ...*RegisterExecutorInput) {
 	for _, ele := range eles {
-		eleMap[ele.ElementName] = ele.ElementExecutor
+		executorMap[ele.ElementType] = ele.ElementExecutor
 	}
 }
 
 func GetElementExecutor(name string) Executor {
-	return eleMap[name]
+	return executorMap[name]
 }
