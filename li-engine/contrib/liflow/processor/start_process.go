@@ -41,8 +41,9 @@ func StartProcess(ctx context.Context, input *StartProcessInput) (*StartProcessO
 	}
 	spc := &startProcessor{
 		FlowCtx: &liflow.FlowCtx{
-			Ctx:            ctx,
-			FlowElementMap: flow.Model.ElementMap(),
+			Ctx:              ctx,
+			FlowElementMap:   flow.Model.ElementMap(),
+			NodeInstanceList: make([]ent.FlowNodeInstance, 0),
 		},
 	}
 	// 2: 初始化全局数据
@@ -106,24 +107,19 @@ func (spc *startProcessor) doExecute() error {
 }
 
 func (spc *startProcessor) postExecute() error {
-	if spc.ProcessStatus == liflow.ProcessStatusSuccess {
-		if spc.CurrentNodeInstance != nil {
-			spc.SuspendNodeInstance = spc.CurrentNodeInstance
-		}
+	if spc.ProcessStatus == liflow.ProcessStatusSuccess && spc.CurrentNodeInstance != nil {
+		spc.SuspendNodeInstance = spc.CurrentNodeInstance
 	}
-	if err := spc.SaveNodeInstanceList(); err != nil {
+	if err := spc.SaveNodeInstanceList(liflow.FlowNodeInstanceTypeExecute); err != nil {
 		return err
 	}
 	// 更新流程实例状态
 	if spc.isCompleted() {
 		spc.FlowInstanceStatus = liflow.FlowInstanceStatusCompleted
-		err := ent.DB().FlowInstance.
+		return ent.DB().FlowInstance.
 			UpdateOneID(spc.FlowInstanceID).
 			SetStatus(liflow.FlowInstanceStatusCompleted).
 			Exec(spc.Ctx)
-		if err != nil {
-			return err
-		}
 	}
 	return nil
 }

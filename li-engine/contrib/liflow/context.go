@@ -19,7 +19,7 @@ type FlowCtx struct {
 	SuspendNodeInstance *ent.FlowNodeInstance
 }
 
-func (ctx *FlowCtx) SaveNodeInstanceList() error {
+func (ctx *FlowCtx) SaveNodeInstanceList(nodeInstanceType int8) error {
 	return nil
 }
 

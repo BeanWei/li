@@ -59,6 +59,18 @@ func (e *ElementExecutor) GetExecuteExecutor(ctx *liflow.FlowCtx) liflow.Executo
 	return liflow.GetElementExecutor(flowElement.Type)
 }
 
+func (e *ElementExecutor) GetRollbackExecutor(ctx *liflow.FlowCtx) (liflow.Executor, error) {
+	if ctx.CurrentNodeInstance != nil && ctx.CurrentNodeInstance.SourceFlowNodeInstanceID == "" {
+		return nil, nil
+	}
+	sourceNodeInstance, err := ent.DB().FlowNodeInstance.Get(ctx.Ctx, ctx.CurrentNodeInstance.SourceFlowNodeInstanceID)
+	if err != nil {
+		return nil, err
+	}
+	ctx.CurrentNodeModel = ctx.FlowElementMap[sourceNodeInstance.NodeKey]
+	return liflow.GetElementExecutor(ctx.CurrentNodeModel.Type), nil
+}
+
 func (e *ElementExecutor) PreExecute(ctx *liflow.FlowCtx) error {
 	currentNodeInstance := &ent.FlowNodeInstance{
 		ID:             lient.NewXid(),

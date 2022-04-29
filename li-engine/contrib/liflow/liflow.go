@@ -10,6 +10,7 @@ type (
 		Rollback(ctx *FlowCtx) error
 		IsCompleted(ctx *FlowCtx) bool
 		GetExecuteExecutor(ctx *FlowCtx) Executor
+		GetRollbackExecutor(ctx *FlowCtx) (Executor, error)
 	}
 )
 
