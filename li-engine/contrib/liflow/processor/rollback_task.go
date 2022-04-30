@@ -6,7 +6,6 @@ import (
 	"github.com/BeanWei/li/li-engine/contrib/liflow"
 	"github.com/BeanWei/li/li-engine/contrib/liflow/ent"
 	"github.com/BeanWei/li/li-engine/contrib/liflow/ent/flownodeinstance"
-	"github.com/gogf/gf/v2/errors/gcode"
 	"github.com/gogf/gf/v2/errors/gerror"
 )
 
@@ -29,14 +28,14 @@ type (
 func RollbackTask(ctx context.Context, input *RollbackTaskInput) (*RollbackTaskOutput, error) {
 	flowInstance, err := ent.DB().FlowInstance.Get(ctx, input.FlowInstanceID)
 	if err != nil {
-		return nil, err
+		return nil, gerror.WrapCode(liflow.ErrCodeGetFlowInstanceFailed, err)
 	}
 	if flowInstance.Status != liflow.FlowInstanceStatusRunning {
-		return nil, gerror.NewCode(gcode.CodeInvalidOperation, "rollback failed: invalid status to rollback.")
+		return nil, gerror.NewCode(liflow.ErrCodeRollbackRejected)
 	}
 	flow, err := ent.DB().FlowDeployment.Get(ctx, flowInstance.FlowDeploymentID)
 	if err != nil {
-		return nil, err
+		return nil, gerror.WrapCode(liflow.ErrCodeGetFlowDeploymentFailed, err)
 	}
 	suspendNodeInstance, err := ent.DB().FlowNodeInstance.Get(ctx, input.TaskInstanceID)
 	if err != nil {
@@ -50,28 +49,39 @@ func RollbackTask(ctx context.Context, input *RollbackTaskInput) (*RollbackTaskO
 			FlowInstanceStatus:  flowInstance.Status,
 			SuspendNodeInstance: suspendNodeInstance,
 			NodeInstanceList:    make([]ent.FlowNodeInstance, 0),
+			InstanceDataID:      suspendNodeInstance.FlowInstanceDataID,
 		},
 	}
 	rollbackNodeInstance, err := rt.getActiveUserTask(input.TaskInstanceID)
 	if err != nil {
-		return nil, err
+		return nil, gerror.WrapCode(liflow.ErrCodeRollbackFailed, err)
 	}
 	if rollbackNodeInstance == nil {
-		return nil, gerror.NewCode(gcode.CodeInvalidOperation, "cannot rollback")
+		return nil, gerror.NewCode(liflow.ErrCodeRollbackFailed)
 	}
 	if rt.isCompleted() {
-		return nil, gerror.NewCode(gcode.CodeInvalidOperation, "flow has been processed completely")
+		return nil, gerror.NewCode(liflow.ErrCodeRollbackRejected)
 	}
 	rt.CurrentNodeModel = rt.FlowElementMap[rt.SuspendNodeInstance.NodeKey]
 	if rt.CurrentNodeModel == nil {
-		return nil, gerror.NewCode(gcode.CodeInvalidOperation, "cannot get current node model")
+		return nil, gerror.NewCode(liflow.ErrCodeModelUnknownElementKey)
+	}
+
+	if rt.InstanceDataID != "" {
+		instanceData, err := ent.DB().FlowInstanceData.Get(ctx, rt.InstanceDataID)
+		if err != nil {
+			return nil, gerror.WrapCode(liflow.ErrCodeGetInstanceDataFailed, err)
+		}
+		rt.InstanceDataMap = instanceData.Data
 	}
 
 	if err := rt.doRollback(); err != nil {
-		return nil, err
-	}
-	if err := rt.postRollback(); err != nil {
-		return nil, err
+		return nil, gerror.WrapCode(liflow.ErrCodeRollbackFailed, err)
+	} else {
+		rt.ProcessStatus = liflow.ProcessStatusSuccess
+		if err := rt.postRollback(); err != nil {
+			return nil, err
+		}
 	}
 
 	return &RollbackTaskOutput{
@@ -94,9 +104,6 @@ func (rt *rollbackTask) doRollback() (err error) {
 }
 
 func (rt *rollbackTask) postRollback() error {
-	// if rt.ProcessStatus != liflow.ProcessStatusSuccess {
-	// 	return nil
-	// }
 	if rt.CurrentNodeInstance != nil {
 		rt.SuspendNodeInstance = rt.CurrentNodeInstance
 	}

@@ -28,7 +28,7 @@ var (
 	ErrCodeRollbackRejected              = gcode.New(9504, "Rollback rejected, non-running flowInstance to rollback", nil)
 	ErrCodeNoNodeToRollback              = gcode.New(9505, "No node to rollback", nil)
 	ErrCodeNodeUserTaskToRollback        = gcode.New(9506, "No userTask to rollback", nil)
-	ErrCodeFlowDeploymentFailed          = gcode.New(9507, "Get flowDeployment failed", nil)
+	ErrCodeGetFlowDeploymentFailed       = gcode.New(9507, "Get flowDeployment failed", nil)
 	ErrCodeGetFlowInstanceFailed         = gcode.New(9508, "Get flowInstance failed", nil)
 	ErrCodeGetNodeFailed                 = gcode.New(9509, "Get current node failed", nil)
 	ErrCodeGetNodeInstanceFailed         = gcode.New(9510, "Get nodeInstance failed", nil)

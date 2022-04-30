@@ -12,15 +12,16 @@ import (
 
 type FlowCtx struct {
 	Ctx                 context.Context
-	ProcessStatus       int8
 	FlowElementMap      map[string]*schema.FlowElement
-	CurrentNodeModel    *schema.FlowElement
 	FlowInstanceID      string
 	FlowInstanceStatus  int8
-	NodeInstanceList    []ent.FlowNodeInstance
-	CurrentNodeInstance *ent.FlowNodeInstance
 	SuspendNodeInstance *ent.FlowNodeInstance
-	InstanceData        *ent.FlowInstanceData
+	NodeInstanceList    []ent.FlowNodeInstance
+	CurrentNodeModel    *schema.FlowElement
+	CurrentNodeInstance *ent.FlowNodeInstance
+	InstanceDataID      string
+	InstanceDataMap     map[string]interface{}
+	ProcessStatus       int8
 }
 
 func (ctx *FlowCtx) SaveNodeInstanceList(nodeInstanceType int8) error {

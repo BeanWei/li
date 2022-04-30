@@ -79,7 +79,7 @@ func (e *ElementExecutor) PreExecute(ctx *liflow.FlowCtx) error {
 		FlowInstanceID:     ctx.FlowInstanceID,
 		NodeKey:            ctx.CurrentNodeModel.Key,
 		Status:             liflow.FlowNodeInstanceStatusActive,
-		FlowInstanceDataID: ctx.InstanceData.ID,
+		FlowInstanceDataID: ctx.InstanceDataID,
 	}
 	if ctx.CurrentNodeInstance != nil {
 		currentNodeInstance.SourceFlowNodeInstanceID = ctx.CurrentNodeInstance.ID

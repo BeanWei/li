@@ -5,8 +5,8 @@ import (
 
 	"github.com/BeanWei/li/li-engine/contrib/liflow"
 	"github.com/BeanWei/li/li-engine/contrib/liflow/ent"
-	"github.com/gogf/gf/v2/errors/gcode"
 	"github.com/gogf/gf/v2/errors/gerror"
+	"github.com/gogf/gf/v2/util/gutil"
 )
 
 type (
@@ -14,9 +14,9 @@ type (
 		*liflow.FlowCtx
 	}
 	CommitTaskInput struct {
-		FlowInstanceID string
-		TaskInstanceID string
-		Variables      map[string]interface{}
+		FlowInstanceID string                 `json:"flow_instance_id" v:"required"`
+		TaskInstanceID string                 `json:"task_instance_id" v:"required"`
+		Variables      map[string]interface{} `json:"variables"`
 	}
 	CommitTaskOutput struct {
 		FlowInstanceID     string                 `json:"flow_instance_id"`
@@ -26,24 +26,26 @@ type (
 	}
 )
 
+// CommitTask 提交任务
+// 引擎从指定的用户任务节点开始执行，直到用户任务节点挂起或者结束节点完成
 func CommitTask(ctx context.Context, input *CommitTaskInput) (*CommitTaskOutput, error) {
 	flowInstance, err := ent.DB().FlowInstance.Get(ctx, input.FlowInstanceID)
 	if err != nil {
-		return nil, err
+		return nil, gerror.WrapCode(liflow.ErrCodeGetFlowInstanceFailed, err)
 	}
 	if flowInstance.Status == liflow.FlowInstanceStatusTerminated {
-		return nil, gerror.New("flowInstance is terminated")
+		return nil, gerror.NewCode(liflow.ErrCodeCommitRejected)
 	}
 	if flowInstance.Status == liflow.FlowInstanceStatusCompleted {
-		return nil, gerror.New("flowInstance is completed")
+		return nil, nil
 	}
 	flow, err := ent.DB().FlowDeployment.Get(ctx, flowInstance.FlowDeploymentID)
 	if err != nil {
-		return nil, err
+		return nil, gerror.WrapCode(liflow.ErrCodeGetFlowDeploymentFailed, err)
 	}
 	suspendNodeInstance, err := ent.DB().FlowNodeInstance.Get(ctx, input.TaskInstanceID)
 	if err != nil {
-		return nil, err
+		return nil, gerror.WrapCode(liflow.ErrCodeGetNodeInstanceFailed, err)
 	}
 	ct := &commitTask{
 		FlowCtx: &liflow.FlowCtx{
@@ -52,19 +54,46 @@ func CommitTask(ctx context.Context, input *CommitTaskInput) (*CommitTaskOutput,
 			FlowInstanceID:      flowInstance.ID,
 			FlowInstanceStatus:  flowInstance.Status,
 			SuspendNodeInstance: suspendNodeInstance,
+			CurrentNodeInstance: suspendNodeInstance,
 			NodeInstanceList:    make([]ent.FlowNodeInstance, 0),
+			InstanceDataID:      suspendNodeInstance.FlowInstanceDataID,
 		},
 	}
 	if ct.isCompleted() {
-		return nil, gerror.NewCode(gcode.CodeInvalidOperation, "flow has been processed completely")
+		return nil, nil
 	}
 	ct.CurrentNodeModel = ct.FlowElementMap[ct.SuspendNodeInstance.NodeKey]
 	if ct.CurrentNodeModel == nil {
-		return nil, gerror.NewCode(gcode.CodeInvalidOperation, "cannot get current node model")
+		return nil, gerror.NewCode(liflow.ErrCodeModelUnknownElementKey)
 	}
 
+	instanceDataMap := make(map[string]interface{})
+	if ct.InstanceDataID != "" {
+		instanceData, err := ent.DB().FlowInstanceData.Get(ctx, ct.InstanceDataID)
+		if err != nil {
+			return nil, gerror.WrapCode(liflow.ErrCodeGetInstanceDataFailed, err)
+		}
+		instanceDataMap = instanceData.Data
+	}
+	if input.Variables != nil {
+		gutil.MapMerge(instanceDataMap, input.Variables)
+		flowInstanceData, err := ent.DB().FlowInstanceData.Create().
+			SetFlowInstanceID(flowInstance.ID).
+			SetData(instanceDataMap).
+			SetType(liflow.FlowInstanceDataTypeCommit).
+			SetNodeKey(ct.CurrentNodeModel.Key).
+			Save(ctx)
+		if err != nil {
+			return nil, gerror.WrapCode(liflow.ErrCodeSaveInstanceDataFailed, err)
+		}
+		ct.InstanceDataID = flowInstanceData.ID
+	}
+	ct.InstanceDataMap = instanceDataMap
+
 	if err := ct.doCommit(); err != nil {
-		return nil, err
+		ct.ProcessStatus = liflow.ProcessStatusFailed
+	} else {
+		ct.ProcessStatus = liflow.ProcessStatusSuccess
 	}
 	if err := ct.postCommit(); err != nil {
 		return nil, err
@@ -89,6 +118,10 @@ func (ct *commitTask) doCommit() error {
 		err := executor.Execute(ct.FlowCtx)
 		if err != nil {
 			return err
+		}
+		// 用户节点执行完成之后退出
+		if ct.CurrentNodeModel.FlowType == liflow.FlowElementFlowTypeUserTask {
+			return nil
 		}
 		executor = executor.GetExecuteExecutor(ct.FlowCtx)
 	}

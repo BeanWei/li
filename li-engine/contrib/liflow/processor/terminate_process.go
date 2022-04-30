@@ -5,6 +5,7 @@ import (
 
 	"github.com/BeanWei/li/li-engine/contrib/liflow"
 	"github.com/BeanWei/li/li-engine/contrib/liflow/ent"
+	"github.com/gogf/gf/v2/errors/gerror"
 )
 
 type (
@@ -20,7 +21,7 @@ type (
 func TerminateProcess(ctx context.Context, input *terminateProcessInput) (*terminateProcessOutput, error) {
 	flowInstance, err := ent.DB().FlowInstance.Get(ctx, input.FlowInstanceID)
 	if err != nil {
-		return nil, err
+		return nil, gerror.WrapCode(liflow.ErrCodeGetFlowInstanceFailed, err)
 	}
 	output := new(terminateProcessOutput)
 	if flowInstance.Status == liflow.FlowInstanceStatusCompleted {
@@ -28,7 +29,7 @@ func TerminateProcess(ctx context.Context, input *terminateProcessInput) (*termi
 	} else {
 		err = flowInstance.Update().SetStatus(liflow.FlowInstanceStatusTerminated).Exec(ctx)
 		if err != nil {
-			return nil, err
+			return nil, gerror.WrapCode(liflow.ErrCodeSaveFlowInstanceFailed, err)
 		}
 		output.FlowInstanceStatus = liflow.FlowInstanceStatusTerminated
 	}

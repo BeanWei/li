@@ -65,7 +65,8 @@ func StartProcess(ctx context.Context, input *StartProcessInput) (*StartProcessO
 	if err != nil {
 		return nil, gerror.WrapCode(liflow.ErrCodeSaveInstanceDataFailed, err)
 	}
-	sp.InstanceData = flowInstanceData
+	sp.InstanceDataID = flowInstanceData.ID
+	sp.InstanceDataMap = input.Variables
 
 	var startEvent *schema.FlowElement
 	for _, ele := range flow.Model {
