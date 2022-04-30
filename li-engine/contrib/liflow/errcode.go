@@ -19,8 +19,8 @@ var (
 	ErrCodeModelUnknownElementKey        = gcode.New(9211, "Unknown element key", nil)
 	ErrCodeElementTooMuchIncoming        = gcode.New(9212, "Too many incoming", nil)
 	ErrCodeElementTooMuchOutgoing        = gcode.New(9213, "Too many outgoing", nil)
-	ErrCodeElementLackMuchIncoming       = gcode.New(9214, "Element lack incoming", nil)
-	ErrCodeElementLackMuchOutgoing       = gcode.New(9215, "Element lack outgoing", nil)
+	ErrCodeElementLackIncoming           = gcode.New(9214, "Element lack incoming", nil)
+	ErrCodeElementLackOutgoing           = gcode.New(9215, "Element lack outgoing", nil)
 	// 流程执行错误
 	ErrCodeCommitFailed                  = gcode.New(9501, "Commit task failed", nil)
 	ErrCodeRollbackFailed                = gcode.New(9502, "Rollback task failed", nil)

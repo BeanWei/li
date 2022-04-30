@@ -12,8 +12,11 @@ type UserTaskExecutor struct {
 }
 
 func (e *UserTaskExecutor) Validate(eleMap map[string]*schema.FlowElement, ele *schema.FlowElement) error {
-	if len(ele.Incoming) > 0 {
-		return gerror.NewCode(liflow.ErrCodeElementTooMuchIncoming)
+	if len(ele.Incoming) == 0 {
+		return gerror.NewCode(liflow.ErrCodeElementLackIncoming)
+	}
+	if len(ele.Outgoing) == 0 {
+		return gerror.NewCode(liflow.ErrCodeElementLackOutgoing)
 	}
 	return nil
 }
