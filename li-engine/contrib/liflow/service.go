@@ -24,8 +24,10 @@ func GetHistoryUserTaskList(ctx context.Context, flowInstanceID string) ([]*ent.
 		Query().
 		Where(flownodeinstance.FlowInstanceIDEQ(flowInstanceID)).
 		All(ctx)
-	if err != nil || len(historyNodeInstanceList) == 0 {
-		return historyNodeInstanceList, err
+	if err != nil {
+		return nil, err
+	} else if len(historyNodeInstanceList) == 0 {
+		return nil, nil
 	}
 
 	flowInstance, err := ent.DB().FlowInstance.Query().
@@ -36,7 +38,7 @@ func GetHistoryUserTaskList(ctx context.Context, flowInstanceID string) ([]*ent.
 		return nil, err
 	}
 	if flowInstance.Edges.FlowDeployment == nil {
-		return nil, gerror.NewCode(gcode.CodeInvalidRequest, "flow deployment is empty")
+		return nil, nil
 	}
 	flowElementMap := flowInstance.Edges.FlowDeployment.Model.ElementMap()
 

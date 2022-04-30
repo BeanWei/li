@@ -17,9 +17,15 @@ func (e *EndEventExecutor) Validate(eleMap map[string]*schema.FlowElement, ele *
 	return nil
 }
 
-func (e *EndEventExecutor) PostExecute(ctx *liflow.FlowCtx) error {
+func (e *EndEventExecutor) Execute(ctx *liflow.FlowCtx) error {
 	ctx.CurrentNodeInstance.Status = liflow.FlowNodeInstanceStatusCompleted
 	ctx.NodeInstanceList = append(ctx.NodeInstanceList, *ctx.CurrentNodeInstance)
+	return nil
+}
+
+func (e *EndEventExecutor) Rollback(ctx *liflow.FlowCtx) error {
+	ctx.CurrentNodeInstance = ctx.SuspendNodeInstance
+	ctx.NodeInstanceList = nil
 	return nil
 }
 

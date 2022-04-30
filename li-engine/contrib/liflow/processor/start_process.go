@@ -2,7 +2,9 @@ package processor
 
 import (
 	"context"
+	"time"
 
+	"github.com/BeanWei/li/li-engine/contrib/lient"
 	"github.com/BeanWei/li/li-engine/contrib/liflow"
 	"github.com/BeanWei/li/li-engine/contrib/liflow/ent"
 	"github.com/BeanWei/li/li-engine/contrib/liflow/ent/schema"
@@ -103,9 +105,23 @@ func StartProcess(ctx context.Context, input *StartProcessInput) (*StartProcessO
 	}, nil
 }
 
-func (sp *startProcess) doExecute() error {
+func (sp *startProcess) doExecute() (err error) {
 	executor := sp.getExecuteExecutor()
 	for executor != nil {
+		currentNodeInstance := &ent.FlowNodeInstance{
+			ID:                 lient.NewXid(),
+			CreatedAt:          time.Now().Unix(),
+			UpdatedAt:          time.Now().Unix(),
+			FlowInstanceID:     sp.FlowInstanceID,
+			NodeKey:            sp.CurrentNodeModel.Key,
+			Status:             liflow.FlowNodeInstanceStatusActive,
+			FlowInstanceDataID: sp.InstanceDataID,
+		}
+		if sp.CurrentNodeInstance != nil {
+			currentNodeInstance.SourceFlowNodeInstanceID = sp.CurrentNodeInstance.ID
+			currentNodeInstance.SourceNodeKey = sp.CurrentNodeInstance.NodeKey
+		}
+		sp.CurrentNodeInstance = currentNodeInstance
 		err := executor.Execute(sp.FlowCtx)
 		if err != nil {
 			return err

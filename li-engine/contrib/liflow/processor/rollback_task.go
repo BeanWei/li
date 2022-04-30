@@ -25,6 +25,8 @@ type (
 	}
 )
 
+// RollbackTask 回滚任务
+// 引擎从指定的用户任务节点开始回滚，直到用户任务节点挂起或者开始节点结束
 func RollbackTask(ctx context.Context, input *RollbackTaskInput) (*RollbackTaskOutput, error) {
 	flowInstance, err := ent.DB().FlowInstance.Get(ctx, input.FlowInstanceID)
 	if err != nil {
@@ -94,7 +96,10 @@ func RollbackTask(ctx context.Context, input *RollbackTaskInput) (*RollbackTaskO
 func (rt *rollbackTask) doRollback() (err error) {
 	executor := rt.getExecuteExecutor()
 	for executor != nil {
-		executor.Rollback(rt.FlowCtx)
+		err = executor.Rollback(rt.FlowCtx)
+		if err != nil {
+			return err
+		}
 		executor, err = executor.GetRollbackExecutor(rt.FlowCtx)
 		if err != nil {
 			return
