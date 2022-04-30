@@ -34,7 +34,7 @@ func (ctx *FlowCtx) GetUniqueNextNode(currentFlowElement *schema.FlowElement) *s
 	if nextFlowElement == nil {
 		return nil
 	}
-	for nextFlowElement != nil && nextFlowElement.Type == FlowElementTypeSequenceFlow {
+	for nextFlowElement != nil && nextFlowElement.FlowType == FlowElementFlowTypeSequenceFlow {
 		nextFlowElement = ctx.GetUniqueNextNode(nextFlowElement)
 	}
 	return nextFlowElement

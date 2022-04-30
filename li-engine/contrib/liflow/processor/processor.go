@@ -6,8 +6,14 @@ import (
 )
 
 func init() {
-	liflow.RegisterExecutor(&liflow.RegisterExecutorInput{
-		ElementType:     liflow.FlowElementTypeStartEvent,
-		ElementExecutor: new(executor.StartEventExecutor),
-	})
+	liflow.RegisterExecutor(
+		&liflow.RegisterExecutorInput{
+			ElementType:     "StartEvent",
+			ElementExecutor: new(executor.StartEventExecutor),
+		},
+		&liflow.RegisterExecutorInput{
+			ElementType:     "EndEvent",
+			ElementExecutor: new(executor.EndEventExecutor),
+		},
+	)
 }

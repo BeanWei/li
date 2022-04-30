@@ -45,7 +45,7 @@ func GetHistoryUserTaskList(ctx context.Context, flowInstanceID string) ([]*ent.
 		if node.Status != FlowNodeInstanceStatusCompleted && node.Status != FlowNodeInstanceStatusActive {
 			continue
 		}
-		if ele := flowElementMap[node.NodeKey]; ele.Type != FlowElementTypeUserTask {
+		if ele := flowElementMap[node.NodeKey]; ele.FlowType != FlowElementFlowTypeUserTask {
 			continue
 		}
 		userTaskList = append(userTaskList, node)

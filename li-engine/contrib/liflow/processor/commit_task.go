@@ -126,7 +126,7 @@ func (ct *commitTask) isCompleted() bool {
 	if ct.SuspendNodeInstance.Status != liflow.FlowNodeInstanceStatusCompleted {
 		return false
 	}
-	if node := ct.FlowElementMap[ct.SuspendNodeInstance.NodeKey]; node != nil && node.Type == liflow.FlowElementTypeEndEvent {
+	if node := ct.FlowElementMap[ct.SuspendNodeInstance.NodeKey]; node != nil && node.FlowType == liflow.FlowElementFlowTypeEndEvent {
 		return true
 	}
 	return false

@@ -1,5 +1,7 @@
 package liflow
 
+import "github.com/BeanWei/li/li-engine/contrib/liflow/ent/schema"
+
 const (
 	ProcessStatusSuccess          int8 = iota // 处理成功
 	ProcessStatusReentrantWarning             // 重复处理
@@ -53,11 +55,11 @@ const (
 )
 
 const (
-	FlowElementTypeSequenceFlow     = "SequenceFlow"
-	FlowElementTypeStartEvent       = "StartEvent"
-	FlowElementTypeEndEvent         = "EndEvent"
-	FlowElementTypeUserTask         = "UserTask"
-	FlowElementTypeExclusiveGateway = "ExclusiveGateway"
+	FlowElementFlowTypeSequenceFlow     schema.FlowElementFlowType = "SequenceFlow"
+	FlowElementFlowTypeStartEvent       schema.FlowElementFlowType = "StartEvent"
+	FlowElementFlowTypeEndEvent         schema.FlowElementFlowType = "EndEvent"
+	FlowElementFlowTypeUserTask         schema.FlowElementFlowType = "UserTask"
+	FlowElementFlowTypeExclusiveGateway schema.FlowElementFlowType = "ExclusiveGateway"
 )
 
 const (

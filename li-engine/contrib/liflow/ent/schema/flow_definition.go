@@ -13,12 +13,15 @@ type (
 	}
 	FlowModel   []*FlowElement
 	FlowElement struct {
+		Name       string
 		Key        string
 		Type       string
+		FlowType   FlowElementFlowType
 		Outgoing   []string
 		Incoming   []string
 		Properties map[string]interface{}
 	}
+	FlowElementFlowType string
 )
 
 func (fm *FlowModel) ElementMap() map[string]*FlowElement {

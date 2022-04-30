@@ -63,7 +63,7 @@ func StartProcess(ctx context.Context, input *StartProcessInput) (*StartProcessO
 
 	var startEvent *schema.FlowElement
 	for _, ele := range flow.Model {
-		if ele.Type == liflow.FlowElementTypeStartEvent {
+		if ele.FlowType == liflow.FlowElementFlowTypeStartEvent {
 			startEvent = ele
 			break
 		}
@@ -136,7 +136,7 @@ func (sp *startProcess) isCompleted() bool {
 	if sp.SuspendNodeInstance.Status != liflow.FlowNodeInstanceStatusCompleted {
 		return false
 	}
-	if node := sp.FlowElementMap[sp.SuspendNodeInstance.NodeKey]; node != nil && node.Type == liflow.FlowElementTypeEndEvent {
+	if node := sp.FlowElementMap[sp.SuspendNodeInstance.NodeKey]; node != nil && node.FlowType == liflow.FlowElementFlowTypeEndEvent {
 		return true
 	}
 	return false

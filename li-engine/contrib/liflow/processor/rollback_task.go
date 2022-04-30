@@ -116,7 +116,7 @@ func (rt *rollbackTask) getActiveUserTask(suspendNodeInstanceID string) (*ent.Fl
 		return nil, nil
 	}
 	for _, node := range nodeInstanceList {
-		if nodeModel := rt.FlowElementMap[node.NodeKey]; nodeModel == nil || nodeModel.Type != liflow.FlowElementTypeUserTask {
+		if nodeModel := rt.FlowElementMap[node.NodeKey]; nodeModel == nil || nodeModel.FlowType != liflow.FlowElementFlowTypeUserTask {
 			continue
 		}
 		if node.Status == liflow.FlowNodeInstanceStatusActive || node.Status == liflow.FlowNodeInstanceStatusCompleted {
@@ -136,7 +136,7 @@ func (rt *rollbackTask) isCompleted() bool {
 	if rt.SuspendNodeInstance.Status != liflow.FlowNodeInstanceStatusCompleted {
 		return false
 	}
-	if node := rt.FlowElementMap[rt.SuspendNodeInstance.NodeKey]; node != nil && node.Type == liflow.FlowElementTypeEndEvent {
+	if node := rt.FlowElementMap[rt.SuspendNodeInstance.NodeKey]; node != nil && node.FlowType == liflow.FlowElementFlowTypeEndEvent {
 		return true
 	}
 	return false
