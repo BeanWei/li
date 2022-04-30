@@ -4,7 +4,7 @@ import "github.com/BeanWei/li/li-engine/contrib/liflow/ent/schema"
 
 type (
 	Executor interface {
-		Validate(ele *schema.FlowElement) error
+		Validate(eleMap map[string]*schema.FlowElement, ele *schema.FlowElement) error
 		Execute(ctx *FlowCtx) error
 		Commit(ctx *FlowCtx) error
 		Rollback(ctx *FlowCtx) error

@@ -1,9 +1,20 @@
 package executor
 
-import "github.com/BeanWei/li/li-engine/contrib/liflow"
+import (
+	"github.com/BeanWei/li/li-engine/contrib/liflow"
+	"github.com/BeanWei/li/li-engine/contrib/liflow/ent/schema"
+	"github.com/gogf/gf/v2/errors/gerror"
+)
 
 type EndEventExecutor struct {
 	ElementExecutor
+}
+
+func (e *EndEventExecutor) Validate(eleMap map[string]*schema.FlowElement, ele *schema.FlowElement) error {
+	if len(ele.Outgoing) > 0 {
+		return gerror.NewCode(liflow.ErrCodeElementTooMuchOutgoing)
+	}
+	return nil
 }
 
 func (e *EndEventExecutor) PostExecute(ctx *liflow.FlowCtx) error {

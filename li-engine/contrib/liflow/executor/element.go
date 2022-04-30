@@ -11,7 +11,7 @@ import (
 
 type ElementExecutor struct{}
 
-func (e *ElementExecutor) Validate(ele *schema.FlowElement) error {
+func (e *ElementExecutor) Validate(eleMap map[string]*schema.FlowElement, ele *schema.FlowElement) error {
 	return nil
 }
 
