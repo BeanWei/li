@@ -7,7 +7,9 @@ import (
 	"github.com/BeanWei/li/li-engine/contrib/liflow/ent/flownodeinstance"
 	"github.com/BeanWei/li/li-engine/contrib/liflow/ent/flownodeinstancelog"
 	"github.com/BeanWei/li/li-engine/contrib/liflow/ent/schema"
+	"github.com/antonmedv/expr"
 	"github.com/gogf/gf/v2/errors/gerror"
+	"github.com/gogf/gf/v2/util/gconv"
 )
 
 type FlowCtx struct {
@@ -80,6 +82,30 @@ func (ctx *FlowCtx) GetUniqueNextNode(currentFlowElement *schema.FlowElement) *s
 		return nil
 	}
 	for nextFlowElement != nil && nextFlowElement.FlowType == FlowElementFlowTypeSequenceFlow {
+		nextFlowElement = ctx.GetUniqueNextNode(nextFlowElement)
+	}
+	return nextFlowElement
+}
+
+func (ctx *FlowCtx) CalculateNextNode(currentFlowElement *schema.FlowElement, instanceDataMap map[string]interface{}) *schema.FlowElement {
+	var nextFlowElement *schema.FlowElement
+	for _, og := range currentFlowElement.Outgoing {
+		outgoingSequenceFlow := ctx.FlowElementMap[og]
+		if outgoingSequenceFlow == nil || outgoingSequenceFlow.Properties == nil {
+			continue
+		}
+		condition := gconv.String(outgoingSequenceFlow.Properties[FlowElementPropertiesCondition])
+		expr.Compile(condition, expr.Env(instanceDataMap))
+		if condition != "" {
+			if output, err := expr.Eval(condition, instanceDataMap); err != nil && gconv.Bool(output) {
+				return outgoingSequenceFlow
+			}
+		}
+		if gconv.Bool(outgoingSequenceFlow.Properties[FlowElementPropertiesDefaultCondition]) {
+			return outgoingSequenceFlow
+		}
+	}
+	for nextFlowElement.FlowType == FlowElementFlowTypeSequenceFlow {
 		nextFlowElement = ctx.GetUniqueNextNode(nextFlowElement)
 	}
 	return nextFlowElement
