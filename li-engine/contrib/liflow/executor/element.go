@@ -73,16 +73,17 @@ func (e *ElementExecutor) GetRollbackExecutor(ctx *liflow.FlowCtx) (liflow.Execu
 
 func (e *ElementExecutor) PreExecute(ctx *liflow.FlowCtx) error {
 	currentNodeInstance := &ent.FlowNodeInstance{
-		ID:             lient.NewXid(),
-		CreatedAt:      time.Now().Unix(),
-		UpdatedAt:      time.Now().Unix(),
-		FlowInstanceID: ctx.FlowInstanceID,
-		NodeKey:        ctx.CurrentNodeModel.Key,
-		Status:         liflow.FlowNodeInstanceStatusActive,
+		ID:                 lient.NewXid(),
+		CreatedAt:          time.Now().Unix(),
+		UpdatedAt:          time.Now().Unix(),
+		FlowInstanceID:     ctx.FlowInstanceID,
+		NodeKey:            ctx.CurrentNodeModel.Key,
+		Status:             liflow.FlowNodeInstanceStatusActive,
+		FlowInstanceDataID: ctx.InstanceData.ID,
 	}
 	if ctx.CurrentNodeInstance != nil {
 		currentNodeInstance.SourceFlowNodeInstanceID = ctx.CurrentNodeInstance.ID
-		currentNodeInstance.NodeKey = ctx.CurrentNodeInstance.NodeKey
+		currentNodeInstance.SourceNodeKey = ctx.CurrentNodeInstance.NodeKey
 	}
 	ctx.CurrentNodeInstance = currentNodeInstance
 	return nil

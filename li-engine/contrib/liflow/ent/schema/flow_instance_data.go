@@ -23,10 +23,10 @@ func (FlowInstanceData) Fields() []ent.Field {
 			NotEmpty().
 			Comment("流程执行实例ID"),
 		field.String("flow_node_instance_id").
-			NotEmpty().
+			Optional().
 			Comment("节点执行实例ID"),
 		field.String("node_key").
-			NotEmpty().
+			Optional().
 			Comment("节点唯一标示"),
 		field.JSON("data", map[string]interface{}{}).
 			Optional().

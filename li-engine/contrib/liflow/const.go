@@ -3,10 +3,9 @@ package liflow
 import "github.com/BeanWei/li/li-engine/contrib/liflow/ent/schema"
 
 const (
-	ProcessStatusSuccess          int8 = iota // 处理成功
-	ProcessStatusReentrantWarning             // 重复处理
-	ProcessStatusCommitSuspend                // 任务待提交
-	ProcessStatusRollbackSuspend              // 任务待撤销
+	ProcessStatusDefault int8 = iota // 默认值
+	ProcessStatusSuccess             // 已完成
+	ProcessStatusFailed              // 已撤销
 )
 
 const (

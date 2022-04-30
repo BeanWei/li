@@ -94,9 +94,9 @@ func (rt *rollbackTask) doRollback() (err error) {
 }
 
 func (rt *rollbackTask) postRollback() error {
-	if rt.ProcessStatus != liflow.ProcessStatusSuccess {
-		return nil
-	}
+	// if rt.ProcessStatus != liflow.ProcessStatusSuccess {
+	// 	return nil
+	// }
 	if rt.CurrentNodeInstance != nil {
 		rt.SuspendNodeInstance = rt.CurrentNodeInstance
 	}

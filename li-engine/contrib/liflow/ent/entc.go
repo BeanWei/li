@@ -3,8 +3,6 @@
 
 package main
 
-// package ent
-
 import (
 	"log"
 
@@ -15,7 +13,11 @@ import (
 
 func main() {
 	err := entc.Generate("./schema",
-		&gen.Config{},
+		&gen.Config{
+			Features: []gen.Feature{
+				gen.FeatureUpsert,
+			},
+		},
 		entc.Extensions(&lient.Extension{}),
 	)
 	if err != nil {

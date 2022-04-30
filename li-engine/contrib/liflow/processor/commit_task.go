@@ -90,9 +90,6 @@ func (ct *commitTask) doCommit() error {
 		if err != nil {
 			return err
 		}
-		if ct.ProcessStatus == liflow.ProcessStatusSuccess || ct.ProcessStatus == liflow.ProcessStatusCommitSuspend {
-			return nil
-		}
 		executor = executor.GetExecuteExecutor(ct.FlowCtx)
 	}
 	return nil
