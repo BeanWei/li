@@ -15,5 +15,13 @@ func init() {
 			ElementType:     "EndEvent",
 			ElementExecutor: new(executor.EndEventExecutor),
 		},
+		&liflow.RegisterExecutorInput{
+			ElementType:     "SequenceFlow",
+			ElementExecutor: new(executor.SequenceFlowExecutor),
+		},
+		&liflow.RegisterExecutorInput{
+			ElementType:     "UserTask",
+			ElementExecutor: new(executor.UserTaskExecutor),
+		},
 	)
 }

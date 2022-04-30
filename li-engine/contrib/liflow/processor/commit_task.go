@@ -77,7 +77,8 @@ func CommitTask(ctx context.Context, input *CommitTaskInput) (*CommitTaskOutput,
 	}
 	if input.Variables != nil {
 		gutil.MapMerge(instanceDataMap, input.Variables)
-		flowInstanceData, err := ent.DB().FlowInstanceData.Create().
+		flowInstanceData, err := ent.DB().FlowInstanceData.
+			Create().
 			SetFlowInstanceID(flowInstance.ID).
 			SetData(instanceDataMap).
 			SetType(liflow.FlowInstanceDataTypeCommit).
@@ -119,7 +120,7 @@ func (ct *commitTask) doCommit() error {
 		if err != nil {
 			return err
 		}
-		// 用户节点执行完成之后退出
+		// 用户任务节点挂起
 		if ct.CurrentNodeModel.FlowType == liflow.FlowElementFlowTypeUserTask {
 			return nil
 		}
@@ -129,7 +130,7 @@ func (ct *commitTask) doCommit() error {
 }
 
 func (ct *commitTask) postCommit() error {
-	if ct.CurrentNodeInstance != nil {
+	if ct.ProcessStatus == liflow.ProcessStatusSuccess && ct.CurrentNodeInstance != nil {
 		ct.SuspendNodeInstance = ct.CurrentNodeInstance
 	}
 	if err := ct.SaveNodeInstanceList(liflow.FlowNodeInstanceTypeCommit); err != nil {

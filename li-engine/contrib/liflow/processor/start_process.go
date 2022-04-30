@@ -48,7 +48,8 @@ func StartProcess(ctx context.Context, input *StartProcessInput) (*StartProcessO
 		},
 	}
 
-	flowInstance, err := ent.DB().FlowInstance.Create().
+	flowInstance, err := ent.DB().FlowInstance.
+		Create().
 		SetFlowDeploymentID(input.FlowDeploymentID).
 		SetRefID(input.RefID).
 		SetStatus(liflow.FlowInstanceStatusRunning).
@@ -59,7 +60,8 @@ func StartProcess(ctx context.Context, input *StartProcessInput) (*StartProcessO
 	sp.FlowInstanceID = flowInstance.ID
 	sp.FlowInstanceStatus = flowInstance.Status
 
-	flowInstanceData, err := ent.DB().FlowInstanceData.Create().
+	flowInstanceData, err := ent.DB().FlowInstanceData.
+		Create().
 		SetFlowInstanceID(flowInstance.ID).
 		SetData(input.Variables).
 		SetType(liflow.FlowInstanceDataTypeInit).
@@ -126,7 +128,7 @@ func (sp *startProcess) doExecute() (err error) {
 		if err != nil {
 			return err
 		}
-		// 用户节点执行完成之后退出
+		// 用户任务节点挂起
 		if sp.CurrentNodeModel.FlowType == liflow.FlowElementFlowTypeUserTask {
 			return nil
 		}

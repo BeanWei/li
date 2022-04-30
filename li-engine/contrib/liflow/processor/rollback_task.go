@@ -100,6 +100,10 @@ func (rt *rollbackTask) doRollback() (err error) {
 		if err != nil {
 			return err
 		}
+		// 用户任务节点挂起
+		if rt.CurrentNodeModel.FlowType == liflow.FlowElementFlowTypeUserTask {
+			return nil
+		}
 		executor, err = executor.GetRollbackExecutor(rt.FlowCtx)
 		if err != nil {
 			return
