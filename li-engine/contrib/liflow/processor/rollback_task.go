@@ -34,7 +34,7 @@ func RollbackTask(ctx context.Context, input *RollbackTaskInput) (*RollbackTaskO
 	if flowInstance.Status != liflow.FlowInstanceStatusRunning {
 		return nil, gerror.NewCode(gcode.CodeInvalidOperation, "rollback failed: invalid status to rollback.")
 	}
-	flow, err := ent.DB().FlowDefinition.Get(ctx, flowInstance.FlowDefinitionID)
+	flow, err := ent.DB().FlowDeployment.Get(ctx, flowInstance.FlowDeploymentID)
 	if err != nil {
 		return nil, err
 	}

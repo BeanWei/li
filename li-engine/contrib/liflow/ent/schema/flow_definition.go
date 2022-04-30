@@ -43,7 +43,7 @@ func (FlowDefinition) Fields() []ent.Field {
 			Comment("流程名称"),
 		field.Int8("status").
 			Default(0).
-			Comment("状态(0.编辑中 1.已上线 2.已下线)"),
+			Comment("状态(1.初始态 1.编辑中 2.已上线)"),
 		field.JSON("model", FlowModel{}).
 			Comment("流程模型"),
 		field.String("remark").
@@ -55,6 +55,6 @@ func (FlowDefinition) Fields() []ent.Field {
 
 func (FlowDefinition) Edges() []ent.Edge {
 	return []ent.Edge{
-		edge.To("flow_instances", FlowInstance.Type),
+		edge.To("flow_deployments", FlowDeployment.Type),
 	}
 }

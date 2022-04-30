@@ -3,6 +3,7 @@ package schema
 import (
 	"entgo.io/ent"
 	"entgo.io/ent/schema/field"
+	"entgo.io/ent/schema/index"
 	"github.com/BeanWei/li/li-engine/contrib/lient/mixin"
 )
 
@@ -38,5 +39,12 @@ func (FlowNodeInstanceLog) Fields() []ent.Field {
 		field.Int8("status").
 			Default(0).
 			Comment("'状态(1.处理成功 2.处理中 3.处理失败 4.处理已撤销)"),
+	}
+}
+
+func (FlowNodeInstanceLog) Indexes() []ent.Index {
+	return []ent.Index{
+		index.Fields("flow_instance_id"),
+		index.Fields("flow_node_instance_id"),
 	}
 }

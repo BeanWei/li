@@ -8,9 +8,16 @@ const (
 )
 
 const (
-	FlowDefinitionStatusEditing  int8 = iota // 编辑中
-	FlowDefinitionStatusDeployed             // 已部署
+	FlowDefinitionStatusDefault  int8 = iota // 数据库默认值
+	FlowDefinitionStatusInit                 // 流程创建, 初始化
+	FlowDefinitionStatusEditing              // 编辑中
 	FlowDefinitionStatusDisabled             // 已下线, 暂未使用
+)
+
+const (
+	FlowDeploymentStatusDefault  int8 = iota // 数据库默认值
+	FlowDeploymentStatusDeployed             // 已部署
+	FlowDeploymentStatusDisabled             // 已下线, 暂未使用
 )
 
 const (
@@ -51,4 +58,10 @@ const (
 	FlowElementTypeEndEvent         = "EndEvent"
 	FlowElementTypeUserTask         = "UserTask"
 	FlowElementTypeExclusiveGateway = "ExclusiveGateway"
+)
+
+const (
+	FlowElementPropertiesName             = "name"
+	FlowElementPropertiesCondition        = "conditionsequenceflow"
+	FlowElementPropertiesDefaultCondition = "defaultConditions"
 )

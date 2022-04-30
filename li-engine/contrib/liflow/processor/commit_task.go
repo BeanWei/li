@@ -37,7 +37,7 @@ func CommitTask(ctx context.Context, input *CommitTaskInput) (*CommitTaskOutput,
 	if flowInstance.Status == liflow.FlowInstanceStatusCompleted {
 		return nil, gerror.New("flowInstance is completed")
 	}
-	flow, err := ent.DB().FlowDefinition.Get(ctx, flowInstance.FlowDefinitionID)
+	flow, err := ent.DB().FlowDeployment.Get(ctx, flowInstance.FlowDeploymentID)
 	if err != nil {
 		return nil, err
 	}

@@ -4,6 +4,7 @@ import (
 	"entgo.io/ent"
 	"entgo.io/ent/schema/edge"
 	"entgo.io/ent/schema/field"
+	"entgo.io/ent/schema/index"
 	"github.com/BeanWei/li/li-engine/contrib/lient/mixin"
 )
 
@@ -51,5 +52,12 @@ func (FlowNodeInstance) Edges() []ent.Edge {
 			Field("flow_instance_id").
 			Unique().
 			Required(),
+	}
+}
+
+func (FlowNodeInstance) Indexes() []ent.Index {
+	return []ent.Index{
+		index.Fields("flow_instance_id"),
+		index.Fields("status"),
 	}
 }

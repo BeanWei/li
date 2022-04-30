@@ -11,16 +11,17 @@ import (
 )
 
 type (
-	startProcessor struct {
+	startProcess struct {
 		*liflow.FlowCtx
 	}
 	StartProcessInput struct {
-		FlowDefinitionID string
+		RefID            string
+		FlowDeploymentID string
 		Variables        map[string]interface{}
 	}
 	StartProcessOutput struct {
 		ProcessStatus      int8                   `json:"process_status"`
-		FlowDefinitionID   string                 `json:"flow_definition_id"`
+		FlowDeploymentID   string                 `json:"flow_deployment_id"`
 		FlowInstanceID     string                 `json:"flow_instance_id"`
 		FlowInstanceStatus int8                   `json:"flow_instance_status"`
 		ActiveNodeInstance *ent.FlowNodeInstance  `json:"active_node_instance"`
@@ -31,15 +32,15 @@ type (
 // StartProcess 流程执行
 // 创建流程实例，从开始节点开始执行，直到用户任务节点挂起或者结束节点完成。
 func StartProcess(ctx context.Context, input *StartProcessInput) (*StartProcessOutput, error) {
-	// 1: 获取流程信息
-	flow, err := ent.DB().FlowDefinition.Get(ctx, input.FlowDefinitionID)
+	// 1: 获取流程模型
+	flow, err := ent.DB().FlowDeployment.Get(ctx, input.FlowDeploymentID)
 	if err != nil {
 		if ent.IsNotFound(err) {
-			return nil, gerror.WrapCodef(gcode.CodeInvalidParameter, err, "not exists flow definition: %s", input.FlowDefinitionID)
+			return nil, gerror.WrapCodef(gcode.CodeInvalidParameter, err, "not exists flow deployment: %s", input.FlowDeploymentID)
 		}
-		return nil, gerror.Wrapf(err, "[processor.StartProcess] find flow definition by id %s", input.FlowDefinitionID)
+		return nil, gerror.Wrapf(err, "[processor.StartProcess] find flow deployment by id %s", input.FlowDeploymentID)
 	}
-	spc := &startProcessor{
+	sp := &startProcess{
 		FlowCtx: &liflow.FlowCtx{
 			Ctx:              ctx,
 			FlowElementMap:   flow.Model.ElementMap(),
@@ -50,14 +51,15 @@ func StartProcess(ctx context.Context, input *StartProcessInput) (*StartProcessO
 
 	// 3: 执行流程
 	flowInstance, err := ent.DB().FlowInstance.Create().
-		SetFlowDefinitionID(flow.ID).
+		SetFlowDeploymentID(input.FlowDeploymentID).
+		SetRefID(input.RefID).
 		SetStatus(liflow.FlowInstanceStatusRunning).
 		Save(ctx)
 	if err != nil {
-		return nil, gerror.Wrapf(err, "[processor.StartProcess] save flowInstance", input.FlowDefinitionID)
+		return nil, gerror.Wrap(err, "[processor.StartProcess] save flowInstance")
 	}
-	spc.FlowInstanceID = flowInstance.ID
-	spc.FlowInstanceStatus = flowInstance.Status
+	sp.FlowInstanceID = flowInstance.ID
+	sp.FlowInstanceStatus = flowInstance.Status
 
 	var startEvent *schema.FlowElement
 	for _, ele := range flow.Model {
@@ -69,81 +71,81 @@ func StartProcess(ctx context.Context, input *StartProcessInput) (*StartProcessO
 	if startEvent == nil {
 		return nil, gerror.Newf("cannot get startEvent node from %s flowDefinition", flow.ID)
 	}
-	spc.CurrentNodeModel = startEvent
-	spc.SuspendNodeInstance = &ent.FlowNodeInstance{
+	sp.CurrentNodeModel = startEvent
+	sp.SuspendNodeInstance = &ent.FlowNodeInstance{
 		NodeKey: startEvent.Key,
 		Status:  liflow.FlowNodeInstanceStatusActive,
 	}
 
-	if err := spc.doExecute(); err != nil {
+	if err := sp.doExecute(); err != nil {
 		return nil, err
 	}
-	if err := spc.postExecute(); err != nil {
+	if err := sp.postExecute(); err != nil {
 		return nil, err
 	}
 
 	return &StartProcessOutput{
-		ProcessStatus:      spc.ProcessStatus,
-		FlowDefinitionID:   flow.ID,
+		ProcessStatus:      sp.ProcessStatus,
+		FlowDeploymentID:   flowInstance.FlowDeploymentID,
 		FlowInstanceID:     flowInstance.ID,
 		FlowInstanceStatus: flowInstance.Status,
-		ActiveNodeInstance: spc.CurrentNodeInstance,
+		ActiveNodeInstance: sp.CurrentNodeInstance,
 	}, nil
 }
 
-func (spc *startProcessor) doExecute() error {
-	executor := spc.getExecuteExecutor()
+func (sp *startProcess) doExecute() error {
+	executor := sp.getExecuteExecutor()
 	for executor != nil {
-		err := executor.Execute(spc.FlowCtx)
+		err := executor.Execute(sp.FlowCtx)
 		if err != nil {
 			return err
 		}
-		if spc.ProcessStatus == liflow.ProcessStatusSuccess || spc.ProcessStatus == liflow.ProcessStatusCommitSuspend {
+		if sp.ProcessStatus == liflow.ProcessStatusSuccess || sp.ProcessStatus == liflow.ProcessStatusCommitSuspend {
 			return nil
 		}
-		executor = executor.GetExecuteExecutor(spc.FlowCtx)
+		executor = executor.GetExecuteExecutor(sp.FlowCtx)
 	}
 	return nil
 }
 
-func (spc *startProcessor) postExecute() error {
-	if spc.ProcessStatus == liflow.ProcessStatusSuccess && spc.CurrentNodeInstance != nil {
-		spc.SuspendNodeInstance = spc.CurrentNodeInstance
+func (sp *startProcess) postExecute() error {
+	if sp.ProcessStatus == liflow.ProcessStatusSuccess && sp.CurrentNodeInstance != nil {
+		sp.SuspendNodeInstance = sp.CurrentNodeInstance
 	}
-	if err := spc.SaveNodeInstanceList(liflow.FlowNodeInstanceTypeExecute); err != nil {
+	if err := sp.SaveNodeInstanceList(liflow.FlowNodeInstanceTypeExecute); err != nil {
 		return err
 	}
 	// 更新流程实例状态
-	if spc.isCompleted() {
-		spc.FlowInstanceStatus = liflow.FlowInstanceStatusCompleted
+	if sp.isCompleted() {
+		sp.FlowInstanceStatus = liflow.FlowInstanceStatusCompleted
 		return ent.DB().FlowInstance.
-			UpdateOneID(spc.FlowInstanceID).
+			UpdateOneID(sp.FlowInstanceID).
 			SetStatus(liflow.FlowInstanceStatusCompleted).
-			Exec(spc.Ctx)
+			Exec(sp.Ctx)
 	}
 	return nil
 }
 
-func (spc *startProcessor) isCompleted() bool {
-	if spc.FlowInstanceStatus == liflow.FlowInstanceStatusCompleted {
+func (sp *startProcess) isCompleted() bool {
+	if sp.FlowInstanceStatus == liflow.FlowInstanceStatusCompleted {
 		return true
 	}
-	if spc.SuspendNodeInstance == nil {
+	if sp.SuspendNodeInstance == nil {
 		return false
 	}
-	if spc.SuspendNodeInstance.Status != liflow.FlowNodeInstanceStatusCompleted {
+	if sp.SuspendNodeInstance.Status != liflow.FlowNodeInstanceStatusCompleted {
 		return false
 	}
-	if node := spc.FlowElementMap[spc.SuspendNodeInstance.NodeKey]; node != nil && node.Type == liflow.FlowElementTypeEndEvent {
+	if node := sp.FlowElementMap[sp.SuspendNodeInstance.NodeKey]; node != nil && node.Type == liflow.FlowElementTypeEndEvent {
 		return true
 	}
 	return false
 }
 
-func (spc *startProcessor) getExecuteExecutor() liflow.Executor {
-	if spc.isCompleted() {
+func (sp *startProcess) getExecuteExecutor() liflow.Executor {
+	if sp.isCompleted() {
 		return nil
 	}
-	executor := liflow.GetElementExecutor(spc.CurrentNodeModel.Type)
+	executor := liflow.GetElementExecutor(sp.CurrentNodeModel.Type)
 	return executor
 }
