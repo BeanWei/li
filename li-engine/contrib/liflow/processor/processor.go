@@ -23,5 +23,9 @@ func init() {
 			ElementType:     "UserTask",
 			ElementExecutor: new(executor.UserTaskExecutor),
 		},
+		&liflow.RegisterExecutorInput{
+			ElementType:     "ExclusiveGateway",
+			ElementExecutor: new(executor.ExclusiveGatewayExecutor),
+		},
 	)
 }
