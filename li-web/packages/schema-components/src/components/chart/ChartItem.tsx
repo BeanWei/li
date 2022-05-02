@@ -88,8 +88,8 @@ export const ChartItem = connect((props: ChartItemProps) => {
               >
                 <IconDownload
                   onClick={() => {
-                    // @ts-ignore
                     downloadImage(
+                      // @ts-ignore
                       chartRef.current?.plot.chart,
                       t(title || fieldSchema.title)
                     );

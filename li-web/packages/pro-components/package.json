@@ -30,6 +30,7 @@
     "react-is": ">=16.8.0 || >=17.0.0"
   },
   "dependencies": {
+    "@logicflow/core": "^1.1.14",
     "pro-utils": "workspace:*"
   },
   "publishConfig": {
