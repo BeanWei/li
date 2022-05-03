@@ -1,4 +1,4 @@
-import { CSSProperties, useEffect, useRef } from "react";
+import { CSSProperties, useRef } from "react";
 import { connect, mapReadPretty } from "@formily/react";
 import { LiFlow } from "pro-components";
 import { useRequest } from "pro-utils";
@@ -18,7 +18,7 @@ type FlowEditorProps = {
 export const FlowEditor = connect(
   (props: FlowEditorProps) => {
     const { fetchUserConfig, ...rest } = props;
-    const { data = {}, run } = useRequest(
+    const { data, run } = useRequest(
       fetchUserConfig?.operation || "",
       fetchUserConfig?.variables,
       {
@@ -34,12 +34,14 @@ export const FlowEditor = connect(
     return (
       <LiFlow
         {...rest}
-        userOptions={data.list?.map((item: any) => {
-          return {
-            label: item[fetchUserConfig?.fieldNames.label || "id"],
-            value: item[fetchUserConfig?.fieldNames.value || "id"],
-          };
-        })}
+        userOptions={(data && Array.isArray(data) ? data : data?.list)?.map(
+          (item: any) => {
+            return {
+              label: item[fetchUserConfig?.fieldNames.label || "id"],
+              value: item[fetchUserConfig?.fieldNames.value || "id"],
+            };
+          }
+        )}
       />
     );
   },
