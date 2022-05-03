@@ -111,6 +111,7 @@ const (
 	ComponentDropdownMenuItem           = "DropdownMenu.Item"
 	ComponentDropdownMenuSubMenu        = "DropdownMenu.SubMenu"
 	ComponentDropdownMenuURL            = "DropdownMenu.URL"
+	ComponentFlowEditor                 = "FlowEditor"
 	ComponentForm                       = "Form"
 	ComponentFormButtonGroup            = "FormButtonGroup"
 	ComponentFormDrawer                 = "FormDrawer"

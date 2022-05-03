@@ -123,7 +123,7 @@ func (b *recordselectBuilder) SearchOperation(operation string, handler interfac
 func (b *recordselectBuilder) SearchVariables(variables string) *recordselectBuilder {
 	sc, ok := b.schema.XComponentProps["searchConfig"].(map[string]interface{})
 	if ok {
-		sc["searchConfig"] = variables
+		sc["variables"] = variables
 		b.schema.XComponentProps["searchConfig"] = sc
 	}
 	return b
