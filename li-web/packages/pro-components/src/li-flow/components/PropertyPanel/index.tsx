@@ -1,10 +1,11 @@
 import { Fragment, useEffect } from "react";
-import { Form } from "@arco-design/web-react";
-import { PropertyCondition, PropertyName } from "./property";
+import { Form, SelectProps } from "@arco-design/web-react";
+import { PropertyApprovers, PropertyCondition, PropertyName } from "./property";
 
 const PropertyPanel: React.FC<{
   activeNode: any;
   onChange: (id: string, values: Record<string, any>) => void;
+  userOptions?: SelectProps["options"];
 }> = (props) => {
   const [form] = Form.useForm();
 
@@ -15,6 +16,13 @@ const PropertyPanel: React.FC<{
           <Fragment>
             <PropertyName />
             <PropertyCondition />
+          </Fragment>
+        );
+      case "UserTask:UserTask":
+        return (
+          <Fragment>
+            <PropertyName />
+            <PropertyApprovers options={props.userOptions} />
           </Fragment>
         );
       default:

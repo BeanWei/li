@@ -1,13 +1,27 @@
-import { useEffect, useRef, useState } from "react";
-import { Card, Grid, Message } from "@arco-design/web-react";
+import { CSSProperties, useEffect, useRef, useState } from "react";
+import { Card, Grid, Message, SelectProps } from "@arco-design/web-react";
 import LogicFlow from "@logicflow/core";
+import "@logicflow/core/dist/style/index.css";
 import ToolbarPanel from "./components/ToolbarPanel";
 import NodePanel from "./components/NodePanel";
 import { registerNodes } from "./nodes";
-import "@logicflow/core/dist/style/index.css";
 import PropertyPanel from "./components/PropertyPanel";
+import LiFlowAdapter from "./adapter";
 
-export const LiFlow: React.FC = () => {
+export type LiFlowProps = {
+  // 初始化数据
+  value?: any;
+  // 数据变更
+  onChange?: (value: any) => void;
+  // 画布高度
+  height?: CSSProperties["height"];
+  // 只读模式，仅渲染流程图
+  readOnly?: boolean;
+  // 审批人
+  userOptions?: SelectProps["options"];
+};
+
+export const LiFlow: React.FC<LiFlowProps> = (props) => {
   const [lf, setLf] = useState<LogicFlow>();
   const [nodeData, setNodeData] = useState();
   const ref = useRef<HTMLDivElement>(null);
@@ -17,12 +31,13 @@ export const LiFlow: React.FC = () => {
       setNodeData(undefined);
     });
     lf.on("element:click", ({ data }) => {
-      console.log(data);
       setNodeData(data);
-      // console.log(JSON.stringify(lf.getGraphData()));
     });
     lf.on("connection:not-allowed", (data: any) => {
       Message.error(data.msg);
+    });
+    lf.on("*", () => {
+      props.onChange?.(lf.getGraphData());
     });
   };
 
@@ -38,25 +53,33 @@ export const LiFlow: React.FC = () => {
         visible: true,
         type: "mesh",
         config: {
-          color: "#DCDCDC", // 设置网格的颜色
+          color: "#eeeeee", // 设置网格的颜色
         },
       },
       keyboard: { enabled: true },
       container: ref.current,
+      plugins: [LiFlowAdapter],
     });
     setLf(lf);
     registerNodes(lf);
-    lf.render();
-    initEvent(lf);
+    lf.render(props.value);
+    !props.readOnly && initEvent(lf);
   }, []);
+
+  if (props.readOnly) {
+    return <div ref={ref} style={{ height: props.height || 400 }} />;
+  }
 
   return (
     <Card title={lf && <ToolbarPanel lf={lf} />} bodyStyle={{ padding: 0 }}>
       <Grid.Row>
-        <Grid.Col span={2} style={{ height: 400, overflowY: "scroll" }}>
+        <Grid.Col
+          span={2}
+          style={{ height: props.height || 400, overflowY: "scroll" }}
+        >
           {lf && <NodePanel lf={lf} />}
         </Grid.Col>
-        <Grid.Col span={22} style={{ height: 400 }}>
+        <Grid.Col span={22} style={{ height: props.height || 400 }}>
           <div ref={ref} style={{ height: "100%" }} />
           {lf && nodeData && (
             <Card
@@ -87,6 +110,7 @@ export const LiFlow: React.FC = () => {
                     edge.model.updateText(values.name);
                   }
                 }}
+                userOptions={props.userOptions}
               />
             </Card>
           )}
