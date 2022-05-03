@@ -4,17 +4,21 @@ import { node } from "../../config";
 
 const NodePanel: React.FC<{ lf: LogicFlow }> = (props) => {
   const local = useLocale();
+  const nodes = Object.values(node);
 
   return (
     <div
       style={{ width: "100%", padding: "16px 0" }}
-      className="arco-space arco-space-horizontal arco-space-align-center"
+      className="arco-space arco-space-vertical arco-space-align-center"
     >
-      {Object.values(node).map((item, key) => {
+      {nodes.map((item, key) => {
         return (
           <div
             key={key}
-            style={{ width: "100%" }}
+            style={{
+              width: "100%",
+              marginBottom: key === nodes.length - 1 ? 0 : 8,
+            }}
             className="arco-space arco-space-vertical arco-space-align-center"
           >
             <img
@@ -30,7 +34,7 @@ const NodePanel: React.FC<{ lf: LogicFlow }> = (props) => {
                 });
               }}
             />
-            <span>{local.LiFlow[item.label]}</span>
+            <span style={{ fontSize: 12 }}>{local.LiFlow[item.label]}</span>
           </div>
         );
       })}

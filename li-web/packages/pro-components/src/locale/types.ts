@@ -8,7 +8,6 @@ export type Locale = {
     nodeSequenceFlow: string;
     nodeStartEvent: string;
     nodeEndEvent: string;
-    nodeGateway: string;
     nodeExclusiveGateway: string;
     nodeUserTask: string;
     nodeServiceTask: string;

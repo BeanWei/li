@@ -8,12 +8,11 @@ const zhCN: Locale = {
     tooltipZoomOut: "缩小",
     tooltipAutoFit: "适应屏幕",
     nodeSequenceFlow: "连接线",
-    nodeStartEvent: "开始",
-    nodeEndEvent: "结束",
-    nodeGateway: "网关",
+    nodeStartEvent: "开始节点",
+    nodeEndEvent: "结束节点",
     nodeExclusiveGateway: "排他网关",
-    nodeUserTask: "用户任务",
-    nodeServiceTask: "系统任务",
+    nodeUserTask: "审批节点",
+    nodeServiceTask: "任务节点",
   },
 };
 

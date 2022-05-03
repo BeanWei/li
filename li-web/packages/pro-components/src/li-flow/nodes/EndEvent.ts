@@ -1,13 +1,13 @@
 import { BaseNodeModel, CircleNode, CircleNodeModel, h } from "@logicflow/core";
 import { node } from "../config";
 
-class StartEventModel extends CircleNodeModel {
-  static extendKey = "StartEventModel";
+class EndEventModel extends CircleNodeModel {
+  static extendKey = "EndEventModel";
   constructor(data: any, graphModel: any) {
     if (!data.text) {
       data.text = "";
     }
-    if (data.text && typeof data.text === "string") {
+    if (typeof data.text === "string") {
       data.text = {
         value: data.text,
         x: data.x,
@@ -20,9 +20,9 @@ class StartEventModel extends CircleNodeModel {
     this.r = 21;
   }
   getConnectedTargetRules() {
-    const rules = super.getConnectedTargetRules();
-    const notAsTarget = {
-      message: "开始节点只能连出，不能连入",
+    const rules = super.getConnectedSourceRules();
+    const notAsSource = {
+      message: "结束节点只能连入，不能连出",
       validate: (source: BaseNodeModel, target: BaseNodeModel) => {
         let isValid = true;
         if (target) {
@@ -32,13 +32,13 @@ class StartEventModel extends CircleNodeModel {
       },
     };
     // @ts-ignore
-    rules.push(notAsTarget);
+    rules.push(notAsSource);
     return rules;
   }
 }
 
-class StartEventView extends CircleNode {
-  static extendKey = "StartEventNode";
+class EndEventView extends CircleNode {
+  static extendKey = "EndEventNode";
   getShape(): any {
     const { model } = this.props;
     const style = model.getNodeStyle();
@@ -51,17 +51,17 @@ class StartEventView extends CircleNode {
         height: model.height,
         // 根据宽高缩放
         preserveAspectRatio: "none meet",
-        href: node.startevent.imgsrc,
+        href: node.endevent.imgsrc,
       }),
     ]);
   }
 }
 
-const StartEvent = {
-  type: node.startevent.type,
-  view: StartEventView,
-  model: StartEventModel,
+const EndEvent = {
+  type: node.endevent.type,
+  view: EndEventView,
+  model: EndEventModel,
 };
 
-export { StartEventModel, StartEventView };
-export default StartEvent;
+export { EndEventModel, EndEventView };
+export default EndEvent;
