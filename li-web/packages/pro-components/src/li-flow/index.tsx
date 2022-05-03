@@ -4,15 +4,14 @@ import LogicFlow from "@logicflow/core";
 import ToolbarPanel from "./components/ToolbarPanel";
 import NodePanel from "./components/NodePanel";
 import { registerNodes } from "./nodes";
+import "@logicflow/core/dist/style/index.css";
 
 export const LiFlow: React.FC = () => {
   const [lf, setLf] = useState<LogicFlow>();
-  const [nodeData, setNodeData] = useState();
   const ref = useRef<HTMLDivElement>(null);
 
   const initEvent = (lf: LogicFlow) => {
     lf.on("element:click", ({ data }) => {
-      setNodeData(data);
       console.log(JSON.stringify(lf.getGraphData()));
     });
     lf.on("connection:not-allowed", (data: any) => {
@@ -37,16 +36,19 @@ export const LiFlow: React.FC = () => {
       container: ref.current,
     });
     setLf(lf);
-    registerNodes(lf), lf.render(nodeData);
+    registerNodes(lf);
+    lf.render();
     initEvent(lf);
   }, []);
 
   return (
-    <Card title={lf && <ToolbarPanel lf={lf} />}>
+    <Card title={lf && <ToolbarPanel lf={lf} />} bodyStyle={{ padding: 0 }}>
       <Grid.Row>
-        <Grid.Col span={2}>{lf && <NodePanel lf={lf} />}</Grid.Col>
-        <Grid.Col span={22}>
-          <div ref={ref} />
+        <Grid.Col span={2} style={{ height: 400, overflow: "scroll" }}>
+          {lf && <NodePanel lf={lf} />}
+        </Grid.Col>
+        <Grid.Col span={22} style={{ height: 400 }}>
+          <div ref={ref} style={{ height: "100%" }} />
         </Grid.Col>
       </Grid.Row>
     </Card>

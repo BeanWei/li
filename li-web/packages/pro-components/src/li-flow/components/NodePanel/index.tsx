@@ -1,30 +1,40 @@
-import { Space } from "@arco-design/web-react";
 import LogicFlow from "@logicflow/core";
 import useLocale from "../../../locale";
-import { nodes } from "../../config";
+import { node } from "../../config";
 
 const NodePanel: React.FC<{ lf: LogicFlow }> = (props) => {
   const local = useLocale();
 
   return (
-    <Space>
-      {nodes.map((node, key) => {
+    <div
+      style={{ width: "100%", padding: "16px 0" }}
+      className="arco-space arco-space-horizontal arco-space-align-center"
+    >
+      {Object.values(node).map((item, key) => {
         return (
-          <Space key={key} direction="vertical" align="center">
+          <div
+            key={key}
+            style={{ width: "100%" }}
+            className="arco-space arco-space-vertical arco-space-align-center"
+          >
             <img
-              src={node.src}
-              style={node.style}
+              src={item.imgsrc}
+              style={{
+                ...item.style,
+                cursor: "grab",
+              }}
+              draggable={false}
               onMouseDown={() => {
                 props.lf.dnd.startDrag({
-                  type: node.type,
+                  type: item.type,
                 });
               }}
             />
-            <span>{local.LiFlow[node.label]}</span>
-          </Space>
+            <span>{local.LiFlow[item.label]}</span>
+          </div>
         );
       })}
-    </Space>
+    </div>
   );
 };
 
