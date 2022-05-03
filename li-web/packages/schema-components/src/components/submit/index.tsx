@@ -61,7 +61,9 @@ export const Submit: React.FC<ISubmitProps> = observer(
             .catch(forSubmitFailed);
         }}
       >
-        {t(fieldSchema["x-content"] || fieldSchema.title)}
+        {props.children
+          ? props.children
+          : t(fieldSchema?.["x-content"] || fieldSchema?.title)}
       </Button>
     );
   },

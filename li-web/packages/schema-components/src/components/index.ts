@@ -11,6 +11,7 @@ export * from "./color-select";
 export * from "./date-picker";
 export * from "./divider";
 export * from "./dropdown-menu";
+export * from "./flow-editor";
 export * from "./form";
 export * from "./form-button-group";
 export * from "./form-drawer";

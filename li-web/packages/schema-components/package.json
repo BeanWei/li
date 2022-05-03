@@ -45,6 +45,7 @@
     "classnames": "^2.3.1",
     "lodash": "^4.17.21",
     "pro-utils": "workspace:*",
+    "pro-components": "workspace:*",
     "react-i18next": "^11.16.7",
     "react-router-dom": "^6.3.0",
     "react-sortable-hoc": "^1.11.0",

@@ -90,7 +90,7 @@ export function FormDrawer(title: any, id: any, renderer?: any): IFormDrawer {
   const root = createPortalRoot(env.host, id);
   const props = getDrawerProps(title);
   const drawer: IDrawerProps = {
-    width: "50%",
+    width: "60%",
     ...props,
     title: <Trans>{props.title}</Trans>,
     footer: null,

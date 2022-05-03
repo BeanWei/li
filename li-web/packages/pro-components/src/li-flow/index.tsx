@@ -1,5 +1,11 @@
 import { CSSProperties, useEffect, useRef, useState } from "react";
-import { Card, Grid, Message, SelectProps } from "@arco-design/web-react";
+import {
+  Card,
+  CardProps,
+  Grid,
+  Message,
+  SelectProps,
+} from "@arco-design/web-react";
 import LogicFlow from "@logicflow/core";
 import "@logicflow/core/dist/style/index.css";
 import ToolbarPanel from "./components/ToolbarPanel";
@@ -19,6 +25,8 @@ export type LiFlowProps = {
   readOnly?: boolean;
   // 审批人
   userOptions?: SelectProps["options"];
+  // Card props
+  cardProps?: Omit<CardProps, "title" | "bodyStyle">;
 };
 
 export const LiFlow: React.FC<LiFlowProps> = (props) => {
@@ -71,7 +79,11 @@ export const LiFlow: React.FC<LiFlowProps> = (props) => {
   }
 
   return (
-    <Card title={lf && <ToolbarPanel lf={lf} />} bodyStyle={{ padding: 0 }}>
+    <Card
+      {...props.cardProps}
+      title={lf && <ToolbarPanel lf={lf} />}
+      bodyStyle={{ padding: 0 }}
+    >
       <Grid.Row>
         <Grid.Col
           span={2}

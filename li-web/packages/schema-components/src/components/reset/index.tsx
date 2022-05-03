@@ -36,7 +36,7 @@ export const Reset: React.FC<IResetProps> = ({
           .catch(onResetValidateFailed);
       }}
     >
-      {t(fieldSchema["x-content"] || fieldSchema.title)}
+      {t(fieldSchema?.["x-content"] || fieldSchema?.title)}
     </Button>
   );
 };

@@ -105,6 +105,20 @@ export default {
                                 "x-component": "Money",
                               },
                               friends,
+                              flow: {
+                                type: "array",
+                                title: "流程图",
+                                "x-decorator": "FormItem",
+                                "x-component": "FlowEditor",
+                                "x-component-props": {
+                                  fetchUserConfig: {
+                                    fieldNames: {
+                                      label: "nickname",
+                                    },
+                                    operation: "listUser",
+                                  },
+                                },
+                              },
                             },
                           },
                           properties: {
@@ -388,46 +402,7 @@ export default {
                     forInit: "getUv",
                   },
                   "x-component": "Chart.AutoChart",
-                  // "x-component-props": {
-                  //   meta: [
-                  //     { id: "ds", name: "日期", isDim: true },
-                  //     { id: "uv", name: "访客数" },
-                  //   ],
-                  // },
                 },
-                // chart2: {
-                //   type: "void",
-                //   "x-decorator": "ChartItem",
-                //   "x-decorator-props": {
-                //     title: "UV & PV",
-                //     subTitle: "(最近1周数据)",
-                //     forInit: "getUv",
-                //   },
-                //   "x-component": "Chart.Column",
-                //   "x-component-props": {
-                //     meta: [
-                //       { id: "ds", name: "日期", isDim: true },
-                //       { id: "uv", name: "访客数" },
-                //     ],
-                //   },
-                // },
-                // chart3: {
-                //   type: "void",
-                //   "x-decorator": "ChartItem",
-                //   "x-decorator-props": {
-                //     title: "UV & PV",
-                //     subTitle: "(最近1周数据)",
-                //     forInit: "getUv",
-                //     gridSpan: 2,
-                //   },
-                //   "x-component": "Chart.Pie",
-                //   "x-component-props": {
-                //     meta: [
-                //       { id: "ds", name: "日期", isDim: true },
-                //       { id: "uv", name: "访客数" },
-                //     ],
-                //   },
-                // },
               },
             },
           },
