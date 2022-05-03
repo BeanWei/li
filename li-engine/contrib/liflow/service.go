@@ -8,7 +8,6 @@ import (
 	"github.com/BeanWei/li/li-engine/contrib/liflow/ent/flownodeinstance"
 	"github.com/gogf/gf/v2/errors/gcode"
 	"github.com/gogf/gf/v2/errors/gerror"
-	"github.com/gogf/gf/v2/util/gconv"
 )
 
 type (
@@ -85,14 +84,14 @@ func GetHistoryElementList(ctx context.Context, flowInstanceID string) ([]*FlowE
 			}
 			elementList = append(elementList, &FlowElementInstance{
 				NodeKey:  sourceFlowElement.Key,
-				NodeName: gconv.String(sourceFlowElement.Properties[FlowElementPropertiesName]),
+				NodeName: sourceFlowElement.Name,
 				Status:   sourceSequenceFlowStatus,
 			})
 		}
 		if flowElement := flowElementMap[node.NodeKey]; flowElement != nil {
 			elementList = append(elementList, &FlowElementInstance{
 				NodeKey:  node.NodeKey,
-				NodeName: gconv.String(flowElement.Properties[FlowElementPropertiesName]),
+				NodeName: flowElement.Name,
 				Status:   node.Status,
 			})
 		}

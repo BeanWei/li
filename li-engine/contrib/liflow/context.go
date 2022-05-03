@@ -101,9 +101,6 @@ func (ctx *FlowCtx) CalculateNextNode(currentFlowElement *schema.FlowElement, in
 				return outgoingSequenceFlow
 			}
 		}
-		if gconv.Bool(outgoingSequenceFlow.Properties[FlowElementPropertiesDefaultCondition]) {
-			return outgoingSequenceFlow
-		}
 	}
 	for nextFlowElement.FlowType == FlowElementFlowTypeSequenceFlow {
 		nextFlowElement = ctx.GetUniqueNextNode(nextFlowElement)

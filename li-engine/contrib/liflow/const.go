@@ -62,7 +62,6 @@ const (
 )
 
 const (
-	FlowElementPropertiesName             = "name"
-	FlowElementPropertiesCondition        = "conditionsequenceflow"
-	FlowElementPropertiesDefaultCondition = "defaultConditions"
+	FlowElementPropertiesName      = "name"
+	FlowElementPropertiesCondition = "condition"
 )
