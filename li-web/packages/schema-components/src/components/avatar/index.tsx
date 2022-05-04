@@ -1,11 +1,14 @@
 import { Avatar as ArcoAvatar, AvatarProps } from "@arco-design/web-react";
+import React from "react";
 
-export const Avatar: React.FC<{
-  shape?: AvatarProps["shape"];
-  size?: AvatarProps["size"];
-  alt?: string;
-  src?: string;
-}> = (props) => {
+export const Avatar: React.FC<
+  React.PropsWithChildren<{
+    shape?: AvatarProps["shape"];
+    size?: AvatarProps["size"];
+    alt?: string;
+    src?: string;
+  }>
+> = (props) => {
   if (props.src) {
     return (
       <ArcoAvatar shape={props.shape || "circle"} size={props.size} {...props}>

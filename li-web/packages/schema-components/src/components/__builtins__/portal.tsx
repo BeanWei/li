@@ -1,5 +1,6 @@
 import React, { Fragment } from "react";
-import ReactDOM, { createPortal } from "react-dom";
+import { createPortal } from "react-dom";
+import { createRoot } from "react-dom/client";
 import { observable } from "@formily/reactive";
 import { Observer } from "@formily/react";
 export interface IPortalProps {
@@ -18,12 +19,15 @@ export const createPortalProvider = (id: string | symbol) => {
       <Fragment>
         {props.children}
         <Observer>
-          {() => {
-            if (!props.id) return null;
-            const portal = PortalMap.get(props.id);
-            if (portal) return createPortal(portal, document.body);
-            return null;
-          }}
+          {
+            // @ts-ignore
+            () => {
+              if (!props.id) return null;
+              const portal = PortalMap.get(props.id);
+              if (portal) return createPortal(portal, document.body);
+              return null;
+            }
+          }
         </Observer>
       </Fragment>
     );
@@ -38,19 +42,24 @@ export function createPortalRoot<T extends React.ReactNode>(
   host: HTMLElement,
   id: string
 ) {
+  const root = createRoot(host);
+
   function render(renderer?: () => T) {
     if (PortalMap.has(id)) {
       PortalMap.set(id, renderer?.());
     } else if (host) {
-      ReactDOM.render(<Fragment>{renderer?.()}</Fragment>, host);
+      root.render(<Fragment>{renderer?.()}</Fragment>);
     }
   }
 
   function unmount() {
     if (PortalMap.has(id)) {
       PortalMap.set(id, null);
-    } else if (host) {
-      ReactDOM.unmountComponentAtNode(host);
+    }
+    if (host) {
+      // FIXME: Warning: Attempted to synchronously unmount a root while React was already rendering.
+      // React cannot finish unmounting the root until the current render has completed, which may lead to a race condition.
+      root.unmount();
       host.parentNode?.removeChild(host);
     }
   }

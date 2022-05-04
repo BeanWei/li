@@ -11,10 +11,12 @@ export const DocumentTitleContext = createContext<DocumentTitleContextProps>({
   setTitle() {},
 });
 
-export const DocumentTitleProvider: React.FC<{
-  addonBefore?: string;
-  addonAfter?: string;
-}> = (props) => {
+export const DocumentTitleProvider: React.FC<
+  React.PropsWithChildren<{
+    addonBefore?: string;
+    addonAfter?: string;
+  }>
+> = (props) => {
   const { addonBefore, addonAfter } = props;
   const [title, setTitle] = useState("");
   const documentTitle = title

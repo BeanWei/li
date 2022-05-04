@@ -25,7 +25,7 @@ const usePlaceholder = (value?: any) => {
   return isValid(value) && value !== "" ? value : placeholder;
 };
 
-export const Form: React.FC<FormProps> = ({
+export const Form: React.FC<React.PropsWithChildren<FormProps>> = ({
   form,
   component,
   onAutoSubmit,

@@ -164,7 +164,7 @@ export function FormDrawer(title: any, id: any, renderer?: any): IFormDrawer {
   return formDrawer;
 }
 
-const DrawerFooter: React.FC = (props) => {
+const DrawerFooter: React.FC<React.PropsWithChildren<{}>> = (props) => {
   const ref = useRef<HTMLDivElement | null>(null);
   const [footer, setFooter] = useState<HTMLDivElement | null>(null);
   const footerRef = useRef<HTMLDivElement | null>(null);

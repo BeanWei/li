@@ -7,13 +7,20 @@ import {
   RecursionField,
 } from "@formily/react";
 import cls from "classnames";
-import { SortableContainer, SortableElement } from "react-sortable-hoc";
+import {
+  SortableContainer,
+  SortableElement,
+  SortableContainerProps,
+  SortableElementProps,
+} from "react-sortable-hoc";
 import { ISchema } from "@formily/json-schema";
 import { usePrefixCls } from "../__builtins__";
 import { ArrayBase, ArrayBaseMixins } from "../array-base";
 import "./index.less";
 
-type ComposedArrayItems = React.FC<React.HTMLAttributes<HTMLDivElement>> &
+type ComposedArrayItems = React.FC<
+  React.PropsWithChildren<React.HTMLAttributes<HTMLDivElement>>
+> &
   ArrayBaseMixins & {
     Item?: React.FC<
       React.HTMLAttributes<HTMLDivElement> & {
@@ -22,7 +29,10 @@ type ComposedArrayItems = React.FC<React.HTMLAttributes<HTMLDivElement>> &
     >;
   };
 
-const SortableItem = SortableElement(
+const SortableItem: React.FC<
+  React.PropsWithChildren<React.HTMLAttributes<HTMLDivElement>> &
+    SortableElementProps
+> = SortableElement(
   (props: React.PropsWithChildren<React.HTMLAttributes<HTMLDivElement>>) => {
     const prefixCls = usePrefixCls("formily-array-items");
     return (
@@ -31,9 +41,12 @@ const SortableItem = SortableElement(
       </div>
     );
   }
-);
+) as any;
 
-const SortableList = SortableContainer(
+const SortableList: React.FC<
+  React.PropsWithChildren<React.HTMLAttributes<HTMLDivElement>> &
+    SortableContainerProps
+> = SortableContainer(
   (props: React.PropsWithChildren<React.HTMLAttributes<HTMLDivElement>>) => {
     const prefixCls = usePrefixCls("formily-array-items");
     return (
@@ -42,7 +55,7 @@ const SortableList = SortableContainer(
       </div>
     );
   }
-);
+) as any;
 
 const isAdditionComponent = (schema: ISchema) => {
   return schema["x-component"]?.indexOf("Addition") > -1;

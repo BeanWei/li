@@ -1,4 +1,4 @@
-import { useEffect, useRef, useState } from "react";
+import React, { useEffect, useRef, useState } from "react";
 import cls from "classnames";
 import { Grid, Popover, Tooltip } from "@arco-design/web-react";
 import {
@@ -120,7 +120,10 @@ const ICON_MAP = {
   pending: <IconLoading />,
 };
 
-export const BaseItem: React.FC<IFormItemProps> = ({ children, ...props }) => {
+export const BaseItem: React.FC<React.PropsWithChildren<IFormItemProps>> = ({
+  children,
+  ...props
+}) => {
   const formLayout = useFormItemLayout(props);
   const { containerRef, contentRef, overflow } = useOverflow<
     HTMLDivElement,

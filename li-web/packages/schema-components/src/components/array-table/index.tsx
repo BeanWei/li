@@ -31,9 +31,9 @@ interface IArrayTablePaginationProps extends PaginationProps {
   ) => React.ReactElement;
 }
 
-type ComposedArrayTable = React.FC<TableProps<any>> &
+type ComposedArrayTable = React.FC<React.PropsWithChildren<TableProps<any>>> &
   ArrayBaseMixins & {
-    Column?: React.FC<ColumnProps<any>>;
+    Column?: React.FC<React.PropsWithChildren<ColumnProps<any>>>;
   };
 
 const SortableRow = SortableElement((props: any) => <tr {...props} />);

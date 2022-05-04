@@ -3,7 +3,9 @@ import { Card } from "@arco-design/web-react";
 import FormGrid, { IFormGridProps } from "../form-grid";
 import ChartAutoChart from "./Chart.AutoChart";
 
-export type ComposedChart = React.FC<IFormGridProps> & {
+export type ComposedChart = React.FC<
+  React.PropsWithChildren<IFormGridProps>
+> & {
   AutoChart?: React.FC<any>;
 };
 

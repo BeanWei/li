@@ -1,5 +1,5 @@
 import { useEffect, useState } from "react";
-import ReactDOM from "react-dom";
+import { createRoot } from "react-dom/client";
 import { ConfigProvider, Link } from "@arco-design/web-react";
 import { I18nextProvider, useTranslation } from "react-i18next";
 import { BrowserRouter, NavLink } from "react-router-dom";
@@ -124,4 +124,4 @@ const App = compose(...providers)(() => {
   );
 });
 
-ReactDOM.render(<App />, document.getElementById("root"));
+createRoot(document.getElementById("root") as HTMLElement).render(<App />);

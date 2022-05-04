@@ -5,7 +5,7 @@
  * 4. 吸底布局
  */
 import React, { useRef, useLayoutEffect, useState } from "react";
-import StickyBox, { StickyBoxMode } from "react-sticky-box";
+import StickyBox from "react-sticky-box";
 import { Space } from "@arco-design/web-react";
 import cls from "classnames";
 import { SpaceProps } from "@arco-design/web-react";
@@ -17,10 +17,6 @@ interface IStickyProps {
   offsetTop?: number;
   offsetBottom?: number;
   bottom?: boolean;
-  onChangeMode?: (
-    oldMode: StickyBoxMode | undefined,
-    newMode: StickyBoxMode
-  ) => any;
   style?: React.CSSProperties;
   className?: string;
   padding?: number;
@@ -32,12 +28,16 @@ type IFormButtonGroupProps = Omit<SpaceProps, "align" | "size"> & {
   gutter?: number;
 };
 
-type ComposedButtonGroup = React.FC<IFormButtonGroupProps> & {
-  Sticky: React.FC<IStickyProps>;
+type ComposedButtonGroup = React.FC<
+  React.PropsWithChildren<IFormButtonGroupProps>
+> & {
+  Sticky: React.FC<React.PropsWithChildren<IStickyProps>>;
   FormItem: React.FC<
-    IFormItemProps & {
-      gutter?: number;
-    }
+    React.PropsWithChildren<
+      IFormItemProps & {
+        gutter?: number;
+      }
+    >
   >;
 };
 

@@ -10,7 +10,9 @@ export interface AsyncDataProviderProps {
   onSuccess?: (data: any, params: any) => void;
 }
 
-export const AsyncDataProvider: React.FC<AsyncDataProviderProps> = (props) => {
+export const AsyncDataProvider: React.FC<
+  React.PropsWithChildren<AsyncDataProviderProps>
+> = (props) => {
   const { value, request, children, ...others } = props;
   if (value) {
     return (

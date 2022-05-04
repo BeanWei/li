@@ -197,7 +197,7 @@ export function FormModal(title: any, id: any, renderer?: any): IFormModal {
   return formModal;
 }
 
-const ModalFooter: React.FC = (props) => {
+const ModalFooter: React.FC<React.PropsWithChildren<{}>> = (props) => {
   const ref = useRef<HTMLDivElement | null>(null);
   const [footer, setFooter] = useState<HTMLDivElement | null>(null);
   const footerRef = useRef<HTMLDivElement | null>(null);
