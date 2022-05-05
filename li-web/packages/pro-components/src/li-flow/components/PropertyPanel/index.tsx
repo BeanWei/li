@@ -1,6 +1,7 @@
 import { Fragment, useEffect } from "react";
 import { Form, SelectProps } from "@arco-design/web-react";
 import { PropertyApprovers, PropertyCondition, PropertyName } from "./property";
+import { eletype } from "../../config";
 
 const PropertyPanel: React.FC<{
   activeNode: any;
@@ -12,14 +13,14 @@ const PropertyPanel: React.FC<{
 
   const renderForm = () => {
     switch (props.activeNode.type) {
-      case "SequenceFlow:SequenceFlow":
+      case eletype.sequenceflow:
         return (
           <Fragment>
             <PropertyName />
             <PropertyCondition />
           </Fragment>
         );
-      case "UserTask:UserTask":
+      case eletype.usertask:
         return (
           <Fragment>
             <PropertyName />
@@ -35,7 +36,7 @@ const PropertyPanel: React.FC<{
   };
 
   useEffect(() => {
-    form.clearFields();
+    form.resetFields();
     form.setFieldsValue(props.activeNode.properties);
   }, [props.activeNode.id]);
 

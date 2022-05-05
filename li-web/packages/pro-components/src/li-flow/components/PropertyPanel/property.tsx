@@ -1,5 +1,6 @@
 import { Fragment } from "react";
 import {
+  Checkbox,
   Form,
   Input,
   Radio,
@@ -79,6 +80,20 @@ export const PropertyApprovers: React.FC<{
           <Radio value="countersign">会签</Radio>
           {/* <Radio value="sequence">依次审批</Radio> */}
         </Radio.Group>
+      </Form.Item>
+      <Form.Item
+        label="通知方式"
+        field="notify_channels"
+        initialValue={["email"]}
+      >
+        <Checkbox.Group
+          direction="vertical"
+          options={[
+            { label: "邮件", value: "email" },
+            { label: "微信", value: "wechat" },
+            { label: "钉钉", value: "dingding" },
+          ]}
+        />
       </Form.Item>
     </Fragment>
   );
