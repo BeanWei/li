@@ -22,6 +22,7 @@
 !**/ent/schema
 !**/ent/generate.go
 !**/ent/entc.go
+!li-engine/contrib/liflow/ent/*
 
 # frontend
 node_modules/
