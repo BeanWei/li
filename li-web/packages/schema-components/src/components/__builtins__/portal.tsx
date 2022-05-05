@@ -52,15 +52,16 @@ export function createPortalRoot<T extends React.ReactNode>(
     }
   }
 
-  function unmount() {
+  async function unmount() {
     if (PortalMap.has(id)) {
       PortalMap.set(id, null);
     }
     if (host) {
-      // FIXME: Warning: Attempted to synchronously unmount a root while React was already rendering.
-      // React cannot finish unmounting the root until the current render has completed, which may lead to a race condition.
-      root.unmount();
       host.parentNode?.removeChild(host);
+      // Delay to unmount to avoid React 18 sync warning
+      Promise.resolve().then(() => {
+        root.unmount();
+      });
     }
   }
 
