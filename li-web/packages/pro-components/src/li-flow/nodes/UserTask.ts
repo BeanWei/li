@@ -1,5 +1,5 @@
 import { RectNode, RectNodeModel, h } from "@logicflow/core";
-import { node } from "../config";
+import { eletype } from "../config";
 
 class UserTaskModel extends RectNodeModel {
   static extendKey = "UserTaskModel";
@@ -50,7 +50,7 @@ class UserTaskView extends RectNode {
 }
 
 const UserTask = {
-  type: node.usertask.type,
+  type: eletype.usertask,
   view: UserTaskView,
   model: UserTaskModel,
 };

@@ -1,4 +1,5 @@
 import { PolylineEdge, PolylineEdgeModel } from "@logicflow/core";
+import { eletype } from "../config";
 
 class SequenceFlowModel extends PolylineEdgeModel {
   static extendKey = "SequenceFlowModel";
@@ -25,7 +26,7 @@ class SequenceFlowView extends PolylineEdge {
 }
 
 const SequenceFlow = {
-  type: "SequenceFlow:SequenceFlow",
+  type: eletype.sequenceflow,
   view: SequenceFlowView,
   model: SequenceFlowModel,
 };

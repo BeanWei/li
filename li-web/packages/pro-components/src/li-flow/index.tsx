@@ -25,6 +25,8 @@ export type LiFlowProps = {
   readOnly?: boolean;
   // 审批人
   userOptions?: SelectProps["options"];
+  // 审批角色
+  roleOptions?: SelectProps["options"];
   // Card props
   cardProps?: Omit<CardProps, "title" | "bodyStyle">;
 };
@@ -103,6 +105,10 @@ export const LiFlow: React.FC<LiFlowProps> = (props) => {
                 margin: "8px 8px -8px -8px",
                 zIndex: 101,
                 boxShadow: "0 0 10px 1px #e4e0db",
+              }}
+              bodyStyle={{
+                overflowY: "scroll",
+                height: parseInt(`${props.height || 400}`) - 8 * 2 - 20 * 2,
               }}
             >
               <PropertyPanel

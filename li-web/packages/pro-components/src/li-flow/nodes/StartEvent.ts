@@ -1,5 +1,5 @@
 import { BaseNodeModel, CircleNode, CircleNodeModel, h } from "@logicflow/core";
-import { node } from "../config";
+import { eletype, node } from "../config";
 
 class StartEventModel extends CircleNodeModel {
   static extendKey = "StartEventModel";
@@ -58,7 +58,7 @@ class StartEventView extends CircleNode {
 }
 
 const StartEvent = {
-  type: node.startevent.type,
+  type: eletype.startevent,
   view: StartEventView,
   model: StartEventModel,
 };

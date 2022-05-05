@@ -1,5 +1,5 @@
 import { h, PolygonNode, PolygonNodeModel } from "@logicflow/core";
-import { node } from "../config";
+import { eletype, node } from "../config";
 
 class ExclusiveGatewayModel extends PolygonNodeModel {
   static extendKey = "ExclusiveGatewayModel";
@@ -45,7 +45,7 @@ class ExclusiveGatewayView extends PolygonNode {
 }
 
 const ExclusiveGateway = {
-  type: "ExclusiveGateway:ExclusiveGateway",
+  type: eletype.exclusivegateway,
   view: ExclusiveGatewayView,
   model: ExclusiveGatewayModel,
 };

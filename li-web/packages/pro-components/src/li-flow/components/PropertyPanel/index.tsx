@@ -6,6 +6,7 @@ const PropertyPanel: React.FC<{
   activeNode: any;
   onChange: (id: string, values: Record<string, any>) => void;
   userOptions?: SelectProps["options"];
+  roleOptions?: SelectProps["options"];
 }> = (props) => {
   const [form] = Form.useForm();
 
@@ -22,7 +23,10 @@ const PropertyPanel: React.FC<{
         return (
           <Fragment>
             <PropertyName />
-            <PropertyApprovers options={props.userOptions} />
+            <PropertyApprovers
+              userOptions={props.userOptions}
+              roleOptions={props.roleOptions}
+            />
           </Fragment>
         );
       default:
