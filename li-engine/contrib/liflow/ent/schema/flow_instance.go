@@ -30,6 +30,10 @@ func (FlowInstance) Fields() []ent.Field {
 		field.Int8("status").
 			Default(0).
 			Comment("状态(1.执行完成 2.执行中 3.执行终止(强制终止))"),
+		field.Bool("is_approved").
+			Default(false).
+			Optional().
+			Comment("是否同意"),
 	}
 }
 
