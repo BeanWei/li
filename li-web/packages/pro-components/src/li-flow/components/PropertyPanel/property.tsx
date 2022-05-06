@@ -1,6 +1,7 @@
 import { Fragment } from "react";
 import {
   Checkbox,
+  Divider,
   Form,
   Input,
   Radio,
@@ -95,6 +96,21 @@ export const PropertyApprovers: React.FC<{
           ]}
         />
       </Form.Item>
+      <Divider orientation="center">通知内容</Divider>
+      <Form.Item label="标题" field="notify_title">
+        <Input />
+      </Form.Item>
+      <Form.Item label="内容" field="notify_content">
+        <Input.TextArea />
+      </Form.Item>
     </Fragment>
+  );
+};
+
+export const PropertyWebhook: React.FC = () => {
+  return (
+    <Form.Item label="Webhook 地址" field="webhook">
+      <Input.TextArea />
+    </Form.Item>
   );
 };

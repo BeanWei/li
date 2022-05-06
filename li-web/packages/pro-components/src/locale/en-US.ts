@@ -12,8 +12,8 @@ const enUS: Locale = {
     nodeEndEvent: "End Event",
     nodeGateway: "Gateway",
     nodeExclusiveGateway: "Exclusive Gateway",
-    nodeUserTask: "User Task",
-    nodeServiceTask: "Service Task",
+    nodeApproverTask: "Approver Task",
+    nodeWebhookTask: "Webhook Task",
   },
 };
 

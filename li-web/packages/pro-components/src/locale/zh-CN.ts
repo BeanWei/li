@@ -11,8 +11,8 @@ const zhCN: Locale = {
     nodeStartEvent: "开始节点",
     nodeEndEvent: "结束节点",
     nodeExclusiveGateway: "排他网关",
-    nodeUserTask: "审批节点",
-    nodeServiceTask: "任务节点",
+    nodeApproverTask: "审批节点",
+    nodeWebhookTask: "钩子节点",
   },
 };
 

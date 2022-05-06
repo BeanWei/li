@@ -9,8 +9,8 @@ export type Locale = {
     nodeStartEvent: string;
     nodeEndEvent: string;
     nodeExclusiveGateway: string;
-    nodeUserTask: string;
-    nodeServiceTask: string;
+    nodeApproverTask: string;
+    nodeWebhookTask: string;
     [key: string]: string;
   };
 };

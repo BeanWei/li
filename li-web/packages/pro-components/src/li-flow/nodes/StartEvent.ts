@@ -7,7 +7,7 @@ class StartEventModel extends CircleNodeModel {
     if (!data.text) {
       data.text = "";
     }
-    if (data.text && typeof data.text === "string") {
+    if (typeof data.text === "string") {
       data.text = {
         value: data.text,
         x: data.x,

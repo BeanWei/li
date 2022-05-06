@@ -1,8 +1,8 @@
 import { RectNode, RectNodeModel, h } from "@logicflow/core";
 import { eletype } from "../config";
 
-class UserTaskModel extends RectNodeModel {
-  static extendKey = "UserTaskModel";
+class ApproverTaskModel extends RectNodeModel {
+  static extendKey = "ApproverTaskModel";
   setAttributes() {
     this.width = 90;
     this.height = 42;
@@ -10,8 +10,8 @@ class UserTaskModel extends RectNodeModel {
   }
 }
 
-class UserTaskView extends RectNode {
-  static extendKey = "UserTaskNode";
+class ApproverTaskView extends RectNode {
+  static extendKey = "ApproverTaskNode";
   getShape(): any {
     const { model } = this.props;
     const { x, y, width, height, radius } = model;
@@ -49,11 +49,11 @@ class UserTaskView extends RectNode {
   }
 }
 
-const UserTask = {
-  type: eletype.usertask,
-  view: UserTaskView,
-  model: UserTaskModel,
+const ApproverTask = {
+  type: eletype.approvertask,
+  view: ApproverTaskView,
+  model: ApproverTaskModel,
 };
 
-export { UserTaskModel, UserTaskView };
-export default UserTask;
+export { ApproverTaskModel, ApproverTaskView };
+export default ApproverTask;

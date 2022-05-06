@@ -1,6 +1,11 @@
 import { Fragment, useEffect } from "react";
 import { Form, SelectProps } from "@arco-design/web-react";
-import { PropertyApprovers, PropertyCondition, PropertyName } from "./property";
+import {
+  PropertyApprovers,
+  PropertyCondition,
+  PropertyName,
+  PropertyWebhook,
+} from "./property";
 import { eletype } from "../../config";
 
 const PropertyPanel: React.FC<{
@@ -20,7 +25,7 @@ const PropertyPanel: React.FC<{
             <PropertyCondition />
           </Fragment>
         );
-      case eletype.usertask:
+      case eletype.approvertask:
         return (
           <Fragment>
             <PropertyName />
@@ -28,6 +33,13 @@ const PropertyPanel: React.FC<{
               userOptions={props.userOptions}
               roleOptions={props.roleOptions}
             />
+          </Fragment>
+        );
+      case eletype.webhooktask:
+        return (
+          <Fragment>
+            <PropertyName />
+            <PropertyWebhook />
           </Fragment>
         );
       default:
