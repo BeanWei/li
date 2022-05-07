@@ -27,6 +27,8 @@ export type LiFlowProps = {
   userOptions?: SelectProps["options"];
   // 审批角色
   roleOptions?: SelectProps["options"];
+  // 通知渠道
+  notifyChannelOptions?: SelectProps["options"];
   // Card props
   cardProps?: Omit<CardProps, "title" | "bodyStyle">;
 };
@@ -129,6 +131,8 @@ export const LiFlow: React.FC<LiFlowProps> = (props) => {
                   }
                 }}
                 userOptions={props.userOptions}
+                roleOptions={props.roleOptions}
+                notifyChannelOptions={props.notifyChannelOptions}
               />
             </Card>
           )}

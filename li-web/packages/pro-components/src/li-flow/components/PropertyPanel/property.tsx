@@ -26,8 +26,9 @@ export const PropertyCondition: React.FC = () => {
 };
 
 export const PropertyApprovers: React.FC<{
-  userOptions: SelectProps["options"];
+  userOptions?: SelectProps["options"];
   roleOptions?: SelectProps["options"];
+  notifyChannelOptions?: SelectProps["options"];
 }> = (props) => {
   return (
     <Fragment>
@@ -82,27 +83,27 @@ export const PropertyApprovers: React.FC<{
           {/* <Radio value="sequence">依次审批</Radio> */}
         </Radio.Group>
       </Form.Item>
-      <Form.Item
-        label="通知方式"
-        field="notify_channels"
-        initialValue={["email"]}
-      >
-        <Checkbox.Group
-          direction="vertical"
-          options={[
-            { label: "邮件", value: "email" },
-            { label: "微信", value: "wechat" },
-            { label: "钉钉", value: "dingding" },
-          ]}
-        />
-      </Form.Item>
-      <Divider orientation="center">通知内容</Divider>
-      <Form.Item label="标题" field="notify_title">
-        <Input />
-      </Form.Item>
-      <Form.Item label="内容" field="notify_content">
-        <Input.TextArea />
-      </Form.Item>
+      {props.notifyChannelOptions && (
+        <Fragment>
+          <Form.Item
+            label="通知方式"
+            field="notify_channels"
+            initialValue={["email"]}
+          >
+            <Checkbox.Group
+              direction="vertical"
+              options={props.notifyChannelOptions}
+            />
+          </Form.Item>
+          <Divider orientation="center">通知内容</Divider>
+          <Form.Item label="标题" field="notify_title">
+            <Input />
+          </Form.Item>
+          <Form.Item label="内容" field="notify_content">
+            <Input.TextArea />
+          </Form.Item>
+        </Fragment>
+      )}
     </Fragment>
   );
 };

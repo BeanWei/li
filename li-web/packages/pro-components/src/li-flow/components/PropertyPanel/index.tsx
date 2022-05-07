@@ -13,6 +13,7 @@ const PropertyPanel: React.FC<{
   onChange: (id: string, values: Record<string, any>) => void;
   userOptions?: SelectProps["options"];
   roleOptions?: SelectProps["options"];
+  notifyChannelOptions?: SelectProps["options"];
 }> = (props) => {
   const [form] = Form.useForm();
 
@@ -32,6 +33,7 @@ const PropertyPanel: React.FC<{
             <PropertyApprovers
               userOptions={props.userOptions}
               roleOptions={props.roleOptions}
+              notifyChannelOptions={props.notifyChannelOptions}
             />
           </Fragment>
         );
