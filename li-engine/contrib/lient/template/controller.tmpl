@@ -124,14 +124,10 @@ type (
 				{{- else if not $f.Optional }}
 					{{- $tag = printf `%s v:"required"` $tag }}
 				{{- end }}
-				{{- if $f.Optional }}
-					{{- if $f.Type.Nillable }}
-						{{ $f.StructField }} {{ $f.Type }} `{{ $tag }}`
-					{{- else }}
-						{{ $f.StructField }} *{{ $f.Type }} `{{ $tag }}`
-					{{- end }}
-				{{- else }}
+				{{- if $f.Type.Nillable }}
 					{{ $f.StructField }} {{ $f.Type }} `{{ $tag }}`
+				{{- else }}
+					{{ $f.StructField }} *{{ $f.Type }} `{{ $tag }}`
 				{{- end }}
 			{{- end }}
 		{{- end }}
@@ -152,9 +148,50 @@ type (
 	}
 )
 
-func NewI{{ $.Name }}(e *{{ $.Name }}) *I{{ $.Name }} {
+func NewI{{ $.Name }}(e *{{ $.Name }}, checkAccess ...bool) *I{{ $.Name }} {
 	if e == nil {
 		return nil
+	}
+	if len(checkAccess) > 0 && checkAccess[0] {
+		var ctx = context.Background()
+		{{- range $f := $.Fields }}
+		{{- if not $f.Sensitive }}
+			{{- $annotation := $f.Annotations.LiEnt }}
+			{{- if and $annotation $annotation.DisableRead }}
+				{{- if or (contains $f.Type.String "int") (contains $f.Type.String "float") }}
+					e.{{ $f.StructField }} = 0
+				{{- else if eq $f.Type.String "string" }}
+					e.{{ $f.StructField }} = ""
+				{{- else if eq $f.Type.String "bool" }}
+					e.{{ $f.StructField }} = false
+				{{- else }}
+					e.{{ $f.StructField }} = nil
+				{{- end }}
+			{{- else }}
+				if !{{ $.Name }}AccessControlExecX(ctx, "read:{{ $f.Name }}") {
+					{{- if or (contains $f.Type.String "int") (contains $f.Type.String "float") }}
+						e.{{ $f.StructField }} = 0
+					{{- else if eq $f.Type.String "string" }}
+						e.{{ $f.StructField }} = ""
+					{{- else if eq $f.Type.String "bool" }}
+						e.{{ $f.StructField }} = false
+					{{- else }}
+						e.{{ $f.StructField }} = nil
+					{{- end }}
+				}
+			{{- end }}
+		{{- end }}
+		{{- end }}
+		{{- range $e := $.Edges }}
+			{{- $annotation := $e.Annotations.LiEnt }}
+			{{- if and $annotation $annotation.DisableRead }}
+				e.Edges.{{ $e.StructField }} = nil
+			{{- else }}
+				if !{{ $.Name }}AccessControlExecX(ctx, "read:{{ $e.Name }}") {
+					e.Edges.{{ $e.StructField }} = nil
+				}
+			{{- end }}
+		{{- end }}
 	}
 	return &I{{ $.Name }}{
 		ID: e.ID,
@@ -162,22 +199,22 @@ func NewI{{ $.Name }}(e *{{ $.Name }}) *I{{ $.Name }} {
 			{{ $f.StructField }}: e.{{ $f.StructField }},
 			{{- $annotation := $f.Annotations.LiEnt }}
 			{{- if and $annotation $annotation.Edge }}
-				{{ $annotation.Edge.StructField }}: NewI{{ $annotation.Edge.Type }}{{ if ne $f.Type.String $.ID.Type.String }}Array{{ end }}(e.Edges.{{ $annotation.Edge.StructField }}),
+				{{ $annotation.Edge.StructField }}: NewI{{ $annotation.Edge.Type }}{{ if ne $f.Type.String $.ID.Type.String }}Array{{ end }}(e.Edges.{{ $annotation.Edge.StructField }}, checkAccess...),
 			{{- end }}
 		{{- end }}
 		{{- range $e := $.Edges }}
-			{{ $e.StructField }}: NewI{{ $e.Type.Name }}{{ if not $e.Unique }}Array{{ end }}(e.Edges.{{ $e.StructField }}),
+			{{ $e.StructField }}: NewI{{ $e.Type.Name }}{{ if not $e.Unique }}Array{{ end }}(e.Edges.{{ $e.StructField }}, checkAccess...),
 		{{- end }}
 	}
 }
 
-func NewI{{ $.Name }}Array(es []*{{ $.Name }}) []*I{{ $.Name }} {
+func NewI{{ $.Name }}Array(es []*{{ $.Name }}, checkAccess ...bool) []*I{{ $.Name }} {
 	if len(es) == 0 {
 		return nil
 	}
 	r := make([]*I{{ $.Name }}, len(es))
 	for i, e := range es {
-		r[i] = NewI{{ $.Name }}(e)
+		r[i] = NewI{{ $.Name }}(e, checkAccess...)
 	}
 	return r
 }
@@ -309,7 +346,7 @@ func List{{ $.Name }}Controller(ctx context.Context, req *List{{ $.Name }}Req) (
 	if err != nil {
 		return nil, gerror.WrapCode(gcode.CodeDbOperationError, err)
 	}
-	res.List = NewI{{ $.Name }}Array(ret)
+	res.List = NewI{{ $.Name }}Array(ret, true)
 	return res, nil
 }
 
@@ -319,7 +356,7 @@ func Create{{ $.Name }}Controller(ctx context.Context, req *Create{{ $.Name }}Re
 	{{- $annotation := $f.Annotations.LiEnt }}
 	{{- if and $annotation $annotation.ViewSchema (not $annotation.DisableCreate) }}
 		{{- if $annotation.Edge }}
-			if req.{{ $annotation.Edge.StructField }} != nil {
+			if req.{{ $annotation.Edge.StructField }} != nil && {{ $.Name }}AccessControlExecX(ctx, "create:{{ $f.Name }}") {
 				{{- if eq $f.Type.String $.ID.Type.String }}
 					b.Set{{ $f.StructField }}(req.{{ $annotation.Edge.StructField }}.ID)
 				{{- else }}
@@ -334,7 +371,7 @@ func Create{{ $.Name }}Controller(ctx context.Context, req *Create{{ $.Name }}Re
 			}
 		{{- else }}
 			{{- if $f.Optional }}
-				if req.{{ $f.StructField }} != nil {
+				if req.{{ $f.StructField }} != nil && {{ $.Name }}AccessControlExecX(ctx, "create:{{ $f.Name }}") {
 					{{- if $f.Type.Nillable }}
 						b.Set{{ $f.StructField }}(req.{{ $f.StructField }})
 					{{- else }}
@@ -351,13 +388,13 @@ func Create{{ $.Name }}Controller(ctx context.Context, req *Create{{ $.Name }}Re
 	{{- $annotation := $e.Annotations.LiEnt }}
 	{{- if and $annotation $annotation.ViewSchema (not $annotation.DisableCreate) }}
 		{{- if $e.Unique }}
-			if req.{{ $e.StructField }} != nil {
+			if req.{{ $e.StructField }} != nil && {{ $.Name }}AccessControlExecX(ctx, "create:{{ $e.Name }}") {
 			{{- if $e.Field }}
 				b.Set{{ pascal $e.Field.Name }}(req.{{ $e.StructField }}.ID)
 			{{- end }}
 			}
 		{{- else if not $e.Field }}
-			if len(req.{{ $e.StructField }}) > 0 {
+			if len(req.{{ $e.StructField }}) > 0 && {{ $.Name }}AccessControlExecX(ctx, "create:{{ $e.Name }}") {
 				b.Add{{ $e.Type.Name }}IDs(func() []{{ $e.Type.ID.Type }} {
 					ids := make([]{{ $e.Type.ID.Type }}, len(req.{{ $e.StructField }}))
 					for i, v := range req.{{ $e.StructField }} {
@@ -402,7 +439,7 @@ func Get{{ $.Name }}Controller(ctx context.Context, req *Get{{ $.Name }}Req) (re
 		}
 		return nil, gerror.WrapCode(gcode.CodeDbOperationError, err)
 	}
-	return NewI{{ $.Name }}(ret), nil
+	return NewI{{ $.Name }}(ret, true), nil
 }
 
 func Update{{ $.Name }}Controller(ctx context.Context, req *Update{{ $.Name }}Req) (err error) {
@@ -412,7 +449,7 @@ func Update{{ $.Name }}Controller(ctx context.Context, req *Update{{ $.Name }}Re
 	{{- $annotation := $f.Annotations.LiEnt }}
 	{{- if and $annotation $annotation.ViewSchema (not $annotation.DisableUpdate) }}
 		{{- if $annotation.Edge }}
-			if req.{{ $annotation.Edge.StructField }} != nil {
+			if req.{{ $annotation.Edge.StructField }} != nil && {{ $.Name }}AccessControlExecX(ctx, "update:{{ $f.Name }}") {
 				{{- if eq $f.Type.String $.ID.Type.String }}
 					b.Set{{ $f.StructField }}(req.{{ $annotation.Edge.StructField }}.ID)
 				{{- else }}
@@ -426,17 +463,13 @@ func Update{{ $.Name }}Controller(ctx context.Context, req *Update{{ $.Name }}Re
 				{{- end }}
 			}
 		{{- else }}
-			{{- if $f.Optional }}
-				if req.{{ $f.StructField }} != nil {
-					{{- if $f.Type.Nillable }}
-						b.Set{{ $f.StructField }}(req.{{ $f.StructField }})
-					{{- else }}
-						b.Set{{ $f.StructField }}(*req.{{ $f.StructField }})
-					{{- end }}
-				}
-			{{- else }}
-				b.Set{{ $f.StructField }}(req.{{ $f.StructField }})
-			{{- end }}
+			if req.{{ $f.StructField }} != nil && {{ $.Name }}AccessControlExecX(ctx, "update:{{ $f.Name }}") {
+				{{- if $f.Type.Nillable }}
+					b.Set{{ $f.StructField }}(req.{{ $f.StructField }})
+				{{- else }}
+					b.Set{{ $f.StructField }}(*req.{{ $f.StructField }})
+				{{- end }}
+			}
 		{{- end }}
 	{{- end }}
 	{{- end }}
@@ -445,13 +478,13 @@ func Update{{ $.Name }}Controller(ctx context.Context, req *Update{{ $.Name }}Re
 	{{- $annotation := $e.Annotations.LiEnt }}
 	{{- if and $annotation $annotation.ViewSchema (not $annotation.DisableUpdate) }}
 		{{- if $e.Unique }}
-			if req.{{ $e.StructField }} != nil {
+			if req.{{ $e.StructField }} != nil && {{ $.Name }}AccessControlExecX(ctx, "update:{{ $e.Name }}") {
 			{{- if $e.Field }}
 				b.Set{{ pascal $e.Field.Name }}(req.{{ $e.StructField }}.ID)
 			{{- end }}
 			}
 		{{- else if not $e.Field }}
-			if req.{{ $e.StructField }} != nil {
+			if req.{{ $e.StructField }} != nil && {{ $.Name }}AccessControlExecX(ctx, "update:{{ $e.Name }}") {
 				b.Clear{{ $e.StructField }}().Add{{ $e.Type.Name }}IDs(func() []{{ $e.Type.ID.Type }} {
 					ids := make([]{{ $e.Type.ID.Type }}, len(req.{{ $e.StructField }}))
 					for i, v := range req.{{ $e.StructField }} {

@@ -8,9 +8,9 @@ func Create{{ $.Name }}FormView() view.Node {
 			{{- if $annotation := $f.Annotations.LiEnt }}
 				{{- if and $annotation.ViewSchema (not $annotation.DisableCreate) }}
 					{{- if $annotation.Edge }}
-					{{ $.Package }}.Node{{ $annotation.Edge.StructField }}().SetAC({{ $.Package }}ViewACL["create:{{ $annotation.Edge.Name }}"]){{- if contains $annotation.ValidateRule "required" }}.SetRequired(true){{- end }},
+					{{ $.Package }}.Node{{ $annotation.Edge.StructField }}().SetAC({{ $.Package }}ACL["create:{{ $annotation.Edge.Name }}"]){{- if contains $annotation.ValidateRule "required" }}.SetRequired(true){{- end }},
 					{{- else }}
-					{{ $.Package }}.Node{{ $f.StructField }}().SetAC({{ $.Package }}ViewACL["create:{{ $f.Name }}"]){{- if contains $annotation.ValidateRule "required" }}.SetRequired(true){{- end }},
+					{{ $.Package }}.Node{{ $f.StructField }}().SetAC({{ $.Package }}ACL["create:{{ $f.Name }}"]){{- if contains $annotation.ValidateRule "required" }}.SetRequired(true){{- end }},
 					{{- end }}
 				{{- end }}
 				{{- if and (not $searchable) $annotation $annotation.Queryable }}
@@ -21,7 +21,7 @@ func Create{{ $.Name }}FormView() view.Node {
 		{{- range $e := $.Edges }}
 			{{- if $annotation := $e.Annotations.LiEnt }}
 				{{- if and $annotation.ViewSchema (not $annotation.DisableCreate) }}
-					{{ $.Package }}.Node{{ $e.StructField }}().SetAC({{ $.Package }}ViewACL["create:{{ $e.Name }}"]){{ if not $e.Optional }}.SetRequired(true){{ end }},
+					{{ $.Package }}.Node{{ $e.StructField }}().SetAC({{ $.Package }}ACL["create:{{ $e.Name }}"]){{ if not $e.Optional }}.SetRequired(true){{ end }},
 				{{- end }}
 			{{- end }}
 		{{- end }}
@@ -34,9 +34,9 @@ func Read{{ $.Name }}FormView() view.Node {
 			{{- if $annotation := $f.Annotations.LiEnt }}
 				{{- if and $annotation.ViewSchema (not $annotation.DisableRead) }}
 					{{- if $annotation.Edge }}
-					{{ $.Package }}.Node{{ $annotation.Edge.StructField }}().SetAC({{ $.Package }}ViewACL["read:{{ $annotation.Edge.Name }}"]),
+					{{ $.Package }}.Node{{ $annotation.Edge.StructField }}().SetAC({{ $.Package }}ACL["read:{{ $annotation.Edge.Name }}"]),
 					{{- else }}
-					{{ $.Package }}.Node{{ $f.StructField }}().SetAC({{ $.Package }}ViewACL["read:{{ $f.Name }}"]),
+					{{ $.Package }}.Node{{ $f.StructField }}().SetAC({{ $.Package }}ACL["read:{{ $f.Name }}"]),
 					{{- end }}
 				{{- end }}
 			{{- end }}
@@ -44,7 +44,7 @@ func Read{{ $.Name }}FormView() view.Node {
 		{{- range $e := $.Edges }}
 			{{- if $annotation := $e.Annotations.LiEnt }}
 				{{- if and $annotation.ViewSchema (not $annotation.DisableRead) }}
-					{{ $.Package }}.Node{{ $e.StructField }}().SetAC({{ $.Package }}ViewACL["read:{{ $e.Name }}"]),
+					{{ $.Package }}.Node{{ $e.StructField }}().SetAC({{ $.Package }}ACL["read:{{ $e.Name }}"]),
 				{{- end }}
 			{{- end }}
 		{{- end }}
@@ -57,9 +57,9 @@ func Update{{ $.Name }}FormView() view.Node {
 			{{- if $annotation := $f.Annotations.LiEnt }}
 				{{- if and $annotation.ViewSchema (not $annotation.DisableUpdate) }}
 					{{- if $annotation.Edge }}
-					{{ $.Package }}.Node{{ $annotation.Edge.StructField }}().SetAC({{ $.Package }}ViewACL["update:{{ $annotation.Edge.Name }}"]){{- if contains $annotation.ValidateRule "required" }}.SetRequired(true){{- end }},
+					{{ $.Package }}.Node{{ $annotation.Edge.StructField }}().SetAC({{ $.Package }}ACL["update:{{ $annotation.Edge.Name }}"]){{- if contains $annotation.ValidateRule "required" }}.SetRequired(true){{- end }},
 					{{- else }}
-					{{ $.Package }}.Node{{ $f.StructField }}().SetAC({{ $.Package }}ViewACL["update:{{ $f.Name }}"]){{- if contains $annotation.ValidateRule "required" }}.SetRequired(true){{- end }},
+					{{ $.Package }}.Node{{ $f.StructField }}().SetAC({{ $.Package }}ACL["update:{{ $f.Name }}"]){{- if contains $annotation.ValidateRule "required" }}.SetRequired(true){{- end }},
 					{{- end }}
 				{{- end }}
 			{{- end }}
@@ -67,7 +67,7 @@ func Update{{ $.Name }}FormView() view.Node {
 		{{- range $e := $.Edges }}
 			{{- if $annotation := $e.Annotations.LiEnt }}
 				{{- if and $annotation.ViewSchema (not $annotation.DisableUpdate) }}
-					{{ $.Package }}.Node{{ $e.StructField }}().SetAC({{ $.Package }}ViewACL["update:{{ $e.Name }}"]){{ if not $e.Optional }}.SetRequired(true){{ end }},
+					{{ $.Package }}.Node{{ $e.StructField }}().SetAC({{ $.Package }}ACL["update:{{ $e.Name }}"]){{ if not $e.Optional }}.SetRequired(true){{ end }},
 				{{- end }}
 			{{- end }}
 		{{- end }}
@@ -83,7 +83,7 @@ func List{{ $.Name }}TableColumns() []view.Node {
 					{{- if $annotation.Edge }}
 					node.ListTableColumn("column{{ $i }}").
 						Title({{ $.Package }}.Node{{ $annotation.Edge.StructField }}Title).
-						AC({{ $.Package }}ViewACL["read:{{ $annotation.Edge.Name }}"]).
+						AC({{ $.Package }}ACL["read:{{ $annotation.Edge.Name }}"]).
 						DataIndex("{{ $annotation.Edge.Name }}").
 						{{- if $annotation.ColumnProps.Align }}Align("{{ $annotation.ColumnProps.Align }}").{{- end }}
 						{{- if $annotation.ColumnProps.Ellipsis }}Ellipsis(true).{{- end }}
@@ -96,7 +96,7 @@ func List{{ $.Name }}TableColumns() []view.Node {
 					{{- else }}
 					node.ListTableColumn("column{{ $i }}").
 						Title({{ $.Package }}.Node{{ $f.StructField }}Title).
-						AC({{ $.Package }}ViewACL["read:{{ $f.Name }}"]).
+						AC({{ $.Package }}ACL["read:{{ $f.Name }}"]).
 						DataIndex("{{ $f.Name }}").
 						{{- if $annotation.ColumnProps.Align }}Align("{{ $annotation.ColumnProps.Align }}").{{- end }}
 						{{- if $annotation.ColumnProps.Ellipsis }}Ellipsis(true).{{- end }}
@@ -116,7 +116,7 @@ func List{{ $.Name }}TableColumns() []view.Node {
 				{{- if and $annotation.ViewSchema (not $annotation.DisableRead) (not (isNil $annotation.ColumnProps)) }}
 					node.ListTableColumn("columnEdge{{ $i }}").
 						Title({{ $.Package }}.Node{{ $e.StructField }}Title).
-						AC({{ $.Package }}ViewACL["read:{{ $e.Name }}"]).
+						AC({{ $.Package }}ACL["read:{{ $e.Name }}"]).
 						DataIndex("{{ $e.Name }}").
 						{{- if $annotation.ColumnProps.Align }}Align("{{ $annotation.ColumnProps.Align }}").{{- end }}
 						{{- if $annotation.ColumnProps.Ellipsis }}Ellipsis(true).{{- end }}
@@ -126,7 +126,7 @@ func List{{ $.Name }}TableColumns() []view.Node {
 						{{- if $annotation.ColumnProps.HideInTable }}HideInTable(true).{{- end }}
 						{{- if $annotation.ColumnProps.Order }}Order({{ $annotation.ColumnProps.Order }}).{{- end }}
 						Render(
-							{{ $.Package }}.Node{{ $e.StructField }}().SetAC({{ $.Package }}ViewACL["read:{{ $e.Name }}"]),
+							{{ $.Package }}.Node{{ $e.StructField }}().SetAC({{ $.Package }}ACL["read:{{ $e.Name }}"]),
 						),
 				{{- end }}
 			{{- end }}
@@ -136,7 +136,7 @@ func List{{ $.Name }}TableColumns() []view.Node {
 
 func List{{ $.Name }}View() view.Node {
 	return node.List("{{ $.Package }}List").
-		AC({{ $.Package }}ViewACL["list:{{ $.Name }}"]).
+		AC({{ $.Package }}ACL["list:{{ $.Name }}"]).
 		ForInit("@list{{ $.Name }}", List{{ $.Name }}Controller).
 		DecoratorCard().
 		EnableFilter().
@@ -147,7 +147,7 @@ func List{{ $.Name }}View() view.Node {
 					node.ListAction("{{ $.Package }}ListActions").Children(
 						node.ListActionRecordFormDrawer("add{{ $.Name }}").
 							Title("addNew").
-							AC({{ $.Package }}ViewACL["create:{{ $.Name }}"]).
+							AC({{ $.Package }}ACL["create:{{ $.Name }}"]).
 							ButtonType("primary").
 							ButtonIcon("IconPlus").
 							ButtonPosition("left").
@@ -158,7 +158,7 @@ func List{{ $.Name }}View() view.Node {
 							),
 						node.ListActionRowSelection("deleteMany{{ $.Name }}").
 							Title("bulkDelete").
-							AC({{ $.Package }}ViewACL["deleteMany:{{ $.Name }}"]).
+							AC({{ $.Package }}ACL["deleteMany:{{ $.Name }}"]).
 							ForSubmit("@deleteMany{{ $.Name }}", DeleteMany{{ $.Name }}Controller).
 							AfterReload(true).
 							ConfirmTitle("confirmDelete").
@@ -180,7 +180,7 @@ func List{{ $.Name }}View() view.Node {
 							Render(
 								node.Space("actions").Size(0).SplitByDivider().Children(
 									node.ListActionRecordFormDrawer("view").
-										AC({{ $.Package }}ViewACL["get:{{ $.Name }}"]).
+										AC({{ $.Package }}ACL["get:{{ $.Name }}"]).
 										ForInit("@get{{ $.Name }}", Get{{ $.Name }}Controller).
 										DrawerTitle("viewDrawerTitle").
 										ButtonType("text").
@@ -190,7 +190,7 @@ func List{{ $.Name }}View() view.Node {
 											node.ActionFormDrawerCancel("cancel"),
 										),
 									node.ListActionRecordFormDrawer("edit").
-										AC({{ $.Package }}ViewACL["update:{{ $.Name }}"]).
+										AC({{ $.Package }}ACL["update:{{ $.Name }}"]).
 										ForInit("@get{{ $.Name }}", Get{{ $.Name }}Controller).
 										DrawerTitle("editDrawerTitle").
 										ButtonType("text").
@@ -202,7 +202,7 @@ func List{{ $.Name }}View() view.Node {
 												ForSubmit("@update{{ $.Name }}", Update{{ $.Name }}Controller),
 										),
 									node.ListActionRecordDelete("delete").
-										AC({{ $.Package }}ViewACL["delete:{{ $.Name }}"]).
+										AC({{ $.Package }}ACL["delete:{{ $.Name }}"]).
 										ForSubmit("@delete{{ $.Name }}", Delete{{ $.Name }}Controller).
 										ButtonType("text").
 										ButtonIcon("IconDelete"),
@@ -213,12 +213,29 @@ func List{{ $.Name }}View() view.Node {
 		)
 }
 
-var {{ $.Package }}ViewACL = map[string]ac.AC{}
+var {{ $.Package }}ACL = map[string]ac.AC{}
 
 func init() {
 	rf := reflect.ValueOf(schema.{{ $.Name }}{}).MethodByName("ACL")
 	if rf.IsValid() {
-		{{ $.Package }}ViewACL, _ = rf.Call([]reflect.Value{})[0].Interface().(map[string]ac.AC)
+		{{ $.Package }}ACL, _ = rf.Call([]reflect.Value{})[0].Interface().(map[string]ac.AC)
 	}
+}
+
+func {{ $.Name }}AccessControlExec(ctx context.Context, key string) (pass bool, err error) {
+	f := {{ $.Package }}ACL[key]
+	if f != nil {
+		return f(ctx)
+	}
+	return true, nil
+}
+
+func {{ $.Name }}AccessControlExecX(ctx context.Context, key string) (pass bool) {
+	var err error
+	pass, err = {{ $.Name }}AccessControlExec(ctx, key)
+	if err != nil {
+		panic(err)
+	}
+	return
 }
 {{ end }}
