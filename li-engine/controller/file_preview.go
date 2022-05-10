@@ -1,7 +1,7 @@
 package controller
 
 import (
-	"github.com/BeanWei/li/li-engine/contrib/file"
+	"github.com/BeanWei/li/li-engine/contrib/lifile"
 	"github.com/BeanWei/li/li-engine/service"
 	"github.com/gogf/gf/v2/errors/gcode"
 	"github.com/gogf/gf/v2/errors/gerror"
@@ -31,7 +31,7 @@ func FilePreviw(r *ghttp.Request) {
 		})
 		return
 	}
-	client.ServeFile(r, &file.ProxyInput{
+	client.ServeFile(r, &lifile.ProxyInput{
 		BucketName: req.BucketName,
 		FileName:   req.FileName,
 	})

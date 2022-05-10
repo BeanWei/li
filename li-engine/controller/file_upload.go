@@ -3,7 +3,7 @@ package controller
 import (
 	"context"
 
-	"github.com/BeanWei/li/li-engine/contrib/file"
+	"github.com/BeanWei/li/li-engine/contrib/lifile"
 	"github.com/BeanWei/li/li-engine/service"
 	"github.com/gogf/gf/v2/errors/gcode"
 	"github.com/gogf/gf/v2/errors/gerror"
@@ -32,7 +32,7 @@ func FileUpload(ctx context.Context) (res *FileUploadRes, err error) {
 		return
 	}
 
-	output, err := client.PutObject(ctx, &file.PutObjectInput{
+	output, err := client.PutObject(ctx, &lifile.PutObjectInput{
 		File:       f.FileHeader,
 		BucketName: gtime.Now().Format("Ym"),
 	})

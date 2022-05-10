@@ -4,22 +4,22 @@ import (
 	"context"
 	"sync"
 
-	"github.com/BeanWei/li/li-engine/contrib/file"
+	"github.com/BeanWei/li/li-engine/contrib/lifile"
 	"github.com/gogf/gf/v2/frame/g"
 )
 
 var (
-	fileclent     file.Storage
+	fileclent     lifile.Storage
 	fileclentOnce sync.Once
 )
 
-func NewFileClient(ctx context.Context) (file.Storage, error) {
+func NewFileClient(ctx context.Context) (lifile.Storage, error) {
 	var err error
 	fileclentOnce.Do(func() {
 		adapter := g.Cfg().MustGet(ctx, "file.default.adapter").String()
 		switch adapter {
 		case "aws":
-			fileclent, err = file.NewStorageAwsClient(&file.AwsClientOption{
+			fileclent, err = lifile.NewStorageAwsClient(&lifile.AwsClientOption{
 				AccessKeyID:     g.Cfg().MustGet(ctx, "file.aws.accessKeyID").String(),
 				SecretAccessKey: g.Cfg().MustGet(ctx, "file.aws.secretAccessKey").String(),
 				Endpoint:        g.Cfg().MustGet(ctx, "file.aws.endpoint").String(),
@@ -28,7 +28,7 @@ func NewFileClient(ctx context.Context) (file.Storage, error) {
 				ForcePathStyle:  g.Cfg().MustGet(ctx, "file.aws.forcePathStyle").Bool(),
 			})
 		default:
-			fileclent, err = file.NewStorageLocalClient(&file.LocalClientOption{
+			fileclent, err = lifile.NewStorageLocalClient(&lifile.LocalClientOption{
 				Dir: g.Cfg().MustGet(ctx, "file.local.dir").String(),
 			})
 		}
