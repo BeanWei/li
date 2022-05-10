@@ -5,8 +5,25 @@ import (
 	"entgo.io/ent/schema/field"
 	"entgo.io/ent/schema/mixin"
 	"github.com/BeanWei/li/li-engine/contrib/lient"
-	"github.com/rs/xid"
 )
+
+type ID struct {
+	mixin.Schema
+}
+
+func (ID) Fields() []ent.Field {
+	return []ent.Field{
+		field.Int64("id").
+			Unique().
+			Immutable().
+			DefaultFunc(func() int64 {
+				return lient.NewID()
+			}).
+			Annotations(lient.Annotation{
+				DisableCreate: true,
+			}),
+	}
+}
 
 type XID struct {
 	mixin.Schema
@@ -19,7 +36,7 @@ func (XID) Fields() []ent.Field {
 			Unique().
 			Immutable().
 			DefaultFunc(func() string {
-				return xid.New().String()
+				return lient.NewXid()
 			}).
 			Annotations(lient.Annotation{
 				DisableCreate: true,
@@ -27,4 +44,5 @@ func (XID) Fields() []ent.Field {
 	}
 }
 
+var _ ent.Mixin = (*ID)(nil)
 var _ ent.Mixin = (*XID)(nil)

@@ -9,4 +9,5 @@ require (
 	github.com/gogf/gf/v2 v2.0.6
 	github.com/hexops/valast v1.4.1
 	github.com/rs/xid v1.4.0
+	github.com/yitter/idgenerator-go v1.2.2
 )
