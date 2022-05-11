@@ -153,7 +153,8 @@ func NewI{{ $.Name }}(e *{{ $.Name }}, checkAccess ...bool) *I{{ $.Name }} {
 		return nil
 	}
 	if len(checkAccess) > 0 && checkAccess[0] {
-		var ctx = context.Background()
+		{{- $acfields := list }}
+		{{- $acfieldsSynatx := list }}
 		{{- range $f := $.Fields }}
 		{{- if not $f.Sensitive }}
 			{{- $annotation := $f.Annotations.LiEnt }}
@@ -168,17 +169,16 @@ func NewI{{ $.Name }}(e *{{ $.Name }}, checkAccess ...bool) *I{{ $.Name }} {
 					e.{{ $f.StructField }} = nil
 				{{- end }}
 			{{- else }}
-				if !{{ $.Name }}AccessControlExecX(ctx, "read:{{ $f.Name }}") {
-					{{- if or (contains $f.Type.String "int") (contains $f.Type.String "float") }}
-						e.{{ $f.StructField }} = 0
-					{{- else if eq $f.Type.String "string" }}
-						e.{{ $f.StructField }} = ""
-					{{- else if eq $f.Type.String "bool" }}
-						e.{{ $f.StructField }} = false
-					{{- else }}
-						e.{{ $f.StructField }} = nil
-					{{- end }}
-				}
+				{{- $acfields = append $acfields (printf `"%s"` $f.Name) }}
+				{{- if or (contains $f.Type.String "int") (contains $f.Type.String "float") }}
+					{{- $acfieldsSynatx = append $acfieldsSynatx (printf `e.%s = 0` $f.StructField) }}
+				{{- else if eq $f.Type.String "string" }}
+					{{- $acfieldsSynatx = append $acfieldsSynatx (printf `e.%s = ""` $f.StructField) }}
+				{{- else if eq $f.Type.String "bool" }}
+					{{- $acfieldsSynatx = append $acfieldsSynatx (printf `e.%s = false` $f.StructField) }}
+				{{- else }}
+					{{- $acfieldsSynatx = append $acfieldsSynatx (printf `e.%s = nil` $f.StructField) }}
+				{{- end }}
 			{{- end }}
 		{{- end }}
 		{{- end }}
@@ -187,10 +187,23 @@ func NewI{{ $.Name }}(e *{{ $.Name }}, checkAccess ...bool) *I{{ $.Name }} {
 			{{- if and $annotation $annotation.DisableRead }}
 				e.Edges.{{ $e.StructField }} = nil
 			{{- else }}
-				if !{{ $.Name }}AccessControlExecX(ctx, "read:{{ $e.Name }}") {
-					e.Edges.{{ $e.StructField }} = nil
-				}
+				{{- $acfields = append $acfields (printf `"%s"` $e.Name) }}
+				{{- $acfieldsSynatx = append $acfieldsSynatx (printf `e.Edges.%s = nil` $e.StructField) }}
 			{{- end }}
+		{{- end }}
+		{{- if ne (len $acfields) 0 }}
+			fields, err := ac.CheckForResponse(context.Background(), {{ $.Package }}ACL, {{ joinx $acfields ", " }})
+			if err != nil {
+				panic(err)
+			}
+			if len(fields) > 0 {
+				fieldsStr := "|" + strings.Join(fields, "|") + "|"
+				{{- range $i, $af := $acfields }}
+				if strings.Contains(fieldsStr, "|" + {{ $af }} + "|") {
+					{{ index $acfieldsSynatx $i }}
+				}
+				{{- end }}
+			}
 		{{- end }}
 	}
 	return &I{{ $.Name }}{
@@ -346,7 +359,7 @@ func List{{ $.Name }}Controller(ctx context.Context, req *List{{ $.Name }}Req) (
 	if err != nil {
 		return nil, gerror.WrapCode(gcode.CodeDbOperationError, err)
 	}
-	res.List = NewI{{ $.Name }}Array(ret, true)
+	res.List = NewI{{ $.Name }}Array(ret)
 	return res, nil
 }
 
@@ -439,7 +452,7 @@ func Get{{ $.Name }}Controller(ctx context.Context, req *Get{{ $.Name }}Req) (re
 		}
 		return nil, gerror.WrapCode(gcode.CodeDbOperationError, err)
 	}
-	return NewI{{ $.Name }}(ret, true), nil
+	return NewI{{ $.Name }}(ret), nil
 }
 
 func Update{{ $.Name }}Controller(ctx context.Context, req *Update{{ $.Name }}Req) (err error) {

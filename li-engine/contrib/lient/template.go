@@ -19,6 +19,7 @@ var (
 		"title":     title,
 		"contains":  contains,
 		"listfield": listfield,
+		"joinx":     gstr.JoinAny,
 	}
 	Templates = gen.MustParse(gen.NewTemplate("lient").Funcs(FuncMap).ParseFS(templateDir, "template/*tmpl"))
 )
