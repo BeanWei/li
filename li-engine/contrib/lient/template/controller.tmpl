@@ -3,6 +3,9 @@
 {{ define "model/additional/lient-controller" }}
 {{ $queryFields := listfield }}
 {{ $sortFields := list }}
+{{ $acCreateFields := list }}
+{{ $acReadFields := list }}
+{{ $acUpdateFields := list }}
 type (
 	I{{ $.Name }} struct {
 		ID {{ $.ID.Type }} {{ with $.Annotations.Fields.StructTag.id }}`{{ . }}`{{ else }}`{{ $.ID.StructTag }}`{{ end }}
@@ -10,12 +13,46 @@ type (
 			{{- $tag := $f.StructTag }}{{ with $tags := $.Annotations.Fields.StructTag }}{{ with index $tags $f.Name }}{{ $tag = . }}{{ end }}{{ end }}
 			{{ $f.StructField }} {{ if $f.NillableValue }}*{{ end }}{{ $f.Type }} {{ if not $f.Sensitive }}`{{ $tag }}`{{ else }}`json:"-"`{{ end }}
 			{{- $annotation := $f.Annotations.LiEnt }}
-			{{- if and $annotation $annotation.Edge }}
-				{{ $annotation.Edge.StructField }} {{ if ne $f.Type.String $.ID.Type.String }}[]{{ end }}*I{{ $annotation.Edge.Type }} `json:"{{ $annotation.Edge.Name }},omitempty"`
+			{{- if $annotation }}
+				{{- if $annotation.Edge }}
+					{{ $annotation.Edge.StructField }} {{ if ne $f.Type.String $.ID.Type.String }}[]{{ end }}*I{{ $annotation.Edge.Type }} `json:"{{ $annotation.Edge.Name }},omitempty"`
+				{{- end }}
+				{{- $quoteFieldName := printf `"%s"` $f.Name }}
+				{{- if $annotation.DisableCreate }}
+					{{- $acCreateFields = append $acCreateFields $quoteFieldName }}
+					{{- if $annotation.Edge }}
+						{{- $acCreateFields = append $acCreateFields (printf `"%s"` $annotation.Edge.Name) }}
+					{{- end }}
+				{{- end }}
+				{{- if $annotation.DisableRead }}
+					{{- $acReadFields = append $acReadFields $quoteFieldName }}
+					{{- if $annotation.Edge }}
+						{{- $acReadFields = append $acReadFields (printf `"%s"` $annotation.Edge.Name) }}
+					{{- end }}
+				{{- end }}
+				{{- if $annotation.DisableUpdate }}
+					{{- $acUpdateFields = append $acUpdateFields $quoteFieldName }}
+					{{- if $annotation.Edge }}
+						{{- $acUpdateFields = append $acUpdateFields (printf `"%s"` $annotation.Edge.Name) }}
+					{{- end }}
+				{{- end }}
 			{{- end }}
 		{{- end }}
 		{{- range $e := $.Edges }}
 			{{ $e.StructField }} {{ if not $e.Unique }}[]{{ end }}*I{{ $e.Type.Name }} {{ with $e.StructTag }}`{{ . }}`{{ end }}
+			{{- $annotation := $e.Annotations.LiEnt }}
+			{{- if $annotation }}
+				{{- $quoteFieldName := printf `"%s"` $e.Name }}
+				{{- if $annotation.DisableCreate }}
+					{{- $acCreateFields = append $acCreateFields $quoteFieldName }}
+				{{- end }}
+				{{- if $annotation.DisableRead }}
+					{{- $acReadFields = append $acReadFields $quoteFieldName }}
+				{{- end }}
+				{{- if $annotation.DisableUpdate }}
+					{{- $acUpdateFields = append $acUpdateFields $quoteFieldName }}
+				{{- end }}
+			{{- end }}
 		{{- end }}
 	}
 	List{{ $.Name }}Req struct {
@@ -153,7 +190,6 @@ func NewI{{ $.Name }}(e *{{ $.Name }}, checkAccess ...bool) *I{{ $.Name }} {
 		return nil
 	}
 	if len(checkAccess) > 0 && checkAccess[0] {
-		{{- $acfields := list }}
 		{{- $acfieldsSynatx := list }}
 		{{- range $f := $.Fields }}
 		{{- if not $f.Sensitive }}
@@ -169,7 +205,6 @@ func NewI{{ $.Name }}(e *{{ $.Name }}, checkAccess ...bool) *I{{ $.Name }} {
 					e.{{ $f.StructField }} = nil
 				{{- end }}
 			{{- else }}
-				{{- $acfields = append $acfields (printf `"%s"` $f.Name) }}
 				{{- if or (contains $f.Type.String "int") (contains $f.Type.String "float") }}
 					{{- $acfieldsSynatx = append $acfieldsSynatx (printf `e.%s = 0` $f.StructField) }}
 				{{- else if eq $f.Type.String "string" }}
@@ -179,6 +214,9 @@ func NewI{{ $.Name }}(e *{{ $.Name }}, checkAccess ...bool) *I{{ $.Name }} {
 				{{- else }}
 					{{- $acfieldsSynatx = append $acfieldsSynatx (printf `e.%s = nil` $f.StructField) }}
 				{{- end }}
+				{{- if and $annotation $annotation.Edge }}
+					{{- $acfieldsSynatx = append $acfieldsSynatx (printf `e.Edges.%s = nil` $annotation.Edge.StructField) }}
+				{{- end }}
 			{{- end }}
 		{{- end }}
 		{{- end }}
@@ -187,19 +225,21 @@ func NewI{{ $.Name }}(e *{{ $.Name }}, checkAccess ...bool) *I{{ $.Name }} {
 			{{- if and $annotation $annotation.DisableRead }}
 				e.Edges.{{ $e.StructField }} = nil
 			{{- else }}
-				{{- $acfields = append $acfields (printf `"%s"` $e.Name) }}
 				{{- $acfieldsSynatx = append $acfieldsSynatx (printf `e.Edges.%s = nil` $e.StructField) }}
 			{{- end }}
 		{{- end }}
-		{{- if ne (len $acfields) 0 }}
-			fields, err := ac.CheckForResponse(context.Background(), {{ $.Package }}ACL, {{ joinx $acfields ", " }})
+		{{- if ne (len $acReadFields) 0 }}
+			removes, err := ac.CheckForModel(context.Background(), {{ $.Package }}ACL, "read", {{ joinx $acReadFields ", " }})
 			if err != nil {
 				panic(err)
 			}
-			if len(fields) > 0 {
-				fieldsStr := "|" + strings.Join(fields, "|") + "|"
-				{{- range $i, $af := $acfields }}
-				if strings.Contains(fieldsStr, "|" + {{ $af }} + "|") {
+			if len(removes) > 0 {
+				removesmap := make(map[string]bool, len(removes))
+				for _, r := range removes {
+					removesmap[r] = true
+				}
+				{{- range $i, $af := $acReadFields }}
+				if removesmap[{{ $af }}] {
 					{{ index $acfieldsSynatx $i }}
 				}
 				{{- end }}
@@ -364,12 +404,24 @@ func List{{ $.Name }}Controller(ctx context.Context, req *List{{ $.Name }}Req) (
 }
 
 func Create{{ $.Name }}Controller(ctx context.Context, req *Create{{ $.Name }}Req) (err error) {
+	var removesmap map[string]bool
+	{{- if ne (len $acCreateFields) 0 }}
+		removes, err := ac.CheckForModel(ctx, {{ $.Package }}ACL, "create", {{ joinx $acCreateFields ", " }})
+		if err != nil {
+			panic(err)
+		}
+		if len(removes) > 0 {
+			for _, r := range removes {
+				removesmap[r] = true
+			}
+		}
+	{{- end }}
 	b := DB().{{ $.Name }}.Create()
 	{{- range $f := $.Fields }}
 	{{- $annotation := $f.Annotations.LiEnt }}
 	{{- if and $annotation $annotation.ViewSchema (not $annotation.DisableCreate) }}
 		{{- if $annotation.Edge }}
-			if req.{{ $annotation.Edge.StructField }} != nil && {{ $.Name }}AccessControlExecX(ctx, "create:{{ $f.Name }}") {
+			if req.{{ $annotation.Edge.StructField }} != nil && !removesmap["{{ $f.Name }}"] && !removesmap["{{ $annotation.Edge.Name }}"] {
 				{{- if eq $f.Type.String $.ID.Type.String }}
 					b.Set{{ $f.StructField }}(req.{{ $annotation.Edge.StructField }}.ID)
 				{{- else }}
@@ -384,7 +436,7 @@ func Create{{ $.Name }}Controller(ctx context.Context, req *Create{{ $.Name }}Re
 			}
 		{{- else }}
 			{{- if $f.Optional }}
-				if req.{{ $f.StructField }} != nil && {{ $.Name }}AccessControlExecX(ctx, "create:{{ $f.Name }}") {
+				if req.{{ $f.StructField }} != nil && !removesmap["{{ $f.Name }}"] {
 					{{- if $f.Type.Nillable }}
 						b.Set{{ $f.StructField }}(req.{{ $f.StructField }})
 					{{- else }}
@@ -401,13 +453,13 @@ func Create{{ $.Name }}Controller(ctx context.Context, req *Create{{ $.Name }}Re
 	{{- $annotation := $e.Annotations.LiEnt }}
 	{{- if and $annotation $annotation.ViewSchema (not $annotation.DisableCreate) }}
 		{{- if $e.Unique }}
-			if req.{{ $e.StructField }} != nil && {{ $.Name }}AccessControlExecX(ctx, "create:{{ $e.Name }}") {
+			if req.{{ $e.StructField }} != nil && !removesmap["{{ $e.Name }}"] {
 			{{- if $e.Field }}
 				b.Set{{ pascal $e.Field.Name }}(req.{{ $e.StructField }}.ID)
 			{{- end }}
 			}
 		{{- else if not $e.Field }}
-			if len(req.{{ $e.StructField }}) > 0 && {{ $.Name }}AccessControlExecX(ctx, "create:{{ $e.Name }}") {
+			if len(req.{{ $e.StructField }}) > 0 && !removesmap["{{ $e.Name }}"] {
 				b.Add{{ $e.Type.Name }}IDs(func() []{{ $e.Type.ID.Type }} {
 					ids := make([]{{ $e.Type.ID.Type }}, len(req.{{ $e.StructField }}))
 					for i, v := range req.{{ $e.StructField }} {
@@ -456,13 +508,25 @@ func Get{{ $.Name }}Controller(ctx context.Context, req *Get{{ $.Name }}Req) (re
 }
 
 func Update{{ $.Name }}Controller(ctx context.Context, req *Update{{ $.Name }}Req) (err error) {
+	var removesmap map[string]bool
+	{{- if ne (len $acUpdateFields) 0 }}
+		removes, err := ac.CheckForModel(ctx, {{ $.Package }}ACL, "update", {{ joinx $acUpdateFields ", " }})
+		if err != nil {
+			panic(err)
+		}
+		if len(removes) > 0 {
+			for _, r := range removes {
+				removesmap[r] = true
+			}
+		}
+	{{- end }}
 	b := DB().{{ $.Name }}.UpdateOneID(req.ID)
 	{{- range $f := $.Fields }}
 	{{- if not $f.Sensitive }}
 	{{- $annotation := $f.Annotations.LiEnt }}
 	{{- if and $annotation $annotation.ViewSchema (not $annotation.DisableUpdate) }}
 		{{- if $annotation.Edge }}
-			if req.{{ $annotation.Edge.StructField }} != nil && {{ $.Name }}AccessControlExecX(ctx, "update:{{ $f.Name }}") {
+			if req.{{ $annotation.Edge.StructField }} != nil && !removesmap["{{ $f.Name }}"] && !removesmap["{{ $annotation.Edge.Name }}"] {
 				{{- if eq $f.Type.String $.ID.Type.String }}
 					b.Set{{ $f.StructField }}(req.{{ $annotation.Edge.StructField }}.ID)
 				{{- else }}
@@ -476,7 +540,7 @@ func Update{{ $.Name }}Controller(ctx context.Context, req *Update{{ $.Name }}Re
 				{{- end }}
 			}
 		{{- else }}
-			if req.{{ $f.StructField }} != nil && {{ $.Name }}AccessControlExecX(ctx, "update:{{ $f.Name }}") {
+			if req.{{ $f.StructField }} != nil && !removesmap["{{ $f.Name }}"] {
 				{{- if $f.Type.Nillable }}
 					b.Set{{ $f.StructField }}(req.{{ $f.StructField }})
 				{{- else }}
@@ -491,13 +555,13 @@ func Update{{ $.Name }}Controller(ctx context.Context, req *Update{{ $.Name }}Re
 	{{- $annotation := $e.Annotations.LiEnt }}
 	{{- if and $annotation $annotation.ViewSchema (not $annotation.DisableUpdate) }}
 		{{- if $e.Unique }}
-			if req.{{ $e.StructField }} != nil && {{ $.Name }}AccessControlExecX(ctx, "update:{{ $e.Name }}") {
+			if req.{{ $e.StructField }} != nil && !removesmap["{{ $e.Name }}"] {
 			{{- if $e.Field }}
 				b.Set{{ pascal $e.Field.Name }}(req.{{ $e.StructField }}.ID)
 			{{- end }}
 			}
 		{{- else if not $e.Field }}
-			if req.{{ $e.StructField }} != nil && {{ $.Name }}AccessControlExecX(ctx, "update:{{ $e.Name }}") {
+			if req.{{ $e.StructField }} != nil && !removesmap["{{ $e.Name }}"] {
 				b.Clear{{ $e.StructField }}().Add{{ $e.Type.Name }}IDs(func() []{{ $e.Type.ID.Type }} {
 					ids := make([]{{ $e.Type.ID.Type }}, len(req.{{ $e.StructField }}))
 					for i, v := range req.{{ $e.StructField }} {

@@ -221,21 +221,4 @@ func init() {
 		{{ $.Package }}ACL, _ = rf.Call([]reflect.Value{})[0].Interface().(map[string]ac.AC)
 	}
 }
-
-func {{ $.Name }}AccessControlExec(ctx context.Context, key string) (pass bool, err error) {
-	f := {{ $.Package }}ACL[key]
-	if f != nil {
-		return f(ctx)
-	}
-	return true, nil
-}
-
-func {{ $.Name }}AccessControlExecX(ctx context.Context, key string) (pass bool) {
-	var err error
-	pass, err = {{ $.Name }}AccessControlExec(ctx, key)
-	if err != nil {
-		panic(err)
-	}
-	return
-}
 {{ end }}

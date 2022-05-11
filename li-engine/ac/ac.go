@@ -88,8 +88,8 @@ func CheckForView(ctx context.Context, paths ...string) (removes []string, err e
 	return
 }
 
-// CheckForResponse 接口响应的鉴权，执行全部并返需要移除的无权限的字段
-func CheckForResponse(ctx context.Context, acmap map[string]AC, fields ...string) (removes []string, err error) {
+// CheckForModel 数据层的鉴权，执行全部并返需要移除的无权限的字段
+func CheckForModel(ctx context.Context, acmap map[string]AC, action string, fields ...string) (removes []string, err error) {
 	if len(fields) == 0 {
 		return
 	}
@@ -97,7 +97,7 @@ func CheckForResponse(ctx context.Context, acmap map[string]AC, fields ...string
 	g.GOMAXPROCS(runtime.NumCPU())
 	ch := make(chan string, len(fields))
 	for _, field := range fields {
-		f := acmap["read:"+field]
+		f := acmap[action+":"+field]
 		if f == nil {
 			continue
 		}
