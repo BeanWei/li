@@ -32,6 +32,9 @@ Golang, GoFrame, Ent ...
 **前端：**
  React, TypeScript, Formily, Arco-Design ...
 
+## ⌨️ 快速开始
+https://github.com/BeanWei/li-quickstart
+
  ## 🏗️ 本地开发 (示例仓库：https://github.com/BeanWei/li-example)
  * 1: cd li-web & pnpm
  * 2: cd li-web/apps/admin & pnpm dev
