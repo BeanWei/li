@@ -153,6 +153,10 @@ func NewApp(cfg *App) {
 	if cfg.Binding != nil {
 		signform = cfg.Binding.SignForm.Schema()
 		controller.Bind(OperationGetCurrentUser, cfg.Binding.GetCurrentUserController)
+	} else {
+		controller.Bind(OperationGetCurrentUser, func(ctx context.Context) (res map[string]string, err error) {
+			return map[string]string{}, nil
+		})
 	}
 	// 获取应用配置
 	controller.Bind(OperationGetAppConfig, func(ctx context.Context) (res *app, err error) {
