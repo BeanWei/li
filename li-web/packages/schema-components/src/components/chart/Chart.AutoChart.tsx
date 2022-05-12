@@ -67,7 +67,7 @@ const EmptyContent: React.FC = () => {
             alt=""
           />
         </div>
-        <div>{locale.Chart.nodata}</div>
+        <div>{locale.Chart?.nodata}</div>
       </div>
     </div>
   );
@@ -85,7 +85,7 @@ const AutoChart: React.FC<
   useEffect(() => {
     if (rest.data?.length > 0) {
       const myAdvices = myAdvisor.advise(rest);
-      setAdvices(myAdvices);
+      setAdvices(myAdvices as any);
       setCurrentAdviceIndex(0);
     }
   }, [rest.data]);
